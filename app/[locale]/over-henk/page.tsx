@@ -33,7 +33,7 @@ export default async function AboutPage({
           <div className="relative aspect-[4/5] w-full overflow-hidden bg-ink/5">
             <video
               className="absolute inset-0 h-full w-full object-cover object-top"
-              src="/videos/Hendrix_BIO.mov"
+              src="/videos/Hendrix_BIO.mp4"
               autoPlay
               muted
               loop
