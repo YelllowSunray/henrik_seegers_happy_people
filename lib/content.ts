@@ -1,0 +1,318 @@
+import type {
+  BlogPost,
+  Locale,
+  LocalizedString,
+  QuoteItem,
+  SeminarEvent,
+  VideoItem,
+} from "./types";
+
+export function t(localized: LocalizedString, locale: Locale): string {
+  return localized[locale] ?? localized.en ?? localized.nl;
+}
+
+export const posts: BlogPost[] = [
+  {
+    id: "1",
+    slug: "you-are-not-lost",
+    title: {
+      nl: "Je bent niet verloren — je herinnert je",
+      en: "You are not lost — you are remembering",
+      de: "Du bist nicht verloren — du erinnerst dich",
+    },
+    excerpt: {
+      nl: "Over identiteit, verbinding en het gevoel dat er iets groters is.",
+      en: "On identity, connection, and the feeling that something greater connects us.",
+      de: "Über Identität, Verbindung und das Gefühl, dass etwas Größeres uns verbindet.",
+    },
+    body: {
+      nl: "Soms voelt het alsof je verdwaald bent. Happy People zegt: je bent aan het herinneren wie je altijd al was. Zet je angsten op stil. Zet je glimlach op standje maximaal. En sluit je aan.",
+      en: "Sometimes it feels like you are lost. Happy People says: you are remembering who you always were. Put your fears on silent. Put your smile on maximum. And join in.",
+      de: "Manchmal fühlt es sich an, als wärst du verloren. Happy People sagt: du erinnerst dich, wer du immer warst. Stelle Ängste auf stumm. Stelle dein Lächeln auf Maximum. Und mach mit.",
+    },
+    publishedAt: "2026-08-01",
+    membersOnly: false,
+  },
+  {
+    id: "2",
+    slug: "affirmation-to-manifestation",
+    title: {
+      nl: "Van affirmatie naar manifestatie",
+      en: "From affirmation to manifestation",
+      de: "Von Affirmation zur Manifestation",
+    },
+    excerpt: {
+      nl: "Probeer het maar — het werkt echt. Je zult het zien en dan beleven.",
+      en: "Try it — it really works. You will see it, then live it.",
+      de: "Versuch es — es funktioniert wirklich. Du wirst es sehen und dann erleben.",
+    },
+    body: {
+      nl: "In de spirituele wereld leiden affirmaties tot manifestaties. Formuleer helder wat je wilt, herhaal het met gevoel, en leef alsof de weg al open is. Dat is de oefening van Happy People.",
+      en: "In the spiritual world, affirmations lead to manifestations. State clearly what you want, repeat it with feeling, and live as if the path is already open. That is the Happy People practice.",
+      de: "In der spirituellen Welt führen Affirmationen zu Manifestationen. Formuliere klar, was du willst, wiederhole es mit Gefühl, und lebe, als wäre der Weg schon offen.",
+    },
+    publishedAt: "2026-07-28",
+    membersOnly: false,
+  },
+  {
+    id: "3",
+    slug: "do-what-you-say",
+    title: {
+      nl: "Doe wat je zegt — zeg wat je doet",
+      en: "Do what you say — say what you do",
+      de: "Tu was du sagst — sag was du tust",
+    },
+    excerpt: {
+      nl: "Eerlijk handel drijven begint bij jezelf.",
+      en: "Honest living starts with yourself.",
+      de: "Ehrlich leben beginnt bei dir selbst.",
+    },
+    body: {
+      nl: "De weg van de Happy People is niet ingewikkeld: weer gelukkig met elkaar samenleven, eerlijk handel drijven, doen wat we zeggen en zeggen wat we doen — of in omgekeerde volgorde. Dat mag natuurlijk ook.",
+      en: "The path of Happy People is not complicated: live happily together again, trade honestly, do what we say and say what we do — or the other way around. That is allowed too.",
+      de: "Der Weg der Happy People ist nicht kompliziert: wieder glücklich zusammenleben, ehrlich handeln, tun was wir sagen und sagen was wir tun — oder umgekehrt.",
+    },
+    publishedAt: "2026-07-20",
+    membersOnly: false,
+  },
+  {
+    id: "4",
+    slug: "eye-of-the-beholder",
+    title: {
+      nl: "It's all in the eye of the beholder",
+      en: "It's all in the eye of the beholder",
+      de: "It's all in the eye of the beholder",
+    },
+    excerpt: {
+      nl: "Uit iets wat donker lijkt, kan soms iets moois groeien.",
+      en: "From something that looks dark, something beautiful can grow.",
+      de: "Aus etwas, das dunkel wirkt, kann etwas Schönes wachsen.",
+    },
+    body: {
+      nl: "Een moeilijke situatie hoeft niet te eindigen in meer ellende. Soms ontstaat er iets menselijks als je de rust bewaart. Het zit niet alleen in wat er gebeurt, maar in hoe je ernaar kijkt.",
+      en: "A hard situation does not have to end in more misery. Sometimes something human appears when you keep your calm. It is not only what happens — it is how you look at it.",
+      de: "Eine schwere Situation muss nicht in mehr Elend enden. Manchmal entsteht etwas Menschliches, wenn du die Ruhe bewahrst.",
+    },
+    publishedAt: "2026-07-12",
+    membersOnly: false,
+  },
+  {
+    id: "5",
+    slug: "reunite-as-one",
+    title: {
+      nl: "Samen verenigen we ons als één",
+      en: "Together we reunite as one",
+      de: "Gemeinsam vereinen wir uns als eins",
+    },
+    excerpt: {
+      nl: "Voor alle lost boys — en iedereen die zich zo voelt.",
+      en: "For all lost boys — and anyone who feels that way.",
+      de: "Für alle lost boys — und alle, die sich so fühlen.",
+    },
+    body: {
+      nl: "Ik kom van de planeet outherspace en ik ben hier op aarde om jou te helpen. Wij mensen zijn light beings. Samen herinneren we ons dat we één zijn.",
+      en: "I'm from the planet outherspace and I'm here on earth to help you. We humans are light beings. Together we remember that we are one.",
+      de: "Ich komme vom Planeten outherspace und bin hier, um dir zu helfen. Wir Menschen sind light beings. Gemeinsam erinnern wir uns, dass wir eins sind.",
+    },
+    publishedAt: "2026-07-05",
+    membersOnly: false,
+  },
+  {
+    id: "6",
+    slug: "members-morning-practice",
+    title: {
+      nl: "Ochtendpraktijk voor Happy People",
+      en: "Morning practice for Happy People",
+      de: "Morgenpraxis für Happy People",
+    },
+    excerpt: {
+      nl: "Een korte rituelenreeks alleen voor leden.",
+      en: "A short ritual sequence for members only.",
+      de: "Eine kurze Ritualfolge nur für Mitglieder.",
+    },
+    body: {
+      nl: "1. Adem drie keer diep. 2. Zeg hardop één affirmatie. 3. Glimlach alsof je dag al gelukt is. 4. Doe vandaag één ding dat je belooft hebt. Dat is genoeg.",
+      en: "1. Breathe deeply three times. 2. Speak one affirmation aloud. 3. Smile as if your day already worked. 4. Do one thing you promised today. That is enough.",
+      de: "1. Dreimal tief atmen. 2. Eine Affirmation laut sagen. 3. Lächeln, als wäre der Tag schon gelungen. 4. Heute eine Sache tun, die du versprochen hast.",
+    },
+    publishedAt: "2026-08-05",
+    membersOnly: true,
+  },
+];
+
+export const events: SeminarEvent[] = [
+  {
+    id: "ev1",
+    title: {
+      nl: "De reis terug naar één",
+      en: "The journey back to one",
+      de: "Die Reise zurück zum Einssein",
+    },
+    description: {
+      nl: "Een middag over identiteit, verbinding, manifestatie en het gevoel dat er iets groters is dat ons verbindt. Technieken om in contact te komen met overleden dierbaren, en dromen waar te maken.",
+      en: "An afternoon on identity, connection, manifestation, and techniques to connect with loved ones who have passed — plus making dreams real.",
+      de: "Ein Nachmittag über Identität, Verbindung, Manifestation und Techniken, um mit Verstorbenen in Kontakt zu kommen.",
+    },
+    date: "2026-09-19",
+    time: "14:00–17:00",
+    location: "Almere",
+    priceLabel: "Live seminar",
+  },
+];
+
+export const videos: VideoItem[] = [
+  {
+    id: "v-sample-1",
+    title: {
+      nl: "Voorbeeld: affirmatie openen",
+      en: "Sample: opening affirmation",
+      de: "Beispiel: Affirmation öffnen",
+    },
+    description: {
+      nl: "Korte publieke clip uit een Almere-seminar.",
+      en: "Short public clip from an Almere seminar.",
+      de: "Kurzer öffentlicher Clip aus einem Seminar in Almere.",
+    },
+    kind: "sample",
+    publishedAt: "2026-07-01",
+    durationLabel: "3 min",
+  },
+  {
+    id: "v-sem-1",
+    title: {
+      nl: "Seminar #01 — Terug naar één",
+      en: "Seminar #01 — Back to one",
+      de: "Seminar #01 — Zurück zum Einssein",
+    },
+    description: {
+      nl: "Volledige opname — alleen voor Happy People-leden.",
+      en: "Full recording — Happy People members only.",
+      de: "Volle Aufnahme — nur für Happy People-Mitglieder.",
+    },
+    kind: "seminar",
+    publishedAt: "2026-07-15",
+    durationLabel: "1u 48m",
+  },
+  {
+    id: "v-sem-2",
+    title: {
+      nl: "Seminar #02 — Contact met opa & oma",
+      en: "Seminar #02 — Contact with grandpa & grandma",
+      de: "Seminar #02 — Kontakt mit Opa & Oma",
+    },
+    description: {
+      nl: "Techniek en verhalen over verbinding met overleden dierbaren.",
+      en: "Technique and stories about connecting with loved ones who have passed.",
+      de: "Technik und Geschichten über Verbindung mit Verstorbenen.",
+    },
+    kind: "seminar",
+    publishedAt: "2026-07-22",
+    durationLabel: "2u 05m",
+  },
+  {
+    id: "v-vlog-1",
+    title: {
+      nl: "Vlog: glimlach op standje maximaal",
+      en: "Vlog: smile on maximum",
+      de: "Vlog: Lächeln auf Maximum",
+    },
+    description: {
+      nl: "Een persoonlijke video van Henk over angsten stilzetten.",
+      en: "A personal video from Henk on silencing fear.",
+      de: "Ein persönliches Video von Henk über Angst auf stumm stellen.",
+    },
+    kind: "vlog",
+    publishedAt: "2026-08-02",
+    durationLabel: "8 min",
+  },
+  {
+    id: "v-vlog-2",
+    title: {
+      nl: "Vlog: light beings",
+      en: "Vlog: light beings",
+      de: "Vlog: light beings",
+    },
+    description: {
+      nl: "Korte reflectie vanuit de auto — zoals Henk het deelt.",
+      en: "A short reflection from the car — the way Henk shares.",
+      de: "Kurze Reflexion aus dem Auto — so wie Henk teilt.",
+    },
+    kind: "vlog",
+    publishedAt: "2026-08-06",
+    durationLabel: "6 min",
+  },
+];
+
+export const quotes: QuoteItem[] = [
+  {
+    id: "q1",
+    text: {
+      nl: "Ik zet mijn angsten op stil, mijn glimlach op standje maximaal en sluit me aan bij de shiny happy people.",
+      en: "I put my fears on silent, my smile on maximum, and join the shiny happy people.",
+      de: "Ich stelle meine Ängste auf stumm, mein Lächeln auf Maximum und schließe mich den shiny happy people an.",
+    },
+    publishedAt: "2026-08-07",
+  },
+  {
+    id: "q2",
+    text: {
+      nl: "Doe wat je zegt. Zeg wat je doet. Of in omgekeerde volgorde — dat mag ook.",
+      en: "Do what you say. Say what you do. Or the other way around — that works too.",
+      de: "Tu was du sagst. Sag was du tust. Oder umgekehrt — das geht auch.",
+    },
+    publishedAt: "2026-08-03",
+  },
+  {
+    id: "q3",
+    text: {
+      nl: "Het kost je bijna niets — met een glimlach.",
+      en: "It costs you almost nothing — with a smile.",
+      de: "Es kostet dich fast nichts — mit einem Lächeln.",
+    },
+    publishedAt: "2026-07-30",
+  },
+  {
+    id: "q4",
+    text: {
+      nl: "Together we reunite as 1.",
+      en: "Together we reunite as 1.",
+      de: "Together we reunite as 1.",
+    },
+    publishedAt: "2026-07-18",
+  },
+];
+
+export const samplePersonalMessages = [
+  {
+    id: "pm1",
+    toUserId: "demo",
+    subject: {
+      nl: "Voor jou, met een glimlach",
+      en: "For you, with a smile",
+      de: "Für dich, mit einem Lächeln",
+    },
+    body: {
+      nl: "Hoi — dit is hoe een persoonlijk bericht van Henk eruitziet in de club. Geen AI: hij schrijft het zelf, voor jou.",
+      en: "Hi — this is what a personal message from Henk looks like in the club. No AI: he writes it himself, for you.",
+      de: "Hi — so sieht eine persönliche Nachricht von Henk im Club aus. Keine KI: er schreibt sie selbst, für dich.",
+    },
+    createdAt: "2026-08-08",
+    read: false,
+  },
+];
+
+export function getPublicPosts() {
+  return posts.filter((p) => !p.membersOnly);
+}
+
+export function getMemberPosts() {
+  return posts.filter((p) => p.membersOnly);
+}
+
+export function getPostBySlug(slug: string) {
+  return posts.find((p) => p.slug === slug);
+}
+
+export function getVideosByKind(kind: VideoItem["kind"]) {
+  return videos.filter((v) => v.kind === kind);
+}

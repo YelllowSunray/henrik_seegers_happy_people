@@ -1,0 +1,116 @@
+{
+  "meta": {
+    "title": "Happy People — Henrik Seegers",
+    "description": "Enlightenment Seminars for people who are stuck in life. Der Weg der Happy People."
+  },
+  "nav": {
+    "home": "Start",
+    "about": "Über Henk",
+    "seminars": "Seminare",
+    "blog": "Blog",
+    "membership": "Happy People",
+    "contact": "Kontakt",
+    "members": "Mitglieder",
+    "join": "Beitreten",
+    "signIn": "Anmelden",
+    "signOut": "Abmelden"
+  },
+  "hero": {
+    "brand": "Happy People",
+    "headline": "Enlightenment Seminars for people who are stuck in life",
+    "support": "Es kostet dich fast nichts — mit einem Lächeln",
+    "ctaJoin": "Happy People beitreten",
+    "ctaSeminar": "Nächstes Seminar"
+  },
+  "message": {
+    "eyebrow": "Die Botschaft",
+    "short": "Ich komme vom Planeten outherspace und bin hier auf der Erde, um dir und allen lost boys zu helfen. Gemeinsam vereinen wir uns wieder als eins.",
+    "body": "Ich versuche Menschen bewusst zu machen, womit wir beschäftigt sind — denn so, wie wir diese Erde langsam zerstören, ist nicht der richtige Weg. Ich habe einen anderen Weg gefunden: den Weg der Happy People, in dem wir wieder glücklich miteinander leben, ehrlich handeln, tun was wir sagen und sagen was wir tun. Und ich wünsche jedem von Herzen ein gesegnetes Leben."
+  },
+  "about": {
+    "eyebrow": "Über Henk",
+    "title": "Henrik Seegers",
+    "teaser": "Von Almere zu einem anderen Weg — Affirmationen, Manifestation und wieder lächeln lernen.",
+    "cta": "Seine Geschichte",
+    "lead": "Einfach meinen Namen nennen, oder? Ich bin Henrik Seegers, geboren in Westperkassel, 1965, genau um Mitternacht. Als kleines Kind stand ich in Kontakt mit dem Höchsten; ich sagte: Gott, wenn Du existierst, sprich bitte mit mir. Ich bekam Antwort, und die Frage war: was willst du mich fragen, Henkie? Ich sagte: nenn mich bitte Henk, denn ein Henkie bin ich längst nicht mehr.",
+    "p1": "Ich bin vom Glauben abgefallen, weil ich im Fernsehen sehe, dass Kinder im Südsudan verhungern und an Skorbut sterben, während wir hier im Westen darüber nachdenken, ob wir ein zweites Auto kaufen oder einen dritten Urlaub buchen. Wenn Du so gut bist, wie es in den heiligen Schriften steht, verstehe ich hiervon überhaupt nichts. Kannst Du mir sagen, ob es jemals wieder gut wird mit der Menschheit?",
+    "p2": "Und ich bekam Antwort: ich finde dich ein eigensinniges, eigentümliches, spontanes Kerlchen, und wenn du denkst, dass du es besser machen kannst als ich, dann darfst du von mir den Stab übernehmen, und ich verspreche dir, dass ich dich in allem unterstützen werde, was du im Leben brauchst.",
+    "artCaption": ""
+  },
+  "seminars": {
+    "eyebrow": "Seminare",
+    "title": "Wöchentlich in Almere",
+    "teaser": "Live-Sessions zu Affirmationen, Manifestation und Verbindung. Aufnahmen für Mitglieder.",
+    "cta": "Seminare ansehen",
+    "next": "Nächstes Seminar",
+    "location": "Almere",
+    "sample": "Beispielaufnahmen",
+    "sampleNote": "Kurze Clips für alle. Volle Aufnahmen für Happy People-Mitglieder.",
+    "missed": "Verpasst? Die volle Aufnahme ist in deiner Mitgliedschaft.",
+    "reserve": "Mehr erfahren",
+    "membersOnly": "Nur für Mitglieder",
+    "imageCaption": "if you meet your twin flame, it feels like you're going 160km/h over a bumping road",
+    "imageAlt": "Twin Flames"
+  },
+  "blog": {
+    "eyebrow": "Blog",
+    "title": "Neueste Beiträge",
+    "cta": "Alle Beiträge",
+    "read": "Weiterlesen",
+    "empty": "Noch keine Beiträge."
+  },
+  "membership": {
+    "eyebrow": "Mitgliedschaft",
+    "title": "Happy People",
+    "price": "€1 / Monat",
+    "trial": "Erster Monat gratis",
+    "teaser": "Volle Seminaraufnahmen, Vlogs, Zitate und persönliche Nachrichten von Henk.",
+    "cta": "Gratis-Monat starten",
+    "benefitSeminars": "Volle Seminaraufnahmen",
+    "benefitVlogs": "Persönliche Vlogs von Henk",
+    "benefitQuotes": "Kurze Botschaften & Zitate",
+    "benefitTeachings": "Mitglieder-only Blog",
+    "benefitMessages": "Persönliche Nachrichten von Henk",
+    "pitch": "Ein Club. Fast nichts. Mit einem Lächeln."
+  },
+  "contact": {
+    "title": "Kontakt",
+    "body": "Fragen zu Seminaren oder Happy People? Erreiche Henk auf Facebook, oder tritt dem Club bei.",
+    "facebook": "Facebook-Profil"
+  },
+  "members": {
+    "welcome": "Willkommen zurück",
+    "hub": "Dein Happy People Hub",
+    "continue": "Weiter schauen",
+    "seminars": "Seminare",
+    "vlogs": "Vlogs",
+    "quotes": "Zitate",
+    "messages": "Nachrichten von Henk",
+    "teachings": "Lehren",
+    "locked": "Werde Mitglied, um dies zu öffnen",
+    "emptyInbox": "Noch keine persönlichen Nachrichten.",
+    "manageBilling": "Abo verwalten"
+  },
+  "auth": {
+    "email": "E-Mail",
+    "password": "Passwort",
+    "signInTitle": "Anmelden",
+    "signUpTitle": "Konto erstellen",
+    "createAccount": "Konto erstellen",
+    "haveAccount": "Schon ein Konto?",
+    "needAccount": "Noch kein Konto?"
+  },
+  "footer": {
+    "tagline": "Der Weg der Happy People",
+    "rights": "© {year} Henrik Seegers — Happy People"
+  },
+  "admin": {
+    "title": "Admin",
+    "posts": "Blog",
+    "videos": "Videos",
+    "quotes": "Zitate",
+    "messages": "Persönliche Nachrichten",
+    "events": "Seminare",
+    "denied": "Kein Zugang"
+  }
+}

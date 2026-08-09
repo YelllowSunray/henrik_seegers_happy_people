@@ -1,0 +1,116 @@
+{
+  "meta": {
+    "title": "Happy People — Henrik Seegers",
+    "description": "Enlightenment Seminars for people who are stuck in life. The path of Happy People."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About Henk",
+    "seminars": "Seminars",
+    "blog": "Blog",
+    "membership": "Happy People",
+    "contact": "Contact",
+    "members": "Members",
+    "join": "Join",
+    "signIn": "Sign in",
+    "signOut": "Sign out"
+  },
+  "hero": {
+    "brand": "Happy People",
+    "headline": "Enlightenment Seminars for people who are stuck in life",
+    "support": "It will cost you almost nothing — with a smile",
+    "ctaJoin": "Join Happy People",
+    "ctaSeminar": "Next seminar"
+  },
+  "message": {
+    "eyebrow": "The message",
+    "short": "I'm from the planet outherspace and I'm here on earth to help you and all lost boys. Together we reunite as 1.",
+    "body": "I try to make people aware of what we're doing, because the way we're slowly destroying this earth is not the right path. I've found another way — the path of Happy People — where we can live happily together again, trade honestly, do what we say and say what we do — or the other way around. And from the bottom of my heart, I wish everyone a blessed life."
+  },
+  "about": {
+    "eyebrow": "About Henk",
+    "title": "Henrik Seegers",
+    "teaser": "From Almere to another path — affirmations, manifestation, and learning to smile again.",
+    "cta": "Read his story",
+    "lead": "Just my name, right? I’m Henrik Seegers, born in Westperkassel, 1965, at twelve o’clock at night exactly. As a small child I was in contact with the Most High; I said: God, if You exist, please talk to me. I got an answer, and the question was: what do you want to ask me, Henkie? I said: well, I’d rather you call me Henk, because I’m long past being a Henkie.",
+    "p1": "I fell away from my faith because on television I see children in South Sudan starving and dying of scurvy, while here in the West we wonder whether to buy a second car or book a third holiday. If You are as good as it says in the holy scriptures, then I don’t understand a thing of this. Can You tell me whether it will ever be alright with humanity?",
+    "p2": "And I got an answer: I find you quite a stubborn, peculiar, spontaneous little fellow, and if you think you can do better than I can, then you may take over the baton from me, and I promise you that I will support you in everything you need in life.",
+    "artCaption": ""
+  },
+  "seminars": {
+    "eyebrow": "Seminars",
+    "title": "Weekly in Almere",
+    "teaser": "Live sessions on affirmations, manifestation and connection. Recordings for members.",
+    "cta": "See seminars",
+    "next": "Next seminar",
+    "location": "Almere",
+    "sample": "Sample recordings",
+    "sampleNote": "Short clips for everyone. Full recordings for Happy People members.",
+    "missed": "Missed it? The full recording is in your Happy People membership.",
+    "reserve": "Learn more",
+    "membersOnly": "Members only",
+    "imageCaption": "if you meet your twin flame, it feels like you're going 160km/h over a bumping road",
+    "imageAlt": "Twin flames"
+  },
+  "blog": {
+    "eyebrow": "Blog",
+    "title": "Latest messages",
+    "cta": "All posts",
+    "read": "Read more",
+    "empty": "No posts yet."
+  },
+  "membership": {
+    "eyebrow": "Membership",
+    "title": "Happy People",
+    "price": "€1 / month",
+    "trial": "First month free",
+    "teaser": "Full seminar recordings, vlogs, quotes, and personal messages from Henk.",
+    "cta": "Start free month",
+    "benefitSeminars": "Full seminar recordings",
+    "benefitVlogs": "Personal vlogs from Henk",
+    "benefitQuotes": "Short messages & quotes",
+    "benefitTeachings": "Members-only blog",
+    "benefitMessages": "Personal messages from Henk",
+    "pitch": "One club. Almost nothing. With a smile."
+  },
+  "contact": {
+    "title": "Contact",
+    "body": "Questions about seminars or Happy People? Reach Henk on Facebook, or join the club and message from inside.",
+    "facebook": "Facebook profile"
+  },
+  "members": {
+    "welcome": "Welcome back",
+    "hub": "Your Happy People hub",
+    "continue": "Continue watching",
+    "seminars": "Seminars",
+    "vlogs": "Vlogs",
+    "quotes": "Quotes",
+    "messages": "Messages from Henk",
+    "teachings": "Teachings",
+    "locked": "Join to unlock this",
+    "emptyInbox": "No personal messages yet.",
+    "manageBilling": "Manage subscription"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "signInTitle": "Sign in",
+    "signUpTitle": "Create account",
+    "createAccount": "Create account",
+    "haveAccount": "Already have an account?",
+    "needAccount": "Need an account?"
+  },
+  "footer": {
+    "tagline": "The path of Happy People",
+    "rights": "© {year} Henrik Seegers — Happy People"
+  },
+  "admin": {
+    "title": "Admin",
+    "posts": "Blog",
+    "videos": "Videos",
+    "quotes": "Quotes",
+    "messages": "Personal messages",
+    "events": "Seminars",
+    "denied": "Access denied"
+  }
+}

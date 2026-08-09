@@ -1,0 +1,116 @@
+{
+  "meta": {
+    "title": "Happy People — Henrik Seegers",
+    "description": "Enlightenment Seminars for people who are stuck in life. Happy People의 길."
+  },
+  "nav": {
+    "home": "홈",
+    "about": "헹크 소개",
+    "seminars": "세미나",
+    "blog": "블로그",
+    "membership": "Happy People",
+    "contact": "문의",
+    "members": "멤버",
+    "join": "가입",
+    "signIn": "로그인",
+    "signOut": "로그아웃"
+  },
+  "hero": {
+    "brand": "Happy People",
+    "headline": "Enlightenment Seminars for people who are stuck in life",
+    "support": "거의 비용이 들지 않습니다 — 미소와 함께",
+    "ctaJoin": "Happy People 가입하기",
+    "ctaSeminar": "다음 세미나"
+  },
+  "message": {
+    "eyebrow": "메시지",
+    "short": "나는 outherspace 행성에서 왔으며, 지구에서 당신과 모든 lost boys를 돕기 위해 있습니다. 함께 하나로 다시 모입니다.",
+    "body": "우리가 이 지구를 천천히 파괴하는 지금의 방식은 올바른 길이 아닙니다. 저는 다른 길을 찾았습니다 — Happy People의 길입니다. 다시 행복하게 함께 살고, 정직하게 거래하며, 말한 것을 행하고 행한 것을 말하는 길입니다. 그리고 진심으로 모두에게 축복받은 삶을 빕니다."
+  },
+  "about": {
+    "eyebrow": "헹크 소개",
+    "title": "Henrik Seegers",
+    "teaser": "Almere에서 다른 길로 — 확언, 현실화, 다시 웃는 법.",
+    "cta": "그의 이야기 읽기",
+    "lead": "그냥 제 이름을 말해도 될까요? 저는 Henrik Seegers입니다. 1965년 Westperkassel에서 밤 열두 시에 정확히 태어났습니다. 어린 시절 저는 지극히 높으신 분과 연결되어 있었습니다. 저는 말했습니다. 하느님, 존재하신다면 제발 말씀해 주세요. 답이 왔고 질문은 이랬습니다. Henkie야, 무엇을 묻겠니? 저는 말했습니다. Henk라고 불러 주세요. 저는 더 이상 Henkie가 아닙니다.",
+    "p1": "저는 믿음을 잃었습니다. 텔레비전에서 남수단의 아이들이 굶주리고 괴혈병으로 죽어 가는 모습을 보았기 때문입니다. 한편 우리는 여기서 두 번째 차를 살지, 세 번째 휴가를 예약할지 고민합니다. 성서에 쓰인 대로 선하시다면, 저는 도무지 이해할 수 없습니다. 인류는 언젠가 괜찮아질까요?",
+    "p2": "그리고 답이 왔습니다. 너는 고집 세고 특이하고 솔직한 아이구나. 네가 나보다 더 잘할 수 있다고 생각한다면, 바통을 이어받아라. 그리고 인생에서 필요한 모든 것에서 너를 돕겠다고 약속한다.",
+    "artCaption": ""
+  },
+  "seminars": {
+    "eyebrow": "세미나",
+    "title": "매주 Almere에서",
+    "teaser": "확언, 현실화, 연결에 대한 라이브 세션. 멤버를 위한 녹화본.",
+    "cta": "세미나 보기",
+    "next": "다음 세미나",
+    "location": "Almere",
+    "sample": "샘플 녹화",
+    "sampleNote": "모두를 위한 짧은 클립. Happy People 멤버를 위한 전체 녹화.",
+    "missed": "놓치셨나요? 전체 녹화는 Happy People 멤버십에 있습니다.",
+    "reserve": "자세히 보기",
+    "membersOnly": "멤버 전용",
+    "imageCaption": "if you meet your twin flame, it feels like you're going 160km/h over a bumping road",
+    "imageAlt": "Twin flames"
+  },
+  "blog": {
+    "eyebrow": "Blog",
+    "title": "최신 글",
+    "cta": "모든 글",
+    "read": "더 읽기",
+    "empty": "아직 글이 없습니다."
+  },
+  "membership": {
+    "eyebrow": "멤버십",
+    "title": "Happy People",
+    "price": "월 €1",
+    "trial": "첫 달 무료",
+    "teaser": "세미나 전체 녹화, 브이로그, 인용문, Henk의 개인 메시지.",
+    "cta": "무료 달 시작하기",
+    "benefitSeminars": "세미나 전체 녹화",
+    "benefitVlogs": "Henk의 개인 브이로그",
+    "benefitQuotes": "짧은 메시지와 인용",
+    "benefitTeachings": "멤버 전용 블로그",
+    "benefitMessages": "Henk의 개인 메시지",
+    "pitch": "하나의 클럽. 거의 비용 없이. 미소와 함께."
+  },
+  "contact": {
+    "title": "문의",
+    "body": "세미나나 Happy People에 대한 질문? Facebook에서 Henk에게 연락하거나 클럽에 가입하세요.",
+    "facebook": "Facebook 프로필"
+  },
+  "members": {
+    "welcome": "다시 오신 것을 환영합니다",
+    "hub": "내 Happy People 허브",
+    "continue": "이어서 보기",
+    "seminars": "세미나",
+    "vlogs": "브이로그",
+    "quotes": "인용",
+    "messages": "Henk의 메시지",
+    "teachings": "가르침",
+    "locked": "잠금 해제를 위해 가입하세요",
+    "emptyInbox": "아직 개인 메시지가 없습니다.",
+    "manageBilling": "구독 관리"
+  },
+  "auth": {
+    "email": "이메일",
+    "password": "비밀번호",
+    "signInTitle": "로그인",
+    "signUpTitle": "계정 만들기",
+    "createAccount": "계정 만들기",
+    "haveAccount": "이미 계정이 있으신가요?",
+    "needAccount": "계정이 필요하신가요?"
+  },
+  "footer": {
+    "tagline": "Happy People의 길",
+    "rights": "© {year} Henrik Seegers — Happy People"
+  },
+  "admin": {
+    "title": "관리자",
+    "posts": "블로그",
+    "videos": "영상",
+    "quotes": "인용",
+    "messages": "개인 메시지",
+    "events": "세미나",
+    "denied": "접근 불가"
+  }
+}

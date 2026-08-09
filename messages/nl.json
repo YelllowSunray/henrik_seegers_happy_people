@@ -1,0 +1,116 @@
+{
+  "meta": {
+    "title": "Happy People — Henrik Seegers",
+    "description": "Enlightenment Seminars for people who are stuck in life. De weg van de Happy People."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "Over Henk",
+    "seminars": "Seminars",
+    "blog": "Blog",
+    "membership": "Happy People",
+    "contact": "Contact",
+    "members": "Leden",
+    "join": "Word lid",
+    "signIn": "Inloggen",
+    "signOut": "Uitloggen"
+  },
+  "hero": {
+    "brand": "Happy People",
+    "headline": "Enlightenment Seminars for people who are stuck in life",
+    "support": "Het kost je bijna niets — met een glimlach",
+    "ctaJoin": "Word Happy People",
+    "ctaSeminar": "Volgend seminar"
+  },
+  "message": {
+    "eyebrow": "De boodschap",
+    "short": "Ik kom van de planeet outherspace en ik ben hier op aarde om jou en alle lost boys te helpen. Samen verenigen we ons weer als één.",
+    "body": "Ik probeer mensen bewust te maken waar we mee bezig zijn, want zoals we nu bezig zijn om deze aarde langzaam maar zeker te vernietigen, is niet de goede weg. Ik heb een andere weg gevonden, de weg van de Happy People, waarin we weer gelukkig met elkaar samen kunnen leven, eerlijk handel drijven, doen wat we zeggen en zeggen wat we doen — of in omgekeerde volgorde, dat mag natuurlijk ook. En ik wens iedereen een gezegend leven toe vanuit de grond van mijn hart."
+  },
+  "about": {
+    "eyebrow": "Over Henk",
+    "title": "Henrik Seegers",
+    "teaser": "Van Almere naar een andere weg — affirmaties, manifestatie, en de kunst om weer te lachen.",
+    "cta": "Lees zijn verhaal",
+    "lead": "Gewoon mijn naam noemen, toch? Ik ben Henrik Seegers, geboren in Westperkassel, 1965, om twaalf uur 's nachts precies. Ik heb als klein kind in contact gestaan met het opperwezen; ik zei: God, als u bestaat, praat alstublieft tegen mij. Ik kreeg antwoord en de vraag was: wat wil je aan me vragen, Henkie? Ik zeg: nou, ik heb liever dat u me Henk noemt, want een Henkie ben ik allang niet meer.",
+    "p1": "Ik ben van mijn geloof afgevallen omdat ik op televisie zie dat er kinderen in Zuid-Soedan liggen te verhongeren en met scheurbuik overlijden, terwijl wij hier in het Westen nadenken over al dan niet een tweede auto te kopen of een derde vakantie te boeken. Als u zo goed bent als dat in de heilige geschriften staat, dan begrijp ik hier helemaal geen bal van. Kunt u mij vertellen of het ooit nog goed komt met de mensheid?",
+    "p2": "En ik kreeg antwoord: ik vind jou wel een eigenzinnig, eigenaardig, spontaan kereltje, en als jij denkt dat je het beter kan doen dan ik, dan mag je van mij het stokje overnemen, en dan beloof ik je dat ik jou zal steunen in alles wat je nodig hebt in het leven.",
+    "artCaption": ""
+  },
+  "seminars": {
+    "eyebrow": "Seminars",
+    "title": "Wekelijks in Almere",
+    "teaser": "Live lessen over affirmaties, manifestatie en verbinding. Opnames voor leden.",
+    "cta": "Bekijk seminars",
+    "next": "Volgend seminar",
+    "location": "Almere",
+    "sample": "Voorbeeldopnames",
+    "sampleNote": "Korte clips voor iedereen. Volledige opnames voor Happy People-leden.",
+    "missed": "Gemist? De volledige opname zit in je Happy People-lidmaatschap.",
+    "reserve": "Meer info",
+    "membersOnly": "Alleen voor leden",
+    "imageCaption": "if you meet your twin flame, it feels like you're going 160km/h over a bumping road",
+    "imageAlt": "Twin flames"
+  },
+  "blog": {
+    "eyebrow": "Blog",
+    "title": "Laatste berichten",
+    "cta": "Alle berichten",
+    "read": "Lees verder",
+    "empty": "Nog geen berichten."
+  },
+  "membership": {
+    "eyebrow": "Lidmaatschap",
+    "title": "Happy People",
+    "price": "€1 / maand",
+    "trial": "Eerste maand gratis",
+    "teaser": "Volledige seminaropnames, vlogs, quotes en persoonlijke berichten van Henk.",
+    "cta": "Start gratis maand",
+    "benefitSeminars": "Volledige seminaropnames",
+    "benefitVlogs": "Persoonlijke vlogs van Henk",
+    "benefitQuotes": "Korte berichten & quotes",
+    "benefitTeachings": "Leden-only blog",
+    "benefitMessages": "Persoonlijke berichten van Henk",
+    "pitch": "Eén club. Bijna niets. Met een glimlach."
+  },
+  "contact": {
+    "title": "Contact",
+    "body": "Vragen over seminars of Happy People? Bereik Henk via Facebook, of word lid en stuur een bericht vanuit de club.",
+    "facebook": "Facebook-profiel"
+  },
+  "members": {
+    "welcome": "Welkom terug",
+    "hub": "Jouw Happy People hub",
+    "continue": "Verder kijken",
+    "seminars": "Seminars",
+    "vlogs": "Vlogs",
+    "quotes": "Quotes",
+    "messages": "Berichten van Henk",
+    "teachings": "Leringen",
+    "locked": "Word lid om dit te openen",
+    "emptyInbox": "Nog geen persoonlijke berichten.",
+    "manageBilling": "Abonnement beheren"
+  },
+  "auth": {
+    "email": "E-mail",
+    "password": "Wachtwoord",
+    "signInTitle": "Inloggen",
+    "signUpTitle": "Account aanmaken",
+    "createAccount": "Account aanmaken",
+    "haveAccount": "Heb je al een account?",
+    "needAccount": "Nog geen account?"
+  },
+  "footer": {
+    "tagline": "De weg van de Happy People",
+    "rights": "© {year} Henrik Seegers — Happy People"
+  },
+  "admin": {
+    "title": "Admin",
+    "posts": "Blog",
+    "videos": "Video's",
+    "quotes": "Quotes",
+    "messages": "Persoonlijke berichten",
+    "events": "Seminars",
+    "denied": "Geen toegang"
+  }
+}
