@@ -3,11 +3,17 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
-import { getPostBySlug, posts, t } from "@/lib/content";
+import { posts as seedPosts, t } from "@/lib/content";
+import { fetchPostBySlug, fetchPublicPosts } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
 
-export function generateStaticParams() {
-  return posts.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  const fromDb = await fetchPublicPosts();
+  const slugs = new Set([
+    ...seedPosts.filter((p) => !p.membersOnly).map((p) => p.slug),
+    ...fromDb.map((p) => p.slug),
+  ]);
+  return [...slugs].map((slug) => ({ slug }));
 }
 
 export default async function BlogPostPage({
@@ -19,7 +25,7 @@ export default async function BlogPostPage({
   setRequestLocale(localeParam);
   const locale = localeParam as Locale;
   const tr = await getTranslations("blog");
-  const post = getPostBySlug(slug);
+  const post = await fetchPostBySlug(slug);
 
   if (!post || post.membersOnly) {
     notFound();

@@ -2,7 +2,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
-import { getPublicPosts, t } from "@/lib/content";
+import { t } from "@/lib/content";
+import { fetchPublicPosts } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
 
 export default async function BlogPage({
@@ -14,7 +15,7 @@ export default async function BlogPage({
   setRequestLocale(localeParam);
   const locale = localeParam as Locale;
   const tr = await getTranslations("blog");
-  const posts = getPublicPosts();
+  const posts = await fetchPublicPosts();
 
   return (
     <>

@@ -1,13 +1,18 @@
-"use client";
-
-import { useLocale, useTranslations } from "next-intl";
-import { getMemberPosts, t } from "@/lib/content";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { t } from "@/lib/content";
+import { fetchMemberPosts } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
 
-export default function MembersTeachingsPage() {
-  const tr = useTranslations("members");
-  const locale = useLocale() as Locale;
-  const posts = getMemberPosts();
+export default async function MembersTeachingsPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale: localeParam } = await params;
+  setRequestLocale(localeParam);
+  const locale = localeParam as Locale;
+  const tr = await getTranslations("members");
+  const posts = await fetchMemberPosts();
 
   return (
     <div>

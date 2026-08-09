@@ -1,12 +1,18 @@
-"use client";
-
-import { useLocale, useTranslations } from "next-intl";
-import { quotes, t } from "@/lib/content";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { t } from "@/lib/content";
+import { fetchQuotes } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
 
-export default function MembersQuotesPage() {
-  const tr = useTranslations("members");
-  const locale = useLocale() as Locale;
+export default async function MembersQuotesPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale: localeParam } = await params;
+  setRequestLocale(localeParam);
+  const locale = localeParam as Locale;
+  const tr = await getTranslations("members");
+  const quotes = await fetchQuotes();
 
   return (
     <div>

@@ -23,12 +23,20 @@ async function upsertMemberFromSubscription(sub: Stripe.Subscription) {
 
   if (!uid) return;
 
+  const plan =
+    sub.metadata?.plan === "yearly"
+      ? "yearly"
+      : sub.metadata?.plan === "monthly"
+        ? "monthly"
+        : undefined;
+
   await db.collection("members").doc(uid).set(
     {
       stripeCustomerId:
         typeof sub.customer === "string" ? sub.customer : sub.customer.id,
       stripeSubscriptionId: sub.id,
       subscriptionStatus: sub.status,
+      ...(plan ? { membershipPlan: plan } : {}),
     },
     { merge: true },
   );

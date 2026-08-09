@@ -3,6 +3,12 @@ import { verifyBearerUser } from "@/lib/auth-server";
 import { getAdminDb } from "@/lib/firebase/admin";
 import { getStripe, isStripeConfigured } from "@/lib/stripe";
 
+function localeFromReferer(req: Request) {
+  const referer = req.headers.get("referer") || "";
+  const match = referer.match(/\/(nl|en|de|es|it|fr|ko)(\/|$)/);
+  return match?.[1] ?? "nl";
+}
+
 export async function POST(req: Request) {
   if (!isStripeConfigured()) {
     return NextResponse.json(
@@ -35,9 +41,10 @@ export async function POST(req: Request) {
 
   const stripe = getStripe();
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const locale = localeFromReferer(req);
   const session = await stripe.billingPortal.sessions.create({
     customer: customerId,
-    return_url: `${appUrl}/nl/members`,
+    return_url: `${appUrl}/${locale}/members`,
   });
 
   return NextResponse.json({ url: session.url });

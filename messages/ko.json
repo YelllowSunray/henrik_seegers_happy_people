@@ -13,7 +13,8 @@
     "members": "멤버",
     "join": "가입",
     "signIn": "로그인",
-    "signOut": "로그아웃"
+    "signOut": "로그아웃",
+    "admin": "Admin"
   },
   "hero": {
     "brand": "Happy People",
@@ -60,18 +61,29 @@
     "empty": "아직 글이 없습니다."
   },
   "membership": {
-    "eyebrow": "멤버십",
+    "eyebrow": "Membership",
     "title": "Happy People",
-    "price": "월 €1",
-    "trial": "첫 달 무료",
-    "teaser": "세미나 전체 녹화, 브이로그, 인용문, Henk의 개인 메시지.",
-    "cta": "무료 달 시작하기",
-    "benefitSeminars": "세미나 전체 녹화",
-    "benefitVlogs": "Henk의 개인 브이로그",
-    "benefitQuotes": "짧은 메시지와 인용",
-    "benefitTeachings": "멤버 전용 블로그",
-    "benefitMessages": "Henk의 개인 메시지",
-    "pitch": "하나의 클럽. 거의 비용 없이. 미소와 함께."
+    "price": "월 €20",
+    "trial": "1주 무료 — 의무 없음",
+    "teaser": "Full seminar recordings, vlogs, quotes, and personal messages from Henk.",
+    "cta": "1주 무료 시작",
+    "benefitSeminars": "Full seminar recordings",
+    "benefitVlogs": "Personal vlogs from Henk",
+    "benefitQuotes": "Short messages & quotes",
+    "benefitTeachings": "Members-only blog",
+    "benefitMessages": "Personal messages from Henk",
+    "pitch": "하나의 클럽. 거의 아무것도. 미소와 함께.",
+    "priceMonthly": "월 €20",
+    "priceYearly": "연 €200",
+    "noObligation": "이후 월간 또는 연간 — 언제든 해지 가능.",
+    "ctaMonthly": "월간 선택",
+    "ctaYearly": "연간 선택",
+    "monthlyLabel": "월간",
+    "yearlyLabel": "연간",
+    "monthlyDetail": "무료 주 이후 월 €20. 의무 없음.",
+    "yearlyDetail": "무료 주 이후 연 €200. 의무 없음.",
+    "yearlySave": "2개월 혜택",
+    "openClub": "클럽으로"
   },
   "contact": {
     "title": "문의",
@@ -79,17 +91,20 @@
     "facebook": "Facebook 프로필"
   },
   "members": {
-    "welcome": "다시 오신 것을 환영합니다",
-    "hub": "내 Happy People 허브",
-    "continue": "이어서 보기",
-    "seminars": "세미나",
-    "vlogs": "브이로그",
-    "quotes": "인용",
-    "messages": "Henk의 메시지",
-    "teachings": "가르침",
-    "locked": "잠금 해제를 위해 가입하세요",
-    "emptyInbox": "아직 개인 메시지가 없습니다.",
-    "manageBilling": "구독 관리"
+    "welcome": "클럽에 오신 것을 환영합니다",
+    "hub": "Happy People Club",
+    "continue": "Continue watching",
+    "seminars": "Seminars",
+    "vlogs": "Vlogs",
+    "quotes": "Quotes",
+    "messages": "Messages from Henk",
+    "teachings": "Teachings",
+    "locked": "Join to unlock this",
+    "emptyInbox": "No personal messages yet.",
+    "manageBilling": "Manage subscription",
+    "subtitle": "세미나, 브이로그, 인용구, Henk의 메시지를 위한 공간.",
+    "explore": "클럽 둘러보기",
+    "trialBadge": "체험 주간 진행 중"
   },
   "auth": {
     "email": "이메일",
@@ -111,6 +126,18 @@
     "quotes": "인용",
     "messages": "개인 메시지",
     "events": "세미나",
-    "denied": "접근 불가"
+    "denied": "접근 불가",
+    "subtitle": "Beheer blog, seminars en ledencontent",
+    "signInHint": "Log in met het admin-account om verder te gaan.",
+    "newItem": "Nieuw",
+    "edit": "Bewerken",
+    "delete": "Verwijderen",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "empty": "Nog geen items",
+    "membersOnly": "Alleen voor leden",
+    "overBudgetTitle": "Firebase-budget bereikt",
+    "overBudgetBody": "Het Firebase-budget van €100 is bereikt. Neem contact op met Samir Iyer (samir@samirdev.com / +31 687343078) om meer spend vrij te geven. Schrijven is geblokkeerd.",
+    "blocked": "Opslaan geblokkeerd — budgetlimiet."
   }
 }

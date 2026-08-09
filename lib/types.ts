@@ -62,5 +62,6 @@ export type MemberProfile = {
   stripeCustomerId?: string;
   stripeSubscriptionId?: string;
   subscriptionStatus?: "none" | "trialing" | "active" | "past_due" | "canceled";
+  membershipPlan?: "monthly" | "yearly";
   isAdmin?: boolean;
 };

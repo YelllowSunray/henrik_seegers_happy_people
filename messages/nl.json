@@ -13,7 +13,8 @@
     "members": "Leden",
     "join": "Word lid",
     "signIn": "Inloggen",
-    "signOut": "Uitloggen"
+    "signOut": "Uitloggen",
+    "admin": "Admin"
   },
   "hero": {
     "brand": "Happy People",
@@ -62,16 +63,27 @@
   "membership": {
     "eyebrow": "Lidmaatschap",
     "title": "Happy People",
-    "price": "€1 / maand",
-    "trial": "Eerste maand gratis",
+    "price": "€20 / maand",
+    "trial": "1 week gratis — zonder verplichting",
     "teaser": "Volledige seminaropnames, vlogs, quotes en persoonlijke berichten van Henk.",
-    "cta": "Start gratis maand",
+    "cta": "Start 1 week gratis",
     "benefitSeminars": "Volledige seminaropnames",
     "benefitVlogs": "Persoonlijke vlogs van Henk",
     "benefitQuotes": "Korte berichten & quotes",
     "benefitTeachings": "Leden-only blog",
     "benefitMessages": "Persoonlijke berichten van Henk",
-    "pitch": "Eén club. Bijna niets. Met een glimlach."
+    "pitch": "Eén club. Bijna niets. Met een glimlach.",
+    "priceMonthly": "€20 / maand",
+    "priceYearly": "€200 / jaar",
+    "noObligation": "Daarna maandelijks of jaarlijks — altijd zonder verplichting. Stop wanneer je wilt.",
+    "ctaMonthly": "Kies maandelijks",
+    "ctaYearly": "Kies jaarlijks",
+    "monthlyLabel": "Maandelijks",
+    "yearlyLabel": "Jaarlijks",
+    "monthlyDetail": "Na de gratis week €20 per maand. Zonder verplichting.",
+    "yearlyDetail": "Na de gratis week €200 per jaar. Zonder verplichting.",
+    "yearlySave": "2 maanden voordeel",
+    "openClub": "Naar de club"
   },
   "contact": {
     "title": "Contact",
@@ -79,8 +91,8 @@
     "facebook": "Facebook-profiel"
   },
   "members": {
-    "welcome": "Welkom terug",
-    "hub": "Jouw Happy People hub",
+    "welcome": "Welkom in de club",
+    "hub": "Happy People Club",
     "continue": "Verder kijken",
     "seminars": "Seminars",
     "vlogs": "Vlogs",
@@ -89,7 +101,10 @@
     "teachings": "Leringen",
     "locked": "Word lid om dit te openen",
     "emptyInbox": "Nog geen persoonlijke berichten.",
-    "manageBilling": "Abonnement beheren"
+    "manageBilling": "Abonnement beheren",
+    "subtitle": "Jouw ruimte voor seminars, vlogs, quotes en berichten van Henk.",
+    "explore": "Ontdek de club",
+    "trialBadge": "Proefweek actief"
   },
   "auth": {
     "email": "E-mail",
@@ -111,6 +126,18 @@
     "quotes": "Quotes",
     "messages": "Persoonlijke berichten",
     "events": "Seminars",
-    "denied": "Geen toegang"
+    "denied": "Geen toegang",
+    "subtitle": "Beheer blog, seminars en ledencontent",
+    "signInHint": "Log in met het admin-account om verder te gaan.",
+    "newItem": "Nieuw",
+    "edit": "Bewerken",
+    "delete": "Verwijderen",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "empty": "Nog geen items",
+    "membersOnly": "Alleen voor leden",
+    "overBudgetTitle": "Firebase-budget bereikt",
+    "overBudgetBody": "Het Firebase-budget van €100 is bereikt. Neem contact op met Samir Iyer (samir@samirdev.com / +31 687343078) om meer spend vrij te geven. Schrijven is geblokkeerd.",
+    "blocked": "Opslaan geblokkeerd — budgetlimiet."
   }
 }

@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
-import { JoinButton } from "@/components/join-button";
+import { MembershipPlans } from "@/components/membership-plans";
 
 export default async function MembershipPage({
   params,
@@ -25,11 +25,7 @@ export default async function MembershipPage({
       <SiteHeader variant="solid" />
       <Section eyebrow={t("eyebrow")} title={t("title")}>
         <p className="max-w-2xl text-lg text-ink-soft sm:text-xl">{t("teaser")}</p>
-        <p className="font-display mt-6 text-3xl text-accent sm:text-4xl">
-          {t("price")}
-        </p>
-        <p className="mt-2 text-ink-soft">{t("trial")}</p>
-        <p className="mt-8 max-w-xl text-lg">{t("pitch")}</p>
+        <p className="mt-6 max-w-xl text-lg text-ink">{t("pitch")}</p>
 
         <ul className="mt-10 max-w-lg space-y-4">
           {benefits.map((b) => (
@@ -42,9 +38,7 @@ export default async function MembershipPage({
           ))}
         </ul>
 
-        <div className="mt-12">
-          <JoinButton label={t("cta")} />
-        </div>
+        <MembershipPlans className="mt-12" />
       </Section>
     </>
   );

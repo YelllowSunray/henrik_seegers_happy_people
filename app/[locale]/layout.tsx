@@ -3,6 +3,7 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { AuthProvider } from "@/components/auth-provider";
+import { BillingBanner } from "@/components/billing-banner";
 import { SiteFooter } from "@/components/site-footer";
 
 export function generateStaticParams() {
@@ -28,6 +29,7 @@ export default async function LocaleLayout({
     <NextIntlClientProvider messages={messages}>
       <AuthProvider>
         <div className="flex min-h-full flex-col">
+          <BillingBanner />
           <div className="flex-1">{children}</div>
           <SiteFooter />
         </div>

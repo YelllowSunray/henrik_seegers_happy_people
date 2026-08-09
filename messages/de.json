@@ -13,7 +13,8 @@
     "members": "Mitglieder",
     "join": "Beitreten",
     "signIn": "Anmelden",
-    "signOut": "Abmelden"
+    "signOut": "Abmelden",
+    "admin": "Admin"
   },
   "hero": {
     "brand": "Happy People",
@@ -62,16 +63,27 @@
   "membership": {
     "eyebrow": "Mitgliedschaft",
     "title": "Happy People",
-    "price": "€1 / Monat",
-    "trial": "Erster Monat gratis",
+    "price": "€20 / Monat",
+    "trial": "1 Woche gratis — ohne Verpflichtung",
     "teaser": "Volle Seminaraufnahmen, Vlogs, Zitate und persönliche Nachrichten von Henk.",
-    "cta": "Gratis-Monat starten",
+    "cta": "1 Woche gratis starten",
     "benefitSeminars": "Volle Seminaraufnahmen",
     "benefitVlogs": "Persönliche Vlogs von Henk",
-    "benefitQuotes": "Kurze Botschaften & Zitate",
-    "benefitTeachings": "Mitglieder-only Blog",
+    "benefitQuotes": "Kurze Nachrichten & Zitate",
+    "benefitTeachings": "Mitglieder-Blog",
     "benefitMessages": "Persönliche Nachrichten von Henk",
-    "pitch": "Ein Club. Fast nichts. Mit einem Lächeln."
+    "pitch": "Ein Club. Fast nichts. Mit einem Lächeln.",
+    "priceMonthly": "€20 / Monat",
+    "priceYearly": "€200 / Jahr",
+    "noObligation": "Danach monatlich oder jährlich — immer ohne Verpflichtung. Jederzeit kündbar.",
+    "ctaMonthly": "Monatlich wählen",
+    "ctaYearly": "Jährlich wählen",
+    "monthlyLabel": "Monatlich",
+    "yearlyLabel": "Jährlich",
+    "monthlyDetail": "Nach der Gratiswoche €20 pro Monat. Ohne Verpflichtung.",
+    "yearlyDetail": "Nach der Gratiswoche €200 pro Jahr. Ohne Verpflichtung.",
+    "yearlySave": "2 Monate Vorteil",
+    "openClub": "Zum Club"
   },
   "contact": {
     "title": "Kontakt",
@@ -79,8 +91,8 @@
     "facebook": "Facebook-Profil"
   },
   "members": {
-    "welcome": "Willkommen zurück",
-    "hub": "Dein Happy People Hub",
+    "welcome": "Willkommen im Club",
+    "hub": "Happy People Club",
     "continue": "Weiter schauen",
     "seminars": "Seminare",
     "vlogs": "Vlogs",
@@ -89,7 +101,10 @@
     "teachings": "Lehren",
     "locked": "Werde Mitglied, um dies zu öffnen",
     "emptyInbox": "Noch keine persönlichen Nachrichten.",
-    "manageBilling": "Abo verwalten"
+    "manageBilling": "Abo verwalten",
+    "subtitle": "Dein Raum für Seminare, Vlogs, Zitate und Nachrichten von Henk.",
+    "explore": "Club entdecken",
+    "trialBadge": "ProbeWoche aktiv"
   },
   "auth": {
     "email": "E-Mail",
@@ -111,6 +126,18 @@
     "quotes": "Zitate",
     "messages": "Persönliche Nachrichten",
     "events": "Seminare",
-    "denied": "Kein Zugang"
+    "denied": "Kein Zugang",
+    "subtitle": "Beheer blog, seminars en ledencontent",
+    "signInHint": "Log in met het admin-account om verder te gaan.",
+    "newItem": "Nieuw",
+    "edit": "Bewerken",
+    "delete": "Verwijderen",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "empty": "Nog geen items",
+    "membersOnly": "Alleen voor leden",
+    "overBudgetTitle": "Firebase-budget bereikt",
+    "overBudgetBody": "Het Firebase-budget van €100 is bereikt. Neem contact op met Samir Iyer (samir@samirdev.com / +31 687343078) om meer spend vrij te geven. Schrijven is geblokkeerd.",
+    "blocked": "Opslaan geblokkeerd — budgetlimiet."
   }
 }

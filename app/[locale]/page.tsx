@@ -3,10 +3,12 @@ import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { JoinButton } from "@/components/join-button";
+import { MembershipPlans } from "@/components/membership-plans";
 import { SpeedGallery } from "@/components/speed-gallery";
 import { LightboxImage } from "@/components/lightbox-image";
 import { MicrochipPlayer } from "@/components/microchip-player";
-import { events, getPublicPosts, t } from "@/lib/content";
+import { t } from "@/lib/content";
+import { fetchEvents, fetchPublicPosts } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
 
 export default async function HomePage({
@@ -24,8 +26,12 @@ export default async function HomePage({
   const tBlog = await getTranslations("blog");
   const tMem = await getTranslations("membership");
 
+  const [events, publicPosts] = await Promise.all([
+    fetchEvents(),
+    fetchPublicPosts(),
+  ]);
   const nextEvent = events[0];
-  const latest = getPublicPosts().slice(0, 3);
+  const latest = publicPosts.slice(0, 3);
 
   return (
     <>
@@ -209,9 +215,6 @@ export default async function HomePage({
               {tMem("title")}
             </h2>
             <p className="mt-6 max-w-xl text-lg text-ink-soft">{tMem("pitch")}</p>
-            <p className="mt-2 font-display text-3xl text-accent">
-              {tMem("price")} · {tMem("trial")}
-            </p>
             <ul className="mt-8 grid gap-3 text-ink-soft sm:grid-cols-2">
               <li>{tMem("benefitSeminars")}</li>
               <li>{tMem("benefitVlogs")}</li>
@@ -219,9 +222,7 @@ export default async function HomePage({
               <li>{tMem("benefitTeachings")}</li>
               <li>{tMem("benefitMessages")}</li>
             </ul>
-            <div className="mt-10">
-              <JoinButton label={tMem("cta")} />
-            </div>
+            <MembershipPlans className="mt-10" />
           </div>
           <SpeedGallery />
         </div>

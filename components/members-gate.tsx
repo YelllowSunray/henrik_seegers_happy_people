@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/components/auth-provider";
 import { Link } from "@/i18n/navigation";
-import { JoinButton } from "@/components/join-button";
+import { MembershipPlans } from "@/components/membership-plans";
 
 export function MembersGate({ children }: { children: React.ReactNode }) {
   const { user, loading, isMember } = useAuth();
@@ -17,11 +17,12 @@ export function MembersGate({ children }: { children: React.ReactNode }) {
 
   if (!user) {
     return (
-      <div className="py-16 text-center">
-        <p className="text-lg text-ink-soft">{t("locked")}</p>
+      <div className="mx-auto max-w-lg py-16 text-center">
+        <p className="font-display text-3xl text-ink">{tMem("title")}</p>
+        <p className="mt-4 text-lg text-ink-soft">{t("locked")}</p>
         <Link
           href="/auth?next=/members"
-          className="mt-6 inline-flex rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white"
+          className="mt-8 inline-flex rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white"
         >
           {tNav("signIn")}
         </Link>
@@ -31,11 +32,14 @@ export function MembersGate({ children }: { children: React.ReactNode }) {
 
   if (!isMember) {
     return (
-      <div className="py-16 text-center">
-        <p className="text-lg text-ink-soft">{t("locked")}</p>
-        <div className="mt-6 flex justify-center">
-          <JoinButton label={tMem("cta")} />
+      <div className="mx-auto max-w-3xl py-10">
+        <div className="text-center">
+          <p className="font-display text-3xl text-ink sm:text-4xl">
+            {tMem("title")}
+          </p>
+          <p className="mt-3 text-ink-soft">{t("locked")}</p>
         </div>
+        <MembershipPlans className="mt-10" />
       </div>
     );
   }

@@ -10,16 +10,16 @@ const navKeys = [
   ["about", "/over-henk"],
   ["seminars", "/seminars"],
   ["blog", "/blog"],
-  ["membership", "/happy-people"],
   ["contact", "/contact"],
 ] as const;
 
 export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" }) {
   const t = useTranslations("nav");
-  const { user, isMember, signOut, loading } = useAuth();
+  const { user, isMember, isAdmin, signOut, loading } = useAuth();
   const onHero = variant === "hero";
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const showJoin = !loading && !isMember;
 
   useEffect(() => {
     setMenuOpen(false);
@@ -39,6 +39,10 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
     };
   }, [menuOpen]);
 
+  const linkTone = onHero
+    ? "text-white/90 hover:text-white"
+    : "text-ink-soft hover:text-ink";
+
   return (
     <header
       className={
@@ -47,10 +51,10 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
           : "sticky top-0 z-40 border-b border-line bg-bg/90 pt-[env(safe-area-inset-top)] backdrop-blur"
       }
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-4 sm:gap-5 sm:py-6 md:px-8">
+      <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-5 py-4 md:px-8 lg:gap-6">
         <Link
           href="/"
-          className={`font-display shrink-0 text-xl tracking-tight sm:text-2xl md:text-3xl ${
+          className={`font-display shrink-0 text-xl tracking-tight sm:text-2xl ${
             onHero ? "text-white drop-shadow" : "text-ink"
           }`}
         >
@@ -58,7 +62,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
         </Link>
 
         <nav
-          className={`hidden items-center gap-7 text-base font-medium lg:flex ${
+          className={`hidden min-w-0 flex-1 items-center justify-center gap-5 text-sm font-medium whitespace-nowrap xl:gap-6 xl:text-[0.95rem] lg:flex ${
             onHero ? "text-white drop-shadow-sm" : "text-ink"
           }`}
         >
@@ -66,19 +70,38 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
             <Link
               key={key}
               href={href}
-              className="opacity-95 transition hover:opacity-100"
+              className={`transition ${linkTone}`}
             >
               {t(key)}
             </Link>
           ))}
-          {isMember && (
-            <Link href="/members" className="transition hover:opacity-100">
-              {t("members")}
+          {!isMember && (
+            <Link href="/happy-people" className={`transition ${linkTone}`}>
+              {t("membership")}
             </Link>
           )}
         </nav>
 
-        <div className="flex items-center gap-2 sm:gap-3.5">
+        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
+          {isMember && (
+            <Link
+              href="/members"
+              className={`hidden text-sm font-medium transition lg:inline ${linkTone}`}
+            >
+              {t("members")}
+            </Link>
+          )}
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className={`hidden text-sm font-semibold transition lg:inline ${
+                onHero ? "text-gold hover:text-white" : "text-accent hover:text-accent-soft"
+              }`}
+            >
+              {t("admin")}
+            </Link>
+          )}
+
           <LanguageSwitcher variant={variant} />
 
           {!loading &&
@@ -86,37 +109,31 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
               <button
                 type="button"
                 onClick={() => void signOut()}
-                className={`hidden rounded-full px-4 py-2 text-sm font-medium lg:inline ${
-                  onHero
-                    ? "border border-white/35 text-white"
-                    : "border border-line text-ink"
-                }`}
+                className={`hidden text-sm font-medium transition lg:inline ${linkTone}`}
               >
                 {t("signOut")}
               </button>
             ) : (
               <Link
                 href="/auth"
-                className={`hidden rounded-full px-4 py-2 text-sm font-medium lg:inline ${
-                  onHero
-                    ? "border border-white/35 text-white"
-                    : "border border-line text-ink"
-                }`}
+                className={`hidden text-sm font-medium transition lg:inline ${linkTone}`}
               >
                 {t("signIn")}
               </Link>
             ))}
 
-          <Link
-            href="/happy-people"
-            className="hidden rounded-full bg-accent px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-accent-soft sm:inline-flex sm:px-4.5 sm:py-2.5"
-          >
-            {t("join")}
-          </Link>
+          {showJoin && (
+            <Link
+              href="/happy-people"
+              className="hidden rounded-full bg-accent px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-accent-soft sm:inline-flex"
+            >
+              {t("join")}
+            </Link>
+          )}
 
           <button
             type="button"
-            className={`inline-flex h-11 w-11 items-center justify-center rounded-full border lg:hidden ${
+            className={`inline-flex h-10 w-10 items-center justify-center rounded-full border lg:hidden ${
               onHero
                 ? "border-white/35 text-white"
                 : "border-line text-ink"
@@ -179,6 +196,15 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                   {t(key)}
                 </Link>
               ))}
+              {!isMember && (
+                <Link
+                  href="/happy-people"
+                  className="rounded-lg px-3 py-3.5 text-lg font-medium text-ink transition hover:bg-bg-deep"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {t("membership")}
+                </Link>
+              )}
               {isMember && (
                 <Link
                   href="/members"
@@ -186,6 +212,15 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                   onClick={() => setMenuOpen(false)}
                 >
                   {t("members")}
+                </Link>
+              )}
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  className="rounded-lg px-3 py-3.5 text-lg font-medium text-accent transition hover:bg-bg-deep"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {t("admin")}
                 </Link>
               )}
             </nav>
@@ -212,13 +247,15 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                     {t("signIn")}
                   </Link>
                 ))}
-              <Link
-                href="/happy-people"
-                className="rounded-full bg-accent px-4 py-3 text-center text-base font-semibold text-white"
-                onClick={() => setMenuOpen(false)}
-              >
-                {t("join")}
-              </Link>
+              {showJoin && (
+                <Link
+                  href="/happy-people"
+                  className="rounded-full bg-accent px-4 py-3 text-center text-base font-semibold text-white"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {t("join")}
+                </Link>
+              )}
             </div>
           </div>
         </div>

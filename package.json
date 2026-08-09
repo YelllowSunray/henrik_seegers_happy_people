@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "admin:ensure-user": "node --env-file=.env.local scripts/ensure-admin-user.mjs",
+    "admin:billing-on": "node --env-file=.env.local scripts/set-billing-flag.mjs true",
+    "admin:billing-off": "node --env-file=.env.local scripts/set-billing-flag.mjs false"
   },
   "dependencies": {
     "@stripe/stripe-js": "^9.13.0",

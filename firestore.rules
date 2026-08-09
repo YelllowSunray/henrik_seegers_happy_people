@@ -10,6 +10,11 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/members/$(request.auth.uid)).data.isAdmin == true;
     }
 
+    function billingOk() {
+      return !exists(/databases/$(database)/documents/system/billing)
+        || get(/databases/$(database)/documents/system/billing).data.overBudget != true;
+    }
+
     match /members/{uid} {
       allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
       allow create: if signedIn() && request.auth.uid == uid;
@@ -18,17 +23,17 @@ service cloud.firestore {
 
     match /posts/{id} {
       allow read: if resource.data.membersOnly != true || signedIn();
-      allow write: if isAdmin();
+      allow create, update, delete: if isAdmin() && billingOk();
     }
 
     match /videos/{id} {
       allow read: if resource.data.kind == 'sample' || signedIn();
-      allow write: if isAdmin();
+      allow create, update, delete: if isAdmin() && billingOk();
     }
 
     match /quotes/{id} {
       allow read: if signedIn();
-      allow write: if isAdmin();
+      allow create, update, delete: if isAdmin() && billingOk();
     }
 
     match /personalMessages/{id} {
@@ -36,12 +41,18 @@ service cloud.firestore {
         && (resource.data.toUserId == request.auth.uid
             || resource.data.toEmail == request.auth.token.email
             || isAdmin());
-      allow write: if isAdmin();
+      allow create, update, delete: if isAdmin() && billingOk();
     }
 
     match /events/{id} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow create, update, delete: if isAdmin() && billingOk();
+    }
+
+    match /system/{doc} {
+      // Public read so the spend-cap banner works for everyone
+      allow read: if true;
+      allow write: if false;
     }
   }
 }

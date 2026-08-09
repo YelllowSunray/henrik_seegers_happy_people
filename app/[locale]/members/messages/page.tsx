@@ -1,13 +1,60 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { collection, onSnapshot } from "firebase/firestore";
+import { useAuth } from "@/components/auth-provider";
+import { getClientDb, isFirebaseConfigured } from "@/lib/firebase/client";
 import { samplePersonalMessages, t } from "@/lib/content";
-import type { Locale } from "@/lib/types";
+import type { Locale, PersonalMessage } from "@/lib/types";
 
 export default function MembersMessagesPage() {
   const tr = useTranslations("members");
   const locale = useLocale() as Locale;
-  const messages = samplePersonalMessages;
+  const { user } = useAuth();
+  const [messages, setMessages] = useState<PersonalMessage[]>([]);
+
+  useEffect(() => {
+    if (!isFirebaseConfigured || !user?.email) {
+      setMessages(
+        samplePersonalMessages.map((m) => ({
+          ...m,
+          toEmail: user?.email ?? undefined,
+        })),
+      );
+      return;
+    }
+
+    const email = user.email.toLowerCase();
+    return onSnapshot(collection(getClientDb(), "personalMessages"), (snap) => {
+      const rows = snap.docs
+        .map((d) => {
+          const data = d.data();
+          return {
+            id: d.id,
+            toUserId: String(data.toUserId ?? ""),
+            toEmail: data.toEmail as string | undefined,
+            subject: data.subject ?? { nl: "" },
+            body: data.body ?? { nl: "" },
+            createdAt: String(data.createdAt ?? ""),
+            read: Boolean(data.read),
+          } as PersonalMessage;
+        })
+        .filter(
+          (m) =>
+            m.toEmail?.toLowerCase() === email ||
+            m.toUserId === user.uid,
+        );
+      setMessages(
+        rows.length > 0
+          ? rows
+          : samplePersonalMessages.map((m) => ({
+              ...m,
+              toEmail: user.email ?? undefined,
+            })),
+      );
+    });
+  }, [user]);
 
   return (
     <div>

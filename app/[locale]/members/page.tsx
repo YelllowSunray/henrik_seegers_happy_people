@@ -1,46 +1,62 @@
-"use client";
-
-import { useLocale, useTranslations } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { useAuth } from "@/components/auth-provider";
-import { getVideosByKind, quotes, t } from "@/lib/content";
+import { MembersPortalButton } from "@/components/members-portal-button";
+import { MembersWelcome } from "@/components/members-welcome";
+import { t } from "@/lib/content";
+import {
+  fetchQuotes,
+  fetchVideosByKind,
+} from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
 
-export default function MembersHomePage() {
-  const tr = useTranslations("members");
-  const locale = useLocale() as Locale;
-  const { user, profile } = useAuth();
-  const latestSeminar = getVideosByKind("seminar")[0];
-  const latestVlog = getVideosByKind("vlog")[0];
+export default async function MembersHomePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale: localeParam } = await params;
+  setRequestLocale(localeParam);
+  const locale = localeParam as Locale;
+  const tr = await getTranslations("members");
+  const [seminars, vlogs, quotes] = await Promise.all([
+    fetchVideosByKind("seminar"),
+    fetchVideosByKind("vlog"),
+    fetchQuotes(),
+  ]);
+  const latestSeminar = seminars[0];
+  const latestVlog = vlogs[0];
   const latestQuote = quotes[0];
-
-  async function openPortal() {
-    if (!user) return;
-    const token = await user.getIdToken();
-    const res = await fetch("/api/stripe/portal", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = (await res.json()) as { url?: string };
-    if (data.url) window.location.href = data.url;
-  }
 
   return (
     <div>
-      <p className="text-sm text-ink-soft">{tr("welcome")}</p>
-      <h1 className="font-display mt-1 text-3xl sm:text-4xl">{tr("hub")}</h1>
-      <p className="mt-2 text-sm text-ink-soft">{profile?.email}</p>
+      <MembersWelcome />
 
-      <div className="mt-10 grid gap-6 md:grid-cols-2">
+      <p className="mt-10 text-xs font-semibold tracking-[0.18em] text-accent uppercase">
+        {tr("explore")}
+      </p>
+
+      <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ClubLink href="/members/seminars" label={tr("seminars")} tone="accent" />
+        <ClubLink href="/members/vlogs" label={tr("vlogs")} tone="gold" />
+        <ClubLink href="/members/quotes" label={tr("quotes")} tone="accent" />
+        <ClubLink href="/members/messages" label={tr("messages")} tone="gold" />
+        <ClubLink
+          href="/members/teachings"
+          label={tr("teachings")}
+          tone="accent"
+        />
+      </div>
+
+      <div className="mt-12 grid gap-6 md:grid-cols-2">
         {latestSeminar && (
           <Link
             href="/members/seminars"
-            className="border border-line bg-bg/70 p-6 transition hover:border-accent"
+            className="group border border-line bg-bg-deep/40 p-6 transition hover:border-accent"
           >
             <p className="text-xs font-semibold tracking-wider text-accent uppercase">
               {tr("continue")}
             </p>
-            <h2 className="font-display mt-2 text-2xl">
+            <h2 className="font-display mt-2 text-2xl group-hover:text-accent">
               {t(latestSeminar.title, locale)}
             </h2>
             <p className="mt-2 text-sm text-ink-soft">
@@ -51,12 +67,12 @@ export default function MembersHomePage() {
         {latestVlog && (
           <Link
             href="/members/vlogs"
-            className="border border-line bg-bg/70 p-6 transition hover:border-accent"
+            className="group border border-line bg-bg-deep/40 p-6 transition hover:border-accent"
           >
             <p className="text-xs font-semibold tracking-wider text-gold uppercase">
               {tr("vlogs")}
             </p>
-            <h2 className="font-display mt-2 text-2xl">
+            <h2 className="font-display mt-2 text-2xl group-hover:text-accent">
               {t(latestVlog.title, locale)}
             </h2>
           </Link>
@@ -64,25 +80,43 @@ export default function MembersHomePage() {
         {latestQuote && (
           <Link
             href="/members/quotes"
-            className="border border-line bg-bg/70 p-6 md:col-span-2"
+            className="border border-line bg-bg-deep/40 p-6 md:col-span-2"
           >
             <p className="text-xs font-semibold tracking-wider text-accent uppercase">
               {tr("quotes")}
             </p>
-            <p className="font-display mt-3 text-2xl leading-snug">
+            <p className="font-display mt-3 text-2xl leading-snug md:text-3xl">
               “{t(latestQuote.text, locale)}”
             </p>
           </Link>
         )}
       </div>
 
-      <button
-        type="button"
-        onClick={() => void openPortal()}
-        className="mt-10 text-sm text-accent underline-offset-4 hover:underline"
-      >
-        {tr("manageBilling")}
-      </button>
+      <MembersPortalButton />
     </div>
+  );
+}
+
+function ClubLink({
+  href,
+  label,
+  tone,
+}: {
+  href: string;
+  label: string;
+  tone: "accent" | "gold";
+}) {
+  return (
+    <Link
+      href={href}
+      className="flex items-center justify-between border border-line bg-white/50 px-4 py-4 transition hover:border-accent"
+    >
+      <span className="font-medium text-ink">{label}</span>
+      <span
+        className={`text-lg ${tone === "gold" ? "text-gold" : "text-accent"}`}
+      >
+        →
+      </span>
+    </Link>
   );
 }

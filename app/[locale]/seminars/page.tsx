@@ -3,7 +3,8 @@ import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { JoinButton } from "@/components/join-button";
-import { events, getVideosByKind, t } from "@/lib/content";
+import { t } from "@/lib/content";
+import { fetchEvents, fetchVideosByKind } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
 
 export default async function SeminarsPage({
@@ -16,7 +17,10 @@ export default async function SeminarsPage({
   const locale = localeParam as Locale;
   const tr = await getTranslations("seminars");
   const tMem = await getTranslations("membership");
-  const seminars = getVideosByKind("seminar");
+  const [events, seminars] = await Promise.all([
+    fetchEvents(),
+    fetchVideosByKind("seminar"),
+  ]);
 
   return (
     <>
@@ -26,7 +30,10 @@ export default async function SeminarsPage({
 
         <div className="mt-12 space-y-8">
           {events.map((event) => (
-            <article key={event.id} className="border border-line bg-bg/80 p-5 sm:p-8">
+            <article
+              key={event.id}
+              className="border border-line bg-bg/80 p-5 sm:p-8"
+            >
               <p className="text-xs font-semibold tracking-[0.18em] text-gold uppercase">
                 {tr("next")}
               </p>
