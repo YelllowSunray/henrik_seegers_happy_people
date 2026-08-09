@@ -43,16 +43,16 @@ export function LanguageSwitcher({
         aria-expanded={open}
         aria-label={`Language: ${current.native}`}
         onClick={() => setOpen((v) => !v)}
-        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide ${
+        className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-2 text-xs font-semibold tracking-wide sm:gap-2 sm:px-3.5 sm:text-sm ${
           onHero
-            ? "border border-white/25 bg-black/20 text-white backdrop-blur"
+            ? "border border-white/30 bg-black/25 text-white backdrop-blur"
             : "border border-line bg-white/80 text-ink"
         }`}
       >
         <svg
           aria-hidden
           viewBox="0 0 24 24"
-          className="h-3.5 w-3.5 opacity-80"
+          className="h-3.5 w-3.5 opacity-85 sm:h-4 sm:w-4"
           fill="none"
           stroke="currentColor"
           strokeWidth="1.8"
@@ -62,7 +62,7 @@ export function LanguageSwitcher({
         </svg>
         <span>{current.short}</span>
         <span
-          className={`inline-block text-[10px] opacity-70 transition-transform ${
+          className={`inline-block text-xs opacity-70 transition-transform ${
             open ? "rotate-180" : ""
           }`}
         >
@@ -85,12 +85,12 @@ export function LanguageSwitcher({
                   href={pathname}
                   locale={code}
                   onClick={() => setOpen(false)}
-                  className={`flex items-center justify-between gap-3 px-3 py-2.5 text-sm transition hover:bg-bg-deep ${
+                  className={`flex items-center justify-between gap-3 px-3.5 py-3 text-base transition hover:bg-bg-deep ${
                     active ? "bg-bg-deep font-semibold text-accent" : "text-ink"
                   }`}
                 >
                   <span>{label.native}</span>
-                  <span className="text-xs tracking-wide text-ink-soft uppercase">
+                  <span className="text-sm tracking-wide text-ink-soft uppercase">
                     {label.short}
                   </span>
                 </Link>

@@ -42,8 +42,8 @@ function AuthForm() {
   }
 
   return (
-    <div className="mx-auto max-w-md px-5 py-16">
-      <h1 className="font-display text-3xl">
+    <div className="mx-auto max-w-md px-5 py-12 sm:py-16">
+      <h1 className="font-display text-2xl sm:text-3xl">
         {mode === "in" ? t("signInTitle") : t("signUpTitle")}
       </h1>
       <form onSubmit={onSubmit} className="mt-8 space-y-4">
@@ -54,7 +54,7 @@ function AuthForm() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 w-full border border-line bg-white/70 px-3 py-2"
+            className="mt-1 w-full border border-line bg-white/70 px-3 py-3 text-base"
           />
         </label>
         <label className="block text-sm">
@@ -65,7 +65,7 @@ function AuthForm() {
             minLength={6}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 w-full border border-line bg-white/70 px-3 py-2"
+            className="mt-1 w-full border border-line bg-white/70 px-3 py-3 text-base"
           />
         </label>
         {error && <p className="text-sm text-red-700">{error}</p>}

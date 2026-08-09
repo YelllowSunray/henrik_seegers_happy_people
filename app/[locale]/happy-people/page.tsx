@@ -24,8 +24,8 @@ export default async function MembershipPage({
     <>
       <SiteHeader variant="solid" />
       <Section eyebrow={t("eyebrow")} title={t("title")}>
-        <p className="max-w-2xl text-xl text-ink-soft">{t("teaser")}</p>
-        <p className="font-display mt-6 text-4xl text-accent">
+        <p className="max-w-2xl text-lg text-ink-soft sm:text-xl">{t("teaser")}</p>
+        <p className="font-display mt-6 text-3xl text-accent sm:text-4xl">
           {t("price")}
         </p>
         <p className="mt-2 text-ink-soft">{t("trial")}</p>

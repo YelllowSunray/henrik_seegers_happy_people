@@ -28,7 +28,7 @@ export default function MembersHomePage() {
   return (
     <div>
       <p className="text-sm text-ink-soft">{tr("welcome")}</p>
-      <h1 className="font-display mt-1 text-4xl">{tr("hub")}</h1>
+      <h1 className="font-display mt-1 text-3xl sm:text-4xl">{tr("hub")}</h1>
       <p className="mt-2 text-sm text-ink-soft">{profile?.email}</p>
 
       <div className="mt-10 grid gap-6 md:grid-cols-2">

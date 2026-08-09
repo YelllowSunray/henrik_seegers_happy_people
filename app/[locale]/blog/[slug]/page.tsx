@@ -30,10 +30,10 @@ export default async function BlogPostPage({
       <SiteHeader variant="solid" />
       <Section>
         <p className="text-xs text-ink-soft">{post.publishedAt}</p>
-        <h1 className="font-display mt-3 max-w-3xl text-4xl md:text-5xl">
+        <h1 className="font-display mt-3 max-w-3xl text-3xl leading-tight sm:text-4xl md:text-5xl">
           {t(post.title, locale)}
         </h1>
-        <p className="mt-10 max-w-2xl text-lg leading-relaxed whitespace-pre-wrap text-ink-soft">
+        <p className="mt-8 max-w-2xl text-base leading-relaxed whitespace-pre-wrap text-ink-soft sm:mt-10 sm:text-lg">
           {t(post.body, locale)}
         </p>
         <Link

@@ -49,12 +49,12 @@ export function LightboxImage({
           role="dialog"
           aria-modal="true"
           aria-label={alt}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-ink/80 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-ink/80 p-4 pt-[max(1rem,env(safe-area-inset-top))] backdrop-blur-sm"
           onClick={() => setOpen(false)}
         >
           <button
             type="button"
-            className="absolute top-5 right-5 rounded-full border border-white/30 px-3 py-1 text-sm text-white"
+            className="absolute top-[max(1.25rem,env(safe-area-inset-top))] right-[max(1.25rem,env(safe-area-inset-right))] rounded-full border border-white/30 px-3 py-1.5 text-sm text-white"
             onClick={() => setOpen(false)}
           >
             Close

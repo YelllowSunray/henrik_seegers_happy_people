@@ -5,6 +5,7 @@ import { Section } from "@/components/section";
 import { JoinButton } from "@/components/join-button";
 import { SpeedGallery } from "@/components/speed-gallery";
 import { LightboxImage } from "@/components/lightbox-image";
+import { MicrochipPlayer } from "@/components/microchip-player";
 import { events, getPublicPosts, t } from "@/lib/content";
 import type { Locale } from "@/lib/types";
 
@@ -32,7 +33,8 @@ export default async function HomePage({
 
       <section className="relative min-h-[100svh] overflow-hidden">
         <video
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          id="hero-video"
+          className="absolute inset-0 h-full w-full object-cover object-[center_28%] sm:object-center"
           src="/videos/Siminar_Video.mp4"
           autoPlay
           muted
@@ -42,24 +44,30 @@ export default async function HomePage({
           aria-hidden
         />
         <div className="absolute inset-0" style={{ background: "var(--hero-overlay)" }} />
-        <div className="relative mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-5 pb-16 pt-28 md:px-8 md:pb-24">
-          <p className="reveal font-display text-5xl text-white drop-shadow md:text-7xl lg:text-8xl">
-            {tNav("brand")}
-          </p>
-          <h1 className="reveal reveal-delay-1 mt-4 whitespace-nowrap text-sm text-white/95 sm:text-lg md:text-xl lg:text-2xl">
-            {tNav("headline")}
-          </h1>
-          <p className="reveal reveal-delay-2 mt-3 max-w-md text-base text-white/80">
-            {tNav("support")}
-          </p>
-          <div className="reveal reveal-delay-3 mt-8 flex flex-wrap gap-3">
-            <JoinButton label={tNav("ctaJoin")} />
-            <Link
-              href="/seminars"
-              className="inline-flex rounded-full border border-white/40 px-6 py-3 text-sm font-semibold text-white backdrop-blur hover:bg-white/10"
-            >
-              {tNav("ctaSeminar")}
-            </Link>
+        <div className="relative mx-auto flex min-h-[100svh] w-full flex-col justify-end gap-6 px-5 pb-10 pt-24 sm:gap-8 sm:pb-16 sm:pt-28 md:px-8 md:pb-24 lg:flex-row lg:items-end lg:justify-between lg:gap-12 lg:px-10 xl:px-14">
+          <div className="min-w-0 max-w-6xl lg:max-w-xl xl:max-w-2xl">
+            <p className="reveal font-display text-4xl text-white drop-shadow sm:whitespace-nowrap sm:text-5xl md:text-7xl lg:text-8xl">
+              {tNav("brand")}
+            </p>
+            <h1 className="reveal reveal-delay-1 mt-3 max-w-xl text-balance text-base leading-snug text-white/95 sm:mt-4 sm:text-lg md:text-xl lg:text-2xl">
+              {tNav("headline")}
+            </h1>
+            <p className="reveal reveal-delay-2 mt-3 max-w-md text-sm text-white/80 sm:text-base">
+              {tNav("support")}
+            </p>
+            <div className="reveal reveal-delay-3 mt-6 flex flex-wrap gap-3 sm:mt-8">
+              <JoinButton label={tNav("ctaJoin")} />
+              <Link
+                href="/seminars"
+                className="inline-flex rounded-full border border-white/40 px-5 py-3 text-sm font-semibold text-white backdrop-blur hover:bg-white/10 sm:px-6"
+              >
+                {tNav("ctaSeminar")}
+              </Link>
+            </div>
+          </div>
+
+          <div className="w-full shrink-0 lg:ml-auto lg:w-auto lg:max-w-[41rem]">
+            <MicrochipPlayer />
           </div>
         </div>
       </section>
@@ -158,7 +166,7 @@ export default async function HomePage({
             <LightboxImage
               src="/images/image3.jpg"
               alt={tSem("imageAlt")}
-              className="aspect-square min-h-[22rem] w-full"
+              className="aspect-square min-h-[16rem] w-full sm:min-h-[22rem]"
             />
             <figcaption className="mt-3 text-sm text-ink-soft">
               {tSem("imageCaption")}

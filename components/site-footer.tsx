@@ -6,7 +6,7 @@ export async function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-line bg-bg-deep">
+    <footer className="border-t border-line bg-bg-deep pb-[env(safe-area-inset-bottom)]">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-12 md:flex-row md:items-end md:justify-between md:px-8">
         <div>
           <p className="font-display text-2xl text-ink">Happy People</p>

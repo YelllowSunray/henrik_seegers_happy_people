@@ -26,11 +26,11 @@ export default async function SeminarsPage({
 
         <div className="mt-12 space-y-8">
           {events.map((event) => (
-            <article key={event.id} className="border border-line bg-bg/80 p-8">
+            <article key={event.id} className="border border-line bg-bg/80 p-5 sm:p-8">
               <p className="text-xs font-semibold tracking-[0.18em] text-gold uppercase">
                 {tr("next")}
               </p>
-              <h2 className="font-display mt-2 text-3xl md:text-4xl">
+              <h2 className="font-display mt-2 text-2xl sm:text-3xl md:text-4xl">
                 {t(event.title, locale)}
               </h2>
               <p className="mt-3 text-ink-soft">

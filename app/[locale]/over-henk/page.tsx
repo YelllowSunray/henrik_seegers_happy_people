@@ -20,7 +20,7 @@ export default async function AboutPage({
             <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
               {t("eyebrow")}
             </p>
-            <h1 className="font-display mt-3 text-3xl leading-tight text-ink md:text-5xl">
+            <h1 className="font-display mt-3 text-2xl leading-tight text-ink sm:text-3xl md:text-5xl">
               {t("title")}
             </h1>
             <div className="mt-8 space-y-5 text-base leading-relaxed text-ink-soft md:text-lg">
