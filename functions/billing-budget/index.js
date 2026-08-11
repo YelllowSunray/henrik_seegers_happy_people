@@ -1,6 +1,6 @@
 /**
  * Google Cloud Function (2nd gen) — Pub/Sub trigger from a GCP Billing Budget.
- * Sets Firestore system/billing.overBudget = true when spend crosses the budget.
+ * Writes latest spend into Firestore and sets overBudget at 100%.
  *
  * Deploy (example):
  *   gcloud functions deploy firebaseBudgetHardStop \
@@ -18,28 +18,36 @@ initializeApp({
   projectId: process.env.GCP_PROJECT || process.env.GCLOUD_PROJECT,
 });
 
+const LIMIT_EUR = 100;
+
 exports.firebaseBudgetHardStop = async (message) => {
   const data = message?.data
     ? JSON.parse(Buffer.from(message.data, "base64").toString())
     : {};
 
-  const ratio =
-    data.costAmount && data.budgetAmount
-      ? Number(data.costAmount) / Number(data.budgetAmount)
-      : 1;
+  const costAmount =
+    data.costAmount != null && Number.isFinite(Number(data.costAmount))
+      ? Number(data.costAmount)
+      : null;
+  const budgetAmount =
+    data.budgetAmount != null && Number.isFinite(Number(data.budgetAmount))
+      ? Number(data.budgetAmount)
+      : LIMIT_EUR;
 
-  // Hard-stop when budget is fully consumed (or alert payload is missing amounts).
-  if (ratio < 1 && data.costAmount != null && data.budgetAmount != null) {
-    console.log(`Budget alert below 100% (${ratio}); no hard-stop.`);
-    return;
-  }
+  const ratio =
+    costAmount != null && budgetAmount > 0 ? costAmount / budgetAmount : null;
+  const percentUsed =
+    ratio != null ? Math.round(ratio * 1000) / 10 : null;
+  const overBudget = ratio == null ? true : ratio >= 1;
 
   await getFirestore()
     .doc("system/billing")
     .set(
       {
-        overBudget: true,
-        limitEur: 100,
+        overBudget,
+        limitEur: budgetAmount || LIMIT_EUR,
+        ...(costAmount != null ? { spentEur: costAmount } : {}),
+        ...(percentUsed != null ? { percentUsed } : {}),
         updatedAt: new Date().toISOString(),
         lastAlert: data,
         triggeredAt: FieldValue.serverTimestamp(),
@@ -47,5 +55,7 @@ exports.firebaseBudgetHardStop = async (message) => {
       { merge: true },
     );
 
-  console.log("Set system/billing.overBudget = true");
+  console.log(
+    `Billing update: spent=${costAmount} limit=${budgetAmount} overBudget=${overBudget}`,
+  );
 };

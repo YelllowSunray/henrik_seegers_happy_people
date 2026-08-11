@@ -1,7 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
-import { MembersGate } from "@/components/members-gate";
-import { MembersNav } from "@/components/members-nav";
+import { MembersShell } from "@/components/members-shell";
 
 export default async function MembersLayout({
   children,
@@ -17,22 +16,45 @@ export default async function MembersLayout({
   return (
     <>
       <SiteHeader variant="solid" />
-      <div className="border-b border-line bg-gradient-to-b from-bg-deep to-bg">
-        <div className="mx-auto max-w-6xl px-5 py-8 md:px-8 md:py-10">
-          <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
-            Happy People
+      <div className="relative overflow-hidden border-b border-line">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url(/images/seminar.png)" }}
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(115deg, rgba(15,40,36,0.92) 0%, rgba(15,40,36,0.78) 42%, rgba(15,40,36,0.55) 100%)",
+          }}
+          aria-hidden
+        />
+        <div className="relative mx-auto max-w-6xl px-5 py-12 md:px-8 md:py-16">
+          <p className="reveal text-xs font-semibold tracking-[0.22em] text-gold uppercase">
+            {tr("inside")}
           </p>
-          <p className="font-display mt-2 text-2xl text-ink md:text-3xl">
+          <p className="reveal reveal-delay-1 font-display mt-3 text-4xl text-white md:text-6xl">
             {tr("hub")}
           </p>
-          <p className="mt-2 max-w-xl text-sm text-ink-soft">{tr("subtitle")}</p>
+          <p className="reveal reveal-delay-2 mt-3 max-w-lg text-base text-white/80 md:text-lg">
+            {tr("subtitle")}
+          </p>
+          <div className="reveal reveal-delay-3 mt-6 flex flex-wrap gap-2">
+            <span className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-white/90 uppercase backdrop-blur">
+              {tr("pillLive")}
+            </span>
+            <span className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-white/90 uppercase backdrop-blur">
+              {tr("pillChat")}
+            </span>
+            <span className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-white/90 uppercase backdrop-blur">
+              {tr("pillNew")}
+            </span>
+          </div>
         </div>
       </div>
-      <div className="mx-auto max-w-6xl px-5 py-8 md:px-8 md:py-10">
-        <MembersGate>
-          <MembersNav />
-          <div className="mt-8">{children}</div>
-        </MembersGate>
+      <div className="mx-auto max-w-6xl px-5 py-8 md:px-8 md:py-12">
+        <MembersShell>{children}</MembersShell>
       </div>
     </>
   );

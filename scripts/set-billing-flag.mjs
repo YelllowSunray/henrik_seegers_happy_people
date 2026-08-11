@@ -37,6 +37,9 @@ await getFirestore()
     {
       overBudget,
       limitEur: 100,
+      ...(overBudget
+        ? { spentEur: 100, percentUsed: 100 }
+        : {}),
       updatedAt: new Date().toISOString(),
     },
     { merge: true },

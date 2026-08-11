@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { JoinButton } from "@/components/join-button";
 import { MembershipPlans } from "@/components/membership-plans";
+import { DonateSection } from "@/components/donate-section";
 import { SpeedGallery } from "@/components/speed-gallery";
 import { LightboxImage } from "@/components/lightbox-image";
 import { MicrochipPlayer } from "@/components/microchip-player";
@@ -13,10 +14,13 @@ import type { Locale } from "@/lib/types";
 
 export default async function HomePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ donate?: string }>;
 }) {
   const { locale: localeParam } = await params;
+  const { donate } = await searchParams;
   setRequestLocale(localeParam);
   const locale = localeParam as Locale;
   const tNav = await getTranslations("hero");
@@ -215,6 +219,9 @@ export default async function HomePage({
               {tMem("title")}
             </h2>
             <p className="mt-6 max-w-xl text-lg text-ink-soft">{tMem("pitch")}</p>
+            <p className="mt-3 max-w-xl text-base italic text-ink">
+              {tMem("wordBond")}
+            </p>
             <ul className="mt-8 grid gap-3 text-ink-soft sm:grid-cols-2">
               <li>{tMem("benefitSeminars")}</li>
               <li>{tMem("benefitVlogs")}</li>
@@ -226,6 +233,10 @@ export default async function HomePage({
           </div>
           <SpeedGallery />
         </div>
+      </Section>
+
+      <Section tone="deep">
+        <DonateSection thanks={donate === "success"} />
       </Section>
     </>
   );

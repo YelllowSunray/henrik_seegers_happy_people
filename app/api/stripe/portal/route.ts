@@ -40,11 +40,17 @@ export async function POST(req: Request) {
   }
 
   const stripe = getStripe();
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const locale = localeFromReferer(req);
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3002";
+  let locale = localeFromReferer(req);
+  try {
+    const body = (await req.json()) as { locale?: string };
+    if (body.locale && /^[a-z]{2}$/.test(body.locale)) locale = body.locale;
+  } catch {
+    /* no body */
+  }
   const session = await stripe.billingPortal.sessions.create({
     customer: customerId,
-    return_url: `${appUrl}/${locale}/members`,
+    return_url: `${appUrl}/${locale}/members/subscription`,
   });
 
   return NextResponse.json({ url: session.url });

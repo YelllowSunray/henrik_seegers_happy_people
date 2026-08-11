@@ -5,85 +5,103 @@ import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { useAuth } from "@/components/auth-provider";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
+import { joinHref } from "@/lib/auth-href";
+
+function postLoginPath(isAdmin: boolean, next: string | null) {
+  if (isAdmin) {
+    if (next && next !== "/members" && next !== "/admin") return next;
+    return "/admin";
+  }
+  if (next === "/admin") return "/members";
+  return next || "/members";
+}
 
 function AuthForm() {
   const t = useTranslations("auth");
-  const { signIn, signUp, user, loading } = useAuth();
+  const { signIn, user, loading, isAdmin, profile } = useAuth();
   const router = useRouter();
   const search = useSearchParams();
-  const next = search.get("next") || "/members";
+  const next = search.get("next");
 
-  const [mode, setMode] = useState<"in" | "up">("in");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (!loading && user) {
-      router.replace(next);
+    if (!loading && user && profile) {
+      router.replace(postLoginPath(isAdmin, next));
     }
-  }, [loading, user, next, router]);
+  }, [loading, user, profile, isAdmin, next, router]);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setBusy(true);
     setError(null);
     try {
-      if (mode === "in") await signIn(email, password);
-      else await signUp(email, password);
-      router.replace(next);
+      await signIn(email, password);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Auth failed");
-    } finally {
       setBusy(false);
     }
   }
 
   return (
     <div className="mx-auto max-w-md px-5 py-12 sm:py-16">
-      <h1 className="font-display text-2xl sm:text-3xl">
-        {mode === "in" ? t("signInTitle") : t("signUpTitle")}
+      <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
+        Happy People
+      </p>
+      <h1 className="font-display mt-3 text-3xl text-ink sm:text-4xl">
+        {t("returnTitle")}
       </h1>
+      <p className="mt-3 text-base leading-relaxed text-ink-soft">
+        {t("returnLead")}
+      </p>
+
       <form onSubmit={onSubmit} className="mt-8 space-y-4">
-        <label className="block text-sm">
+        <label className="block text-sm font-medium text-ink">
           {t("email")}
           <input
             type="email"
             required
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 w-full border border-line bg-white/70 px-3 py-3 text-base"
+            className="mt-1.5 w-full border border-line bg-white px-3 py-3 text-base outline-none focus:border-accent"
           />
         </label>
-        <label className="block text-sm">
+        <label className="block text-sm font-medium text-ink">
           {t("password")}
           <input
             type="password"
             required
             minLength={6}
+            autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 w-full border border-line bg-white/70 px-3 py-3 text-base"
+            className="mt-1.5 w-full border border-line bg-white px-3 py-3 text-base outline-none focus:border-accent"
           />
         </label>
         {error && <p className="text-sm text-red-700">{error}</p>}
         <button
           type="submit"
-          disabled={busy}
-          className="w-full rounded-full bg-accent py-3 text-sm font-semibold text-white disabled:opacity-60"
+          disabled={busy || (!!user && !profile)}
+          className="w-full rounded-full bg-accent py-3.5 text-sm font-semibold text-white hover:bg-accent-soft disabled:opacity-60"
         >
-          {mode === "in" ? t("signInTitle") : t("createAccount")}
+          {busy || (user && !profile) ? "…" : t("returnCta")}
         </button>
       </form>
-      <button
-        type="button"
-        className="mt-6 text-sm text-accent"
-        onClick={() => setMode(mode === "in" ? "up" : "in")}
-      >
-        {mode === "in" ? t("needAccount") : t("haveAccount")}
-      </button>
+
+      <p className="mt-8 text-center text-sm text-ink-soft">
+        {t("needJoin")}{" "}
+        <Link
+          href={joinHref(next || "/members/onboarding")}
+          className="font-semibold text-accent hover:underline"
+        >
+          {t("switchToJoin")}
+        </Link>
+      </p>
     </div>
   );
 }

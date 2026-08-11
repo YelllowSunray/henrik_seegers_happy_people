@@ -5,9 +5,20 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    function isAdmin() {
+    function isAdminEmail() {
       return signedIn()
-        && get(/databases/$(database)/documents/members/$(request.auth.uid)).data.isAdmin == true;
+        && request.auth.token.email in [
+          'henk.seegers1965@gmail.com'
+        ];
+    }
+
+    function isAdmin() {
+      return isAdminEmail()
+        || (
+          signedIn()
+          && exists(/databases/$(database)/documents/members/$(request.auth.uid))
+          && get(/databases/$(database)/documents/members/$(request.auth.uid)).data.isAdmin == true
+        );
     }
 
     function billingOk() {
@@ -41,7 +52,47 @@ service cloud.firestore {
         && (resource.data.toUserId == request.auth.uid
             || resource.data.toEmail == request.auth.token.email
             || isAdmin());
-      allow create, update, delete: if isAdmin() && billingOk();
+      allow create, delete: if isAdmin() && billingOk();
+      allow update: if isAdmin() && billingOk()
+        || (
+          signedIn()
+          && (
+            resource.data.toUserId == request.auth.uid
+            || resource.data.toEmail == request.auth.token.email
+          )
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read'])
+        );
+    }
+
+    // Two-way chat between a member and Henk (admin)
+    match /chats/{memberUid} {
+      allow read: if signedIn() && (request.auth.uid == memberUid || isAdmin());
+      allow create, update: if signedIn()
+        && (request.auth.uid == memberUid || isAdmin());
+
+      match /messages/{messageId} {
+        allow read: if signedIn()
+          && (request.auth.uid == memberUid || isAdmin());
+        allow create: if signedIn() && (
+          (
+            request.auth.uid == memberUid
+            && request.resource.data.senderId == request.auth.uid
+            && request.resource.data.senderRole == 'member'
+            && request.resource.data.text is string
+            && request.resource.data.text.size() > 0
+            && request.resource.data.text.size() < 4000
+          )
+          || (
+            isAdmin()
+            && request.resource.data.senderRole == 'admin'
+            && request.resource.data.senderId == request.auth.uid
+            && request.resource.data.text is string
+            && request.resource.data.text.size() > 0
+            && request.resource.data.text.size() < 4000
+          )
+        );
+        allow update, delete: if isAdmin();
+      }
     }
 
     match /events/{id} {

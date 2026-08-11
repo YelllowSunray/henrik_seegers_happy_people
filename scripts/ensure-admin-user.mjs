@@ -68,6 +68,8 @@ async function main() {
     {
       overBudget: false,
       limitEur: 100,
+      spentEur: 0,
+      percentUsed: 0,
       updatedAt: new Date().toISOString(),
     },
     { merge: true },

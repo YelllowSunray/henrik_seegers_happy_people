@@ -15,13 +15,13 @@ import {
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
 } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { deleteField, doc, getDoc, setDoc } from "firebase/firestore";
 import {
   getClientAuth,
   getClientDb,
   isFirebaseConfigured,
 } from "@/lib/firebase/client";
-import { hasMembershipAccess } from "@/lib/membership";
+import { computeTrialEndsAt, hasMembershipAccess } from "@/lib/membership";
 import type { MemberProfile } from "@/lib/types";
 
 type AuthContextValue = {
@@ -50,12 +50,31 @@ async function loadProfile(user: User): Promise<MemberProfile> {
 
   if (snap.exists()) {
     const data = snap.data() as MemberProfile;
+    const next = { ...data, isAdmin: emailAdmin || Boolean(data.isAdmin) };
     if (emailAdmin && !data.isAdmin) {
-      const next = { ...data, isAdmin: true };
-      await setDoc(ref, next, { merge: true });
-      return next;
+      await setDoc(ref, { isAdmin: true }, { merge: true });
     }
-    return data;
+    // Plan is only real after Stripe confirms — clear abandoned-checkout leftovers.
+    if (!next.stripeSubscriptionId && next.membershipPlan) {
+      await setDoc(ref, { membershipPlan: deleteField() }, { merge: true });
+      delete next.membershipPlan;
+    }
+    // Backfill complimentary week for accounts created before app trials.
+    if (
+      !next.isAdmin &&
+      !next.stripeSubscriptionId &&
+      !next.trialEndsAt &&
+      next.onboardingCompleted
+    ) {
+      const trialEndsAt = computeTrialEndsAt();
+      await setDoc(
+        ref,
+        { subscriptionStatus: "trialing", trialEndsAt },
+        { merge: true },
+      );
+      return { ...next, subscriptionStatus: "trialing", trialEndsAt };
+    }
+    return next;
   }
   const profile: MemberProfile = {
     uid: user.uid,
@@ -120,7 +139,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await setDoc(doc(getClientDb(), "members", cred.user.uid), {
           uid: cred.user.uid,
           email,
-          subscriptionStatus: "none",
+          subscriptionStatus: "trialing",
+          trialEndsAt: computeTrialEndsAt(),
           isAdmin: false,
         } satisfies MemberProfile);
       },

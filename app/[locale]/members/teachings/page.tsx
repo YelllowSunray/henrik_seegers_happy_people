@@ -16,20 +16,30 @@ export default async function MembersTeachingsPage({
 
   return (
     <div>
-      <h1 className="font-display text-3xl">{tr("teachings")}</h1>
-      <ul className="mt-8 divide-y divide-line">
-        {posts.map((post) => (
-          <li key={post.id} className="py-6">
-            <p className="text-xs text-ink-soft">{post.publishedAt}</p>
-            <h2 className="font-display mt-2 text-2xl">
-              {t(post.title, locale)}
-            </h2>
-            <p className="mt-3 max-w-2xl whitespace-pre-wrap text-ink-soft">
-              {t(post.body, locale)}
-            </p>
-          </li>
-        ))}
-      </ul>
+      <p className="text-xs font-semibold tracking-[0.18em] text-accent uppercase">
+        {tr("inside")}
+      </p>
+      <h1 className="font-display mt-2 text-4xl md:text-5xl">{tr("teachings")}</h1>
+      <p className="mt-3 max-w-xl text-ink-soft">{tr("descTeachings")}</p>
+      {posts.length === 0 ? (
+        <p className="mt-10 text-ink-soft">{tr("emptyContent")}</p>
+      ) : (
+        <ul className="mt-10 divide-y divide-line border-t border-line">
+          {posts.map((post) => (
+            <li key={post.id} className="py-8">
+              <p className="text-xs tracking-wide text-ink-soft uppercase">
+                {post.publishedAt}
+              </p>
+              <h2 className="font-display mt-2 text-3xl">
+                {t(post.title, locale)}
+              </h2>
+              <p className="mt-4 max-w-2xl whitespace-pre-wrap leading-relaxed text-ink-soft">
+                {t(post.body, locale)}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

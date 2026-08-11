@@ -6,6 +6,10 @@ import { useAuth } from "@/components/auth-provider";
 import { useBillingOverBudget } from "@/components/billing-banner";
 import { billingContactMessage } from "@/lib/billing";
 import { Link } from "@/i18n/navigation";
+import {
+  hasStripeSubscription,
+  isAppTrialExpired,
+} from "@/lib/membership";
 import type { MembershipPlan } from "@/lib/stripe";
 
 export function MembershipPlans({
@@ -15,19 +19,21 @@ export function MembershipPlans({
 }) {
   const t = useTranslations("membership");
   const locale = useLocale();
-  const { user, isMember } = useAuth();
+  const { user, profile } = useAuth();
   const overBudget = useBillingOverBudget();
   const [busy, setBusy] = useState<MembershipPlan | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const trialExpired = isAppTrialExpired(profile);
 
-  if (isMember) {
+  // Paid / Stripe trial — manage in portal, not a new checkout.
+  if (hasStripeSubscription(profile)) {
     return (
       <div className={className}>
         <Link
-          href="/members"
+          href="/members/subscription"
           className="inline-flex rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white hover:bg-accent-soft"
         >
-          {t("openClub")}
+          {t("manageSubscription")}
         </Link>
       </div>
     );
@@ -62,22 +68,24 @@ export function MembershipPlans({
     }
   }
 
-  const authHref = "/auth?next=/happy-people";
+  const registerHref = "/join?next=/members/onboarding";
 
   return (
     <div className={className}>
       <p className="text-sm font-semibold tracking-[0.16em] text-gold uppercase">
-        {t("trial")}
+        {trialExpired ? t("trialEnded") : t("trial")}
       </p>
-      <p className="mt-2 max-w-xl text-ink-soft">{t("noObligation")}</p>
+      <p className="mt-2 max-w-xl text-ink-soft">
+        {trialExpired ? t("trialEndedLead") : t("noObligation")}
+      </p>
 
       <div className="mt-8 grid items-stretch gap-4 sm:grid-cols-2">
         <PlanCard
           eyebrow={t("monthlyLabel")}
           price={t("priceMonthly")}
-          detail={t("monthlyDetail")}
+          detail={trialExpired ? t("monthlyDetailNow") : t("monthlyDetail")}
           cta={user ? t("ctaMonthly") : t("cta")}
-          href={user ? undefined : authHref}
+          href={user ? undefined : registerHref}
           busy={busy === "monthly"}
           onClick={user ? () => void startCheckout("monthly") : undefined}
           featured={false}
@@ -85,10 +93,10 @@ export function MembershipPlans({
         <PlanCard
           eyebrow={t("yearlyLabel")}
           price={t("priceYearly")}
-          detail={t("yearlyDetail")}
+          detail={trialExpired ? t("yearlyDetailNow") : t("yearlyDetail")}
           badge={t("yearlySave")}
           cta={user ? t("ctaYearly") : t("cta")}
-          href={user ? undefined : authHref}
+          href={user ? undefined : registerHref}
           busy={busy === "yearly"}
           onClick={user ? () => void startCheckout("yearly") : undefined}
           featured

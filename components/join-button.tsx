@@ -43,7 +43,7 @@ export function JoinButton({
   if (!user) {
     return (
       <Link
-        href="/auth?next=/happy-people"
+        href="/join?next=/members/onboarding"
         className={
           className ||
           "inline-flex rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white hover:bg-accent-soft"

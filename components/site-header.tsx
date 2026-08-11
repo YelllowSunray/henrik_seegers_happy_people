@@ -19,7 +19,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
   const onHero = variant === "hero";
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const showJoin = !loading && !isMember;
+  const showJoin = !isMember;
 
   useEffect(() => {
     setMenuOpen(false);
@@ -124,7 +124,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
 
           {showJoin && (
             <Link
-              href="/happy-people"
+              href="/join?next=/members/onboarding"
               className="hidden rounded-full bg-accent px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-accent-soft sm:inline-flex"
             >
               {t("join")}
@@ -249,7 +249,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                 ))}
               {showJoin && (
                 <Link
-                  href="/happy-people"
+                  href="/join?next=/members/onboarding"
                   className="rounded-full bg-accent px-4 py-3 text-center text-base font-semibold text-white"
                   onClick={() => setMenuOpen(false)}
                 >

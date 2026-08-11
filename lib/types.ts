@@ -59,9 +59,65 @@ export type MemberProfile = {
   uid: string;
   email: string;
   displayName?: string;
+  phone?: string;
+  photoURL?: string;
+  onboardingCompleted?: boolean;
   stripeCustomerId?: string;
   stripeSubscriptionId?: string;
   subscriptionStatus?: "none" | "trialing" | "active" | "past_due" | "canceled";
+  /** ISO end of complimentary free week before paid plan is required */
+  trialEndsAt?: string;
   membershipPlan?: "monthly" | "yearly";
   isAdmin?: boolean;
+  /** ISO timestamps of last visit per club section */
+  activitySeen?: {
+    seminars?: string;
+    vlogs?: string;
+    quotes?: string;
+    messages?: string;
+    teachings?: string;
+    chat?: string;
+  };
+};
+
+export type ChatSenderRole = "member" | "admin";
+
+export type ChatThread = {
+  id: string;
+  memberUid: string;
+  memberEmail: string;
+  memberName?: string;
+  memberPhotoURL?: string;
+  lastMessage?: string;
+  lastMessageAt?: string;
+  lastSenderRole?: ChatSenderRole;
+  updatedAt?: string;
+  memberLastReadAt?: string;
+  adminLastReadAt?: string;
+};
+
+export type ClubSection =
+  | "seminars"
+  | "vlogs"
+  | "quotes"
+  | "messages"
+  | "teachings"
+  | "chat";
+
+export type ClubActivity = {
+  seminars: number;
+  vlogs: number;
+  quotes: number;
+  messages: number;
+  teachings: number;
+  chat: number;
+  total: number;
+};
+
+export type ChatMessage = {
+  id: string;
+  text: string;
+  senderId: string;
+  senderRole: ChatSenderRole;
+  createdAt: string;
 };

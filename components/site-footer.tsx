@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { FACEBOOK_HREF, WHATSAPP_DISPLAY, WHATSAPP_HREF } from "@/lib/contact";
 
 export async function SiteFooter() {
   const t = await getTranslations("footer");
@@ -14,7 +15,15 @@ export async function SiteFooter() {
         </div>
         <div className="flex flex-col gap-2 text-sm text-ink-soft">
           <a
-            href="https://www.facebook.com/hendrik.seegers"
+            href={WHATSAPP_HREF}
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-accent"
+          >
+            WhatsApp · {WHATSAPP_DISPLAY}
+          </a>
+          <a
+            href={FACEBOOK_HREF}
             target="_blank"
             rel="noreferrer"
             className="hover:text-accent"

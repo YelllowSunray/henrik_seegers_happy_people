@@ -9,7 +9,10 @@
     "lint": "eslint",
     "admin:ensure-user": "node --env-file=.env.local scripts/ensure-admin-user.mjs",
     "admin:billing-on": "node --env-file=.env.local scripts/set-billing-flag.mjs true",
-    "admin:billing-off": "node --env-file=.env.local scripts/set-billing-flag.mjs false"
+    "admin:billing-off": "node --env-file=.env.local scripts/set-billing-flag.mjs false",
+    "admin:seed-content": "node --env-file=.env.local scripts/seed-content.mjs",
+    "stripe:setup": "node --env-file=.env.local scripts/setup-stripe.mjs",
+    "stripe:listen": "stripe listen --forward-to localhost:3002/api/stripe/webhook"
   },
   "dependencies": {
     "@stripe/stripe-js": "^9.13.0",

@@ -7,7 +7,6 @@ import {
   getVideosByKind as seedVideosByKind,
   posts as seedPosts,
   quotes as seedQuotes,
-  samplePersonalMessages,
   videos as seedVideos,
 } from "@/lib/content";
 import type {
@@ -20,7 +19,7 @@ import type {
   VideoKind,
 } from "@/lib/types";
 import type { BillingState } from "@/lib/billing";
-import { BILLING_LIMIT_EUR, DEFAULT_BILLING_STATE } from "@/lib/billing";
+import { DEFAULT_BILLING_STATE, parseBillingDoc } from "@/lib/billing";
 
 function asLocalized(value: unknown, fallback = ""): LocalizedString {
   if (value && typeof value === "object" && !Array.isArray(value)) {
@@ -90,13 +89,20 @@ function mapQuote(id: string, data: Record<string, unknown>): QuoteItem {
 }
 
 function mapMessage(id: string, data: Record<string, unknown>): PersonalMessage {
+  let createdAt = "";
+  const raw = data.createdAt;
+  if (raw && typeof raw === "object" && "toDate" in raw) {
+    createdAt = (raw as { toDate: () => Date }).toDate().toISOString().slice(0, 10);
+  } else {
+    createdAt = String(raw ?? "");
+  }
   return {
     id,
     toUserId: String(data.toUserId ?? ""),
     toEmail: typeof data.toEmail === "string" ? data.toEmail : undefined,
     subject: asLocalized(data.subject),
     body: asLocalized(data.body),
-    createdAt: String(data.createdAt ?? ""),
+    createdAt,
     read: Boolean(data.read),
   };
 }
@@ -170,13 +176,8 @@ export async function fetchQuotes(): Promise<QuoteItem[]> {
 
 export async function fetchPersonalMessages(forEmail?: string): Promise<PersonalMessage[]> {
   const rows = await loadCollection("personalMessages", mapMessage);
-  if (rows === null || rows.length === 0) {
-    return samplePersonalMessages.map((m) => ({
-      ...m,
-      toEmail: forEmail,
-      read: m.read,
-    }));
-  }
+  if (rows === null) return [];
+  if (rows.length === 0) return [];
   if (!forEmail) return rows;
   const email = forEmail.toLowerCase();
   return rows.filter(
@@ -190,14 +191,7 @@ export async function fetchBillingState(): Promise<BillingState> {
   try {
     const snap = await db.doc("system/billing").get();
     if (!snap.exists) return DEFAULT_BILLING_STATE;
-    const data = snap.data() as Record<string, unknown>;
-    return {
-      overBudget: Boolean(data.overBudget),
-      limitEur:
-        typeof data.limitEur === "number" ? data.limitEur : BILLING_LIMIT_EUR,
-      updatedAt:
-        typeof data.updatedAt === "string" ? data.updatedAt : undefined,
-    };
+    return parseBillingDoc(snap.data() as Record<string, unknown>);
   } catch {
     return DEFAULT_BILLING_STATE;
   }
