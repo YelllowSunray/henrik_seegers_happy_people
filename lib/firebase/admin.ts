@@ -7,18 +7,26 @@ function initAdmin(): App | null {
 
   const projectId = process.env.FIREBASE_ADMIN_PROJECT_ID;
   const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL;
-  const privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(
-    /\\n/g,
-    "\n",
-  );
+  let privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY;
 
   if (!projectId || !clientEmail || !privateKey) {
     return null;
   }
 
-  return initializeApp({
-    credential: cert({ projectId, clientEmail, privateKey }),
-  });
+  // Vercel/env UIs often store literal `\n` or wrap the key in quotes.
+  privateKey = privateKey
+    .replace(/^"|"$/g, "")
+    .replace(/^'|'$/g, "")
+    .replace(/\\n/g, "\n");
+
+  try {
+    return initializeApp({
+      credential: cert({ projectId, clientEmail, privateKey }),
+    });
+  } catch (err) {
+    console.error("[firebase-admin] init failed:", err);
+    return null;
+  }
 }
 
 export function getAdminApp() {

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { MembersWelcome } from "@/components/members-welcome";
@@ -15,13 +16,10 @@ import type { Locale } from "@/lib/types";
 
 export default async function MembersHomePage({
   params,
-  searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ donate?: string }>;
 }) {
   const { locale: localeParam } = await params;
-  const { donate } = await searchParams;
   setRequestLocale(localeParam);
   const locale = localeParam as Locale;
   const tr = await getTranslations("members");
@@ -89,7 +87,9 @@ export default async function MembersHomePage({
 
   return (
     <div className="space-y-12 md:space-y-14">
-      <DonateThanksBanner show={donate === "success"} />
+      <Suspense fallback={null}>
+        <DonateThanksBanner />
+      </Suspense>
       <MembersWelcome />
       <WhatsNewStrip />
 

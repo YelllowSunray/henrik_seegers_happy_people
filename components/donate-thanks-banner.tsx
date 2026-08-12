@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-export function DonateThanksBanner({ show }: { show: boolean }) {
+export function DonateThanksBanner({ show }: { show?: boolean }) {
   const t = useTranslations("donate");
-  const [visible, setVisible] = useState(show);
+  const searchParams = useSearchParams();
+  const fromUrl = searchParams.get("donate") === "success";
+  const [visible, setVisible] = useState(Boolean(show) || fromUrl);
 
   if (!visible) return null;
 

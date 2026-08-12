@@ -26,7 +26,8 @@
   "message": {
     "eyebrow": "De boodschap",
     "short": "Ik kom van de planeet outherspace en ik ben hier op aarde om jou en alle lost boys te helpen. Samen verenigen we ons weer als één.",
-    "body": "Ik probeer mensen bewust te maken waar we mee bezig zijn, want zoals we nu bezig zijn om deze aarde langzaam maar zeker te vernietigen, is niet de goede weg. Ik heb een andere weg gevonden, de weg van de Happy People, waarin we weer gelukkig met elkaar samen kunnen leven, eerlijk handel drijven, doen wat we zeggen en zeggen wat we doen — of in omgekeerde volgorde, dat mag natuurlijk ook. En ik wens iedereen een gezegend leven toe vanuit de grond van mijn hart."
+    "body": "Ik probeer mensen bewust te maken waar we mee bezig zijn, want zoals we nu bezig zijn om deze aarde langzaam maar zeker te vernietigen, is niet de goede weg. Ik heb een andere weg gevonden, de weg van de Happy People, waarin we weer gelukkig met elkaar samen kunnen leven, eerlijk handel drijven, doen wat we zeggen en zeggen wat we doen — of in omgekeerde volgorde, dat mag natuurlijk ook. En ik wens iedereen een gezegend leven toe vanuit de grond van mijn hart.",
+    "body2": "Uit studie, nieuwsgierigheid en leergierigheid ontdekte ik iets dat mijn leven kantelde. Hebzucht week; empathie nam haar plaats. Mijn leven loopt weer licht — en met een paar eenvoudige handelingen help ik wie vastloopt. Zo eenvoudig dat een kind van vijf het kan, zodra het leert wat theory of mind is: dat jij een eigen wezen bent, geen aanhangsel van je ouders. Zoek het gerust op."
   },
   "about": {
     "eyebrow": "Over Henk",
@@ -89,7 +90,8 @@
     "trialEndedLead": "Kies maandelijks of jaarlijks om clubtoegang te houden. Stop wanneer je wilt.",
     "monthlyDetailNow": "€20 per maand. Zonder verplichting.",
     "yearlyDetailNow": "€200 per jaar. Zonder verplichting.",
-    "manageSubscription": "Abonnement beheren"
+    "manageSubscription": "Abonnement beheren",
+    "paradiseNote": "Met dit lied heb ik het hart gebroken én gelijmd van de mooiste, aantrekkelijkste vrouw die op aarde rondloopt — voor mij althans."
   },
   "contact": {
     "title": "Contact",
@@ -195,7 +197,7 @@
     "chooseAmount": "Kies een bedrag",
     "selected": "Gekozen",
     "secureNote": "Eenmalig · veilig via Stripe · iDEAL of kaart",
-    "asideQuote": "Samen weer gelukkig leven — eerlijk handelen, doen wat we zeggen.",
+    "asideQuote": "Uit warmte geleerd: zeg wat je voelt. Mijn woord is mijn daad.",
     "asideCredit": "Happy People",
     "imageAlt": "Happy People moment",
     "cta": "Doneren",

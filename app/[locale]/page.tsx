@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
@@ -8,19 +9,18 @@ import { DonateSection } from "@/components/donate-section";
 import { SpeedGallery } from "@/components/speed-gallery";
 import { LightboxImage } from "@/components/lightbox-image";
 import { MicrochipPlayer } from "@/components/microchip-player";
+import { SpiritsPlayer } from "@/components/spirits-player";
+import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
 import { t } from "@/lib/content";
 import { fetchEvents, fetchPublicPosts } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
 
 export default async function HomePage({
   params,
-  searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ donate?: string }>;
 }) {
   const { locale: localeParam } = await params;
-  const { donate } = await searchParams;
   setRequestLocale(localeParam);
   const locale = localeParam as Locale;
   const tNav = await getTranslations("hero");
@@ -94,6 +94,12 @@ export default async function HomePage({
             <p className="mt-8 text-base leading-relaxed text-ink-soft md:text-lg">
               {tMsg("body")}
             </p>
+            <p className="mt-5 text-base leading-relaxed text-ink-soft md:text-lg">
+              {tMsg("body2")}
+            </p>
+            <div className="mt-8 max-w-xl">
+              <SpiritsPlayer />
+            </div>
           </div>
           <LightboxImage
             src="/images/adhd-pic.jpg"
@@ -123,6 +129,15 @@ export default async function HomePage({
             >
               {tAbout("cta")}
             </Link>
+            <div className="mt-8">
+              <SyncedLyricPlayer
+                audioSrc="/audio/never-can-say-goodbye.mp3"
+                lrcSrc="/audio/never-can-say-goodbye.lrc"
+                title="Never Can Say Goodbye"
+                artist="Gloria Gaynor"
+                tone="page"
+              />
+            </div>
           </div>
           <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-ink/5">
             <video
@@ -171,6 +186,15 @@ export default async function HomePage({
                 </Link>
               </div>
             )}
+            <div className="mt-8 max-w-xl">
+              <SyncedLyricPlayer
+                audioSrc="/audio/so-strong.mp3"
+                lrcSrc="/audio/so-strong.lrc"
+                title="So Strong"
+                artist="Labi Siffre"
+                tone="page"
+              />
+            </div>
           </div>
           <figure>
             <LightboxImage
@@ -207,6 +231,14 @@ export default async function HomePage({
         >
           {tBlog("cta")}
         </Link>
+        <div className="mt-8 max-w-xl">
+          <SyncedLyricPlayer
+            audioSrc="/audio/hooponopono.mp3"
+            lrcSrc="/audio/hooponopono.lrc"
+            title="Ho'oponopono"
+            tone="page"
+          />
+        </div>
       </Section>
 
       <Section tone="default">
@@ -230,13 +262,27 @@ export default async function HomePage({
               <li>{tMem("benefitMessages")}</li>
             </ul>
             <MembershipPlans className="mt-10" />
+            <div className="mt-8 max-w-xl">
+              <SyncedLyricPlayer
+                audioSrc="/audio/paradise.mp3"
+                lrcSrc="/audio/paradise.lrc"
+                title="Paradise By The Dashboard Light"
+                artist="Meat Loaf"
+                tone="page"
+              />
+              <p className="mt-4 text-sm leading-relaxed text-ink-soft italic md:text-base">
+                {tMem("paradiseNote")}
+              </p>
+            </div>
           </div>
           <SpeedGallery />
         </div>
       </Section>
 
       <Section tone="deep">
-        <DonateSection thanks={donate === "success"} />
+        <Suspense fallback={null}>
+          <DonateSection />
+        </Suspense>
       </Section>
     </>
   );

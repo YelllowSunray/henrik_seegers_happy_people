@@ -26,7 +26,8 @@
   "message": {
     "eyebrow": "Il messaggio",
     "short": "Vengo dal pianeta outherspace e sono qui sulla terra per aiutare te e tutti i lost boys. Insieme ci riuniamo come uno.",
-    "body": "Cerco di far prendere coscienza alle persone di ciò che stiamo facendo, perché distruggere lentamente questa terra non è la strada giusta. Ho trovato un’altra via: quella di Happy People, in cui possiamo di nuovo vivere felici insieme, commerciare onestamente, fare ciò che diciamo e dire ciò che facciamo — o il contrario. E dal profondo del cuore auguro a tutti una vita benedetta."
+    "body": "Cerco di far prendere coscienza alle persone di ciò che stiamo facendo, perché distruggere lentamente questa terra non è la strada giusta. Ho trovato un’altra via: quella di Happy People, in cui possiamo di nuovo vivere felici insieme, commerciare onestamente, fare ciò che diciamo e dire ciò che facciamo — o il contrario. E dal profondo del cuore auguro a tutti una vita benedetta.",
+    "body2": "Con studio, curiosità e voglia di imparare ho scoperto qualcosa che ha rovesciato la mia vita. L’avidità se n’è andata; l’empatia ha preso il suo posto. La mia vita scorre di nuovo leggera — e con pochi gesti semplici aiuto chi è bloccato. Così semplice che un bambino di cinque anni può farlo, appena sa cos’è la theory of mind: che sei un essere a sé, non un’appendice dei tuoi genitori. Cerca pure."
   },
   "about": {
     "eyebrow": "Su Henk",
@@ -89,7 +90,8 @@
     "trialEndedLead": "Scegli mensile o annuale per mantenere l’accesso al club. Disdici quando vuoi.",
     "monthlyDetailNow": "€20 al mese. Senza obbligo.",
     "yearlyDetailNow": "€200 all’anno. Senza obbligo.",
-    "manageSubscription": "Gestisci abbonamento"
+    "manageSubscription": "Gestisci abbonamento",
+    "paradiseNote": "Con questa canzone ho spezzato e ricucito il cuore della donna più bella e attraente che cammina sulla terra — per me, almeno."
   },
   "contact": {
     "title": "Contatto",
@@ -195,7 +197,7 @@
     "chooseAmount": "Scegli un importo",
     "selected": "Scelto",
     "secureNote": "Una tantum · sicuro via Stripe · carta",
-    "asideQuote": "Vivere di nuovo felici insieme — agire onestamente, fare ciò che diciamo.",
+    "asideQuote": "Cresciuto nel calore: di ciò che senti. La mia parola è il mio gesto.",
     "asideCredit": "Happy People",
     "imageAlt": "Momento Happy People",
     "cta": "Dona",

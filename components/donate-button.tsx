@@ -6,7 +6,7 @@ import { useAuth } from "@/components/auth-provider";
 import {
   DONATION_DEFAULT_EUR,
   DONATION_PRESETS_EUR,
-} from "@/lib/stripe";
+} from "@/lib/stripe-constants";
 
 type Variant = "section" | "compact";
 

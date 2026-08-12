@@ -1,6 +1,17 @@
 import Stripe from "stripe";
+import {
+  DONATION_DEFAULT_EUR,
+  DONATION_MAX_CENTS,
+  DONATION_MIN_CENTS,
+} from "./stripe-constants";
 
 export { isActiveSubscription, TRIAL_DAYS } from "./membership";
+export {
+  DONATION_PRESETS_EUR,
+  DONATION_DEFAULT_EUR,
+  DONATION_MIN_CENTS,
+  DONATION_MAX_CENTS,
+} from "./stripe-constants";
 
 export type MembershipPlan = "monthly" | "yearly";
 
@@ -40,7 +51,7 @@ export function stripeCheckoutLocale(
 }
 
 export function getStripe() {
-  const key = process.env.STRIPE_SECRET_KEY;
+  const key = process.env.STRIPE_SECRET_KEY?.trim();
   if (!key) {
     throw new Error("STRIPE_SECRET_KEY is not set");
   }
@@ -66,8 +77,8 @@ export function getPriceIdForPlan(plan: MembershipPlan): string | undefined {
 
 export function isStripeConfigured() {
   return Boolean(
-    process.env.STRIPE_SECRET_KEY &&
-      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY &&
+    process.env.STRIPE_SECRET_KEY?.trim() &&
+      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim() &&
       (process.env.STRIPE_PRICE_ID_MONTHLY ||
         process.env.STRIPE_PRICE_ID_YEARLY ||
         process.env.STRIPE_PRICE_ID),
@@ -76,7 +87,7 @@ export function isStripeConfigured() {
 
 /** One-time donations only need the secret key (amounts use price_data). */
 export function isStripeDonateConfigured() {
-  return Boolean(process.env.STRIPE_SECRET_KEY);
+  return Boolean(process.env.STRIPE_SECRET_KEY?.trim());
 }
 
 /** Payment methods for one-time donations (no SEPA mandate flow). */
@@ -86,11 +97,6 @@ export function donationPaymentMethodsForLocale(
   if (locale === "nl") return ["ideal", "card"];
   return ["card"];
 }
-
-export const DONATION_PRESETS_EUR = [5, 10, 25, 50] as const;
-export const DONATION_DEFAULT_EUR = 10;
-export const DONATION_MIN_CENTS = 200;
-export const DONATION_MAX_CENTS = 50_000;
 
 export function parseDonationAmountCents(value: unknown): number {
   const n =
@@ -105,7 +111,6 @@ export function parseDonationAmountCents(value: unknown): number {
   if (cents > DONATION_MAX_CENTS) return DONATION_MAX_CENTS;
   return cents;
 }
-
 
 export function parseMembershipPlan(value: unknown): MembershipPlan {
   return value === "yearly" ? "yearly" : "monthly";

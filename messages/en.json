@@ -26,7 +26,8 @@
   "message": {
     "eyebrow": "The message",
     "short": "I'm from the planet outherspace and I'm here on earth to help you and all lost boys. Together we reunite as 1.",
-    "body": "I try to make people aware of what we're doing, because the way we're slowly destroying this earth is not the right path. I've found another way — the path of Happy People — where we can live happily together again, trade honestly, do what we say and say what we do — or the other way around. And from the bottom of my heart, I wish everyone a blessed life."
+    "body": "I try to make people aware of what we're doing, because the way we're slowly destroying this earth is not the right path. I've found another way — the path of Happy People — where we can live happily together again, trade honestly, do what we say and say what we do — or the other way around. And from the bottom of my heart, I wish everyone a blessed life.",
+    "body2": "Through study, curiosity and a hunger to learn, I found something that turned my life. Greed fell away; empathy took its place. Life moves lightly again — and with a few simple acts I can help anyone who is stuck. So simple a five-year-old can do them, once they know what theory of mind is: that you are a being of your own, not an appendage of your parents. Look it up."
   },
   "about": {
     "eyebrow": "About Henk",
@@ -89,7 +90,8 @@
     "trialEndedLead": "Choose monthly or yearly to keep club access. Cancel anytime.",
     "monthlyDetailNow": "€20 per month. No obligation.",
     "yearlyDetailNow": "€200 per year. No obligation.",
-    "manageSubscription": "Manage subscription"
+    "manageSubscription": "Manage subscription",
+    "paradiseNote": "With this song I broke and mended the heart of the most beautiful, captivating woman who walks this earth — for me, at least."
   },
   "contact": {
     "title": "Contact",
@@ -195,7 +197,7 @@
     "chooseAmount": "Choose an amount",
     "selected": "Selected",
     "secureNote": "One-time · secure via Stripe · card or local methods",
-    "asideQuote": "Live happily together again — trade honestly, do what we say.",
+    "asideQuote": "Raised in warmth: speak what you feel. My word is my deed.",
     "asideCredit": "Happy People",
     "imageAlt": "Happy People moment",
     "cta": "Donate",

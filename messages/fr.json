@@ -26,7 +26,8 @@
   "message": {
     "eyebrow": "Le message",
     "short": "Je viens de la planète outherspace et je suis ici sur terre pour t’aider, toi et tous les lost boys. Ensemble, nous nous réunissons comme un.",
-    "body": "J’essaie de faire prendre conscience aux gens de ce que nous faisons, car détruire lentement cette terre n’est pas le bon chemin. J’ai trouvé une autre voie : celle des Happy People, où nous pouvons à nouveau vivre heureux ensemble, commercer honnêtement, faire ce que nous disons et dire ce que nous faisons — ou l’inverse. Et du fond du cœur, je souhaite à chacun une vie bénie."
+    "body": "J’essaie de faire prendre conscience aux gens de ce que nous faisons, car détruire lentement cette terre n’est pas le bon chemin. J’ai trouvé une autre voie : celle des Happy People, où nous pouvons à nouveau vivre heureux ensemble, commercer honnêtement, faire ce que nous disons et dire ce que nous faisons — ou l’inverse. Et du fond du cœur, je souhaite à chacun une vie bénie.",
+    "body2": "Par l’étude, la curiosité et l’envie d’apprendre, j’ai découvert quelque chose qui a basculé ma vie. L’avidité s’est retirée ; l’empathie a pris sa place. Ma vie coule à nouveau légère — et avec quelques gestes simples, j’aide qui est bloqué. Si simple qu’un enfant de cinq ans le peut, dès qu’il sait ce qu’est la theory of mind : que tu es un être à part entière, non un appendice de tes parents. Cherche donc."
   },
   "about": {
     "eyebrow": "À propos de Henk",
@@ -89,7 +90,8 @@
     "trialEndedLead": "Choisissez mensuel ou annuel pour garder l’accès au club. Résiliez quand vous voulez.",
     "monthlyDetailNow": "€20 par mois. Sans engagement.",
     "yearlyDetailNow": "€200 par an. Sans engagement.",
-    "manageSubscription": "Gérer l’abonnement"
+    "manageSubscription": "Gérer l’abonnement",
+    "paradiseNote": "Avec cette chanson, j’ai brisé et recollé le cœur de la plus belle, la plus attirante femme qui marche sur terre — pour moi, du moins."
   },
   "contact": {
     "title": "Contact",
@@ -195,7 +197,7 @@
     "chooseAmount": "Choisir un montant",
     "selected": "Choisi",
     "secureNote": "Ponctuel · sécurisé via Stripe · carte",
-    "asideQuote": "Vivre à nouveau heureux ensemble — agir honnêtement, faire ce qu’on dit.",
+    "asideQuote": "Né dans la chaleur : dis ce que tu ressens. Ma parole est mon acte.",
     "asideCredit": "Happy People",
     "imageAlt": "Moment Happy People",
     "cta": "Donner",

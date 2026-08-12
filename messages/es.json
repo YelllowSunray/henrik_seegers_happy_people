@@ -26,7 +26,8 @@
   "message": {
     "eyebrow": "El mensaje",
     "short": "Vengo del planeta outherspace y estoy aquí en la tierra para ayudarte a ti y a todos los lost boys. Juntos nos reunimos como uno.",
-    "body": "Intento que la gente tome conciencia de lo que estamos haciendo, porque destruir lentamente esta tierra no es el camino correcto. He encontrado otro camino: el de Happy People, donde podemos volver a vivir felices juntos, comerciar con honestidad, hacer lo que decimos y decir lo que hacemos — o al revés. Y desde el fondo de mi corazón les deseo a todos una vida bendecida."
+    "body": "Intento que la gente tome conciencia de lo que estamos haciendo, porque destruir lentamente esta tierra no es el camino correcto. He encontrado otro camino: el de Happy People, donde podemos volver a vivir felices juntos, comerciar con honestidad, hacer lo que decimos y decir lo que hacemos — o al revés. Y desde el fondo de mi corazón les deseo a todos una vida bendecida.",
+    "body2": "Por estudio, curiosidad y ganas de aprender descubrí algo que cambió mi vida. La avaricia se fue; la empatía ocupó su lugar. Mi vida vuelve a fluir con ligereza — y con unos pocos gestos sencillos ayudo a quien está atascado. Tan simple que un niño de cinco años puede hacerlo, cuando entiende qué es la theory of mind: que eres un ser propio, no un apéndice de tus padres. Búscalo."
   },
   "about": {
     "eyebrow": "Sobre Henk",
@@ -89,7 +90,8 @@
     "trialEndedLead": "Elige mensual o anual para mantener el acceso al club. Cancela cuando quieras.",
     "monthlyDetailNow": "€20 al mes. Sin obligación.",
     "yearlyDetailNow": "€200 al año. Sin obligación.",
-    "manageSubscription": "Gestionar suscripción"
+    "manageSubscription": "Gestionar suscripción",
+    "paradiseNote": "Con esta canción rompí y volví a pegar el corazón de la mujer más bella y atractiva que camina por la tierra — para mí, al menos."
   },
   "contact": {
     "title": "Contacto",
@@ -195,7 +197,7 @@
     "chooseAmount": "Elige un importe",
     "selected": "Elegido",
     "secureNote": "Puntual · seguro vía Stripe · tarjeta",
-    "asideQuote": "Vivir felices juntos otra vez — comerciar con honestidad, hacer lo que decimos.",
+    "asideQuote": "Criado en calor: di lo que sientes. Mi palabra es mi hecho.",
     "asideCredit": "Happy People",
     "imageAlt": "Momento Happy People",
     "cta": "Donar",

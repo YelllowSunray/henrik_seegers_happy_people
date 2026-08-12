@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [],
   },
+  // Avoid bundling firebase-admin (jwks-rsa/jose ESM conflict on Vercel).
+  serverExternalPackages: ["firebase-admin", "jose", "jwks-rsa"],
 };
 
 export default withNextIntl(nextConfig);

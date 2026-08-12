@@ -26,7 +26,8 @@
   "message": {
     "eyebrow": "Die Botschaft",
     "short": "Ich komme vom Planeten outherspace und bin hier auf der Erde, um dir und allen lost boys zu helfen. Gemeinsam vereinen wir uns wieder als eins.",
-    "body": "Ich versuche Menschen bewusst zu machen, womit wir beschäftigt sind — denn so, wie wir diese Erde langsam zerstören, ist nicht der richtige Weg. Ich habe einen anderen Weg gefunden: den Weg der Happy People, in dem wir wieder glücklich miteinander leben, ehrlich handeln, tun was wir sagen und sagen was wir tun. Und ich wünsche jedem von Herzen ein gesegnetes Leben."
+    "body": "Ich versuche Menschen bewusst zu machen, womit wir beschäftigt sind — denn so, wie wir diese Erde langsam zerstören, ist nicht der richtige Weg. Ich habe einen anderen Weg gefunden: den Weg der Happy People, in dem wir wieder glücklich miteinander leben, ehrlich handeln, tun was wir sagen und sagen was wir tun. Und ich wünsche jedem von Herzen ein gesegnetes Leben.",
+    "body2": "Aus Studium, Neugier und Lernlust entdeckte ich etwas, das mein Leben wendete. Habgier wich; Empathie trat an ihre Stelle. Mein Leben läuft wieder leicht — und mit ein paar einfachen Handlungen helfe ich, wer feststeckt. So einfach, dass ein Kind von fünf es kann, sobald es weiß, was theory of mind bedeutet: dass du ein eigenes Wesen bist, kein Anhängsel deiner Eltern. Schau es ruhig nach."
   },
   "about": {
     "eyebrow": "Über Henk",
@@ -89,7 +90,8 @@
     "trialEndedLead": "Wähle monatlich oder jährlich, um den Clubzugang zu behalten. Jederzeit kündbar.",
     "monthlyDetailNow": "€20 pro Monat. Ohne Verpflichtung.",
     "yearlyDetailNow": "€200 pro Jahr. Ohne Verpflichtung.",
-    "manageSubscription": "Abo verwalten"
+    "manageSubscription": "Abo verwalten",
+    "paradiseNote": "Mit diesem Lied habe ich das Herz der schönsten, anziehendsten Frau auf Erden gebrochen und wieder geklebt — für mich jedenfalls."
   },
   "contact": {
     "title": "Kontakt",
@@ -195,7 +197,7 @@
     "chooseAmount": "Betrag wählen",
     "selected": "Gewählt",
     "secureNote": "Einmalig · sicher über Stripe · Karte",
-    "asideQuote": "Wieder glücklich zusammen leben — ehrlich handeln, tun was wir sagen.",
+    "asideQuote": "In Wärme gelernt: sag, was du fühlst. Mein Wort ist meine Tat.",
     "asideCredit": "Happy People",
     "imageAlt": "Happy People Moment",
     "cta": "Spenden",

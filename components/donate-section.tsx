@@ -1,26 +1,27 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { LightboxImage } from "@/components/lightbox-image";
+import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
 import {
   DONATION_DEFAULT_EUR,
   DONATION_PRESETS_EUR,
-} from "@/lib/stripe";
+} from "@/lib/stripe-constants";
 
-export function DonateSection({
-  thanks,
-}: {
-  thanks?: boolean;
-}) {
+export function DonateSection() {
   const t = useTranslations("donate");
   const locale = useLocale();
+  const searchParams = useSearchParams();
   const { user } = useAuth();
   const [amountEur, setAmountEur] = useState<number>(DONATION_DEFAULT_EUR);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [thanksVisible, setThanksVisible] = useState(Boolean(thanks));
+  const [thanksVisible, setThanksVisible] = useState(
+    searchParams.get("donate") === "success",
+  );
 
   async function startDonate() {
     setBusy(true);
@@ -132,6 +133,16 @@ export function DonateSection({
           </p>
         </div>
         {error && <p className="mt-4 text-sm text-red-700">{error}</p>}
+
+        <div className="mt-8">
+          <SyncedLyricPlayer
+            audioSrc="/audio/if-you-dont-know.mp3"
+            lrcSrc="/audio/if-you-dont-know.lrc"
+            title="If You Don't Know Me By Now"
+            artist="Simply Red"
+            tone="page"
+          />
+        </div>
       </div>
 
       <aside className="relative overflow-hidden">
