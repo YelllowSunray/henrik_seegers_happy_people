@@ -34,25 +34,33 @@
     "title": "Henrik Seegers",
     "teaser": "From Almere to another path — affirmations, manifestation, and learning to smile again.",
     "cta": "Read his story",
-    "lead": "Just my name, right? I’m Henrik Seegers, born in Westperkassel, 1965, at twelve o’clock at night exactly. As a small child I was in contact with the Most High; I said: God, if You exist, please talk to me. I got an answer, and the question was: what do you want to ask me, Henkie? I said: well, I’d rather you call me Henk, because I’m long past being a Henkie.",
-    "p1": "I fell away from my faith because on television I see children in South Sudan starving and dying of scurvy, while here in the West we wonder whether to buy a second car or book a third holiday. If You are as good as it says in the holy scriptures, then I don’t understand a thing of this. Can You tell me whether it will ever be alright with humanity?",
+    "lead": "Just my name, right? I’m Henrik Seegers, born in Weesperkarspel (present-day Weesp), 1965, at midnight exactly. As a child I contacted the Most High: God, if You exist, talk to me. The answer asked: what do you want, Henkie? I said: call me Henk — I’m long past being a Henkie.",
+    "p1": "I fell away from my faith because on television I see children in South Sudan starving, while here in the West we wonder about a second car or third holiday. If You are as good as the scriptures say, I don’t understand this. Will it ever be alright with humanity?",
     "p2": "And I got an answer: I find you quite a stubborn, peculiar, spontaneous little fellow, and if you think you can do better than I can, then you may take over the baton from me, and I promise you that I will support you in everything you need in life.",
     "artCaption": ""
   },
   "seminars": {
     "eyebrow": "Seminars",
-    "title": "Weekly in Almere",
-    "teaser": "Live sessions on affirmations, manifestation and connection. Recordings for members.",
+    "title": "Live seminars",
+    "teaser": "Live lessons on affirmations, manifestation and connection. Ticket €1500 — buy online only. Recordings for members.",
     "cta": "See seminars",
     "next": "Next seminar",
-    "location": "Almere",
+    "location": "Van der Valk Hotel Amersfoort",
     "sample": "Sample recordings",
     "sampleNote": "Short clips for everyone. Full recordings for Happy People members.",
     "missed": "Missed it? The full recording is in your Happy People membership.",
     "reserve": "Learn more",
     "membersOnly": "Members only",
     "imageCaption": "if you meet your twin flame, it feels like you're going 160km/h over a bumping road",
-    "imageAlt": "Twin flames"
+    "imageAlt": "Twin flames",
+    "price": "€1500",
+    "ticketNote": "This ticket is for this seminar only. Sold online only — no payment at the door.",
+    "buyTicket": "Buy ticket online",
+    "ticketFailed": "Couldn’t start ticket checkout. Please try again.",
+    "ticketThanks": "Thank you — your ticket is paid. See you in Almere.",
+    "ticketForThis": "Ticket for this seminar",
+    "buyTicketFor": "Buy ticket for “{title}”",
+    "allSeminars": "All upcoming seminars"
   },
   "blog": {
     "eyebrow": "Blog",
@@ -91,6 +99,7 @@
     "monthlyDetailNow": "€20 per month. No obligation.",
     "yearlyDetailNow": "€200 per year. No obligation.",
     "manageSubscription": "Manage subscription",
+    "paradisePrompt": "The keuze is aan uw - wordt het \"yes\" or \"no\"",
     "paradiseNote": "With this song I broke and mended the heart of the most beautiful, captivating woman who walks this earth — for me, at least."
   },
   "contact": {
@@ -282,7 +291,8 @@
     "badgeOther": "No plan",
     "selectedMember": "Selected member",
     "fieldEmailHint": "Only needed if the member is not in the list",
-    "accountsLink": "Test accounts"
+    "accountsLink": "Test accounts",
+    "fieldAddress": "Address"
   },
   "adminAccounts": {
     "eyebrow": "Developer",

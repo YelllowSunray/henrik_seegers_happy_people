@@ -9,6 +9,9 @@ import {
 
 const VISIBLE_LINES = 4;
 
+/** All mounted lyric players — pause peers when one starts, or when scrolled away. */
+const mountedAudio = new Set<HTMLAudioElement>();
+
 type Tone = "hero" | "page";
 
 export function SyncedLyricPlayer({
@@ -26,6 +29,7 @@ export function SyncedLyricPlayer({
   tone?: Tone;
   className?: string;
 }) {
+  const rootRef = useRef<HTMLDivElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [lines, setLines] = useState<LyricLine[]>([]);
   const [playing, setPlaying] = useState(false);
@@ -48,8 +52,15 @@ export function SyncedLyricPlayer({
     const audio = audioRef.current;
     if (!audio) return;
 
+    mountedAudio.add(audio);
+
     const onTime = () => setTime(audio.currentTime);
-    const onPlay = () => setPlaying(true);
+    const onPlay = () => {
+      setPlaying(true);
+      for (const other of mountedAudio) {
+        if (other !== audio && !other.paused) other.pause();
+      }
+    };
     const onPause = () => setPlaying(false);
     const onEnded = () => {
       setPlaying(false);
@@ -62,11 +73,33 @@ export function SyncedLyricPlayer({
     audio.addEventListener("ended", onEnded);
 
     return () => {
+      mountedAudio.delete(audio);
+      audio.pause();
       audio.removeEventListener("timeupdate", onTime);
       audio.removeEventListener("play", onPlay);
       audio.removeEventListener("pause", onPause);
       audio.removeEventListener("ended", onEnded);
     };
+  }, []);
+
+  // Pause when this player scrolls out of the viewport (up or down).
+  useEffect(() => {
+    const root = rootRef.current;
+    const audio = audioRef.current;
+    if (!root || !audio) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return;
+        if (!entry.isIntersecting || entry.intersectionRatio < 0.2) {
+          if (!audio.paused) audio.pause();
+        }
+      },
+      { threshold: [0, 0.2, 0.5, 1] },
+    );
+
+    observer.observe(root);
+    return () => observer.disconnect();
   }, []);
 
   const active = activeLyricIndex(lines, time);
@@ -88,7 +121,7 @@ export function SyncedLyricPlayer({
   const isHero = tone === "hero";
 
   return (
-    <div className={`w-full ${className}`}>
+    <div ref={rootRef} className={`w-full ${className}`}>
       <audio ref={audioRef} src={audioSrc} preload="metadata" />
 
       <div

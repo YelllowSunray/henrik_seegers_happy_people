@@ -34,25 +34,33 @@
     "title": "Henrik Seegers",
     "teaser": "De Almere a otro camino — afirmaciones, manifestación y volver a sonreír.",
     "cta": "Lee su historia",
-    "lead": "¿Solo mi nombre, no? Soy Henrik Seegers, nacido en Westperkassel, 1965, a las doce de la noche en punto. De niño estuve en contacto con el Ser Supremo; dije: Dios, si existes, por favor háblame. Recibí respuesta, y la pregunta fue: ¿qué quieres preguntarme, Henkie? Dije: prefiero que me llames Henk, porque un Henkie ya no soy hace mucho.",
-    "p1": "Me alejé de mi fe porque en la televisión veo niños en Sudán del Sur muriendo de hambre y de escorbuto, mientras aquí en Occidente pensamos si comprar un segundo coche o reservar unas terceras vacaciones. Si eres tan bueno como dicen las sagradas escrituras, no entiendo absolutamente nada. ¿Puedes decirme si algún día irá bien la humanidad?",
+    "lead": "¿Solo mi nombre, no? Soy Henrik Seegers, nacido en Weesperkarspel (el actual Weesp), 1965, a medianoche en punto. De niño pedí a Dios: si existes, háblame. La respuesta preguntó: ¿qué quieres, Henkie? Dije: llámame Henk — ya no soy un Henkie.",
+    "p1": "Caí de la fe porque en televisión veo niños en Sudán del Sur muriendo de hambre, mientras en Occidente debatimos un segundo coche o unas terceras vacaciones. Si eres tan bueno como dicen las escrituras, no lo entiendo. ¿Algún día irá bien la humanidad?",
     "p2": "Y recibí respuesta: te veo como un chaval terco, peculiar y espontáneo, y si crees que puedes hacerlo mejor que yo, entonces puedes tomar el relevo de mí, y te prometo que te apoyaré en todo lo que necesites en la vida.",
     "artCaption": ""
   },
   "seminars": {
     "eyebrow": "Seminarios",
-    "title": "Cada semana en Almere",
-    "teaser": "Sesiones en vivo sobre afirmaciones, manifestación y conexión. Grabaciones para miembros.",
+    "title": "Seminarios en vivo",
+    "teaser": "Clases en vivo sobre afirmaciones, manifestación y conexión. Entrada €1500 — solo online. Grabaciones para miembros.",
     "cta": "Ver seminarios",
     "next": "Próximo seminario",
-    "location": "Almere",
+    "location": "Van der Valk Hotel Amersfoort",
     "sample": "Grabaciones de muestra",
     "sampleNote": "Clips cortos para todos. Grabaciones completas para miembros de Happy People.",
     "missed": "¿Te lo perdiste? La grabación completa está en tu membresía Happy People.",
     "reserve": "Más info",
     "membersOnly": "Solo miembros",
     "imageCaption": "if you meet your twin flame, it feels like you're going 160km/h over a bumping road",
-    "imageAlt": "Twin flames"
+    "imageAlt": "Twin flames",
+    "price": "€1500",
+    "ticketNote": "Esta entrada es solo para este seminario. Solo online — sin pago en la puerta.",
+    "buyTicket": "Comprar entrada online",
+    "ticketFailed": "No se pudo iniciar la compra. Inténtalo de nuevo.",
+    "ticketThanks": "Gracias — tu entrada está pagada. Nos vemos en Almere.",
+    "ticketForThis": "Entrada para este seminario",
+    "buyTicketFor": "Comprar entrada para “{title}”",
+    "allSeminars": "Todos los seminarios próximos"
   },
   "blog": {
     "eyebrow": "Blog",
@@ -91,6 +99,7 @@
     "monthlyDetailNow": "€20 al mes. Sin obligación.",
     "yearlyDetailNow": "€200 al año. Sin obligación.",
     "manageSubscription": "Gestionar suscripción",
+    "paradisePrompt": "The keuze is aan uw - wordt het \"yes\" or \"no\"",
     "paradiseNote": "Con esta canción rompí y volví a pegar el corazón de la mujer más bella y atractiva que camina por la tierra — para mí, al menos."
   },
   "contact": {
@@ -282,7 +291,8 @@
     "badgeOther": "Sin plan",
     "selectedMember": "Miembro seleccionado",
     "fieldEmailHint": "Solo si el miembro no está en la lista",
-    "accountsLink": "Cuentas de prueba"
+    "accountsLink": "Cuentas de prueba",
+    "fieldAddress": "Dirección"
   },
   "adminAccounts": {
     "eyebrow": "Developer",

@@ -54,6 +54,7 @@ export function DonateSection() {
   }
 
   return (
+    <>
     <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
       <div>
         {thanksVisible && (
@@ -134,7 +135,7 @@ export function DonateSection() {
         </div>
         {error && <p className="mt-4 text-sm text-red-700">{error}</p>}
 
-        <div className="mt-8">
+        <div className="mt-8 w-full">
           <SyncedLyricPlayer
             audioSrc="/audio/if-you-dont-know.mp3"
             lrcSrc="/audio/if-you-dont-know.lrc"
@@ -167,5 +168,6 @@ export function DonateSection() {
         </div>
       </aside>
     </div>
+    </>
   );
 }

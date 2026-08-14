@@ -34,25 +34,33 @@
     "title": "Henrik Seegers",
     "teaser": "Van Almere naar een andere weg — affirmaties, manifestatie, en de kunst om weer te lachen.",
     "cta": "Lees zijn verhaal",
-    "lead": "Gewoon mijn naam noemen, toch? Ik ben Henrik Seegers, geboren in Westperkassel, 1965, om twaalf uur 's nachts precies. Ik heb als klein kind in contact gestaan met het opperwezen; ik zei: God, als u bestaat, praat alstublieft tegen mij. Ik kreeg antwoord en de vraag was: wat wil je aan me vragen, Henkie? Ik zeg: nou, ik heb liever dat u me Henk noemt, want een Henkie ben ik allang niet meer.",
-    "p1": "Ik ben van mijn geloof afgevallen omdat ik op televisie zie dat er kinderen in Zuid-Soedan liggen te verhongeren en met scheurbuik overlijden, terwijl wij hier in het Westen nadenken over al dan niet een tweede auto te kopen of een derde vakantie te boeken. Als u zo goed bent als dat in de heilige geschriften staat, dan begrijp ik hier helemaal geen bal van. Kunt u mij vertellen of het ooit nog goed komt met de mensheid?",
+    "lead": "Gewoon mijn naam noemen, toch? Ik ben Henrik Seegers, geboren in Weesperkarspel (het huidige Weesp), 1965, om middernacht precies. Als 7 1/2 jaarige kind vroeg ik God: als U bestaat, praat tegen mij. Het antwoord vroeg: wat wil je, Henkie? Ik zeg: noem me Henk — een Henkie ben ik allang niet meer.",
+    "p1": "Ik viel van mijn geloof omdat ik op televisie kinderen in Zuid-Soedan zag verhongeren, terwijl wij in het Westen nadenken over een tweede auto of derde vakantie. Als U zo goed bent als de geschriften zeggen, begrijp ik dit niet. Komt het ooit nog goed met de mensheid?",
     "p2": "En ik kreeg antwoord: ik vind jou wel een eigenzinnig, eigenaardig, spontaan kereltje, en als jij denkt dat je het beter kan doen dan ik, dan mag je van mij het stokje overnemen, en dan beloof ik je dat ik jou zal steunen in alles wat je nodig hebt in het leven.",
     "artCaption": ""
   },
   "seminars": {
     "eyebrow": "Seminars",
-    "title": "Wekelijks in Almere",
-    "teaser": "Live lessen over affirmaties, manifestatie en verbinding. Opnames voor leden.",
+    "title": "Live seminars",
+    "teaser": "Live lessen over affirmaties, manifestatie en verbinding. Ticket €1500 — alleen online te koop. Opnames voor leden.",
     "cta": "Bekijk seminars",
     "next": "Volgend seminar",
-    "location": "Almere",
+    "location": "Van der Valk Hotel Amersfoort",
     "sample": "Voorbeeldopnames",
     "sampleNote": "Korte clips voor iedereen. Volledige opnames voor Happy People-leden.",
     "missed": "Gemist? De volledige opname zit in je Happy People-lidmaatschap.",
     "reserve": "Meer info",
     "membersOnly": "Alleen voor leden",
     "imageCaption": "if you meet your twin flame, it feels like you're going 160km/h over a bumping road",
-    "imageAlt": "Twin flames"
+    "imageAlt": "Twin flames",
+    "price": "€1500",
+    "ticketNote": "Dit ticket geldt alleen voor dit seminar. Alleen online te koop — geen betaling aan de deur.",
+    "buyTicket": "Koop ticket online",
+    "ticketFailed": "Ticket kopen lukte niet. Probeer het opnieuw.",
+    "ticketThanks": "Bedankt — je ticket is betaald. Tot ziens in Almere.",
+    "ticketForThis": "Ticket voor dit seminar",
+    "buyTicketFor": "Koop ticket voor “{title}”",
+    "allSeminars": "Alle aankomende seminars"
   },
   "blog": {
     "eyebrow": "Blog",
@@ -91,6 +99,7 @@
     "monthlyDetailNow": "€20 per maand. Zonder verplichting.",
     "yearlyDetailNow": "€200 per jaar. Zonder verplichting.",
     "manageSubscription": "Abonnement beheren",
+    "paradisePrompt": "The keuze is aan uw - wordt het \"yes\" or \"no\"",
     "paradiseNote": "Met dit lied heb ik het hart gebroken én gelijmd van de mooiste, aantrekkelijkste vrouw die op aarde rondloopt — voor mij althans."
   },
   "contact": {
@@ -192,7 +201,7 @@
   "donate": {
     "eyebrow": "Steun",
     "title": "Een gift met een glimlach",
-    "lead": "Lidmaatschap houdt de club draaiende. Een eenmalige gift helpt Henk seminars, vlogs en berichten blijven delen — zonder verplichting.",
+    "lead": "Lidmaatschap houdt de club draaiende. Een eenmalige gift helpt Henk's seminars, vlogs en berichten blijven delen — zonder verplichting.",
     "body": "Geen abonnement, geen druk. Kies een bedrag dat bij je past. Elk bedrag telt.",
     "chooseAmount": "Kies een bedrag",
     "selected": "Gekozen",
@@ -282,7 +291,8 @@
     "badgeOther": "Geen abonnement",
     "selectedMember": "Geselecteerd lid",
     "fieldEmailHint": "Alleen nodig als het lid niet in de lijst staat",
-    "accountsLink": "Testaccounts"
+    "accountsLink": "Testaccounts",
+    "fieldAddress": "Adres"
   },
   "adminAccounts": {
     "eyebrow": "Developer",

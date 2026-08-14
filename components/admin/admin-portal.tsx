@@ -155,6 +155,12 @@ export function AdminPortal() {
                   date: String(data.date ?? ""),
                   time: String(data.time ?? ""),
                   location: String(data.location ?? ""),
+                  address:
+                    typeof data.address === "string" ? data.address : undefined,
+                  priceLabel:
+                    typeof data.priceLabel === "string"
+                      ? data.priceLabel
+                      : undefined,
                 } as SeminarEvent;
               })
               .sort((a, b) => a.date.localeCompare(b.date)),
@@ -635,7 +641,7 @@ export function AdminPortal() {
                   items={events.map((e) => ({
                     id: e.id,
                     title: nl(e.title),
-                    meta: `${e.date} · ${e.location}`,
+                    meta: `${e.date} · ${e.location}${e.address ? ` · ${e.address}` : ""}`,
                     audience: "public" as const,
                   }))}
                   onEdit={setEditingId}
@@ -917,7 +923,12 @@ function EventForm({
       description: { nl: String(fd.get("description")) },
       date: String(fd.get("date")),
       time: String(fd.get("time")),
-      location: String(fd.get("location") || "Almere"),
+      location: String(
+        fd.get("location") || "Van der Valk Hotel Amersfoort",
+      ),
+      address: String(
+        fd.get("address") || "Ruimtevaart 22-24, 3824 MX Amersfoort",
+      ),
     });
   }
   return (
@@ -962,7 +973,19 @@ function EventForm({
       <Field label={t("fieldLocation")}>
         <input
           name="location"
-          defaultValue={initial?.location || "Almere"}
+          defaultValue={
+            initial?.location || "Van der Valk Hotel Amersfoort"
+          }
+          className={fieldClass}
+        />
+      </Field>
+      <Field label={t("fieldAddress")}>
+        <input
+          name="address"
+          placeholder="Ruimtevaart 22-24, 3824 MX Amersfoort"
+          defaultValue={
+            initial?.address || "Ruimtevaart 22-24, 3824 MX Amersfoort"
+          }
           className={fieldClass}
         />
       </Field>

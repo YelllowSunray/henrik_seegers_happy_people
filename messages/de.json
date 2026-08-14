@@ -34,25 +34,33 @@
     "title": "Henrik Seegers",
     "teaser": "Von Almere zu einem anderen Weg — Affirmationen, Manifestation und wieder lächeln lernen.",
     "cta": "Seine Geschichte",
-    "lead": "Einfach meinen Namen nennen, oder? Ich bin Henrik Seegers, geboren in Westperkassel, 1965, genau um Mitternacht. Als kleines Kind stand ich in Kontakt mit dem Höchsten; ich sagte: Gott, wenn Du existierst, sprich bitte mit mir. Ich bekam Antwort, und die Frage war: was willst du mich fragen, Henkie? Ich sagte: nenn mich bitte Henk, denn ein Henkie bin ich längst nicht mehr.",
-    "p1": "Ich bin vom Glauben abgefallen, weil ich im Fernsehen sehe, dass Kinder im Südsudan verhungern und an Skorbut sterben, während wir hier im Westen darüber nachdenken, ob wir ein zweites Auto kaufen oder einen dritten Urlaub buchen. Wenn Du so gut bist, wie es in den heiligen Schriften steht, verstehe ich hiervon überhaupt nichts. Kannst Du mir sagen, ob es jemals wieder gut wird mit der Menschheit?",
+    "lead": "Einfach meinen Namen, oder? Ich bin Henrik Seegers, geboren in Weesperkarspel (dem heutigen Weesp), 1965, genau um Mitternacht. Als Kind bat ich Gott: wenn Du existierst, sprich zu mir. Die Antwort fragte: was willst du, Henkie? Ich sagte: nenn mich Henk — ein Henkie bin ich längst nicht mehr.",
+    "p1": "Ich fiel vom Glauben ab, weil ich im Fernsehen Kinder in Südsudan verhungern sehe, während wir im Westen über ein zweites Auto oder dritten Urlaub nachdenken. Wenn Du so gut bist wie die Schriften sagen, verstehe ich das nicht. Wird es jemals gut mit der Menschheit?",
     "p2": "Und ich bekam Antwort: ich finde dich ein eigensinniges, eigentümliches, spontanes Kerlchen, und wenn du denkst, dass du es besser machen kannst als ich, dann darfst du von mir den Stab übernehmen, und ich verspreche dir, dass ich dich in allem unterstützen werde, was du im Leben brauchst.",
     "artCaption": ""
   },
   "seminars": {
     "eyebrow": "Seminare",
-    "title": "Wöchentlich in Almere",
-    "teaser": "Live-Sessions zu Affirmationen, Manifestation und Verbindung. Aufnahmen für Mitglieder.",
+    "title": "Live-Seminare",
+    "teaser": "Live-Unterricht zu Affirmationen, Manifestation und Verbindung. Ticket €1500 — nur online. Aufnahmen für Mitglieder.",
     "cta": "Seminare ansehen",
     "next": "Nächstes Seminar",
-    "location": "Almere",
+    "location": "Van der Valk Hotel Amersfoort",
     "sample": "Beispielaufnahmen",
     "sampleNote": "Kurze Clips für alle. Volle Aufnahmen für Happy People-Mitglieder.",
     "missed": "Verpasst? Die volle Aufnahme ist in deiner Mitgliedschaft.",
     "reserve": "Mehr erfahren",
     "membersOnly": "Nur für Mitglieder",
     "imageCaption": "if you meet your twin flame, it feels like you're going 160km/h over a bumping road",
-    "imageAlt": "Twin Flames"
+    "imageAlt": "Twin Flames",
+    "price": "€1500",
+    "ticketNote": "Dieses Ticket gilt nur für dieses Seminar. Nur online — keine Zahlung an der Tür.",
+    "buyTicket": "Ticket online kaufen",
+    "ticketFailed": "Ticketkauf fehlgeschlagen. Bitte erneut versuchen.",
+    "ticketThanks": "Danke — dein Ticket ist bezahlt. Bis bald in Almere.",
+    "ticketForThis": "Ticket für dieses Seminar",
+    "buyTicketFor": "Ticket für „{title}“ kaufen",
+    "allSeminars": "Alle kommenden Seminare"
   },
   "blog": {
     "eyebrow": "Blog",
@@ -91,6 +99,7 @@
     "monthlyDetailNow": "€20 pro Monat. Ohne Verpflichtung.",
     "yearlyDetailNow": "€200 pro Jahr. Ohne Verpflichtung.",
     "manageSubscription": "Abo verwalten",
+    "paradisePrompt": "The keuze is aan uw - wordt het \"yes\" or \"no\"",
     "paradiseNote": "Mit diesem Lied habe ich das Herz der schönsten, anziehendsten Frau auf Erden gebrochen und wieder geklebt — für mich jedenfalls."
   },
   "contact": {
@@ -282,7 +291,8 @@
     "badgeOther": "Kein Abo",
     "selectedMember": "Gewähltes Mitglied",
     "fieldEmailHint": "Nur nötig, wenn das Mitglied nicht in der Liste steht",
-    "accountsLink": "Testkonten"
+    "accountsLink": "Testkonten",
+    "fieldAddress": "Adresse"
   },
   "adminAccounts": {
     "eyebrow": "Developer",

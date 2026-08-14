@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { JoinButton } from "@/components/join-button";
+import { SeminarTicketButton } from "@/components/seminar-ticket-button";
 import { t } from "@/lib/content";
 import { fetchEvents, fetchVideosByKind } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
@@ -43,9 +44,26 @@ export default async function SeminarsPage({
               <p className="mt-3 text-ink-soft">
                 {event.location} · {event.date} · {event.time}
               </p>
+              {event.address ? (
+                <p className="mt-1 text-sm text-ink-soft">{event.address}</p>
+              ) : null}
               <p className="mt-5 max-w-2xl leading-relaxed text-ink-soft">
                 {t(event.description, locale)}
               </p>
+              <SeminarTicketButton
+                className="mt-8"
+                eventId={event.id}
+                eventTitle={t(event.title, locale)}
+                eventMeta={[
+                  event.location,
+                  event.address,
+                  event.date,
+                  event.time,
+                ]
+                  .filter(Boolean)
+                  .join(" · ")}
+                returnPath="/seminars"
+              />
               <p className="mt-6 text-sm text-ink-soft">{tr("missed")}</p>
             </article>
           ))}

@@ -66,6 +66,7 @@ await seedCollection("events", seed.events, (e) => ({
     date: e.date,
     time: e.time,
     location: e.location,
+    ...(e.address ? { address: e.address } : {}),
     ...(e.priceLabel ? { priceLabel: e.priceLabel } : {}),
   },
 }));

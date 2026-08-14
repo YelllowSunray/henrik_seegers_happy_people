@@ -34,25 +34,33 @@
     "title": "Henrik Seegers",
     "teaser": "Almere에서 다른 길로 — 확언, 현실화, 다시 웃는 법.",
     "cta": "그의 이야기 읽기",
-    "lead": "그냥 제 이름을 말해도 될까요? 저는 Henrik Seegers입니다. 1965년 Westperkassel에서 밤 열두 시에 정확히 태어났습니다. 어린 시절 저는 지극히 높으신 분과 연결되어 있었습니다. 저는 말했습니다. 하느님, 존재하신다면 제발 말씀해 주세요. 답이 왔고 질문은 이랬습니다. Henkie야, 무엇을 묻겠니? 저는 말했습니다. Henk라고 불러 주세요. 저는 더 이상 Henkie가 아닙니다.",
-    "p1": "저는 믿음을 잃었습니다. 텔레비전에서 남수단의 아이들이 굶주리고 괴혈병으로 죽어 가는 모습을 보았기 때문입니다. 한편 우리는 여기서 두 번째 차를 살지, 세 번째 휴가를 예약할지 고민합니다. 성서에 쓰인 대로 선하시다면, 저는 도무지 이해할 수 없습니다. 인류는 언젠가 괜찮아질까요?",
+    "lead": "그냥 제 이름이죠? 저는 Henrik Seegers, 1965년 Weesperkarspel (현재의 Weesp)에서 자정에 태어났습니다. 어릴 때 하느님께 물었습니다. 존재하신다면 말씀해 주세요. 답은 물었습니다. 뭘 원하니, Henkie? 전 말했습니다. Henk라 불러 주세요 — 더는 Henkie가 아닙니다.",
+    "p1": "남수단 아이들이 굶주리는 방송을 보며 믿음을 잃었습니다. 서양에서는 두 번째 차나 세 번째 휴가를 고민하죠. 성경대로 선하시다면 이해할 수 없습니다. 인류는 과연 괜찮아질까요?",
     "p2": "그리고 답이 왔습니다. 너는 고집 세고 특이하고 솔직한 아이구나. 네가 나보다 더 잘할 수 있다고 생각한다면, 바통을 이어받아라. 그리고 인생에서 필요한 모든 것에서 너를 돕겠다고 약속한다.",
     "artCaption": ""
   },
   "seminars": {
     "eyebrow": "세미나",
-    "title": "매주 Almere에서",
-    "teaser": "확언, 현실화, 연결에 대한 라이브 세션. 멤버를 위한 녹화본.",
+    "title": "라이브 세미나",
+    "teaser": "확언·현실화·연결에 대한 라이브 수업. 티켓 €1500 — 온라인 전용. 녹화본은 회원용.",
     "cta": "세미나 보기",
     "next": "다음 세미나",
-    "location": "Almere",
+    "location": "Van der Valk Hotel Amersfoort",
     "sample": "샘플 녹화",
     "sampleNote": "모두를 위한 짧은 클립. Happy People 멤버를 위한 전체 녹화.",
     "missed": "놓치셨나요? 전체 녹화는 Happy People 멤버십에 있습니다.",
     "reserve": "자세히 보기",
     "membersOnly": "멤버 전용",
     "imageCaption": "if you meet your twin flame, it feels like you're going 160km/h over a bumping road",
-    "imageAlt": "Twin flames"
+    "imageAlt": "Twin flames",
+    "price": "€1500",
+    "ticketNote": "이 티켓은 이 세미나에만 해당됩니다. 온라인 전용 — 현장 결제 없음.",
+    "buyTicket": "온라인으로 티켓 구매",
+    "ticketFailed": "티켓 결제를 시작할 수 없습니다. 다시 시도하세요.",
+    "ticketThanks": "감사합니다 — 티켓이 결제되었습니다. Almere에서 만나요.",
+    "ticketForThis": "이 세미나 티켓",
+    "buyTicketFor": "“{title}” 티켓 구매",
+    "allSeminars": "다가오는 모든 세미나"
   },
   "blog": {
     "eyebrow": "Blog",
@@ -91,6 +99,7 @@
     "monthlyDetailNow": "월 €20. 의무 없음.",
     "yearlyDetailNow": "연 €200. 의무 없음.",
     "manageSubscription": "구독 관리",
+    "paradisePrompt": "The keuze is aan uw - wordt het \"yes\" or \"no\"",
     "paradiseNote": "이 노래로 나는 지구 위를 걷는 가장 아름답고 매력적인 여인의 마음을 아프게 했다가 다시 붙였다 — 적어도 나에게는."
   },
   "contact": {
@@ -282,7 +291,8 @@
     "badgeOther": "플랜 없음",
     "selectedMember": "선택한 회원",
     "fieldEmailHint": "목록에 없는 회원일 때만 필요",
-    "accountsLink": "테스트 계정"
+    "accountsLink": "테스트 계정",
+    "fieldAddress": "주소"
   },
   "adminAccounts": {
     "eyebrow": "Developer",

@@ -24,6 +24,8 @@ export type SeminarEvent = {
   date: string;
   time: string;
   location: string;
+  /** Street address / venue details */
+  address?: string;
   priceLabel?: string;
 };
 

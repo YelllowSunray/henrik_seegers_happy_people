@@ -56,7 +56,11 @@ function mapEvent(id: string, data: Record<string, unknown>): SeminarEvent {
     description: asLocalized(data.description),
     date: String(data.date ?? ""),
     time: String(data.time ?? ""),
-    location: String(data.location ?? "Almere"),
+    location: String(data.location ?? "Van der Valk Hotel Amersfoort"),
+    address:
+      typeof data.address === "string" && data.address.trim()
+        ? data.address.trim()
+        : undefined,
     priceLabel:
       typeof data.priceLabel === "string" ? data.priceLabel : undefined,
   };
