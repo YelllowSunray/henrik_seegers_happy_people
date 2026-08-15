@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Happy People — Henrik Seegers",
+    "title": "Happy People — Hendrik Seegers",
     "description": "Enlightenment Seminars for people who are stuck in life. Der Weg der Happy People."
   },
   "nav": {
@@ -31,10 +31,10 @@
   },
   "about": {
     "eyebrow": "Über Henk",
-    "title": "Henrik Seegers",
+    "title": "Hendrik Seegers",
     "teaser": "Von Almere zu einem anderen Weg — Affirmationen, Manifestation und wieder lächeln lernen.",
     "cta": "Seine Geschichte",
-    "lead": "Einfach meinen Namen, oder? Ich bin Henrik Seegers, geboren in Weesperkarspel (dem heutigen Weesp), 1965, genau um Mitternacht. Als Kind bat ich Gott: wenn Du existierst, sprich zu mir. Die Antwort fragte: was willst du, Henkie? Ich sagte: nenn mich Henk — ein Henkie bin ich längst nicht mehr.",
+    "lead": "Einfach meinen Namen, oder? Ich bin Hendrik Seegers, geboren in Weesperkarspel (dem heutigen Weesp), 1965, genau um Mitternacht. Als Kind bat ich Gott: wenn Du existierst, sprich zu mir. Die Antwort fragte: was willst du, Henkie? Ich sagte: nenn mich Henk — ein Henkie bin ich längst nicht mehr.",
     "p1": "Ich fiel vom Glauben ab, weil ich im Fernsehen Kinder in Südsudan verhungern sehe, während wir im Westen über ein zweites Auto oder dritten Urlaub nachdenken. Wenn Du so gut bist wie die Schriften sagen, verstehe ich das nicht. Wird es jemals gut mit der Menschheit?",
     "p2": "Und ich bekam Antwort: ich finde dich ein eigensinniges, eigentümliches, spontanes Kerlchen, und wenn du denkst, dass du es besser machen kannst als ich, dann darfst du von mir den Stab übernehmen, und ich verspreche dir, dass ich dich in allem unterstützen werde, was du im Leben brauchst.",
     "artCaption": ""
@@ -60,14 +60,16 @@
     "ticketThanks": "Danke — dein Ticket ist bezahlt. Bis bald in Almere.",
     "ticketForThis": "Ticket für dieses Seminar",
     "buyTicketFor": "Ticket für „{title}“ kaufen",
-    "allSeminars": "Alle kommenden Seminare"
+    "allSeminars": "Alle kommenden Seminare",
+    "refreshments": "Snacks und Getränke werden gestellt."
   },
   "blog": {
     "eyebrow": "Blog",
     "title": "Neueste Beiträge",
     "cta": "Alle Beiträge",
     "read": "Weiterlesen",
-    "empty": "Noch keine Beiträge."
+    "empty": "Noch keine Beiträge.",
+    "facebook": "Blogbeiträge auf Facebook"
   },
   "membership": {
     "eyebrow": "Mitgliedschaft",
@@ -191,12 +193,16 @@
     "haveAccount": "Schon Happy People? Anmelden",
     "needAccount": "Noch kein Happy People? Beitreten",
     "tabJoin": "Beitreten",
-    "tabReturn": "Ich bin schon Mitglied"
+    "tabReturn": "Ich bin schon Mitglied",
+    "forgotPassword": "Passwort vergessen?",
+    "forgotNeedEmail": "Gib zuerst deine E-Mail ein.",
+    "forgotSent": "Prüfe deine E-Mail für den Reset-Link.",
+    "forgotFailed": "Reset-E-Mail konnte nicht gesendet werden."
   },
   "footer": {
     "tagline": "Der Weg der Happy People",
     "whatsapp": "WhatsApp",
-    "rights": "© {year} Henrik Seegers — Happy People"
+    "rights": "© {year} Hendrik Seegers — Happy People"
   },
   "donate": {
     "eyebrow": "Unterstützung",

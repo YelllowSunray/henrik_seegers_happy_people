@@ -112,7 +112,7 @@ export async function POST(req: Request) {
             unit_amount: SEMINAR_TICKET_CENTS,
             product_data: {
               name: eventTitle,
-              description: "Live seminar ticket — Happy People / Henrik Seegers",
+              description: "Live seminar ticket — Happy People / Hendrik Seegers",
             },
           },
         },

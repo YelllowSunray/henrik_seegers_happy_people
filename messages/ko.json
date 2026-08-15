@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Happy People — Henrik Seegers",
+    "title": "Happy People — Hendrik Seegers",
     "description": "Enlightenment Seminars for people who are stuck in life. Happy People의 길."
   },
   "nav": {
@@ -31,10 +31,10 @@
   },
   "about": {
     "eyebrow": "헹크 소개",
-    "title": "Henrik Seegers",
+    "title": "Hendrik Seegers",
     "teaser": "Almere에서 다른 길로 — 확언, 현실화, 다시 웃는 법.",
     "cta": "그의 이야기 읽기",
-    "lead": "그냥 제 이름이죠? 저는 Henrik Seegers, 1965년 Weesperkarspel (현재의 Weesp)에서 자정에 태어났습니다. 어릴 때 하느님께 물었습니다. 존재하신다면 말씀해 주세요. 답은 물었습니다. 뭘 원하니, Henkie? 전 말했습니다. Henk라 불러 주세요 — 더는 Henkie가 아닙니다.",
+    "lead": "그냥 제 이름이죠? 저는 Hendrik Seegers, 1965년 Weesperkarspel (현재의 Weesp)에서 자정에 태어났습니다. 어릴 때 하느님께 물었습니다. 존재하신다면 말씀해 주세요. 답은 물었습니다. 뭘 원하니, Henkie? 전 말했습니다. Henk라 불러 주세요 — 더는 Henkie가 아닙니다.",
     "p1": "남수단 아이들이 굶주리는 방송을 보며 믿음을 잃었습니다. 서양에서는 두 번째 차나 세 번째 휴가를 고민하죠. 성경대로 선하시다면 이해할 수 없습니다. 인류는 과연 괜찮아질까요?",
     "p2": "그리고 답이 왔습니다. 너는 고집 세고 특이하고 솔직한 아이구나. 네가 나보다 더 잘할 수 있다고 생각한다면, 바통을 이어받아라. 그리고 인생에서 필요한 모든 것에서 너를 돕겠다고 약속한다.",
     "artCaption": ""
@@ -60,14 +60,16 @@
     "ticketThanks": "감사합니다 — 티켓이 결제되었습니다. Almere에서 만나요.",
     "ticketForThis": "이 세미나 티켓",
     "buyTicketFor": "“{title}” 티켓 구매",
-    "allSeminars": "다가오는 모든 세미나"
+    "allSeminars": "다가오는 모든 세미나",
+    "refreshments": "간단한 다과와 음료가 제공됩니다."
   },
   "blog": {
     "eyebrow": "Blog",
     "title": "최신 글",
     "cta": "모든 글",
     "read": "더 읽기",
-    "empty": "아직 글이 없습니다."
+    "empty": "아직 글이 없습니다.",
+    "facebook": "Facebook 블로그 글"
   },
   "membership": {
     "eyebrow": "Membership",
@@ -191,12 +193,16 @@
     "haveAccount": "이미 Happy People? 로그인",
     "needAccount": "아직 아닌가요? 가입",
     "tabJoin": "가입",
-    "tabReturn": "이미 회원입니다"
+    "tabReturn": "이미 회원입니다",
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "forgotNeedEmail": "먼저 이메일을 입력하세요.",
+    "forgotSent": "재설정 링크는 이메일을 확인하세요.",
+    "forgotFailed": "재설정 이메일을 보내지 못했습니다."
   },
   "footer": {
     "tagline": "Happy People의 길",
     "whatsapp": "WhatsApp",
-    "rights": "© {year} Henrik Seegers — Happy People"
+    "rights": "© {year} Hendrik Seegers — Happy People"
   },
   "donate": {
     "eyebrow": "후원",

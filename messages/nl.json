@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Happy People — Henrik Seegers",
+    "title": "Happy People — Hendrik Seegers",
     "description": "Enlightenment Seminars for people who are stuck in life. De weg van de Happy People."
   },
   "nav": {
@@ -31,10 +31,10 @@
   },
   "about": {
     "eyebrow": "Over Henk",
-    "title": "Henrik Seegers",
+    "title": "Hendrik Seegers",
     "teaser": "Van Almere naar een andere weg — affirmaties, manifestatie, en de kunst om weer te lachen.",
     "cta": "Lees zijn verhaal",
-    "lead": "Gewoon mijn naam noemen, toch? Ik ben Henrik Seegers, geboren in Weesperkarspel (het huidige Weesp), 1965, om middernacht precies. Als 7 1/2 jaarige kind vroeg ik God: als U bestaat, praat tegen mij. Het antwoord vroeg: wat wil je, Henkie? Ik zeg: noem me Henk — een Henkie ben ik allang niet meer.",
+    "lead": "Gewoon mijn naam noemen, toch? Ik ben Hendrik Seegers, geboren in Weesperkarspel (het huidige Weesp), 1965, om middernacht precies. Als 7 1/2 jaarige kind vroeg ik God: als U bestaat, praat tegen mij. Het antwoord vroeg: wat wil je, Henkie? Ik zeg: noem me Henk — een Henkie ben ik allang niet meer.",
     "p1": "Ik viel van mijn geloof omdat ik op televisie kinderen in Zuid-Soedan zag verhongeren, terwijl wij in het Westen nadenken over een tweede auto of derde vakantie. Als U zo goed bent als de geschriften zeggen, begrijp ik dit niet. Komt het ooit nog goed met de mensheid?",
     "p2": "En ik kreeg antwoord: ik vind jou wel een eigenzinnig, eigenaardig, spontaan kereltje, en als jij denkt dat je het beter kan doen dan ik, dan mag je van mij het stokje overnemen, en dan beloof ik je dat ik jou zal steunen in alles wat je nodig hebt in het leven.",
     "artCaption": ""
@@ -60,14 +60,16 @@
     "ticketThanks": "Bedankt — je ticket is betaald. Tot ziens in Almere.",
     "ticketForThis": "Ticket voor dit seminar",
     "buyTicketFor": "Koop ticket voor “{title}”",
-    "allSeminars": "Alle aankomende seminars"
+    "allSeminars": "Alle aankomende seminars",
+    "refreshments": "Hapjes en drankjes worden verzorgd."
   },
   "blog": {
     "eyebrow": "Blog",
     "title": "Laatste berichten",
     "cta": "Alle berichten",
     "read": "Lees verder",
-    "empty": "Nog geen berichten."
+    "empty": "Nog geen berichten.",
+    "facebook": "Blogberichten op Facebook"
   },
   "membership": {
     "eyebrow": "Lidmaatschap",
@@ -191,12 +193,16 @@
     "haveAccount": "Al Happy People? Log in",
     "needAccount": "Nog geen Happy People? Word lid",
     "tabJoin": "Word lid",
-    "tabReturn": "Ik ben al lid"
+    "tabReturn": "Ik ben al lid",
+    "forgotPassword": "Wachtwoord vergeten?",
+    "forgotNeedEmail": "Vul eerst je e-mailadres in.",
+    "forgotSent": "Check je e-mail voor een resetlink.",
+    "forgotFailed": "Resetmail kon niet worden verstuurd."
   },
   "footer": {
     "tagline": "De weg van de Happy People",
     "whatsapp": "WhatsApp",
-    "rights": "© {year} Henrik Seegers — Happy People"
+    "rights": "© {year} Hendrik Seegers — Happy People"
   },
   "donate": {
     "eyebrow": "Steun",

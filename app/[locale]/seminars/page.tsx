@@ -50,6 +50,9 @@ export default async function SeminarsPage({
               <p className="mt-5 max-w-2xl leading-relaxed text-ink-soft">
                 {t(event.description, locale)}
               </p>
+              <p className="mt-3 max-w-2xl text-sm font-medium text-ink">
+                {tr("refreshments")}
+              </p>
               <SeminarTicketButton
                 className="mt-8"
                 eventId={event.id}

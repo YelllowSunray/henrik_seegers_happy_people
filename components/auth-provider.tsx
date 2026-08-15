@@ -12,6 +12,7 @@ import {
   User,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
 } from "firebase/auth";
@@ -32,6 +33,7 @@ type AuthContextValue = {
   isAdmin: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 };
@@ -143,6 +145,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           trialEndsAt: computeTrialEndsAt(),
           isAdmin: false,
         } satisfies MemberProfile);
+      },
+      resetPassword: async (email) => {
+        await sendPasswordResetEmail(getClientAuth(), email.trim());
       },
       signOut: async () => {
         await firebaseSignOut(getClientAuth());

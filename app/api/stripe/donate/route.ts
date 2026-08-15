@@ -112,7 +112,7 @@ export async function POST(req: Request) {
             product_data: {
               name: "Donation — Happy People",
               description:
-                "One-time gift to support Henrik Seegers / Happy People",
+                "One-time gift to support Hendrik Seegers / Happy People",
             },
           },
         },

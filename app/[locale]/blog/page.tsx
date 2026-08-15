@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { t } from "@/lib/content";
+import { FACEBOOK_HREF } from "@/lib/contact";
 import { fetchPublicPosts } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
 
@@ -21,6 +22,14 @@ export default async function BlogPage({
     <>
       <SiteHeader variant="solid" />
       <Section eyebrow={tr("eyebrow")} title={tr("title")}>
+        <a
+          href={FACEBOOK_HREF}
+          target="_blank"
+          rel="noreferrer"
+          className="mb-8 inline-flex text-sm font-semibold text-accent underline-offset-4 hover:underline"
+        >
+          {tr("facebook")}
+        </a>
         {posts.length === 0 ? (
           <p>{tr("empty")}</p>
         ) : (

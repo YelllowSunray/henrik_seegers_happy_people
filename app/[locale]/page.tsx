@@ -13,6 +13,7 @@ import { SpiritsPlayer } from "@/components/spirits-player";
 import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
 import { SeminarTicketButton } from "@/components/seminar-ticket-button";
 import { t } from "@/lib/content";
+import { FACEBOOK_HREF } from "@/lib/contact";
 import { fetchEvents, fetchPublicPosts } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
 
@@ -149,7 +150,7 @@ export default async function HomePage({
               loop
               playsInline
               preload="metadata"
-              aria-label="Henrik Seegers"
+              aria-label="Hendrik Seegers"
             />
           </div>
         </div>
@@ -181,6 +182,9 @@ export default async function HomePage({
                 ) : null}
                 <p className="mt-4 max-w-2xl text-ink-soft">
                   {t(nextEvent.description, locale)}
+                </p>
+                <p className="mt-3 max-w-2xl text-sm font-medium text-ink">
+                  {tSem("refreshments")}
                 </p>
                 <Link
                   href="/seminars"
@@ -231,6 +235,14 @@ export default async function HomePage({
       </Section>
 
       <Section eyebrow={tBlog("eyebrow")} title={tBlog("title")} tone="deep">
+        <a
+          href={FACEBOOK_HREF}
+          target="_blank"
+          rel="noreferrer"
+          className="mb-8 inline-flex text-sm font-semibold text-accent underline-offset-4 hover:underline"
+        >
+          {tBlog("facebook")}
+        </a>
         <ul className="grid gap-8 md:grid-cols-3">
           {latest.map((post) => (
             <li key={post.id}>

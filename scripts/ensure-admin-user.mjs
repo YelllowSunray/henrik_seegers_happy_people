@@ -45,7 +45,7 @@ async function main() {
         email: EMAIL,
         password: PASSWORD,
         emailVerified: true,
-        displayName: "Henrik Seegers",
+        displayName: "Hendrik Seegers",
       });
       console.log(`Created user ${EMAIL}`);
     } else {
@@ -57,7 +57,7 @@ async function main() {
     {
       uid: user.uid,
       email: EMAIL,
-      displayName: "Henrik Seegers",
+      displayName: "Hendrik Seegers",
       isAdmin: true,
       subscriptionStatus: "active",
     },

@@ -19,7 +19,7 @@ function postLoginPath(isAdmin: boolean, next: string | null) {
 
 function AuthForm() {
   const t = useTranslations("auth");
-  const { signIn, user, loading, isAdmin, profile } = useAuth();
+  const { signIn, resetPassword, user, loading, isAdmin, profile } = useAuth();
   const router = useRouter();
   const search = useSearchParams();
   const next = search.get("next");
@@ -27,7 +27,9 @@ function AuthForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [resetInfo, setResetInfo] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [resetBusy, setResetBusy] = useState(false);
 
   useEffect(() => {
     if (!loading && user && profile) {
@@ -39,11 +41,31 @@ function AuthForm() {
     e.preventDefault();
     setBusy(true);
     setError(null);
+    setResetInfo(null);
     try {
       await signIn(email, password);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Auth failed");
       setBusy(false);
+    }
+  }
+
+  async function onForgotPassword() {
+    setError(null);
+    setResetInfo(null);
+    const trimmed = email.trim();
+    if (!trimmed) {
+      setError(t("forgotNeedEmail"));
+      return;
+    }
+    setResetBusy(true);
+    try {
+      await resetPassword(trimmed);
+      setResetInfo(t("forgotSent"));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t("forgotFailed"));
+    } finally {
+      setResetBusy(false);
     }
   }
 
@@ -71,22 +93,35 @@ function AuthForm() {
             className="mt-1.5 w-full border border-line bg-white px-3 py-3 text-base outline-none focus:border-accent"
           />
         </label>
-        <label className="block text-sm font-medium text-ink">
-          {t("password")}
-          <input
-            type="password"
-            required
-            minLength={6}
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="mt-1.5 w-full border border-line bg-white px-3 py-3 text-base outline-none focus:border-accent"
-          />
-        </label>
+        <div>
+          <label className="block text-sm font-medium text-ink">
+            {t("password")}
+            <input
+              type="password"
+              required
+              minLength={6}
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="mt-1.5 w-full border border-line bg-white px-3 py-3 text-base outline-none focus:border-accent"
+            />
+          </label>
+          <div className="mt-2 flex justify-end">
+            <button
+              type="button"
+              disabled={resetBusy || busy}
+              onClick={() => void onForgotPassword()}
+              className="text-sm font-semibold text-accent underline-offset-4 hover:underline disabled:opacity-60"
+            >
+              {resetBusy ? "…" : t("forgotPassword")}
+            </button>
+          </div>
+        </div>
         {error && <p className="text-sm text-red-700">{error}</p>}
+        {resetInfo && <p className="text-sm text-accent">{resetInfo}</p>}
         <button
           type="submit"
-          disabled={busy || (!!user && !profile)}
+          disabled={busy || resetBusy || (!!user && !profile)}
           className="w-full rounded-full bg-accent py-3.5 text-sm font-semibold text-white hover:bg-accent-soft disabled:opacity-60"
         >
           {busy || (user && !profile) ? "…" : t("returnCta")}

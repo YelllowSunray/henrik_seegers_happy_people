@@ -13,7 +13,7 @@ const body = Figtree({
 });
 
 export const metadata: Metadata = {
-  title: "Happy People — Henrik Seegers",
+  title: "Happy People — Hendrik Seegers",
   description:
     "Enlightenment Seminars for people who are stuck in life. The path of Happy People.",
 };

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Happy People — Henrik Seegers",
+    "title": "Happy People — Hendrik Seegers",
     "description": "Enlightenment Seminars for people who are stuck in life. The path of Happy People."
   },
   "nav": {
@@ -31,10 +31,10 @@
   },
   "about": {
     "eyebrow": "About Henk",
-    "title": "Henrik Seegers",
+    "title": "Hendrik Seegers",
     "teaser": "From Almere to another path — affirmations, manifestation, and learning to smile again.",
     "cta": "Read his story",
-    "lead": "Just my name, right? I’m Henrik Seegers, born in Weesperkarspel (present-day Weesp), 1965, at midnight exactly. As a child I contacted the Most High: God, if You exist, talk to me. The answer asked: what do you want, Henkie? I said: call me Henk — I’m long past being a Henkie.",
+    "lead": "Just my name, right? I’m Hendrik Seegers, born in Weesperkarspel (present-day Weesp), 1965, at midnight exactly. As a child I contacted the Most High: God, if You exist, talk to me. The answer asked: what do you want, Henkie? I said: call me Henk — I’m long past being a Henkie.",
     "p1": "I fell away from my faith because on television I see children in South Sudan starving, while here in the West we wonder about a second car or third holiday. If You are as good as the scriptures say, I don’t understand this. Will it ever be alright with humanity?",
     "p2": "And I got an answer: I find you quite a stubborn, peculiar, spontaneous little fellow, and if you think you can do better than I can, then you may take over the baton from me, and I promise you that I will support you in everything you need in life.",
     "artCaption": ""
@@ -60,14 +60,16 @@
     "ticketThanks": "Thank you — your ticket is paid. See you in Almere.",
     "ticketForThis": "Ticket for this seminar",
     "buyTicketFor": "Buy ticket for “{title}”",
-    "allSeminars": "All upcoming seminars"
+    "allSeminars": "All upcoming seminars",
+    "refreshments": "Snacks and drinks will be provided."
   },
   "blog": {
     "eyebrow": "Blog",
     "title": "Latest messages",
     "cta": "All posts",
     "read": "Read more",
-    "empty": "No posts yet."
+    "empty": "No posts yet.",
+    "facebook": "Blog posts on Facebook"
   },
   "membership": {
     "eyebrow": "Membership",
@@ -191,12 +193,16 @@
     "haveAccount": "Already Happy People? Sign in",
     "needAccount": "Not Happy People yet? Join",
     "tabJoin": "Join",
-    "tabReturn": "I already joined"
+    "tabReturn": "I already joined",
+    "forgotPassword": "Forgot password?",
+    "forgotNeedEmail": "Enter your email above first.",
+    "forgotSent": "Check your email for a reset link.",
+    "forgotFailed": "Could not send reset email."
   },
   "footer": {
     "tagline": "The path of Happy People",
     "whatsapp": "WhatsApp",
-    "rights": "© {year} Henrik Seegers — Happy People"
+    "rights": "© {year} Hendrik Seegers — Happy People"
   },
   "donate": {
     "eyebrow": "Support",

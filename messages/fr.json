@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Happy People — Henrik Seegers",
+    "title": "Happy People — Hendrik Seegers",
     "description": "Enlightenment Seminars for people who are stuck in life. Le chemin des Happy People."
   },
   "nav": {
@@ -31,10 +31,10 @@
   },
   "about": {
     "eyebrow": "À propos de Henk",
-    "title": "Henrik Seegers",
+    "title": "Hendrik Seegers",
     "teaser": "D’Almere à un autre chemin — affirmations, manifestation et apprendre à sourire à nouveau.",
     "cta": "Lire son histoire",
-    "lead": "Juste mon nom, non ? Je suis Henrik Seegers, né à Weesperkarspel (l’actuel Weesp) en 1965, à minuit pile. Enfant, j’ai demandé à Dieu : si Vous existez, parlez-moi. La réponse demanda : que veux-tu, Henkie ? J’ai dit : appelez-moi Henk — je ne suis plus un Henkie depuis longtemps.",
+    "lead": "Juste mon nom, non ? Je suis Hendrik Seegers, né à Weesperkarspel (l’actuel Weesp) en 1965, à minuit pile. Enfant, j’ai demandé à Dieu : si Vous existez, parlez-moi. La réponse demanda : que veux-tu, Henkie ? J’ai dit : appelez-moi Henk — je ne suis plus un Henkie depuis longtemps.",
     "p1": "J’ai perdu la foi en voyant à la télévision des enfants au Soudan du Sud mourir de faim, tandis qu’ici on hésite entre une seconde voiture ou un troisième voyage. Si Vous êtes aussi bon que le disent les Écritures, je ne comprends pas. Tout finira-t-il par aller bien pour l’humanité ?",
     "p2": "Et j’ai reçu une réponse : je te trouve un petit gars têtu, singulier et spontané, et si tu penses pouvoir faire mieux que moi, alors tu peux reprendre le relais de moi, et je te promets que je te soutiendrai dans tout ce dont tu as besoin dans la vie.",
     "artCaption": ""
@@ -60,14 +60,16 @@
     "ticketThanks": "Merci — ton billet est payé. À bientôt à Almere.",
     "ticketForThis": "Billet pour ce séminaire",
     "buyTicketFor": "Acheter le billet pour « {title} »",
-    "allSeminars": "Tous les séminaires à venir"
+    "allSeminars": "Tous les séminaires à venir",
+    "refreshments": "Amuse-gueules et boissons seront offerts."
   },
   "blog": {
     "eyebrow": "Blog",
     "title": "Derniers messages",
     "cta": "Tous les articles",
     "read": "Lire la suite",
-    "empty": "Pas encore d’articles."
+    "empty": "Pas encore d’articles.",
+    "facebook": "Articles de blog sur Facebook"
   },
   "membership": {
     "eyebrow": "Membership",
@@ -191,12 +193,16 @@
     "haveAccount": "Déjà Happy People ? Connexion",
     "needAccount": "Pas encore ? Rejoins",
     "tabJoin": "Rejoindre",
-    "tabReturn": "Je suis déjà membre"
+    "tabReturn": "Je suis déjà membre",
+    "forgotPassword": "Mot de passe oublié ?",
+    "forgotNeedEmail": "Saisis d’abord ton e-mail.",
+    "forgotSent": "Vérifie ton e-mail pour le lien de réinitialisation.",
+    "forgotFailed": "Impossible d’envoyer l’e-mail de réinitialisation."
   },
   "footer": {
     "tagline": "Le chemin des Happy People",
     "whatsapp": "WhatsApp",
-    "rights": "© {year} Henrik Seegers — Happy People"
+    "rights": "© {year} Hendrik Seegers — Happy People"
   },
   "donate": {
     "eyebrow": "Soutien",

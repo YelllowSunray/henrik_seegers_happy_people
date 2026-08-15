@@ -28,7 +28,7 @@ export async function SiteFooter() {
             rel="noreferrer"
             className="hover:text-accent"
           >
-            Facebook — Henrik Seegers
+            Facebook — Hendrik Seegers
           </a>
           <Link href="/contact" className="hover:text-accent">
             Contact

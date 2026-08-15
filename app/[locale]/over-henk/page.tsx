@@ -39,7 +39,7 @@ export default async function AboutPage({
               loop
               playsInline
               preload="metadata"
-              aria-label="Henrik Seegers"
+              aria-label="Hendrik Seegers"
             />
           </div>
         </div>

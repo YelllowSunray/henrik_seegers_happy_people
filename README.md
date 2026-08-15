@@ -1,6 +1,6 @@
-# Happy People — Henrik Seegers
+# Happy People — Hendrik Seegers
 
-Spiritual media + membership club site for Henrik Seegers.
+Spiritual media + membership club site for Hendrik Seegers.
 
 ## Stack
 
