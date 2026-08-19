@@ -191,14 +191,22 @@ export function SyncedLyricPlayer({
               Listen
             </span>
             {isHero && artist ? (
-              <span className="mt-0.5 flex flex-wrap items-baseline gap-x-1.5 leading-tight">
-                <span className="font-display text-[1.05rem] text-white sm:text-lg">
-                  {title}
+              <>
+                <span className="mt-0.5 flex flex-wrap items-baseline gap-x-1.5 leading-tight sm:hidden">
+                  <span className="font-display text-[1.05rem] text-white">
+                    {title}
+                  </span>
+                  <span className="text-xs text-white/65">by {artist}</span>
                 </span>
-                <span className="text-xs text-white/65 sm:text-[13px]">
-                  by {artist}
+                <span className="mt-0.5 hidden leading-tight sm:block">
+                  <span className="font-display block text-lg text-white">
+                    {title}
+                  </span>
+                  <span className="mt-1 block text-[13px] text-white/65">
+                    by {artist}
+                  </span>
                 </span>
-              </span>
+              </>
             ) : (
               <>
                 <span
