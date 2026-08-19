@@ -230,7 +230,14 @@ export function SyncedLyricPlayer({
                 <p
                   key={`${line.t}-${active}-${i}`}
                   className={`leading-snug transition duration-300 ${
-                    i >= 3 ? "hidden sm:block" : ""
+                    // Hero on mobile: current + next only. Elsewhere: keep 3 on mobile / 4 on sm+.
+                    isHero
+                      ? i >= 2
+                        ? "hidden sm:block"
+                        : ""
+                      : i >= 3
+                        ? "hidden sm:block"
+                        : ""
                   } ${
                     isHero
                       ? `drop-shadow-[0_1px_2px_rgba(0,0,0,0.65)] ${
