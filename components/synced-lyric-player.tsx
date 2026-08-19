@@ -190,22 +190,35 @@ export function SyncedLyricPlayer({
             >
               Listen
             </span>
-            <span
-              className={`font-display mt-0.5 block text-[1.05rem] leading-tight sm:text-lg ${
-                isHero ? "text-white" : "text-ink"
-              }`}
-            >
-              {title}
-            </span>
-            {artist ? (
-              <span
-                className={`mt-1 block text-xs sm:text-[13px] ${
-                  isHero ? "text-white/65" : "text-ink-soft"
-                }`}
-              >
-                by {artist}
+            {isHero && artist ? (
+              <span className="mt-0.5 flex flex-wrap items-baseline gap-x-1.5 leading-tight">
+                <span className="font-display text-[1.05rem] text-white sm:text-lg">
+                  {title}
+                </span>
+                <span className="text-xs text-white/65 sm:text-[13px]">
+                  by {artist}
+                </span>
               </span>
-            ) : null}
+            ) : (
+              <>
+                <span
+                  className={`font-display mt-0.5 block text-[1.05rem] leading-tight sm:text-lg ${
+                    isHero ? "text-white" : "text-ink"
+                  }`}
+                >
+                  {title}
+                </span>
+                {artist ? (
+                  <span
+                    className={`mt-1 block text-xs sm:text-[13px] ${
+                      isHero ? "text-white/65" : "text-ink-soft"
+                    }`}
+                  >
+                    by {artist}
+                  </span>
+                ) : null}
+              </>
+            )}
           </span>
         </button>
 
