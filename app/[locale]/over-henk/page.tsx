@@ -10,12 +10,13 @@ export default async function AboutPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("about");
+  const paragraphs = t.raw("paragraphs") as string[];
 
   return (
     <>
       <SiteHeader variant="solid" />
       <Section tone="default">
-        <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-14">
+        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14">
           <div>
             <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
               {t("eyebrow")}
@@ -23,24 +24,34 @@ export default async function AboutPage({
             <h1 className="font-display mt-3 text-2xl leading-tight text-ink sm:text-3xl md:text-5xl">
               {t("title")}
             </h1>
-            <div className="mt-8 space-y-5 text-base leading-relaxed text-ink-soft md:text-lg">
-              <p className="text-ink">{t("lead")}</p>
-              <p>{t("p1")}</p>
-              <p>{t("p2")}</p>
+            <p className="mt-4 max-w-2xl text-base text-ink-soft md:text-lg">
+              {t("teaser")}
+            </p>
+            <div className="mt-8 max-w-2xl space-y-5 text-base leading-relaxed text-ink-soft md:text-lg">
+              {paragraphs.map((paragraph, i) => (
+                <p
+                  key={i}
+                  className={i === 0 ? "text-ink" : undefined}
+                >
+                  {paragraph}
+                </p>
+              ))}
             </div>
           </div>
 
-          <div className="relative aspect-[4/5] w-full overflow-hidden bg-ink/5">
-            <video
-              className="absolute inset-0 h-full w-full object-cover object-top"
-              src="/videos/Hendrix_BIO.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              aria-label="Hendrik Seegers"
-            />
+          <div className="lg:sticky lg:top-28">
+            <div className="relative aspect-[4/5] w-full overflow-hidden bg-ink/5">
+              <video
+                className="absolute inset-0 h-full w-full object-cover object-top"
+                src="/videos/Hendrix_BIO.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-label="Hendrik Seegers"
+              />
+            </div>
           </div>
         </div>
       </Section>
