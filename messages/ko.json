@@ -14,7 +14,8 @@
     "join": "가입",
     "signIn": "로그인",
     "signOut": "로그아웃",
-    "admin": "Admin"
+    "admin": "Admin",
+    "back": "뒤로"
   },
   "hero": {
     "brand": "Happy People",

@@ -14,7 +14,8 @@
     "join": "Rejoindre",
     "signIn": "Connexion",
     "signOut": "Déconnexion",
-    "admin": "Admin"
+    "admin": "Admin",
+    "back": "Retour"
   },
   "hero": {
     "brand": "Happy People",

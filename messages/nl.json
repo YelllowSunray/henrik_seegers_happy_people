@@ -14,7 +14,8 @@
     "join": "Word lid",
     "signIn": "Inloggen",
     "signOut": "Uitloggen",
-    "admin": "Admin"
+    "admin": "Admin",
+    "back": "Terug"
   },
   "hero": {
     "brand": "Happy People",

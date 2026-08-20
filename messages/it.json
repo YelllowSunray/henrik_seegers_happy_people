@@ -14,7 +14,8 @@
     "join": "Unisciti",
     "signIn": "Accedi",
     "signOut": "Esci",
-    "admin": "Admin"
+    "admin": "Admin",
+    "back": "Indietro"
   },
   "hero": {
     "brand": "Happy People",

@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useAuth } from "@/components/auth-provider";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { HeaderBackButton } from "@/components/smart-back-button";
 
 const navKeys = [
   ["about", "/over-henk"],
@@ -181,15 +182,16 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
               : "border-b border-line bg-bg/90 backdrop-blur"
         }`}
       >
-        <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-5 py-4 md:px-8 lg:gap-6">
-          <Link
-            href="/"
-            className={`font-display shrink-0 text-xl tracking-tight sm:text-2xl ${
-              darkChrome ? "text-white drop-shadow" : "text-ink"
-            }`}
-          >
-            Happy People
-          </Link>
+      <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-5 py-4 md:gap-4 md:px-8 lg:gap-6">
+        <HeaderBackButton dark={darkChrome} />
+        <Link
+          href="/"
+          className={`font-display shrink-0 text-xl tracking-tight sm:text-2xl ${
+            darkChrome ? "text-white drop-shadow" : "text-ink"
+          }`}
+        >
+          Happy People
+        </Link>
 
           <nav
             className={`hidden min-w-0 flex-1 items-center justify-center gap-5 text-sm font-medium whitespace-nowrap xl:gap-6 xl:text-[0.95rem] lg:flex ${

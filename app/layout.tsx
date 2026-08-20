@@ -26,7 +26,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="nl" className={`${display.variable} ${body.variable} h-full`}>
+    <html
+      lang="nl"
+      data-scroll-behavior="smooth"
+      className={`${display.variable} ${body.variable} h-full`}
+    >
       <body className="site-grain min-h-full antialiased">{children}</body>
     </html>
   );
