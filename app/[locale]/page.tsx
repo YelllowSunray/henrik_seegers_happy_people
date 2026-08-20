@@ -58,23 +58,23 @@ export default async function HomePage({
         <div className="absolute inset-0" style={{ background: "var(--hero-overlay)" }} />
         <div className="relative mx-auto flex min-h-[100svh] w-full flex-col justify-end gap-4 px-5 pb-8 pt-24 sm:gap-8 sm:pb-16 sm:pt-28 md:px-8 md:pb-24 lg:flex-row lg:items-end lg:justify-between lg:gap-12 lg:px-10 xl:px-14">
           <div className="min-w-0 max-w-6xl lg:max-w-xl xl:max-w-2xl">
-            <p className="reveal font-display text-3xl leading-tight text-white drop-shadow sm:whitespace-nowrap sm:text-5xl md:text-7xl lg:text-8xl">
+            <p className="reveal font-display text-4xl leading-tight text-white drop-shadow sm:whitespace-nowrap sm:text-5xl md:text-7xl lg:text-8xl">
               {tNav("brand")}
             </p>
-            <h1 className="reveal reveal-delay-1 mt-1 max-w-xl text-balance text-sm leading-snug text-white/95 sm:mt-4 sm:text-lg md:text-xl lg:text-2xl">
+            <h1 className="reveal reveal-delay-1 mt-1 max-w-xl text-balance text-base leading-snug text-white/95 sm:mt-4 sm:text-lg md:text-xl lg:text-2xl">
               {tNav("headline")}
             </h1>
-            <p className="reveal reveal-delay-2 mt-1 max-w-md text-xs leading-snug text-white/80 sm:mt-3 sm:text-base">
+            <p className="reveal reveal-delay-2 mt-1 max-w-md text-sm leading-snug text-white/80 sm:mt-3 sm:text-base">
               {tNav("support")}
             </p>
             <div className="reveal reveal-delay-3 mt-3 flex flex-wrap gap-2 sm:mt-8 sm:gap-3">
               <JoinButton
                 label={tNav("ctaJoin")}
-                className="inline-flex rounded-full bg-accent px-4 py-2.5 text-xs font-semibold text-white hover:bg-accent-soft sm:px-6 sm:py-3 sm:text-sm"
+                className="inline-flex rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:bg-accent-soft sm:px-6 sm:py-3"
               />
               <Link
                 href="/seminars"
-                className="inline-flex rounded-full border border-white/40 px-4 py-2.5 text-xs font-semibold text-white backdrop-blur hover:bg-white/10 sm:px-6 sm:py-3 sm:text-sm"
+                className="inline-flex rounded-full border border-white/40 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur hover:bg-white/10 sm:px-6 sm:py-3"
               >
                 {tNav("ctaSeminar")}
               </Link>
