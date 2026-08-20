@@ -33,8 +33,8 @@ Spiritual media + membership club site for Hendrik Seegers.
    The app applies a **7-day trial** at checkout (no obligation; cancel anytime via Customer Portal).
 5. Add Firebase Admin service account env vars.
 6. Set admin allowlist:
-   - `ADMIN_EMAILS=henk.seegers1965@gmail.com`
-   - `NEXT_PUBLIC_ADMIN_EMAILS=henk.seegers1965@gmail.com`
+   - `ADMIN_EMAILS=henk.seegers1965@gmail.com,hendrik.seegers1991@icloud.com`
+   - `NEXT_PUBLIC_ADMIN_EMAILS=henk.seegers1965@gmail.com,hendrik.seegers1991@icloud.com`
 7. Create / reset Henrik’s admin user:
 
 ```bash

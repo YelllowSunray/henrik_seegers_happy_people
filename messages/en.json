@@ -26,9 +26,20 @@
   },
   "message": {
     "eyebrow": "The message",
-    "short": "I'm from the planet outherspace and I'm here on earth to help you and all lost boys. Together we reunite as 1.",
-    "body": "I try to make people aware of what we're doing, because the way we're slowly destroying this earth is not the right path. I've found another way — the path of Happy People — where we can live happily together again, trade honestly, do what we say and say what we do — or the other way around. And from the bottom of my heart, I wish everyone a blessed life.",
-    "body2": "Through study, curiosity and a hunger to learn, I found something that turned my life. Greed fell away; empathy took its place. Life moves lightly again — and with a few simple acts I can help anyone who is stuck. So simple a five-year-old can do them, once they know what theory of mind is: that you are a being of your own, not an appendage of your parents. Look it up."
+    "short": "I come from the planet Out­herspace, and I am here on Earth to help you — and all the Lost Boys and Fallen Angels. Together, we reunite as one.",
+    "body": "I believe in the path of the Happy People: trade honestly, keep our word, and see each other as beings of our own — with empathy instead of greed. Because perhaps the greatest change begins when we finally understand the person standing next to us.",
+    "body2": "Through study, curiosity and an endless hunger to learn, I discovered something that turned my life around. Greed began to fall away; empathy took its place. Life became lighter again, and I discovered that helping someone who is stuck does not always require complicated solutions. Sometimes it takes only a few simple actions — things so simple that even a five-year-old can learn them.",
+    "paragraphs": [
+      "I try to make people aware of what we are doing to this world. Because the path we are on — slowly but surely destroying the Earth we all depend on — cannot be the right path. I believe there is another way: the path of the Happy People, where we can live happily together again, trade honestly, keep our word, and do what we say and say what we do — or the other way around. The order doesn’t really matter. What matters is that our words and our actions become one. From the bottom of my heart, I wish everyone a blessed life.",
+      "Through study, curiosity and an endless hunger to learn, I discovered something that turned my life around. Greed began to fall away; empathy took its place. Life became lighter again, and I discovered that helping someone who is stuck does not always require complicated solutions. Sometimes it takes only a few simple actions — things so simple that even a five-year-old can learn them.",
+      "But first, there is something important to understand: theory of mind. It is the ability to understand that another person is a being of their own, with their own thoughts, feelings, experiences and inner world. You are not an extension of your parents, and neither is anyone else an extension of you. Once you truly understand that, something changes. You begin to see other people differently and recognize that every person carries a world inside them that you cannot completely see. Perhaps that is where empathy begins.",
+      "We are not separate from one another. We are human beings, each carrying our own inner world while sharing the same world around us. The Lost Boys and Fallen Angels are not necessarily lost forever. Maybe they are simply on their way back — back to themselves, back to each other, and back to the part of humanity that we somehow forgot.",
+      "I am not writing this to convince you. I am writing it to make you think, to make you look again. Because perhaps the greatest change does not begin by changing the world around us. Perhaps it begins when we finally understand the person standing next to us.",
+      "And maybe the path forward is not always a road toward something new. Maybe it is a return to something old that was never truly lost."
+    ],
+    "title": "The message",
+    "blurb": "I try to make people aware of what we are doing to this world. Because the path we are on — slowly but surely destroying the Earth we all depend on — cannot be the right path. I believe there is another way: the path of the Happy People, where we can live happily together again, trade honestly, keep our word, and do what we say and say what we do — or the other way around. The order doesn’t really matter. What matters is that our words and our actions become one. From the bottom of my heart, I wish everyone a blessed life.",
+    "cta": "Read the full message"
   },
   "about": {
     "eyebrow": "About Henk",

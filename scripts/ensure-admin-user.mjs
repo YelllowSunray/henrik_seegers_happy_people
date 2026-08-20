@@ -1,6 +1,6 @@
 /**
- * Creates or resets Henrik's Firebase Auth admin user.
- * Password must be ≥6 chars (Firebase rule) — using admin1.
+ * Creates or resets Firebase Auth admin users.
+ * Password must be >=6 chars (Firebase rule) — using admin1.
  *
  * Usage: node --env-file=.env.local scripts/ensure-admin-user.mjs
  */
@@ -11,7 +11,13 @@ const { initializeApp, cert, getApps } = require("firebase-admin/app");
 const { getAuth } = require("firebase-admin/auth");
 const { getFirestore } = require("firebase-admin/firestore");
 
-const EMAIL = "henk.seegers1965@gmail.com";
+const ADMINS = [
+  { email: "henk.seegers1965@gmail.com", displayName: "Hendrik Seegers" },
+  {
+    email: "hendrik.seegers1991@icloud.com",
+    displayName: "Hendrik Seegers",
+  },
+];
 /** Firebase Auth requires min 6 characters; plan requested "admin". */
 const PASSWORD = "admin1";
 
@@ -33,21 +39,21 @@ if (!getApps().length) {
 const auth = getAuth();
 const db = getFirestore();
 
-async function main() {
+async function ensureAdmin({ email, displayName }) {
   let user;
   try {
-    user = await auth.getUserByEmail(EMAIL);
+    user = await auth.getUserByEmail(email);
     await auth.updateUser(user.uid, { password: PASSWORD });
-    console.log(`Updated password for ${EMAIL}`);
+    console.log(`Updated password for ${email}`);
   } catch (e) {
     if (e?.code === "auth/user-not-found") {
       user = await auth.createUser({
-        email: EMAIL,
+        email,
         password: PASSWORD,
         emailVerified: true,
-        displayName: "Hendrik Seegers",
+        displayName,
       });
-      console.log(`Created user ${EMAIL}`);
+      console.log(`Created user ${email}`);
     } else {
       throw e;
     }
@@ -56,13 +62,22 @@ async function main() {
   await db.collection("members").doc(user.uid).set(
     {
       uid: user.uid,
-      email: EMAIL,
-      displayName: "Hendrik Seegers",
+      email,
+      displayName,
       isAdmin: true,
       subscriptionStatus: "active",
     },
     { merge: true },
   );
+
+  console.log(`Admin ready: ${email} / ${PASSWORD}`);
+  console.log(`members/${user.uid}.isAdmin = true`);
+}
+
+async function main() {
+  for (const admin of ADMINS) {
+    await ensureAdmin(admin);
+  }
 
   await db.doc("system/billing").set(
     {
@@ -75,8 +90,6 @@ async function main() {
     { merge: true },
   );
 
-  console.log(`Admin ready: ${EMAIL} / ${PASSWORD}`);
-  console.log(`members/${user.uid}.isAdmin = true`);
   console.log("system/billing initialized (overBudget: false)");
 }
 

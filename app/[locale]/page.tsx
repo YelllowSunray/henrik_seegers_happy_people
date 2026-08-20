@@ -88,7 +88,7 @@ export default async function HomePage({
       </section>
 
       <Section tone="default">
-        <div className="grid items-center gap-8 lg:grid-cols-[7fr_3fr] lg:gap-12">
+        <div className="grid items-center gap-8 lg:grid-cols-[3fr_2fr] lg:gap-12">
           <div>
             <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
               {tMsg("eyebrow")}
@@ -96,12 +96,18 @@ export default async function HomePage({
             <blockquote className="font-display mt-3 text-2xl leading-snug text-ink md:text-4xl">
               {tMsg("short")}
             </blockquote>
-            <p className="mt-8 text-base leading-relaxed text-ink-soft md:text-lg">
-              {tMsg("body")}
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-ink-soft md:text-lg">
+              {tMsg("blurb")}
             </p>
-            <p className="mt-5 text-base leading-relaxed text-ink-soft md:text-lg">
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-ink-soft md:text-lg">
               {tMsg("body2")}
             </p>
+            <Link
+              href="/boodschap"
+              className="mt-6 inline-flex text-sm font-semibold text-accent underline-offset-4 hover:underline"
+            >
+              {tMsg("cta")}
+            </Link>
             <div className="mt-8 w-full max-w-[41rem]">
               <SpiritsPlayer />
             </div>
@@ -109,7 +115,7 @@ export default async function HomePage({
           <LightboxImage
             src="/images/adhd-pic.jpg"
             alt="Happy People"
-            className="aspect-[3/4] min-h-[16rem]"
+            className="aspect-[3/4] min-h-[20rem] w-full"
           />
         </div>
       </Section>
