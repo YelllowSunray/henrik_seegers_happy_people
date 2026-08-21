@@ -1,5 +1,4 @@
 import { getTranslations } from "next-intl/server";
-import { YoutubeEmbed } from "@/components/youtube-embed";
 
 type MeetingBlock = {
   song: string;
@@ -28,9 +27,15 @@ export async function MeetingStory({
         {blocks.map((block, i) => (
           <article key={`${block.song}-${i}`} className="space-y-4">
             <h3 className="font-display text-xl text-ink md:text-2xl">
-              {block.song}
+              <a
+                href={block.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent underline-offset-4 hover:underline"
+              >
+                {block.song}
+              </a>
             </h3>
-            <YoutubeEmbed url={block.youtube} title={block.song} />
             <p className="max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg">
               {block.text}
             </p>
