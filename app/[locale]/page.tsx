@@ -284,9 +284,10 @@ export default async function HomePage({
             </div>
             <div className="mt-10 w-full max-w-[41rem]">
               <SyncedLyricPlayer
-                audioSrc="/audio/hooponopono.mp3"
-                lrcSrc="/audio/hooponopono.lrc"
-                title="Ho'oponopono"
+                audioSrc="/audio/run-through-walls.mp3"
+                lrcSrc="/audio/run-through-walls.lrc"
+                title="Run Through Walls"
+                artist="The Script"
                 tone="page"
               />
             </div>
@@ -333,10 +334,10 @@ export default async function HomePage({
             {tMem("paradisePrompt")}
           </p>
           <SyncedLyricPlayer
-            audioSrc="/audio/paradise.mp3"
-            lrcSrc="/audio/paradise.lrc"
-            title="Paradise By The Dashboard Light"
-            artist="Meat Loaf"
+            audioSrc="/audio/pocketful-of-sunshine.mp3"
+            lrcSrc="/audio/pocketful-of-sunshine.lrc"
+            title="Pocketful of Sunshine"
+            artist="Natasha Bedingfield"
             tone="page"
           />
           <p className="mt-4 text-sm leading-relaxed text-ink-soft italic md:text-base">

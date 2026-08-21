@@ -10,15 +10,17 @@ import {
 const VISIBLE_LINES = 4;
 
 type PlayerEntry = {
-  root: Element;
+  root: HTMLElement;
   audio: HTMLAudioElement;
-  ratio: number;
 };
 
-/** All mounted lyric players — shared viewport handoff. */
+/** All mounted lyric players — hand off when a widget hits the top of the viewport. */
 const players = new Map<HTMLAudioElement, PlayerEntry>();
 let handoffTimer: ReturnType<typeof setTimeout> | null = null;
 let activeFocus: HTMLAudioElement | null = null;
+/** Set after the user taps play once — required for iOS programmatic play. */
+let mediaUnlocked = false;
+let scrollListening = false;
 
 function anyPlaying(): HTMLAudioElement | null {
   for (const audio of players.keys()) {
@@ -27,18 +29,57 @@ function anyPlaying(): HTMLAudioElement | null {
   return null;
 }
 
-function pickFocus(): HTMLAudioElement | null {
+/** Top band of the viewport where handoff is allowed (below sticky header). */
+function topZoneEnd() {
+  return Math.min(160, Math.max(96, window.innerHeight * 0.22));
+}
+
+/**
+ * Widget that currently owns the top of the viewport.
+ * Only returns a player whose top edge has reached that band.
+ */
+function pickTopWidget(): HTMLAudioElement | null {
+  const zone = topZoneEnd();
   let best: HTMLAudioElement | null = null;
-  let bestScore = 0;
+  let bestTop = Infinity;
+
   for (const [audio, entry] of players) {
-    // Prefer the most visible widget; require a meaningful share of the band.
-    if (entry.ratio < 0.2) continue;
-    if (entry.ratio > bestScore) {
-      bestScore = entry.ratio;
+    const rect = entry.root.getBoundingClientRect();
+    // Still below the top band — not yet.
+    if (rect.top > zone) continue;
+    // Fully scrolled past the top band.
+    if (rect.bottom < zone * 0.35) continue;
+
+    if (rect.top < bestTop) {
+      bestTop = rect.top;
       best = audio;
     }
   }
   return best;
+}
+
+async function playWithUnlock(audio: HTMLAudioElement): Promise<boolean> {
+  try {
+    await audio.play();
+    mediaUnlocked = true;
+    return true;
+  } catch {
+    // iOS often blocks unmuted programmatic play; muted→unmute unlocks it.
+    try {
+      audio.muted = true;
+      await audio.play();
+      audio.muted = false;
+      mediaUnlocked = true;
+      return true;
+    } catch {
+      try {
+        audio.muted = false;
+      } catch {
+        /* ignore */
+      }
+      return false;
+    }
+  }
 }
 
 function scheduleHandoff() {
@@ -46,7 +87,7 @@ function scheduleHandoff() {
   handoffTimer = setTimeout(() => {
     handoffTimer = null;
     void runHandoff();
-  }, 80);
+  }, 60);
 }
 
 async function runHandoff() {
@@ -55,26 +96,34 @@ async function runHandoff() {
     activeFocus = null;
     return;
   }
+  if (!mediaUnlocked) return;
 
-  const focus = pickFocus();
+  const focus = pickTopWidget();
   if (!focus || focus === playing) {
     activeFocus = focus ?? playing;
     return;
   }
   if (activeFocus === focus) return;
-  activeFocus = focus;
 
-  // Play next first (keeps user-gesture unlock), then pause the previous.
-  try {
-    await focus.play();
-    if (playing !== focus && !playing.paused) playing.pause();
-    for (const other of players.keys()) {
-      if (other !== focus && !other.paused) other.pause();
-    }
-  } catch {
-    // Autoplay blocked — leave the current track playing.
+  // Play next first (keeps mobile unlock), then pause previous.
+  const ok = await playWithUnlock(focus);
+  if (!ok) {
     activeFocus = playing;
+    return;
   }
+  activeFocus = focus;
+  if (playing !== focus && !playing.paused) playing.pause();
+  for (const other of players.keys()) {
+    if (other !== focus && !other.paused) other.pause();
+  }
+}
+
+function ensureScrollListening() {
+  if (scrollListening || typeof window === "undefined") return;
+  scrollListening = true;
+  const onScroll = () => scheduleHandoff();
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
 }
 
 type Tone = "hero" | "page";
@@ -118,11 +167,15 @@ export function SyncedLyricPlayer({
     const root = rootRef.current;
     if (!audio || !root) return;
 
-    players.set(audio, { root, audio, ratio: 0 });
+    audio.setAttribute("playsinline", "true");
+    audio.setAttribute("webkit-playsinline", "true");
+    players.set(audio, { root, audio });
+    ensureScrollListening();
 
     const onTime = () => setTime(audio.currentTime);
     const onPlay = () => {
       setPlaying(true);
+      mediaUnlocked = true;
       activeFocus = audio;
       for (const other of players.keys()) {
         if (other !== audio && !other.paused) other.pause();
@@ -139,20 +192,9 @@ export function SyncedLyricPlayer({
     audio.addEventListener("pause", onPause);
     audio.addEventListener("ended", onEnded);
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry) return;
-        const current = players.get(audio);
-        if (!current) return;
-        current.ratio = entry.isIntersecting ? entry.intersectionRatio : 0;
-        scheduleHandoff();
-      },
-      {
-        threshold: [0, 0.1, 0.2, 0.35, 0.5, 0.65, 0.8, 1],
-        // Start the handoff a bit before the widget is fully centered.
-        rootMargin: "-10% 0px -25% 0px",
-      },
-    );
+    const observer = new IntersectionObserver(() => scheduleHandoff(), {
+      threshold: [0, 0.15, 0.35, 0.6, 1],
+    });
     observer.observe(root);
 
     return () => {
@@ -177,7 +219,7 @@ export function SyncedLyricPlayer({
     const audio = audioRef.current;
     if (!audio) return;
     if (audio.paused) {
-      await audio.play();
+      await playWithUnlock(audio);
     } else {
       audio.pause();
     }
@@ -187,7 +229,12 @@ export function SyncedLyricPlayer({
 
   return (
     <div ref={rootRef} className={`w-full ${className}`}>
-      <audio ref={audioRef} src={audioSrc} preload="metadata" />
+      <audio
+        ref={audioRef}
+        src={audioSrc}
+        preload="auto"
+        playsInline
+      />
 
       <div
         className={`flex min-h-0 flex-col items-stretch gap-3 px-3.5 py-3 transition-[border-color] duration-300 sm:min-h-[7.5rem] sm:flex-row sm:gap-4 sm:px-[1.1rem] sm:py-4 ${
@@ -316,7 +363,6 @@ export function SyncedLyricPlayer({
                 <p
                   key={`${line.t}-${active}-${i}`}
                   className={`leading-snug transition duration-300 ${
-                    // Hero on mobile: current + next only. Elsewhere: keep 3 on mobile / 4 on sm+.
                     isHero
                       ? i >= 2
                         ? "hidden sm:block"
