@@ -34,6 +34,12 @@ function writeMap(map: Record<string, number>) {
   }
 }
 
+function persistKey(pageKey: string, y: number) {
+  const map = readMap();
+  map[pageKey] = y;
+  writeMap(map);
+}
+
 function pathKey(pathname: string, search: string) {
   const q = !search ? "" : search.startsWith("?") ? search : `?${search}`;
   return `${pathname}${q}`;
@@ -53,6 +59,7 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
   const key = pathKey(pathname, search);
   const keyRef = useRef(key);
   const scrollRef = useRef(0);
+  const restoringRef = useRef(false);
 
   keyRef.current = key;
 
@@ -65,37 +72,33 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const persistCurrent = useCallback(() => {
-    const map = readMap();
-    map[keyRef.current] = scrollRef.current;
-    writeMap(map);
-  }, []);
-
   // Browser back/forward → restore saved scroll for the page we land on.
+  // Do not persist here: keyRef may already be the destination and would
+  // overwrite that page's saved scroll with the leaving page's scrollY.
   useEffect(() => {
     function onPopState() {
-      persistCurrent();
       sessionStorage.setItem(RESTORE_FLAG, "1");
     }
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
-  }, [persistCurrent]);
+  }, []);
 
-  // Save scroll before in-app link navigations (before Next resets scrollY).
+  // Save scroll for the page we're leaving before in-app link navigations.
   useEffect(() => {
+    function capture() {
+      const y = window.scrollY;
+      scrollRef.current = y;
+      persistKey(keyRef.current, y);
+    }
     function onPointerDown(e: PointerEvent) {
       const target = e.target as Element | null;
-      const a = target?.closest?.("a[href]") as HTMLAnchorElement | null;
-      if (!a) return;
-      scrollRef.current = window.scrollY;
-      persistCurrent();
+      if (!target?.closest?.("a[href]")) return;
+      capture();
     }
     function onClick(e: MouseEvent) {
       const target = e.target as Element | null;
-      const a = target?.closest?.("a[href]") as HTMLAnchorElement | null;
-      if (!a) return;
-      scrollRef.current = window.scrollY;
-      persistCurrent();
+      if (!target?.closest?.("a[href]")) return;
+      capture();
     }
     document.addEventListener("pointerdown", onPointerDown, true);
     document.addEventListener("click", onClick, true);
@@ -103,7 +106,7 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
       document.removeEventListener("pointerdown", onPointerDown, true);
       document.removeEventListener("click", onClick, true);
     };
-  }, [persistCurrent]);
+  }, []);
 
   useEffect(() => {
     const shouldRestore = sessionStorage.getItem(RESTORE_FLAG) === "1";
@@ -112,51 +115,76 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
       const map = readMap();
       const y = Number(map[key] ?? 0);
       scrollRef.current = y;
+      restoringRef.current = true;
+
       const restore = () => {
         window.scrollTo({ top: y, left: 0, behavior: "auto" });
       };
       restore();
-      requestAnimationFrame(restore);
-      const t1 = window.setTimeout(restore, 50);
-      const t2 = window.setTimeout(restore, 150);
-      const t3 = window.setTimeout(restore, 400);
+      requestAnimationFrame(() => {
+        restore();
+        requestAnimationFrame(restore);
+      });
+      const timers = [50, 100, 200, 400, 700, 1200].map((ms) =>
+        window.setTimeout(restore, ms),
+      );
+      const done = window.setTimeout(() => {
+        restoringRef.current = false;
+        scrollRef.current = window.scrollY;
+        persistKey(key, window.scrollY);
+      }, 1300);
+
       return () => {
-        window.clearTimeout(t1);
-        window.clearTimeout(t2);
-        window.clearTimeout(t3);
+        timers.forEach((t) => window.clearTimeout(t));
+        window.clearTimeout(done);
+        restoringRef.current = false;
       };
     }
 
+    restoringRef.current = false;
     scrollRef.current = 0;
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     return undefined;
   }, [key]);
 
-  // Persist scroll while reading this page.
+  // Persist scroll while reading this page — always under this effect's pageKey.
   useEffect(() => {
-    scrollRef.current = window.scrollY;
+    const pageKey = key;
+    if (!restoringRef.current) {
+      scrollRef.current = window.scrollY;
+    }
     let ticking = false;
     const onScroll = () => {
+      if (restoringRef.current) return;
       scrollRef.current = window.scrollY;
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(() => {
-        persistCurrent();
+        persistKey(pageKey, scrollRef.current);
         ticking = false;
       });
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("pagehide", persistCurrent);
-    return () => {
-      persistCurrent();
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("pagehide", persistCurrent);
+    const onHide = () => {
+      if (restoringRef.current) return;
+      persistKey(pageKey, scrollRef.current);
     };
-  }, [key, persistCurrent]);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("pagehide", onHide);
+    return () => {
+      // Persist under the page this effect belonged to — not the new keyRef.
+      if (!restoringRef.current) {
+        persistKey(pageKey, scrollRef.current);
+      }
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("pagehide", onHide);
+    };
+  }, [key]);
 
   const goBack = useCallback(() => {
-    scrollRef.current = window.scrollY;
-    persistCurrent();
+    const pageKey = keyRef.current;
+    const y = window.scrollY;
+    scrollRef.current = y;
+    persistKey(pageKey, y);
 
     if (typeof window !== "undefined" && window.history.length > 1) {
       sessionStorage.setItem(RESTORE_FLAG, "1");
@@ -164,7 +192,7 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
       return;
     }
     router.push("/");
-  }, [persistCurrent, router]);
+  }, [router]);
 
   const api = useMemo(() => ({ goBack }), [goBack]);
 
@@ -202,6 +230,7 @@ export function useNavigationMemory() {
     return {
       goBack: () => {
         if (typeof window !== "undefined" && window.history.length > 1) {
+          sessionStorage.setItem(RESTORE_FLAG, "1");
           window.history.back();
         }
       },

@@ -91,6 +91,17 @@ function nl(value: unknown) {
   return typeof value === "string" ? value : "";
 }
 
+function slugify(value: string) {
+  const slug = value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+  return slug || `post-${Date.now()}`;
+}
+
 export function AdminPortal() {
   const t = useTranslations("admin");
   const { user, isAdmin, loading } = useAuth();
@@ -115,8 +126,8 @@ export function AdminPortal() {
   useEffect(() => {
     if (!isFirebaseConfigured || !isAdmin) return;
     const db = getClientDb();
-    const ignore = () => {
-      /* permission / offline — keep last good state */
+    const ignore = (err: Error) => {
+      setStatus(err.message || "Live updates paused.");
     };
     const unsubs = [
       onSnapshot(
@@ -292,11 +303,13 @@ export function AdminPortal() {
       const db = getClientDb();
       if (id) {
         await updateDoc(doc(db, col, id), data);
+        patchLocalItem(col, id, data);
       } else {
-        await addDoc(collection(db, col), {
+        const ref = await addDoc(collection(db, col), {
           createdAt: serverTimestamp(),
           ...data,
         });
+        patchLocalItem(col, ref.id, data);
       }
       setEditingId(null);
       setStatus("Saved.");
@@ -305,11 +318,117 @@ export function AdminPortal() {
     }
   }
 
+  function patchLocalItem(
+    col: string,
+    id: string,
+    data: Record<string, unknown>,
+  ) {
+    if (col === "posts") {
+      setPosts((prev) => {
+        const next = {
+          id,
+          slug: String(data.slug ?? ""),
+          title: (data.title as BlogPost["title"]) ?? { nl: "" },
+          excerpt: (data.excerpt as BlogPost["excerpt"]) ?? { nl: "" },
+          body: (data.body as BlogPost["body"]) ?? { nl: "" },
+          publishedAt: String(data.publishedAt ?? ""),
+          membersOnly: Boolean(data.membersOnly),
+        } as BlogPost;
+        const without = prev.filter((p) => p.id !== id);
+        return [...without, next].sort((a, b) =>
+          b.publishedAt.localeCompare(a.publishedAt),
+        );
+      });
+      return;
+    }
+    if (col === "events") {
+      setEvents((prev) => {
+        const next = {
+          id,
+          title: (data.title as SeminarEvent["title"]) ?? { nl: "" },
+          description:
+            (data.description as SeminarEvent["description"]) ?? { nl: "" },
+          date: String(data.date ?? ""),
+          time: String(data.time ?? ""),
+          location: String(data.location ?? ""),
+          address:
+            typeof data.address === "string" ? data.address : undefined,
+          priceLabel:
+            typeof data.priceLabel === "string" ? data.priceLabel : undefined,
+        } as SeminarEvent;
+        const without = prev.filter((e) => e.id !== id);
+        return [...without, next].sort((a, b) => a.date.localeCompare(b.date));
+      });
+      return;
+    }
+    if (col === "videos") {
+      setVideos((prev) => {
+        const next = {
+          id,
+          title: (data.title as VideoItem["title"]) ?? { nl: "" },
+          description:
+            (data.description as VideoItem["description"]) ?? { nl: "" },
+          kind: (data.kind as VideoKind) ?? "seminar",
+          videoUrl: data.videoUrl as string | undefined,
+          publishedAt: String(data.publishedAt ?? ""),
+          durationLabel: data.durationLabel as string | undefined,
+        } as VideoItem;
+        const without = prev.filter((v) => v.id !== id);
+        return [...without, next].sort((a, b) =>
+          b.publishedAt.localeCompare(a.publishedAt),
+        );
+      });
+      return;
+    }
+    if (col === "quotes") {
+      setQuotes((prev) => {
+        const next = {
+          id,
+          text: (data.text as QuoteItem["text"]) ?? { nl: "" },
+          publishedAt: String(data.publishedAt ?? ""),
+        } as QuoteItem;
+        const without = prev.filter((q) => q.id !== id);
+        return [...without, next].sort((a, b) =>
+          b.publishedAt.localeCompare(a.publishedAt),
+        );
+      });
+      return;
+    }
+    if (col === "personalMessages") {
+      setMessages((prev) => {
+        const next = {
+          id,
+          toUserId: String(data.toUserId ?? ""),
+          toEmail: data.toEmail as string | undefined,
+          subject: (data.subject as PersonalMessage["subject"]) ?? { nl: "" },
+          body: (data.body as PersonalMessage["body"]) ?? { nl: "" },
+          createdAt: new Date().toISOString().slice(0, 10),
+          read: Boolean(data.read),
+        } as PersonalMessage;
+        const without = prev.filter((m) => m.id !== id);
+        return [next, ...without];
+      });
+    }
+  }
+
+  function dropLocalItem(col: string, id: string) {
+    if (col === "posts") setPosts((prev) => prev.filter((p) => p.id !== id));
+    else if (col === "events")
+      setEvents((prev) => prev.filter((e) => e.id !== id));
+    else if (col === "videos")
+      setVideos((prev) => prev.filter((v) => v.id !== id));
+    else if (col === "quotes")
+      setQuotes((prev) => prev.filter((q) => q.id !== id));
+    else if (col === "personalMessages")
+      setMessages((prev) => prev.filter((m) => m.id !== id));
+  }
+
   async function remove(col: string, id: string) {
     if (!guardWrite()) return;
     if (!window.confirm("Delete this item?")) return;
     try {
       await deleteDoc(doc(getClientDb(), col, id));
+      dropLocalItem(col, id);
       setStatus("Deleted.");
       if (editingId === id) setEditingId(null);
     } catch (e) {
@@ -806,9 +925,10 @@ function PostForm({
   function handle(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+    const title = String(fd.get("title"));
     onSubmit({
-      slug: String(fd.get("slug")),
-      title: { nl: String(fd.get("title")) },
+      slug: initial?.slug?.trim() || slugify(title),
+      title: { nl: title },
       excerpt: { nl: String(fd.get("excerpt")) },
       body: { nl: String(fd.get("body")) },
       membersOnly: fd.get("audience") === "club",
@@ -849,14 +969,6 @@ function PostForm({
           name="title"
           required
           defaultValue={nl(initial?.title)}
-          className={fieldClass}
-        />
-      </Field>
-      <Field label={t("fieldSlug")}>
-        <input
-          name="slug"
-          required
-          defaultValue={initial?.slug}
           className={fieldClass}
         />
       </Field>

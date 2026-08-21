@@ -9,7 +9,7 @@ import {
 
 const VISIBLE_LINES = 4;
 
-/** All mounted lyric players — pause peers when one starts, or when scrolled away. */
+/** All mounted lyric players — pause peers when one starts, or when another enters view. */
 const mountedAudio = new Set<HTMLAudioElement>();
 
 type Tone = "hero" | "page";
@@ -82,20 +82,37 @@ export function SyncedLyricPlayer({
     };
   }, []);
 
-  // Pause when this player scrolls out of the viewport (up or down).
+  // Keep playing after this widget leaves view; hand off when another widget enters.
   useEffect(() => {
     const root = rootRef.current;
     const audio = audioRef.current;
     if (!root || !audio) return;
 
+    let wasInView = false;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry) return;
-        if (!entry.isIntersecting || entry.intersectionRatio < 0.2) {
-          if (!audio.paused) audio.pause();
+        const inView =
+          entry.isIntersecting && entry.intersectionRatio >= 0.35;
+        const justEntered = inView && !wasInView;
+        wasInView = inView;
+
+        if (!justEntered) return;
+
+        let pausedPeer = false;
+        for (const other of mountedAudio) {
+          if (other !== audio && !other.paused) {
+            other.pause();
+            pausedPeer = true;
+          }
+        }
+        // Continue the listen as the user scrolls into the next widget.
+        if (pausedPeer && audio.paused) {
+          void audio.play().catch(() => undefined);
         }
       },
-      { threshold: [0, 0.2, 0.5, 1] },
+      { threshold: [0, 0.35, 0.5, 1] },
     );
 
     observer.observe(root);

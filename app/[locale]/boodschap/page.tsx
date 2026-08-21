@@ -41,8 +41,8 @@ export default async function MessagePage({
 
           <div className="lg:sticky lg:top-28">
             <LightboxImage
-              src="/images/adhd-pic.jpg"
-              alt="Happy People"
+              src="/images/boodschap.jpg"
+              alt={t("title")}
               className="aspect-[3/4] min-h-[16rem] w-full"
             />
           </div>

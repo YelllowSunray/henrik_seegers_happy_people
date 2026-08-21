@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
+import { LightboxImage } from "@/components/lightbox-image";
 
 export default async function AboutPage({
   params,
@@ -40,18 +41,11 @@ export default async function AboutPage({
           </div>
 
           <div className="lg:sticky lg:top-28">
-            <div className="relative aspect-[4/5] w-full overflow-hidden bg-ink/5">
-              <video
-                className="absolute inset-0 h-full w-full object-cover object-top"
-                src="/videos/Hendrix_BIO.mp4"
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                aria-label="Hendrik Seegers"
-              />
-            </div>
+            <LightboxImage
+              src="/images/adhd-pic.jpg"
+              alt={t("title")}
+              className="aspect-[3/4] min-h-[16rem] w-full"
+            />
           </div>
         </div>
       </Section>

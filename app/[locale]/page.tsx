@@ -113,8 +113,8 @@ export default async function HomePage({
             </div>
           </div>
           <LightboxImage
-            src="/images/adhd-pic.jpg"
-            alt="Happy People"
+            src="/images/boodschap.jpg"
+            alt={tMsg("title")}
             className="aspect-[3/4] min-h-[20rem] w-full"
           />
         </div>
@@ -150,18 +150,11 @@ export default async function HomePage({
               />
             </div>
           </div>
-          <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-ink/5">
-            <video
-              className="absolute inset-0 h-full w-full object-cover object-top"
-              src="/videos/Hendrix_BIO.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              aria-label="Hendrik Seegers"
-            />
-          </div>
+          <LightboxImage
+            src="/images/adhd-pic.jpg"
+            alt={tAbout("title")}
+            className="aspect-[3/4] min-h-[20rem] w-full"
+          />
         </div>
       </Section>
 
@@ -204,16 +197,18 @@ export default async function HomePage({
               </div>
             )}
           </div>
-          <figure>
-            <LightboxImage
-              src="/images/image3.jpg"
-              alt={tSem("imageAlt")}
-              className="aspect-square min-h-[16rem] w-full sm:min-h-[22rem]"
+          <div className="relative aspect-[4/5] min-h-[16rem] overflow-hidden rounded-sm bg-ink/5 sm:min-h-[22rem]">
+            <video
+              className="absolute inset-0 h-full w-full object-cover object-top"
+              src="/videos/Hendrix_BIO.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-label="Hendrik Seegers"
             />
-            <figcaption className="mt-3 text-sm text-ink-soft">
-              {tSem("imageCaption")}
-            </figcaption>
-          </figure>
+          </div>
         </div>
         {nextEvent && (
           <div className="mt-8 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
@@ -244,42 +239,69 @@ export default async function HomePage({
       </Section>
 
       <Section eyebrow={tBlog("eyebrow")} title={tBlog("title")} tone="deep">
-        <a
-          href={FACEBOOK_HREF}
-          target="_blank"
-          rel="noreferrer"
-          className="mb-8 inline-flex text-sm font-semibold text-accent underline-offset-4 hover:underline"
-        >
-          {tBlog("facebook")}
-        </a>
-        <ul className="grid gap-8 md:grid-cols-3">
-          {latest.map((post) => (
-            <li key={post.id}>
-              <Link href={`/blog/${post.slug}`} className="group block">
-                <p className="text-xs text-ink-soft">{post.publishedAt}</p>
-                <h3 className="font-display mt-2 text-2xl group-hover:text-accent">
-                  {t(post.title, locale)}
-                </h3>
-                <p className="mt-2 text-sm text-ink-soft">
-                  {t(post.excerpt, locale)}
-                </p>
+        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.75fr)_minmax(0,1fr)] lg:gap-12">
+          <div className="min-w-0">
+            <a
+              href={FACEBOOK_HREF}
+              target="_blank"
+              rel="noreferrer"
+              className="mb-8 inline-flex text-xs font-medium tracking-wide text-ink-soft underline-offset-4 hover:text-accent hover:underline"
+            >
+              {tBlog("facebook")} ↗
+            </a>
+            <ul className="space-y-10">
+              {latest.map((post) => (
+                <li key={post.id} className="min-w-0 max-w-2xl">
+                  <p className="text-xs text-ink-soft">{post.publishedAt}</p>
+                  <h3 className="font-display mt-2 text-2xl text-ink md:text-3xl">
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="hover:text-accent"
+                    >
+                      {t(post.title, locale)}
+                    </Link>
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-ink-soft md:text-base">
+                    {t(post.excerpt, locale)}
+                  </p>
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className="mt-5 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:bg-accent-soft"
+                  >
+                    {tBlog("read")}
+                    <span aria-hidden>→</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-12 max-w-2xl border-t border-line pt-8">
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-ink underline-offset-4 hover:text-accent hover:underline"
+              >
+                {tBlog("cta")}
+                <span aria-hidden>→</span>
               </Link>
-            </li>
-          ))}
-        </ul>
-        <Link
-          href="/blog"
-          className="mt-10 inline-flex text-sm font-semibold text-accent underline-offset-4 hover:underline"
-        >
-          {tBlog("cta")}
-        </Link>
-        <div className="mt-10 w-full max-w-[41rem]">
-          <SyncedLyricPlayer
-            audioSrc="/audio/hooponopono.mp3"
-            lrcSrc="/audio/hooponopono.lrc"
-            title="Ho'oponopono"
-            tone="page"
-          />
+            </div>
+            <div className="mt-10 w-full max-w-[41rem]">
+              <SyncedLyricPlayer
+                audioSrc="/audio/hooponopono.mp3"
+                lrcSrc="/audio/hooponopono.lrc"
+                title="Ho'oponopono"
+                tone="page"
+              />
+            </div>
+          </div>
+          <figure className="min-w-0 lg:max-w-md lg:justify-self-end">
+            <LightboxImage
+              src="/images/image3.jpg"
+              alt={tSem("imageAlt")}
+              className="aspect-square min-h-[16rem] w-full sm:min-h-[20rem]"
+            />
+            <figcaption className="mt-3 text-sm text-ink-soft">
+              {tSem("imageCaption")}
+            </figcaption>
+          </figure>
         </div>
       </Section>
 
