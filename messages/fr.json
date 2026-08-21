@@ -6,6 +6,7 @@
   "nav": {
     "home": "Accueil",
     "about": "À propos de Henk",
+    "meeting": "La rencontre",
     "seminars": "Séminaires",
     "blog": "Blog",
     "membership": "Happy People",
@@ -415,5 +416,107 @@
     "inboxEmpty": "Pas encore de chats. Les membres commencent, ou ouvre le chat depuis Abonnés.",
     "pickThread": "Choisis une conversation à gauche.",
     "startChat": "Démarrer un chat"
+  },
+  "meeting": {
+    "eyebrow": "La rencontre",
+    "title": "La rencontre qui a mené à qui je suis aujourd’hui",
+    "bridge": "I wanna know… really love me?",
+    "blocks": [
+      {
+        "song": "Hallelujah — Alexandra Burke",
+        "youtube": "https://www.youtube.com/watch?v=aplWTXEcY70",
+        "text": "Je suis arrivé de Groningen au GGZ Centraal Almere comme quelqu’un qui tenait à peine encore debout. Après des jours de confusion, d’épuisement et ce que j’ai vécu comme une énorme tempête mentale, je cherchais une réponse."
+      },
+      {
+        "song": "Crazy — Gnarls Barkley",
+        "youtube": "https://www.youtube.com/watch?v=-N4jf6rtyuw",
+        "text": "Ma tête tournait à mille à l’heure et tout semblait se mélanger. Avec le recul, j’avais l’impression de ne plus savoir où ma réalité s’arrêtait et où le chaos commençait."
+      },
+      {
+        "song": "The Real Slim Shady — Eminem",
+        "youtube": "https://www.youtube.com/watch?v=eJO5HU_7_1w",
+        "text": "On me voyait comme quelqu’un de totalement dérégulé, alors que j’essayais moi-même de comprendre ce qui m’arrivait. Tout le monde semblait avoir une image de moi — sauf moi."
+      },
+      {
+        "song": "I'm a Creep — Daniel Homeless Mustard",
+        "youtube": "https://www.youtube.com/watch?v=vtLiL3uReoI",
+        "text": "Sous ce chaos se trouvait surtout un être perdu et vulnérable. Pas dangereux pour le monde, mais désespérément à la recherche de quelqu’un qui voyait vraiment ce qui se passait derrière l’apparence."
+      },
+      {
+        "song": "I Love Me — Meghan Trainor",
+        "youtube": "https://www.youtube.com/watch?v=xzoNK3JDBhw",
+        "text": "Et quelque part, je devais me retrouver. Peut-être que la guérison commence finalement exactement là : oser se regarder à nouveau."
+      },
+      {
+        "song": "Angel Eyes — Wet Wet Wet",
+        "youtube": "https://www.youtube.com/watch?v=Wgid1me8POs",
+        "text": "Après des jours de tension, quelqu’un s’est soudain assis en face de moi en restant calme. Je l’ai regardée — et pour moi ce moment a donné l’impression que plus rien d’autre n’existait."
+      },
+      {
+        "song": "Every Little Thing She Does Is Magic — The Police",
+        "youtube": "https://www.youtube.com/watch?v=aENX1Sf3fgQ",
+        "text": "Lentement, le contact est passé d’une conversation à quelque chose qui a commencé à me paraître particulier. Sa façon de regarder, d’écouter et de réagir m’est restée."
+      },
+      {
+        "song": "Are You With Me — Lost Frequencies",
+        "youtube": "https://www.youtube.com/watch?v=dumrK4YCkf4",
+        "text": "Nous avons traversé mes problèmes ensemble, un par un. Et quelque part entre les questions et les réponses est né en moi le sentiment : es-tu vraiment là avec moi ?"
+      },
+      {
+        "song": "Would I Lie to You? — Charles & Eddie",
+        "youtube": "https://www.youtube.com/watch?v=G_UXvcr22rM",
+        "text": "J’ai commencé à tester si ce que je ressentais était peut-être réciproque. Pas directement, mais avec de petites remarques, des regards et des questions qui allaient juste un peu plus loin que le nécessaire."
+      },
+      {
+        "song": "It Must Be Love — Madness",
+        "youtube": "https://www.youtube.com/watch?v=vmezIIrFQmY",
+        "text": "Peut-être que c’était de l’amour, peut-être que c’était mon vécu de ce moment. Mais une chose est sûre : ce sentiment est venu sans prévenir et est resté bien plus longtemps que je n’aurais pu l’imaginer."
+      },
+      {
+        "song": "You Take My Breath Away — Berlin",
+        "youtube": "https://www.youtube.com/watch?v=Bx51eegLTY8",
+        "text": "Certaines rencontres ne sont pas spectaculaires — elles te touchent simplement quelque part au plus profond. Pour moi, elle a été une de ces rencontres."
+      },
+      {
+        "song": "All of Me — John Legend",
+        "youtube": "https://www.youtube.com/watch?v=450p7goxZqg",
+        "text": "Pour la première fois durant cette période, je ne me suis pas senti vu seulement comme un dossier ou un problème. Je me suis senti vu comme un être humain — avec tout ce que cela implique."
+      },
+      {
+        "song": "If You Don’t Know Me by Now — Simply Red",
+        "youtube": "https://www.youtube.com/watch?v=zTcu7MCtuTs",
+        "text": "Mais combien pouvait-elle vraiment savoir de moi en si peu de temps ? Et combien d’elle ai-je réellement vu, derrière cette façade professionnelle ?"
+      },
+      {
+        "song": "Caravan of Love — The Housemartins",
+        "youtube": "https://www.youtube.com/watch?v=ehfiQd7lcPY",
+        "text": "Hors de l’institution, ma vie continuait, mais dans ma tête cette rencontre voyageait avec moi. Un petit morceau de chaleur dans une période autrement assez sombre."
+      },
+      {
+        "song": "Don’t Stop Me Now — Queen",
+        "youtube": "https://www.youtube.com/watch?v=aJez0ljzSQw",
+        "text": "Quand j’ai retrouvé plus d’énergie, j’ai eu l’impression de recommencer à vivre. Le monde était de nouveau ouvert — et dans mon souvenir, elle y avait pris une place particulière."
+      },
+      {
+        "song": "Pocketful of Sunshine — Natasha Bedingfield",
+        "youtube": "https://www.youtube.com/watch?v=gte3BoXKwP0",
+        "text": "Une remarque sur peindre l’extérieur est restée étonnamment longtemps dans ma tête. C’était peut-être simplement une offre aimable — mais pour moi cela a pris un sens bien plus personnel."
+      },
+      {
+        "song": "To Love a Woman — Lionel Richie & Enrique Iglesias",
+        "youtube": "https://www.youtube.com/watch?v=36Dp1L8Fgh4",
+        "text": "J’ai commencé à me demander comment ce serait si la distance entre le contact professionnel et l’affection personnelle n’existait pas. Le désir, en tout cas, était là chez moi."
+      },
+      {
+        "song": "Do You Love Me? — KISS",
+        "youtube": "https://www.youtube.com/watch?v=nwsE7tVHk-k",
+        "text": "Et finalement il n’est resté qu’une question que je n’ai jamais osé poser directement : as-tu aussi ressenti quelque chose, ou n’était-ce que mon histoire ?"
+      },
+      {
+        "song": "Paradise by the Dashboard Light — Meat Loaf & Ellen Foley",
+        "youtube": "https://www.youtube.com/watch?v=C11MzbEcHlw",
+        "text": "Et c’est là que l’expérience se termine : non pas avec l’affirmation que nous avions réellement une relation amoureuse, mais avec l’image de deux personnes qui se sont rencontrées à un moment exceptionnel — et dont l’une n’oubliera jamais cette rencontre."
+      }
+    ]
   }
 }

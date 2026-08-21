@@ -8,6 +8,7 @@ import { MembershipPlans } from "@/components/membership-plans";
 import { DonateSection } from "@/components/donate-section";
 import { SpeedGallery } from "@/components/speed-gallery";
 import { LightboxImage } from "@/components/lightbox-image";
+import { MeetingStory } from "@/components/meeting-story";
 import { MicrochipPlayer } from "@/components/microchip-player";
 import { SpiritsPlayer } from "@/components/spirits-player";
 import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
@@ -155,6 +156,10 @@ export default async function HomePage({
             />
           </div>
         </div>
+      </Section>
+
+      <Section tone="deep">
+        <MeetingStory />
       </Section>
 
       <Section tone="default">

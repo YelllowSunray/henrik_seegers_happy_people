@@ -6,6 +6,7 @@
   "nav": {
     "home": "Home",
     "about": "About Henk",
+    "meeting": "The meeting",
     "seminars": "Seminars",
     "blog": "Blog",
     "membership": "Happy People",
@@ -415,5 +416,107 @@
     "inboxEmpty": "No chats yet. Members start a conversation, or open chat from Subscribers.",
     "pickThread": "Pick a conversation on the left.",
     "startChat": "Start new chat"
+  },
+  "meeting": {
+    "eyebrow": "The meeting",
+    "title": "The meeting that led to who I am now",
+    "bridge": "I wanna know… really love me?",
+    "blocks": [
+      {
+        "song": "Hallelujah — Alexandra Burke",
+        "youtube": "https://www.youtube.com/watch?v=aplWTXEcY70",
+        "text": "I arrived from Groningen at GGZ Centraal Almere as someone who could barely hold himself together. After days of confusion, exhaustion and what I experienced as an enormous mental storm, I was looking for an answer."
+      },
+      {
+        "song": "Crazy — Gnarls Barkley",
+        "youtube": "https://www.youtube.com/watch?v=-N4jf6rtyuw",
+        "text": "My mind was racing a thousand miles an hour and everything seemed tangled together. Looking back, it felt as if I no longer knew where my reality ended and the chaos began."
+      },
+      {
+        "song": "The Real Slim Shady — Eminem",
+        "youtube": "https://www.youtube.com/watch?v=eJO5HU_7_1w",
+        "text": "I was seen as someone who was completely deregulated, while I myself was trying to understand what was happening to me. Everyone seemed to have an image of me — except me."
+      },
+      {
+        "song": "I'm a Creep — Daniel Homeless Mustard",
+        "youtube": "https://www.youtube.com/watch?v=vtLiL3uReoI",
+        "text": "Under that chaos was mainly a person who felt lost and vulnerable. Not dangerous to the world, but desperately looking for someone who truly saw what was happening behind the outside."
+      },
+      {
+        "song": "I Love Me — Meghan Trainor",
+        "youtube": "https://www.youtube.com/watch?v=xzoNK3JDBhw",
+        "text": "And somewhere I had to find myself again. Perhaps recovery ultimately begins exactly there: daring to look at yourself again."
+      },
+      {
+        "song": "Angel Eyes — Wet Wet Wet",
+        "youtube": "https://www.youtube.com/watch?v=Wgid1me8POs",
+        "text": "After days of tension, someone suddenly sat across from me who stayed calm. I looked at her — and for me that moment felt as if nothing else existed for a while."
+      },
+      {
+        "song": "Every Little Thing She Does Is Magic — The Police",
+        "youtube": "https://www.youtube.com/watch?v=aENX1Sf3fgQ",
+        "text": "Slowly the contact changed from a conversation into something that began to feel special to me. Her way of looking, listening and responding stayed with me."
+      },
+      {
+        "song": "Are You With Me — Lost Frequencies",
+        "youtube": "https://www.youtube.com/watch?v=dumrK4YCkf4",
+        "text": "We walked through my problems together, one by one. And somewhere between the questions and answers the feeling arose in me: are you really here with me?"
+      },
+      {
+        "song": "Would I Lie to You? — Charles & Eddie",
+        "youtube": "https://www.youtube.com/watch?v=G_UXvcr22rM",
+        "text": "I began to test whether what I felt might be mutual. Not directly, but with small remarks, glances and questions that went just a little further than what was necessary."
+      },
+      {
+        "song": "It Must Be Love — Madness",
+        "youtube": "https://www.youtube.com/watch?v=vmezIIrFQmY",
+        "text": "Maybe it was love, maybe it was my experience of that moment. But one thing I know for sure: that feeling came unexpectedly and stayed much longer than I could have guessed."
+      },
+      {
+        "song": "You Take My Breath Away — Berlin",
+        "youtube": "https://www.youtube.com/watch?v=Bx51eegLTY8",
+        "text": "Some meetings are not spectacular — they simply touch you somewhere deep inside. For me, she was such a meeting."
+      },
+      {
+        "song": "All of Me — John Legend",
+        "youtube": "https://www.youtube.com/watch?v=450p7goxZqg",
+        "text": "For the first time in that period I did not feel seen only as a file or a problem. I felt seen as a human being — with everything that comes with it."
+      },
+      {
+        "song": "If You Don’t Know Me by Now — Simply Red",
+        "youtube": "https://www.youtube.com/watch?v=zTcu7MCtuTs",
+        "text": "But how much could she really know of me in such a short time? And how much of her did I actually see, behind that professional exterior?"
+      },
+      {
+        "song": "Caravan of Love — The Housemartins",
+        "youtube": "https://www.youtube.com/watch?v=ehfiQd7lcPY",
+        "text": "Outside the institution my life continued, but in my mind that meeting rode along with me. A small piece of warmth from a period that was otherwise rather dark."
+      },
+      {
+        "song": "Don’t Stop Me Now — Queen",
+        "youtube": "https://www.youtube.com/watch?v=aJez0ljzSQw",
+        "text": "When I got more energy again, it felt as if I was starting to live once more. The world was open again — and in my memory she had taken a special place in that."
+      },
+      {
+        "song": "Pocketful of Sunshine — Natasha Bedingfield",
+        "youtube": "https://www.youtube.com/watch?v=gte3BoXKwP0",
+        "text": "A remark about painting the exterior stayed remarkably long in my head. Maybe it was simply a kind offer — but for me it took on a much more personal meaning."
+      },
+      {
+        "song": "To Love a Woman — Lionel Richie & Enrique Iglesias",
+        "youtube": "https://www.youtube.com/watch?v=36Dp1L8Fgh4",
+        "text": "I began to wonder what it would be like if the distance between professional contact and personal affection did not exist. The longing was there for me, at least."
+      },
+      {
+        "song": "Do You Love Me? — KISS",
+        "youtube": "https://www.youtube.com/watch?v=nwsE7tVHk-k",
+        "text": "And in the end only one question remained that I never dared to ask directly: did you feel something too, or was that only my story?"
+      },
+      {
+        "song": "Paradise by the Dashboard Light — Meat Loaf & Ellen Foley",
+        "youtube": "https://www.youtube.com/watch?v=C11MzbEcHlw",
+        "text": "And there the experiment ends: not with the claim that we actually had a love relationship, but with the image of two people who met each other at an exceptional moment — and of whom one will never forget that meeting."
+      }
+    ]
   }
 }

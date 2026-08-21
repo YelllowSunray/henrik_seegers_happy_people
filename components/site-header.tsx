@@ -10,6 +10,7 @@ import { HeaderBackButton } from "@/components/smart-back-button";
 
 const navKeys = [
   ["about", "/over-henk"],
+  ["meeting", "/ontmoeting"],
   ["seminars", "/seminars"],
   ["blog", "/blog"],
   ["contact", "/contact"],
