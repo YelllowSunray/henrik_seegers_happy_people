@@ -119,26 +119,25 @@ export default async function HomePage({
       </Section>
 
       <Section tone="deep">
-        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14">
           <div>
             <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
               {tAbout("eyebrow")}
             </p>
-            <h2 className="font-display mt-3 text-3xl leading-tight text-ink md:text-5xl">
+            <h2 className="font-display mt-3 text-2xl leading-tight text-ink sm:text-3xl md:text-5xl">
               {tAbout("title")}
             </h2>
-            <div className="mt-6 space-y-4 text-sm leading-relaxed text-ink-soft md:text-base">
-              <p className="text-ink">{tAbout("lead")}</p>
-              <p>{tAbout("p1")}</p>
-              <p>{tAbout("p2")}</p>
+            <p className="mt-4 max-w-2xl text-base text-ink-soft md:text-lg">
+              {tAbout("teaser")}
+            </p>
+            <div className="mt-8 max-w-2xl space-y-5 text-base leading-relaxed text-ink-soft md:text-lg">
+              {(tAbout.raw("paragraphs") as string[]).map((paragraph, i) => (
+                <p key={i} className={i === 0 ? "text-ink" : undefined}>
+                  {paragraph}
+                </p>
+              ))}
             </div>
-            <Link
-              href="/over-henk"
-              className="mt-6 inline-flex text-sm font-semibold text-accent underline-offset-4 hover:underline"
-            >
-              {tAbout("cta")}
-            </Link>
-            <div className="mt-8 w-full max-w-[41rem]">
+            <div className="mt-10 w-full max-w-[41rem]">
               <SyncedLyricPlayer
                 audioSrc="/audio/never-can-say-goodbye.mp3"
                 lrcSrc="/audio/never-can-say-goodbye.lrc"
@@ -148,11 +147,13 @@ export default async function HomePage({
               />
             </div>
           </div>
-          <LightboxImage
-            src="/images/adhd-pic.jpg"
-            alt={tAbout("title")}
-            className="aspect-[3/4] min-h-[20rem] w-full"
-          />
+          <div className="lg:sticky lg:top-28">
+            <LightboxImage
+              src="/images/adhd-pic.jpg"
+              alt={tAbout("title")}
+              className="aspect-[3/4] min-h-[16rem] w-full"
+            />
+          </div>
         </div>
       </Section>
 
