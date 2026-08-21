@@ -88,35 +88,33 @@ export default async function HomePage({
       </section>
 
       <Section tone="default">
-        <div className="grid items-center gap-8 lg:grid-cols-[3fr_2fr] lg:gap-12">
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14">
           <div>
             <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
               {tMsg("eyebrow")}
             </p>
-            <blockquote className="font-display mt-3 text-2xl leading-snug text-ink md:text-4xl">
+            <h2 className="font-display mt-3 text-2xl leading-tight text-ink sm:text-3xl md:text-5xl">
+              {tMsg("title")}
+            </h2>
+            <blockquote className="font-display mt-6 text-xl leading-snug text-ink md:text-3xl">
               {tMsg("short")}
             </blockquote>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-ink-soft md:text-lg">
-              {tMsg("blurb")}
-            </p>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-ink-soft md:text-lg">
-              {tMsg("body2")}
-            </p>
-            <Link
-              href="/boodschap"
-              className="mt-6 inline-flex text-sm font-semibold text-accent underline-offset-4 hover:underline"
-            >
-              {tMsg("cta")}
-            </Link>
-            <div className="mt-8 w-full max-w-[41rem]">
+            <div className="mt-8 max-w-2xl space-y-5 text-base leading-relaxed text-ink-soft md:text-lg">
+              {(tMsg.raw("paragraphs") as string[]).map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))}
+            </div>
+            <div className="mt-10 w-full max-w-[41rem]">
               <SpiritsPlayer />
             </div>
           </div>
-          <LightboxImage
-            src="/images/boodschap.jpg"
-            alt={tMsg("title")}
-            className="aspect-[3/4] min-h-[20rem] w-full"
-          />
+          <div className="lg:sticky lg:top-28">
+            <LightboxImage
+              src="/images/boodschap.jpg"
+              alt={tMsg("title")}
+              className="aspect-[3/4] min-h-[16rem] w-full"
+            />
+          </div>
         </div>
       </Section>
 
