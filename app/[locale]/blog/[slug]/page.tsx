@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
+import { BlogBody } from "@/components/blog-body";
 import { posts as seedPosts, t } from "@/lib/content";
 import { fetchPostBySlug, fetchPublicPosts } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
@@ -39,9 +40,9 @@ export default async function BlogPostPage({
         <h1 className="font-display mt-3 max-w-3xl text-3xl leading-tight sm:text-4xl md:text-5xl">
           {t(post.title, locale)}
         </h1>
-        <p className="mt-8 max-w-2xl text-base leading-relaxed whitespace-pre-wrap text-ink-soft sm:mt-10 sm:text-lg">
-          {t(post.body, locale)}
-        </p>
+        <div className="mt-8 sm:mt-10">
+          <BlogBody text={t(post.body, locale)} />
+        </div>
         <Link
           href="/blog"
           className="mt-12 inline-flex text-sm font-semibold text-accent"

@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { BlogBody } from "@/components/blog-body";
 import { t } from "@/lib/content";
 import { fetchMemberPosts } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
@@ -33,9 +34,9 @@ export default async function MembersTeachingsPage({
               <h2 className="font-display mt-2 text-3xl">
                 {t(post.title, locale)}
               </h2>
-              <p className="mt-4 max-w-2xl whitespace-pre-wrap leading-relaxed text-ink-soft">
-                {t(post.body, locale)}
-              </p>
+              <div className="mt-4">
+                <BlogBody text={t(post.body, locale)} />
+              </div>
             </li>
           ))}
         </ul>

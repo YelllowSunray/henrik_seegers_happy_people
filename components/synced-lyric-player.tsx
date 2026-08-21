@@ -9,8 +9,73 @@ import {
 
 const VISIBLE_LINES = 4;
 
-/** All mounted lyric players — pause peers when one starts, or when another enters view. */
-const mountedAudio = new Set<HTMLAudioElement>();
+type PlayerEntry = {
+  root: Element;
+  audio: HTMLAudioElement;
+  ratio: number;
+};
+
+/** All mounted lyric players — shared viewport handoff. */
+const players = new Map<HTMLAudioElement, PlayerEntry>();
+let handoffTimer: ReturnType<typeof setTimeout> | null = null;
+let activeFocus: HTMLAudioElement | null = null;
+
+function anyPlaying(): HTMLAudioElement | null {
+  for (const audio of players.keys()) {
+    if (!audio.paused) return audio;
+  }
+  return null;
+}
+
+function pickFocus(): HTMLAudioElement | null {
+  let best: HTMLAudioElement | null = null;
+  let bestScore = 0;
+  for (const [audio, entry] of players) {
+    // Prefer the most visible widget; require a meaningful share of the band.
+    if (entry.ratio < 0.2) continue;
+    if (entry.ratio > bestScore) {
+      bestScore = entry.ratio;
+      best = audio;
+    }
+  }
+  return best;
+}
+
+function scheduleHandoff() {
+  if (handoffTimer) clearTimeout(handoffTimer);
+  handoffTimer = setTimeout(() => {
+    handoffTimer = null;
+    void runHandoff();
+  }, 80);
+}
+
+async function runHandoff() {
+  const playing = anyPlaying();
+  if (!playing) {
+    activeFocus = null;
+    return;
+  }
+
+  const focus = pickFocus();
+  if (!focus || focus === playing) {
+    activeFocus = focus ?? playing;
+    return;
+  }
+  if (activeFocus === focus) return;
+  activeFocus = focus;
+
+  // Play next first (keeps user-gesture unlock), then pause the previous.
+  try {
+    await focus.play();
+    if (playing !== focus && !playing.paused) playing.pause();
+    for (const other of players.keys()) {
+      if (other !== focus && !other.paused) other.pause();
+    }
+  } catch {
+    // Autoplay blocked — leave the current track playing.
+    activeFocus = playing;
+  }
+}
 
 type Tone = "hero" | "page";
 
@@ -50,14 +115,16 @@ export function SyncedLyricPlayer({
 
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    const root = rootRef.current;
+    if (!audio || !root) return;
 
-    mountedAudio.add(audio);
+    players.set(audio, { root, audio, ratio: 0 });
 
     const onTime = () => setTime(audio.currentTime);
     const onPlay = () => {
       setPlaying(true);
-      for (const other of mountedAudio) {
+      activeFocus = audio;
+      for (const other of players.keys()) {
         if (other !== audio && !other.paused) other.pause();
       }
     };
@@ -72,51 +139,32 @@ export function SyncedLyricPlayer({
     audio.addEventListener("pause", onPause);
     audio.addEventListener("ended", onEnded);
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return;
+        const current = players.get(audio);
+        if (!current) return;
+        current.ratio = entry.isIntersecting ? entry.intersectionRatio : 0;
+        scheduleHandoff();
+      },
+      {
+        threshold: [0, 0.1, 0.2, 0.35, 0.5, 0.65, 0.8, 1],
+        // Start the handoff a bit before the widget is fully centered.
+        rootMargin: "-10% 0px -25% 0px",
+      },
+    );
+    observer.observe(root);
+
     return () => {
-      mountedAudio.delete(audio);
+      observer.disconnect();
+      players.delete(audio);
+      if (activeFocus === audio) activeFocus = null;
       audio.pause();
       audio.removeEventListener("timeupdate", onTime);
       audio.removeEventListener("play", onPlay);
       audio.removeEventListener("pause", onPause);
       audio.removeEventListener("ended", onEnded);
     };
-  }, []);
-
-  // Keep playing after this widget leaves view; hand off when another widget enters.
-  useEffect(() => {
-    const root = rootRef.current;
-    const audio = audioRef.current;
-    if (!root || !audio) return;
-
-    let wasInView = false;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry) return;
-        const inView =
-          entry.isIntersecting && entry.intersectionRatio >= 0.35;
-        const justEntered = inView && !wasInView;
-        wasInView = inView;
-
-        if (!justEntered) return;
-
-        let pausedPeer = false;
-        for (const other of mountedAudio) {
-          if (other !== audio && !other.paused) {
-            other.pause();
-            pausedPeer = true;
-          }
-        }
-        // Continue the listen as the user scrolls into the next widget.
-        if (pausedPeer && audio.paused) {
-          void audio.play().catch(() => undefined);
-        }
-      },
-      { threshold: [0, 0.35, 0.5, 1] },
-    );
-
-    observer.observe(root);
-    return () => observer.disconnect();
   }, []);
 
   const active = activeLyricIndex(lines, time);
