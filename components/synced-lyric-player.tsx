@@ -200,6 +200,7 @@ export function SyncedLyricPlayer({
   title,
   artist,
   tone = "hero",
+  compact = false,
   className = "",
   handoffAnchorId: _handoffAnchorId,
 }: {
@@ -208,6 +209,7 @@ export function SyncedLyricPlayer({
   title: string;
   artist?: string;
   tone?: Tone;
+  compact?: boolean;
   className?: string;
   /** @deprecated Handoff is based on widget position, not section titles. */
   handoffAnchorId?: string;
@@ -309,7 +311,11 @@ export function SyncedLyricPlayer({
       />
 
       <div
-        className={`flex min-h-0 flex-col items-stretch gap-3 px-3.5 py-3 transition-[border-color] duration-300 sm:min-h-[7.5rem] sm:flex-row sm:gap-4 sm:px-[1.1rem] sm:py-4 ${
+        className={`flex min-h-0 flex-col items-stretch gap-3 px-3.5 py-3 transition-[border-color] duration-300 sm:flex-row sm:gap-3 ${
+          compact
+            ? "sm:min-h-[6.75rem] sm:px-3 sm:py-3"
+            : "sm:min-h-[7.5rem] sm:gap-4 sm:px-[1.1rem] sm:py-4"
+        } ${
           isHero
             ? `border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.28)] ${
                 playing ? "border-white/40" : "hover:border-white/45"
@@ -337,7 +343,9 @@ export function SyncedLyricPlayer({
               ? `Pause "${title}"${artist ? ` by ${artist}` : ""}`
               : `Play "${title}"${artist ? ` by ${artist}` : ""}`
           }
-          className="flex w-full shrink-0 items-center gap-2.5 text-left sm:w-[13.5rem]"
+          className={`flex w-full shrink-0 items-center gap-2.5 text-left ${
+            compact ? "sm:w-[10.75rem]" : "sm:w-[13.5rem]"
+          }`}
         >
           <span
             className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition sm:h-11 sm:w-11 ${
@@ -415,7 +423,9 @@ export function SyncedLyricPlayer({
         </button>
 
         <div
-          className={`min-w-0 flex-1 pt-3 sm:border-t-0 sm:pt-0 sm:pl-4 ${
+          className={`min-w-0 flex-1 pt-3 sm:border-t-0 sm:pt-0 ${
+            compact ? "sm:pl-3" : "sm:pl-4"
+          } ${
             isHero
               ? "border-t border-white/25 sm:border-l"
               : "border-t border-line sm:border-l"

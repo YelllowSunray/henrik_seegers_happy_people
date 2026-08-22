@@ -1,104 +1,40 @@
 {
   "subtitle": "MEER DAN ALLEEN LUISTEREN",
+  "ticketSalesOpen": false,
   "storyBlocks": [
     {
       "type": "paragraph",
-      "text": "Geen middag waarin je alleen maar luistert."
+      "text": "Een live seminar van Happy People is geen standaardpresentatie waarbij je achteroverleunt en alleen maar luistert."
     },
     {
       "type": "paragraph",
-      "text": "Wel een persoonlijke ervaring die je aan het denken zet, je raakt en je helpt om met een nieuw perspectief naar jezelf en je leven te kijken."
+      "text": "Het is een warme, persoonlijke middag waarin verhalen, muziek, humor, psychologie en echte gesprekken samenkomen. Een middag waarin je even afstand neemt van de dagelijkse drukte en bewust tijd maakt voor jezelf."
     },
     {
       "type": "paragraph",
-      "text": "De seminars van Happy People brengen samen:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "psychologie",
-        "persoonlijke verhalen",
-        "bewustwording",
-        "manifestatie",
-        "muziek",
-        "humor",
-        "verbinding"
-      ]
+      "text": "Je krijgt nieuwe inzichten, kijkt met meer aandacht naar je eigen leven en ontdekt welke beweging er kan ontstaan wanneer je eerlijk stilstaat bij waar je nu bent."
     },
     {
       "type": "paragraph",
-      "text": "Geen standaardpresentatie of theoretisch verhaal op afstand, maar herkenbare situaties, eerlijke ervaringen en gesprekken die direct iets met je kunnen doen."
+      "text": "We onderzoeken wie je bent, hoe je verbinding maakt met anderen en welke overtuigingen en patronen je keuzes beïnvloeden. Niet vanuit ingewikkelde theorie, maar aan de hand van herkenbare situaties, persoonlijke verhalen en inzichten die je direct kunt toepassen."
     },
     {
       "type": "paragraph",
-      "text": "Ik deel niet alleen wat ik heb geleerd, maar ook mijn eigen zoektocht:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "de mooie momenten",
-        "moeilijke periodes",
-        "twijfel",
-        "inzichten die pas later duidelijk werden"
-      ]
+      "text": "Soms wordt er gelachen. Soms wordt het stil. Soms hoor je precies datgene waardoor je ineens anders kijkt naar een situatie waar je al langer mee rondloopt."
     },
     {
       "type": "paragraph",
-      "text": "Je hoeft niets vooraf te geloven."
+      "text": "Je hoeft niets vooraf te geloven. Je hoeft jezelf niet te veranderen. Je hoeft alleen nieuwsgierig te zijn en jezelf de ruimte te geven om te ontdekken wat deze middag voor jou kan betekenen."
+    }
+  ],
+  "eventBlocks": [
+    {
+      "type": "paragraph",
+      "text": "Een persoonlijke en inspirerende middag over:"
     },
     {
       "type": "paragraph",
-      "text": "Je hoeft jezelf niet te veranderen."
-    },
-    {
-      "type": "paragraph",
-      "text": "Je hoeft alleen nieuwsgierig te zijn naar wat deze middag jou kan opleveren."
-    },
-    {
-      "type": "paragraph",
-      "text": "Een live seminar geeft je iets wat je niet uit een losse video of een boek haalt: een afgebakend moment waarin je bewust stilstaat, actief meedoet en nieuwe inzichten direct kunt verbinden aan je eigen leven."
-    },
-    {
-      "type": "heading",
-      "text": "WAT KUN JE VERWACHTEN?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Tijdens een seminar:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "luister je naar persoonlijke verhalen",
-        "denk je na over je eigen situatie",
-        "krijg je ruimte om vragen te stellen",
-        "ontdek je nieuwe perspectieven",
-        "ontmoet je mensen die ook nieuwsgierig zijn naar persoonlijke groei"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Soms lachen we."
-    },
-    {
-      "type": "paragraph",
-      "text": "Soms wordt het stil."
-    },
-    {
-      "type": "paragraph",
-      "text": "Soms ontdek je een andere manier om te kijken naar iets waar je al langer mee rondloopt."
-    },
-    {
-      "type": "paragraph",
-      "text": "De waarde zit niet alleen in wat je tijdens het seminar hoort, maar vooral in wat je daarna anders kunt zien, voelen of doen."
-    },
-    {
-      "type": "paragraph",
-      "text": "Je gaat niet naar huis met alleen losse ideeën. Je krijgt vragen, inzichten en praktische aanknopingspunten waarmee je verder kunt. Misschien verandert er diezelfde dag iets. Misschien werkt een gesprek nog weken door."
-    },
-    {
-      "type": "heading",
-      "text": "IDENTITEIT"
+      "text": "identiteit · verbinding · manifestatie"
     },
     {
       "type": "paragraph",
@@ -106,478 +42,42 @@
     },
     {
       "type": "paragraph",
-      "text": "We onderzoeken welke rollen, verplichtingen en beelden je sturen."
+      "text": "Welke patronen houden je tegen? Waar laat je je keuzes door sturen? En wat verandert er wanneer je gedachten, woorden en gedrag weer dezelfde richting op gaan?"
     },
     {
       "type": "paragraph",
-      "text": "Je staat stil bij vragen als:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "Wat vind ik zelf belangrijk?",
-        "Welke keuzes maak ik voor mezelf en welke voor anderen?",
-        "Welk beeld van mezelf houd ik nog in stand?",
-        "Wat zou ik doen als ik minder bang was om teleur te stellen?"
-      ]
+      "text": "Tijdens deze middag krijg je geen kant-en-klare antwoorden. Je krijgt iets waardevollers: de ruimte om eerlijk naar jezelf te kijken, vragen te stellen, ervaringen te delen en nieuwe mogelijkheden te ontdekken."
     },
     {
       "type": "paragraph",
-      "text": "Dat kan confronterend zijn."
+      "text": "Misschien herken je een patroon waar je al langer in vastzit. Misschien ontstaat er een inzicht dat je niet had verwacht. Misschien ga je naar huis met een concrete volgende stap, een nieuwe vraag of het gevoel dat je weer dichter bij jezelf bent gekomen."
     },
     {
       "type": "paragraph",
-      "text": "Maar het kan ook bevrijdend zijn."
-    },
-    {
-      "type": "paragraph",
-      "text": "Het begint met eerlijk kijken. Pas wanneer je ziet wat je werkelijk stuurt, ontstaat er ruimte om bewust andere keuzes te maken."
+      "text": "Je hoeft niet precies te weten wat je zoekt. Je hoeft geen plan te hebben. Je hoeft alleen bereid te zijn om stil te staan bij waar je nu bent en bewust te kiezen welke beweging je wilt maken."
     },
     {
       "type": "heading",
-      "text": "VERBINDING"
-    },
-    {
-      "type": "paragraph",
-      "text": "Waarom begrijpen we elkaar soms moeiteloos en raken we elkaar op andere momenten kwijt?"
-    },
-    {
-      "type": "paragraph",
-      "text": "We kijken naar hoe we contact maken, luisteren en reageren."
-    },
-    {
-      "type": "paragraph",
-      "text": "Ook onderzoeken we hoe aannames, verwachtingen en oude patronen ons soms op afstand houden."
-    },
-    {
-      "type": "paragraph",
-      "text": "Je krijgt herkenbare inzichten over:"
+      "text": "WAT KUN JE VERWACHTEN?"
     },
     {
       "type": "list",
       "items": [
-        "waarom gesprekken vastlopen",
-        "waarom sommige mensen je diep raken",
-        "hoe je duidelijker communiceert",
-        "hoe je opnieuw contact maakt zonder jezelf te verliezen"
+        "persoonlijke verhalen die raken en herkenning oproepen",
+        "praktische inzichten over identiteit, relaties en overtuigingen",
+        "ruimte voor vragen, gesprek en persoonlijke reflectie",
+        "muziek, humor en momenten van echte verbinding",
+        "hapjes, drankjes en gelegenheid om andere deelnemers te ontmoeten",
+        "toegang tot de opname voor leden"
       ]
     },
     {
       "type": "paragraph",
-      "text": "De inzichten zijn niet alleen bedoeld voor relaties met anderen. Ze helpen je ook om beter te begrijpen hoe je met jezelf omgaat."
-    },
-    {
-      "type": "heading",
-      "text": "AFFIRMATIES EN MANIFESTATIE"
+      "text": "Je komt niet alleen om te luisteren. Je komt om mee te maken, mee te denken en iets in beweging te zetten."
     },
     {
       "type": "paragraph",
-      "text": "We bekijken affirmaties en manifestatie niet als een trucje waarmee je de werkelijkheid kunt bestellen."
-    },
-    {
-      "type": "paragraph",
-      "text": "We onderzoeken wat er gebeurt wanneer gedachten, woorden en gedrag dezelfde richting op gaan."
-    },
-    {
-      "type": "paragraph",
-      "text": "Daarbij staan vragen centraal als:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "Welke overtuigingen sturen mijn keuzes?",
-        "Waar geef ik mijn aandacht aan?",
-        "Welke patronen houden mij tegen?",
-        "Welke concrete stappen kan ik zelf zetten?"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Manifestatie wordt zo praktisch en persoonlijk."
-    },
-    {
-      "type": "paragraph",
-      "text": "Niet als vervanging van actie, maar als uitnodiging om bewuster te kiezen en verantwoordelijkheid te nemen voor je richting."
-    },
-    {
-      "type": "paragraph",
-      "text": "Je ontdekt niet alleen wat je graag zou willen, maar ook welke overtuigingen en gewoonten je dagelijks versterken. Daardoor wordt het mogelijk om niet langer alleen te hopen op verandering, maar zelf een eerste concrete beweging te maken."
-    },
-    {
-      "type": "heading",
-      "text": "RUIMTE VOOR JOUW VRAGEN"
-    },
-    {
-      "type": "paragraph",
-      "text": "Kom luisteren, stel je vraag en ontdek wat het gesprek jou kan brengen."
-    },
-    {
-      "type": "paragraph",
-      "text": "Je hoeft je vraag niet perfect te formuleren."
-    },
-    {
-      "type": "paragraph",
-      "text": "Een eerlijke vraag kan het begin zijn van een inzicht dat nog lang bij je blijft."
-    },
-    {
-      "type": "paragraph",
-      "text": "Juist de vragen die je normaal misschien inslikt, kunnen waardevol zijn. Voor jezelf, maar vaak ook voor anderen in de zaal die met iets vergelijkbaars rondlopen."
-    },
-    {
-      "type": "heading",
-      "text": "💬 JOUW VRAAG MAG ER ZIJN"
-    },
-    {
-      "type": "paragraph",
-      "text": "Binnen Happy People hoef je niet te wachten tot Henk online is wanneer je ergens mee zit of nieuwsgierig naar bent."
-    },
-    {
-      "type": "paragraph",
-      "text": "Daarom bouwen we aan een persoonlijke AI-assistent, getraind op:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "mijn manier van denken",
-        "mijn verhalen",
-        "mijn uitgangspunten",
-        "de kennis die ik binnen Happy People deel"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Je kunt vragen stellen wanneer het jou uitkomt."
-    },
-    {
-      "type": "paragraph",
-      "text": "Niet om mij te vervangen, maar om je sneller op weg te helpen met:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "een gedachte",
-        "een richting",
-        "een nieuw perspectief"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Sommige vragen kunnen aanleiding worden voor een:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "livesessie",
-        "blog",
-        "video",
-        "nieuw gesprek binnen de community"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Zo help je mee bepalen welke onderwerpen binnen Happy People ontstaan."
-    },
-    {
-      "type": "paragraph",
-      "text": "De community is daardoor niet alleen een plek waar je informatie ontvangt."
-    },
-    {
-      "type": "paragraph",
-      "text": "Het is ook een omgeving die wordt gevormd door de vragen en ervaringen van de deelnemers."
-    },
-    {
-      "type": "heading",
-      "text": "🎥 TUSSEN DE SEMINARS DOOR"
-    },
-    {
-      "type": "paragraph",
-      "text": "Het seminar stopt niet wanneer de middag voorbij is."
-    },
-    {
-      "type": "paragraph",
-      "text": "Leden kunnen nieuwe verhalen, video's en blogs verwachten: momenten om stil te staan, te reflecteren en opnieuw richting te kiezen."
-    },
-    {
-      "type": "heading",
-      "text": "QUOTE VAN DE WEEK"
-    },
-    {
-      "type": "paragraph",
-      "text": "Eén zin om even bij stil te staan."
-    },
-    {
-      "type": "heading",
-      "text": "DE BLOG VAN HENK"
-    },
-    {
-      "type": "paragraph",
-      "text": "Een persoonlijke of praktische gedachte, ervaring of ontdekking."
-    },
-    {
-      "type": "paragraph",
-      "text": "Altijd met de vraag:"
-    },
-    {
-      "type": "paragraph",
-      "text": "Wat kan dit voor jou betekenen?"
-    },
-    {
-      "type": "heading",
-      "text": "VIDEOBLOG"
-    },
-    {
-      "type": "paragraph",
-      "text": "Geen gelikte televisie."
-    },
-    {
-      "type": "paragraph",
-      "text": "Gewoon ik, met een verhaal dat verteld moet worden."
-    },
-    {
-      "type": "heading",
-      "text": "VRAAG VAN DE WEEK"
-    },
-    {
-      "type": "paragraph",
-      "text": "Een vraag uit de community die aanleiding geeft tot een eerlijk gesprek waar meer mensen iets aan kunnen hebben."
-    },
-    {
-      "type": "heading",
-      "text": "THE HAPPY PEOPLE PLAYLIST"
-    },
-    {
-      "type": "paragraph",
-      "text": "Omdat sommige dingen niet uitgelegd hoeven worden, maar gevoeld mogen worden."
-    },
-    {
-      "type": "paragraph",
-      "text": "Happy People is geen kant-en-klaar programma waarin alles al vastligt."
-    },
-    {
-      "type": "paragraph",
-      "text": "Het groeit met de mensen die meedoen."
-    },
-    {
-      "type": "heading",
-      "text": "🌱 EEN GEMEENSCHAP, GEEN PUBLIEK"
-    },
-    {
-      "type": "paragraph",
-      "text": "Je komt niet alleen om naar Henk te luisteren."
-    },
-    {
-      "type": "paragraph",
-      "text": "Je maakt deel uit van een groep mensen die nieuwsgierig zijn naar:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "zichzelf",
-        "elkaar",
-        "de wereld",
-        "persoonlijke groei",
-        "echte verbinding"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Je mag:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "vragen stellen",
-        "twijfelen",
-        "het oneens zijn",
-        "lachen",
-        "geraakt worden",
-        "opnieuw beginnen"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Je hoeft geen ervaring te hebben."
-    },
-    {
-      "type": "paragraph",
-      "text": "Je hoeft ook niet precies te weten wat je zoekt."
-    },
-    {
-      "type": "paragraph",
-      "text": "Kom zoals je bent:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "met een concrete vraag",
-        "met het gevoel dat er iets moet veranderen",
-        "of gewoon uit nieuwsgierigheid"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Er hoeft niets perfect te zijn."
-    }
-  ],
-  "eventBlocks": [
-    {
-      "type": "paragraph",
-      "text": "Een intensieve en persoonlijke middag over:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "identiteit",
-        "verbinding",
-        "manifestatie"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "We kijken opnieuw naar:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "wie we zijn",
-        "hoe we met elkaar omgaan",
-        "wat er mogelijk wordt wanneer gedachten, woorden en daden weer bij elkaar komen"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Niet vanuit ingewikkelde theorie, maar vanuit herkenbare situaties, persoonlijke verhalen en gesprekken die ook na afloop kunnen bijblijven."
-    },
-    {
-      "type": "heading",
-      "text": "WAAROM DEZE MIDDAG?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Omdat je soms niet méér informatie nodig hebt."
-    },
-    {
-      "type": "paragraph",
-      "text": "Maar wel een moment waarop je eerlijk kijkt naar de richting waarin je beweegt."
-    },
-    {
-      "type": "paragraph",
-      "text": "Omdat je kunt weten wat je wilt en toch vast blijft zitten."
-    },
-    {
-      "type": "paragraph",
-      "text": "En omdat een live ontmoeting iets anders doet dan alleen een video bekijken."
-    },
-    {
-      "type": "paragraph",
-      "text": "Je bent aanwezig, ontmoet anderen en krijgt ruimte om:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "direct te reageren",
-        "vragen te stellen",
-        "ervaringen te delen",
-        "nieuwe inzichten te laten ontstaan"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Deze middag is waardevol wanneer je voelt dat je op een kruispunt staat, wanneer je steeds in dezelfde patronen terechtkomt of wanneer je opnieuw contact wilt maken met wat voor jou belangrijk is."
-    },
-    {
-      "type": "paragraph",
-      "text": "Je hoeft niet met een uitgewerkt plan te komen. Je hoeft alleen bereid te zijn om eerlijk te kijken en actief mee te doen."
-    },
-    {
-      "type": "heading",
-      "text": "WAT KUN JE MEEMAKEN?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Tijdens deze middag is er ruimte om:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "opnieuw te leren lachen",
-        "contact te maken met wat groter is dan jezelf",
-        "stil te staan bij dromen die je misschien bent kwijtgeraakt",
-        "te onderzoeken welke overtuigingen je tegenhouden",
-        "te ontdekken welke eerste stap je vandaag kunt zetten",
-        "anderen te ontmoeten die nieuwsgierig zijn naar persoonlijke groei en echte verbinding"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Misschien zijn sommige dromen niet verdwenen omdat ze onmogelijk zijn."
-    },
-    {
-      "type": "paragraph",
-      "text": "Misschien zijn we vergeten dat we ze ooit hadden."
-    },
-    {
-      "type": "paragraph",
-      "text": "Je krijgt geen belofte dat alles vanzelf verandert."
-    },
-    {
-      "type": "paragraph",
-      "text": "Wel krijg je de kans om scherper te zien:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "waar je staat",
-        "wat je belangrijk vindt",
-        "welke overtuigingen je sturen",
-        "welke beweging je zelf kunt maken"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Droom niet alleen."
-    },
-    {
-      "type": "paragraph",
-      "text": "Zet je dromen in beweging."
-    },
-    {
-      "type": "paragraph",
-      "text": "Tijdens de middag zorgen we voor hapjes en drankjes."
-    },
-    {
-      "type": "paragraph",
-      "text": "Zo is er ook ruimte om elkaar te ontmoeten en ervaringen uit te wisselen. Juist die gesprekken tussen de onderdelen door kunnen een belangrijk deel van de ervaring worden."
-    },
-    {
-      "type": "heading",
-      "text": "BEPERKT AANTAL PLAATSEN"
-    },
-    {
-      "type": "paragraph",
-      "text": "Het aantal plaatsen is bewust beperkt."
-    },
-    {
-      "type": "paragraph",
-      "text": "Dat is geen formaliteit, maar een keuze. Een kleinere groep zorgt voor meer ruimte voor:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "persoonlijke aandacht",
-        "vragen",
-        "gesprekken",
-        "herkenning",
-        "echte ontmoeting"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Wanneer de zaal vol zit, kunnen er geen extra plaatsen worden toegevoegd zonder dat de kwaliteit en persoonlijke sfeer van de middag verloren gaan."
-    },
-    {
-      "type": "paragraph",
-      "text": "Daarom is het verstandig om niet te wachten tot vlak voor de datum. Wie nu reserveert, stelt zijn plek veilig en weet zeker dat hij of zij deze live ervaring kan meemaken."
+      "text": "Het aantal plaatsen is bewust beperkt. Daardoor blijft er ruimte voor persoonlijke aandacht, open gesprekken en een sfeer waarin je jezelf kunt zijn."
     },
     {
       "type": "heading",
@@ -585,59 +85,27 @@
     },
     {
       "type": "paragraph",
-      "text": "€1.500"
+      "text": "Prijs volgt."
     },
     {
       "type": "paragraph",
-      "text": "Het seminar is uitsluitend online te reserveren."
+      "text": "Online reserveren is binnenkort mogelijk."
     },
     {
       "type": "paragraph",
-      "text": "Leden krijgen toegang tot de opname."
+      "text": "Wil je als eerste weten wanneer de ticketverkoop start? Houd Happy People dan goed in de gaten en reserveer je plek zodra de verkoop opent. Door het beperkte aantal plaatsen kan het seminar snel vol zijn."
     },
     {
       "type": "paragraph",
-      "text": "Ook wanneer je er niet live bij kunt zijn, kun je de reis later meemaken."
+      "text": "Gun jezelf deze middag."
     },
     {
       "type": "paragraph",
-      "text": "Live aanwezig zijn blijft de meest complete ervaring. Je beleeft de verhalen, gesprekken en energie samen met de andere deelnemers. Je kunt direct reageren, je vraag stellen op het moment dat die ontstaat en onderdeel zijn van de ontmoeting in plaats van alleen achteraf terug te kijken."
+      "text": "Een moment om op adem te komen, nieuwe inspiratie op te doen en opnieuw te ontdekken wat voor jou belangrijk is."
     },
     {
       "type": "paragraph",
-      "text": "De opname is een waardevolle aanvulling, maar kan de live ervaring niet volledig vervangen."
-    },
-    {
-      "type": "heading",
-      "text": "WAAROM NU RESERVEREN?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Omdat wachten zelden meer duidelijkheid oplevert."
-    },
-    {
-      "type": "paragraph",
-      "text": "Je hoeft niet eerst precies te weten wat je zoekt. Je hoeft niet te wachten tot je agenda vanzelf ruimte maakt of tot je alle antwoorden al hebt."
-    },
-    {
-      "type": "paragraph",
-      "text": "Een reservering is een concrete keuze om tijd vrij te maken voor jezelf, voor reflectie en voor een nieuwe richting."
-    },
-    {
-      "type": "paragraph",
-      "text": "Daarnaast zijn de plaatsen beperkt. Zodra het maximum is bereikt, sluit de reservering."
-    },
-    {
-      "type": "paragraph",
-      "text": "Wacht dus niet tot je zeker weet dat je deze middag nodig hebt."
-    },
-    {
-      "type": "paragraph",
-      "text": "Nieuwsgierigheid is genoeg om te beginnen."
-    },
-    {
-      "type": "paragraph",
-      "text": "Reserveer nu je ticket en geef jezelf een middag die niet alleen inspirerend kan zijn, maar ook praktisch verschil kan maken in hoe je kijkt, kiest en handelt."
+      "text": "Reserveer straks je ticket en geef jezelf de ruimte om terug te keren naar één."
     },
     {
       "type": "paragraph",

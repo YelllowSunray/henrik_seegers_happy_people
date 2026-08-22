@@ -180,21 +180,9 @@ export default async function HomePage({
           titleId="seminars-title"
           returnPath="/"
           showTicket={false}
-          showAllLink
-          variant="home"
+          showSoStrongPlayer={Boolean(nextEvent)}
+          variant="full"
         />
-        {nextEvent && (
-          <div className="mt-8 w-full max-w-[41rem]">
-            <SyncedLyricPlayer
-              audioSrc="/audio/so-strong.mp3"
-              lrcSrc="/audio/so-strong.lrc"
-              title="So Strong"
-              artist="Labi Siffre"
-              tone="page"
-              handoffAnchorId="seminars-title"
-            />
-          </div>
-        )}
       </Section>
 
       <Section

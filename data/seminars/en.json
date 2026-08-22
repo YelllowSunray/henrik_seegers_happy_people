@@ -1,104 +1,40 @@
 {
   "subtitle": "MORE THAN JUST LISTENING",
+  "ticketSalesOpen": false,
   "storyBlocks": [
     {
       "type": "paragraph",
-      "text": "Not an afternoon where you only listen."
+      "text": "A Happy People live seminar is not a standard presentation where you lean back and only listen."
     },
     {
       "type": "paragraph",
-      "text": "But a personal experience that makes you think, moves you, and helps you look at yourself and your life from a new perspective."
+      "text": "It is a warm, personal afternoon where stories, music, humour, psychology and real conversations come together. An afternoon where you step away from daily pressure and consciously make time for yourself."
     },
     {
       "type": "paragraph",
-      "text": "Happy People seminars bring together:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "psychology",
-        "personal stories",
-        "awareness",
-        "manifestation",
-        "music",
-        "humour",
-        "connection"
-      ]
+      "text": "You gain new insights, look at your own life with more attention, and discover what movement can arise when you honestly pause at where you are now."
     },
     {
       "type": "paragraph",
-      "text": "Not a standard presentation or distant theoretical talk, but relatable situations, honest experiences, and conversations that can reach you directly."
+      "text": "We explore who you are, how you connect with others, and which beliefs and patterns influence your choices. Not through complicated theory, but through relatable situations, personal stories and insights you can apply directly."
     },
     {
       "type": "paragraph",
-      "text": "I share not only what I have learned, but also my own journey:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "the beautiful moments",
-        "difficult periods",
-        "doubt",
-        "insights that only became clear later"
-      ]
+      "text": "Sometimes we laugh. Sometimes it goes quiet. Sometimes you hear exactly what makes you look differently at something you have been carrying for a while."
     },
     {
       "type": "paragraph",
-      "text": "You don't have to believe anything in advance."
+      "text": "You do not have to believe anything in advance. You do not have to change yourself. You only need to be curious and give yourself the space to discover what this afternoon can mean for you."
+    }
+  ],
+  "eventBlocks": [
+    {
+      "type": "paragraph",
+      "text": "A personal and inspiring afternoon about:"
     },
     {
       "type": "paragraph",
-      "text": "You don't have to change yourself."
-    },
-    {
-      "type": "paragraph",
-      "text": "You only need to be curious about what this afternoon can offer you."
-    },
-    {
-      "type": "paragraph",
-      "text": "A live seminar gives you something you cannot get from a standalone video or a book: a defined moment in which you consciously pause, actively participate, and connect new insights directly to your own life."
-    },
-    {
-      "type": "heading",
-      "text": "WHAT CAN YOU EXPECT?"
-    },
-    {
-      "type": "paragraph",
-      "text": "During a seminar:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "you listen to personal stories",
-        "you reflect on your own situation",
-        "you get space to ask questions",
-        "you discover new perspectives",
-        "you meet people who are also curious about personal growth"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Sometimes we laugh."
-    },
-    {
-      "type": "paragraph",
-      "text": "Sometimes it goes quiet."
-    },
-    {
-      "type": "paragraph",
-      "text": "Sometimes you discover a different way of looking at something you have been carrying for a while."
-    },
-    {
-      "type": "paragraph",
-      "text": "The value lies not only in what you hear during the seminar, but especially in what you can see, feel, or do differently afterwards."
-    },
-    {
-      "type": "paragraph",
-      "text": "You don't go home with only loose ideas. You receive questions, insights, and practical starting points to move forward with. Maybe something shifts that same day. Maybe a conversation keeps working on you for weeks."
-    },
-    {
-      "type": "heading",
-      "text": "IDENTITY"
+      "text": "identity · connection · manifestation"
     },
     {
       "type": "paragraph",
@@ -106,478 +42,42 @@
     },
     {
       "type": "paragraph",
-      "text": "We explore which roles, obligations, and images guide you."
+      "text": "Which patterns hold you back? What drives your choices? And what changes when your thoughts, words and actions move in the same direction again?"
     },
     {
       "type": "paragraph",
-      "text": "You pause with questions such as:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "What do I find important myself?",
-        "Which choices do I make for myself and which for others?",
-        "What image of myself am I still maintaining?",
-        "What would I do if I were less afraid of disappointing people?"
-      ]
+      "text": "During this afternoon you will not get ready-made answers. You get something more valuable: the space to look honestly at yourself, ask questions, share experiences and discover new possibilities."
     },
     {
       "type": "paragraph",
-      "text": "That can be confronting."
+      "text": "Maybe you recognise a pattern you have been stuck in. Maybe an unexpected insight arises. Maybe you go home with a concrete next step, a new question, or the feeling that you have come closer to yourself again."
     },
     {
       "type": "paragraph",
-      "text": "But it can also be liberating."
-    },
-    {
-      "type": "paragraph",
-      "text": "It starts with looking honestly. Only when you see what is truly guiding you does space open up to make conscious different choices."
+      "text": "You do not need to know exactly what you are looking for. You do not need a plan. You only need to be willing to pause at where you are now and consciously choose which movement you want to make."
     },
     {
       "type": "heading",
-      "text": "CONNECTION"
-    },
-    {
-      "type": "paragraph",
-      "text": "Why do we sometimes understand each other effortlessly, and lose each other at other moments?"
-    },
-    {
-      "type": "paragraph",
-      "text": "We look at how we make contact, listen, and respond."
-    },
-    {
-      "type": "paragraph",
-      "text": "We also explore how assumptions, expectations, and old patterns sometimes keep us at a distance."
-    },
-    {
-      "type": "paragraph",
-      "text": "You gain relatable insights about:"
+      "text": "WHAT CAN YOU EXPECT?"
     },
     {
       "type": "list",
       "items": [
-        "why conversations get stuck",
-        "why some people touch you deeply",
-        "how to communicate more clearly",
-        "how to reconnect without losing yourself"
+        "personal stories that move you and feel recognisable",
+        "practical insights on identity, relationships and beliefs",
+        "space for questions, conversation and personal reflection",
+        "music, humour and moments of real connection",
+        "snacks, drinks and a chance to meet other participants",
+        "access to the recording for members"
       ]
     },
     {
       "type": "paragraph",
-      "text": "The insights are not only meant for relationships with others. They also help you better understand how you treat yourself."
-    },
-    {
-      "type": "heading",
-      "text": "AFFIRMATIONS AND MANIFESTATION"
+      "text": "You do not come only to listen. You come to take part, think along and set something in motion."
     },
     {
       "type": "paragraph",
-      "text": "We do not view affirmations and manifestation as a trick to order reality."
-    },
-    {
-      "type": "paragraph",
-      "text": "We explore what happens when thoughts, words, and behaviour move in the same direction."
-    },
-    {
-      "type": "paragraph",
-      "text": "Central questions include:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "Which beliefs guide my choices?",
-        "Where do I give my attention?",
-        "Which patterns hold me back?",
-        "Which concrete steps can I take myself?"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Manifestation becomes practical and personal in this way."
-    },
-    {
-      "type": "paragraph",
-      "text": "Not as a replacement for action, but as an invitation to choose more consciously and take responsibility for your direction."
-    },
-    {
-      "type": "paragraph",
-      "text": "You discover not only what you would like, but also which beliefs and habits you reinforce daily. That makes it possible to stop only hoping for change and instead make a first concrete move yourself."
-    },
-    {
-      "type": "heading",
-      "text": "SPACE FOR YOUR QUESTIONS"
-    },
-    {
-      "type": "paragraph",
-      "text": "Come listen, ask your question, and discover what the conversation can bring you."
-    },
-    {
-      "type": "paragraph",
-      "text": "You don't have to formulate your question perfectly."
-    },
-    {
-      "type": "paragraph",
-      "text": "An honest question can be the beginning of an insight that stays with you for a long time."
-    },
-    {
-      "type": "paragraph",
-      "text": "Precisely the questions you might normally swallow can be valuable. For yourself, but often also for others in the room who are dealing with something similar."
-    },
-    {
-      "type": "heading",
-      "text": "💬 YOUR QUESTION IS WELCOME"
-    },
-    {
-      "type": "paragraph",
-      "text": "Within Happy People, you don't have to wait until Henk is online when something is on your mind or you're curious about something."
-    },
-    {
-      "type": "paragraph",
-      "text": "That is why we are building a personal AI assistant, trained on:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "my way of thinking",
-        "my stories",
-        "my principles",
-        "the knowledge I share within Happy People"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "You can ask questions whenever it suits you."
-    },
-    {
-      "type": "paragraph",
-      "text": "Not to replace me, but to help you get on your way more quickly with:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "a thought",
-        "a direction",
-        "a new perspective"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Some questions may become the starting point for a:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "live session",
-        "blog",
-        "video",
-        "new conversation within the community"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "In this way, you help shape which topics emerge within Happy People."
-    },
-    {
-      "type": "paragraph",
-      "text": "The community is therefore not only a place where you receive information."
-    },
-    {
-      "type": "paragraph",
-      "text": "It is also an environment shaped by the questions and experiences of participants."
-    },
-    {
-      "type": "heading",
-      "text": "🎥 BETWEEN SEMINARS"
-    },
-    {
-      "type": "paragraph",
-      "text": "The seminar doesn't stop when the afternoon is over."
-    },
-    {
-      "type": "paragraph",
-      "text": "Members can expect new stories, videos, and blogs: moments to pause, reflect, and choose direction again."
-    },
-    {
-      "type": "heading",
-      "text": "QUOTE OF THE WEEK"
-    },
-    {
-      "type": "paragraph",
-      "text": "One sentence to pause with."
-    },
-    {
-      "type": "heading",
-      "text": "HENK'S BLOG"
-    },
-    {
-      "type": "paragraph",
-      "text": "A personal or practical thought, experience, or discovery."
-    },
-    {
-      "type": "paragraph",
-      "text": "Always with the question:"
-    },
-    {
-      "type": "paragraph",
-      "text": "What could this mean for you?"
-    },
-    {
-      "type": "heading",
-      "text": "VIDEO BLOG"
-    },
-    {
-      "type": "paragraph",
-      "text": "Not polished television."
-    },
-    {
-      "type": "paragraph",
-      "text": "Just me, with a story that needs to be told."
-    },
-    {
-      "type": "heading",
-      "text": "QUESTION OF THE WEEK"
-    },
-    {
-      "type": "paragraph",
-      "text": "A question from the community that leads to an honest conversation that more people can benefit from."
-    },
-    {
-      "type": "heading",
-      "text": "THE HAPPY PEOPLE PLAYLIST"
-    },
-    {
-      "type": "paragraph",
-      "text": "Because some things don't need to be explained — they can simply be felt."
-    },
-    {
-      "type": "paragraph",
-      "text": "Happy People is not a ready-made programme where everything is already fixed."
-    },
-    {
-      "type": "paragraph",
-      "text": "It grows with the people who take part."
-    },
-    {
-      "type": "heading",
-      "text": "🌱 A COMMUNITY, NOT AN AUDIENCE"
-    },
-    {
-      "type": "paragraph",
-      "text": "You don't come only to listen to Henk."
-    },
-    {
-      "type": "paragraph",
-      "text": "You are part of a group of people who are curious about:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "themselves",
-        "each other",
-        "the world",
-        "personal growth",
-        "genuine connection"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "You may:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "ask questions",
-        "doubt",
-        "disagree",
-        "laugh",
-        "be moved",
-        "start again"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "You don't need any experience."
-    },
-    {
-      "type": "paragraph",
-      "text": "You also don't need to know exactly what you're looking for."
-    },
-    {
-      "type": "paragraph",
-      "text": "Come as you are:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "with a concrete question",
-        "with the feeling that something needs to change",
-        "or simply out of curiosity"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Nothing has to be perfect."
-    }
-  ],
-  "eventBlocks": [
-    {
-      "type": "paragraph",
-      "text": "An intensive and personal afternoon about:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "identity",
-        "connection",
-        "manifestation"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "We look again at:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "who we are",
-        "how we relate to each other",
-        "what becomes possible when thoughts, words, and actions come back together"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Not from complicated theory, but from relatable situations, personal stories, and conversations that can stay with you long after the event."
-    },
-    {
-      "type": "heading",
-      "text": "WHY THIS AFTERNOON?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Because sometimes you don't need more information."
-    },
-    {
-      "type": "paragraph",
-      "text": "But you do need a moment to look honestly at the direction you're moving in."
-    },
-    {
-      "type": "paragraph",
-      "text": "Because you can know what you want and still feel stuck."
-    },
-    {
-      "type": "paragraph",
-      "text": "And because a live encounter does something different than watching a video alone."
-    },
-    {
-      "type": "paragraph",
-      "text": "You are present, you meet others, and you get space to:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "respond directly",
-        "ask questions",
-        "share experiences",
-        "let new insights emerge"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "This afternoon is valuable when you feel you're at a crossroads, when you keep ending up in the same patterns, or when you want to reconnect with what matters to you."
-    },
-    {
-      "type": "paragraph",
-      "text": "You don't need to come with a fully worked-out plan. You only need to be willing to look honestly and participate actively."
-    },
-    {
-      "type": "heading",
-      "text": "WHAT CAN YOU EXPERIENCE?"
-    },
-    {
-      "type": "paragraph",
-      "text": "During this afternoon, there is space to:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "learn to laugh again",
-        "connect with something greater than yourself",
-        "pause with dreams you may have lost",
-        "explore which beliefs hold you back",
-        "discover which first step you can take today",
-        "meet others who are curious about personal growth and genuine connection"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Maybe some dreams haven't disappeared because they're impossible."
-    },
-    {
-      "type": "paragraph",
-      "text": "Maybe we've forgotten we ever had them."
-    },
-    {
-      "type": "paragraph",
-      "text": "You won't be promised that everything will change on its own."
-    },
-    {
-      "type": "paragraph",
-      "text": "But you will get the chance to see more clearly:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "where you stand",
-        "what matters to you",
-        "which beliefs guide you",
-        "which move you can make yourself"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Don't just dream."
-    },
-    {
-      "type": "paragraph",
-      "text": "Set your dreams in motion."
-    },
-    {
-      "type": "paragraph",
-      "text": "During the afternoon, we provide snacks and drinks."
-    },
-    {
-      "type": "paragraph",
-      "text": "That also creates space to meet each other and exchange experiences. Those conversations between sessions can become an important part of the experience."
-    },
-    {
-      "type": "heading",
-      "text": "LIMITED PLACES"
-    },
-    {
-      "type": "paragraph",
-      "text": "The number of places is deliberately limited."
-    },
-    {
-      "type": "paragraph",
-      "text": "That is not a formality, but a choice. A smaller group creates more room for:"
-    },
-    {
-      "type": "list",
-      "items": [
-        "personal attention",
-        "questions",
-        "conversations",
-        "recognition",
-        "genuine encounter"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "When the room is full, no extra places can be added without losing the quality and personal atmosphere of the afternoon."
-    },
-    {
-      "type": "paragraph",
-      "text": "That's why it's wise not to wait until just before the date. Those who reserve now secure their place and know for certain they can experience this live event."
+      "text": "The number of places is deliberately limited. That keeps room for personal attention, open conversations and an atmosphere where you can be yourself."
     },
     {
       "type": "heading",
@@ -585,59 +85,27 @@
     },
     {
       "type": "paragraph",
-      "text": "€1,500"
+      "text": "Price to follow."
     },
     {
       "type": "paragraph",
-      "text": "The seminar can only be reserved online."
+      "text": "Online booking will be available soon."
     },
     {
       "type": "paragraph",
-      "text": "Members get access to the recording."
+      "text": "Want to be the first to know when ticket sales open? Keep a close eye on Happy People and reserve your place as soon as sales begin. With limited places, the seminar can fill up quickly."
     },
     {
       "type": "paragraph",
-      "text": "Even if you can't be there live, you can experience the journey later."
+      "text": "Give yourself this afternoon."
     },
     {
       "type": "paragraph",
-      "text": "Being there live remains the most complete experience. You share the stories, conversations, and energy with the other participants. You can respond directly, ask your question the moment it arises, and be part of the encounter instead of only watching afterwards."
+      "text": "A moment to catch your breath, find new inspiration and rediscover what matters to you."
     },
     {
       "type": "paragraph",
-      "text": "The recording is a valuable addition, but cannot fully replace the live experience."
-    },
-    {
-      "type": "heading",
-      "text": "WHY RESERVE NOW?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Because waiting rarely brings more clarity."
-    },
-    {
-      "type": "paragraph",
-      "text": "You don't first need to know exactly what you're looking for. You don't need to wait until your calendar clears on its own or until you already have all the answers."
-    },
-    {
-      "type": "paragraph",
-      "text": "A reservation is a concrete choice to make time for yourself, for reflection, and for a new direction."
-    },
-    {
-      "type": "paragraph",
-      "text": "In addition, places are limited. Once the maximum is reached, reservations close."
-    },
-    {
-      "type": "paragraph",
-      "text": "So don't wait until you're certain you need this afternoon."
-    },
-    {
-      "type": "paragraph",
-      "text": "Curiosity is enough to begin."
-    },
-    {
-      "type": "paragraph",
-      "text": "Reserve your ticket now and give yourself an afternoon that can be not only inspiring, but also make a practical difference in how you see, choose, and act."
+      "text": "Reserve your ticket soon and give yourself the space to return to one."
     },
     {
       "type": "paragraph",

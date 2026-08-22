@@ -1,4 +1,9 @@
+import de from "@/data/seminars/de.json";
 import en from "@/data/seminars/en.json";
+import es from "@/data/seminars/es.json";
+import fr from "@/data/seminars/fr.json";
+import it from "@/data/seminars/it.json";
+import ko from "@/data/seminars/ko.json";
 import nl from "@/data/seminars/nl.json";
 import type { Locale } from "@/lib/types";
 
@@ -9,13 +14,19 @@ export type SeminarStoryBlock =
 
 export type SeminarPageContent = {
   subtitle: string;
+  ticketSalesOpen: boolean;
   storyBlocks: SeminarStoryBlock[];
   eventBlocks: SeminarStoryBlock[];
 };
 
-const byLocale: Partial<Record<Locale, SeminarPageContent>> = {
+const byLocale: Record<Locale, SeminarPageContent> = {
   nl: nl as SeminarPageContent,
   en: en as SeminarPageContent,
+  de: de as SeminarPageContent,
+  es: es as SeminarPageContent,
+  it: it as SeminarPageContent,
+  fr: fr as SeminarPageContent,
+  ko: ko as SeminarPageContent,
 };
 
 /** Keep the first ~ratio of content sections (split at headings). */
@@ -44,7 +55,7 @@ export function getSeminarContent(
   locale: Locale,
   variant: "full" | "home" = "full",
 ): SeminarPageContent {
-  const content = (byLocale[locale] ?? en) as SeminarPageContent;
+  const content = byLocale[locale] ?? en;
   if (variant === "full") return content;
   return {
     ...content,

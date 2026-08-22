@@ -1,3 +1,4 @@
+import { locales } from "@/i18n/locales";
 import { getAdminDb } from "@/lib/firebase/admin";
 import {
   events as seedEvents,
@@ -24,12 +25,14 @@ import { DEFAULT_BILLING_STATE, parseBillingDoc } from "@/lib/billing";
 function asLocalized(value: unknown, fallback = ""): LocalizedString {
   if (value && typeof value === "object" && !Array.isArray(value)) {
     const o = value as Record<string, unknown>;
-    const nl = String(o.nl ?? fallback);
-    return {
-      nl,
-      ...(typeof o.en === "string" ? { en: o.en } : {}),
-      ...(typeof o.de === "string" ? { de: o.de } : {}),
-    };
+    const nl = String(o.nl ?? o.en ?? fallback);
+    const out: LocalizedString = { nl };
+    for (const loc of locales) {
+      if (loc !== "nl" && typeof o[loc] === "string") {
+        out[loc] = o[loc] as string;
+      }
+    }
+    return out;
   }
   if (typeof value === "string") return { nl: value };
   return { nl: fallback };
