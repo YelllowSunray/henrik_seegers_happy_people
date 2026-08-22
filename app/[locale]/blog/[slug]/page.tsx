@@ -4,18 +4,11 @@ import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { BlogBody } from "@/components/blog-body";
-import { posts as seedPosts, t } from "@/lib/content";
-import { fetchPostBySlug, fetchPublicPosts } from "@/lib/content-firestore";
+import { t } from "@/lib/content";
+import { fetchPostBySlug } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
 
-export async function generateStaticParams() {
-  const fromDb = await fetchPublicPosts();
-  const slugs = new Set([
-    ...seedPosts.filter((p) => !p.membersOnly).map((p) => p.slug),
-    ...fromDb.map((p) => p.slug),
-  ]);
-  return [...slugs].map((slug) => ({ slug }));
-}
+export const dynamic = "force-dynamic";
 
 export default async function BlogPostPage({
   params,

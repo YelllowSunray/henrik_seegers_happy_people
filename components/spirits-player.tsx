@@ -2,7 +2,11 @@
 
 import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
 
-export function SpiritsPlayer() {
+export function SpiritsPlayer({
+  handoffAnchorId,
+}: {
+  handoffAnchorId?: string;
+}) {
   return (
     <SyncedLyricPlayer
       audioSrc="/audio/spirits.mp3"
@@ -10,6 +14,7 @@ export function SpiritsPlayer() {
       title="Spirits In The Material World"
       artist="The Police"
       tone="page"
+      handoffAnchorId={handoffAnchorId}
     />
   );
 }

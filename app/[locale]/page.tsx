@@ -4,7 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { JoinButton } from "@/components/join-button";
-import { MembershipPlans } from "@/components/membership-plans";
+import { MembershipStory } from "@/components/membership-story";
 import { DonateSection } from "@/components/donate-section";
 import { SpeedGallery } from "@/components/speed-gallery";
 import { LightboxImage } from "@/components/lightbox-image";
@@ -17,6 +17,8 @@ import { t } from "@/lib/content";
 import { FACEBOOK_HREF } from "@/lib/contact";
 import { fetchEvents, fetchPublicPosts } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
+
+export const dynamic = "force-dynamic";
 
 export default async function HomePage({
   params,
@@ -62,7 +64,10 @@ export default async function HomePage({
             <p className="reveal font-display text-4xl leading-tight text-white drop-shadow sm:whitespace-nowrap sm:text-5xl md:text-7xl lg:text-8xl">
               {tNav("brand")}
             </p>
-            <h1 className="reveal reveal-delay-1 mt-1 max-w-xl text-balance text-base leading-snug text-white/95 sm:mt-4 sm:text-lg md:text-xl lg:text-2xl">
+            <h1
+              id="hero-title"
+              className="reveal reveal-delay-1 mt-1 max-w-xl text-balance text-base leading-snug text-white/95 sm:mt-4 sm:text-lg md:text-xl lg:text-2xl"
+            >
               {tNav("headline")}
             </h1>
             <p className="reveal reveal-delay-2 mt-1 max-w-md text-sm leading-snug text-white/80 sm:mt-3 sm:text-base">
@@ -83,7 +88,7 @@ export default async function HomePage({
           </div>
 
           <div className="w-full shrink-0 lg:ml-auto lg:w-auto lg:max-w-[41rem]">
-            <MicrochipPlayer />
+            <MicrochipPlayer handoffAnchorId="hero-title" />
           </div>
         </div>
       </section>
@@ -94,7 +99,10 @@ export default async function HomePage({
             <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
               {tMsg("eyebrow")}
             </p>
-            <h2 className="font-display mt-3 text-2xl leading-tight text-ink sm:text-3xl md:text-5xl">
+            <h2
+              id="message-title"
+              className="font-display mt-3 text-2xl leading-tight text-ink sm:text-3xl md:text-5xl"
+            >
               {tMsg("title")}
             </h2>
             <blockquote className="font-display mt-6 text-xl leading-snug text-ink md:text-3xl">
@@ -106,7 +114,7 @@ export default async function HomePage({
               ))}
             </div>
             <div className="mt-10 w-full max-w-[41rem]">
-              <SpiritsPlayer />
+              <SpiritsPlayer handoffAnchorId="message-title" />
             </div>
           </div>
           <div className="lg:sticky lg:top-28">
@@ -125,7 +133,10 @@ export default async function HomePage({
             <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
               {tAbout("eyebrow")}
             </p>
-            <h2 className="font-display mt-3 text-2xl leading-tight text-ink sm:text-3xl md:text-5xl">
+            <h2
+              id="about-title"
+              className="font-display mt-3 text-2xl leading-tight text-ink sm:text-3xl md:text-5xl"
+            >
               {tAbout("title")}
             </h2>
             <p className="mt-4 max-w-2xl text-base text-ink-soft md:text-lg">
@@ -145,6 +156,7 @@ export default async function HomePage({
                 title="Never Can Say Goodbye"
                 artist="Gloria Gaynor"
                 tone="page"
+                handoffAnchorId="about-title"
               />
             </div>
           </div>
@@ -168,7 +180,10 @@ export default async function HomePage({
             <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
               {tSem("eyebrow")}
             </p>
-            <h2 className="font-display mt-3 text-3xl leading-tight text-ink md:text-5xl">
+            <h2
+              id="seminars-title"
+              className="font-display mt-3 text-3xl leading-tight text-ink md:text-5xl"
+            >
               {tSem("title")}
             </h2>
             <p className="mt-6 max-w-xl text-ink-soft">{tSem("teaser")}</p>
@@ -237,12 +252,18 @@ export default async function HomePage({
               title="So Strong"
               artist="Labi Siffre"
               tone="page"
+              handoffAnchorId="seminars-title"
             />
           </div>
         )}
       </Section>
 
-      <Section eyebrow={tBlog("eyebrow")} title={tBlog("title")} tone="deep">
+      <Section
+        eyebrow={tBlog("eyebrow")}
+        title={tBlog("title")}
+        titleId="blog-title"
+        tone="deep"
+      >
         <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.75fr)_minmax(0,1fr)] lg:gap-12">
           <div className="min-w-0">
             <a
@@ -294,6 +315,7 @@ export default async function HomePage({
                 title="Run Through Walls"
                 artist="The Script"
                 tone="page"
+                handoffAnchorId="blog-title"
               />
             </div>
           </div>
@@ -311,28 +333,11 @@ export default async function HomePage({
       </Section>
 
       <Section tone="default">
-        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
-          <div>
-            <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
-              {tMem("eyebrow")}
-            </p>
-            <h2 className="font-display mt-3 text-3xl leading-tight text-ink md:text-5xl">
-              {tMem("title")}
-            </h2>
-            <p className="mt-6 max-w-xl text-lg text-ink-soft">{tMem("pitch")}</p>
-            <p className="mt-3 max-w-xl text-base italic text-ink">
-              {tMem("wordBond")}
-            </p>
-            <ul className="mt-8 grid gap-3 text-ink-soft sm:grid-cols-2">
-              <li>{tMem("benefitSeminars")}</li>
-              <li>{tMem("benefitVlogs")}</li>
-              <li>{tMem("benefitQuotes")}</li>
-              <li>{tMem("benefitTeachings")}</li>
-              <li>{tMem("benefitMessages")}</li>
-            </ul>
-            <MembershipPlans className="mt-10" />
+        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14">
+          <MembershipStory titleAs="h2" titleId="membership-title" />
+          <div className="lg:sticky lg:top-28">
+            <SpeedGallery />
           </div>
-          <SpeedGallery />
         </div>
         <div className="mt-10 w-full max-w-[41rem]">
           <p className="mb-4 text-base leading-relaxed text-ink md:text-lg">
@@ -344,6 +349,7 @@ export default async function HomePage({
             title="Pocketful of Sunshine"
             artist="Natasha Bedingfield"
             tone="page"
+            handoffAnchorId="membership-title"
           />
           <p className="mt-4 text-sm leading-relaxed text-ink-soft italic md:text-base">
             {tMem("paradiseNote")}

@@ -3,6 +3,7 @@ type Tone = "default" | "deep" | "transparent";
 export function Section({
   eyebrow,
   title,
+  titleId,
   children,
   className = "",
   id,
@@ -10,6 +11,7 @@ export function Section({
 }: {
   eyebrow?: string;
   title?: string;
+  titleId?: string;
   children: React.ReactNode;
   className?: string;
   id?: string;
@@ -31,7 +33,10 @@ export function Section({
           </p>
         )}
         {title && (
-          <h2 className="font-display mt-3 max-w-2xl text-2xl leading-tight text-ink sm:text-3xl md:text-5xl">
+          <h2
+            id={titleId}
+            className="font-display mt-3 max-w-2xl text-2xl leading-tight text-ink sm:text-3xl md:text-5xl"
+          >
             {title}
           </h2>
         )}

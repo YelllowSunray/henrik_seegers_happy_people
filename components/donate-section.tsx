@@ -73,7 +73,10 @@ export function DonateSection() {
         <p className="text-sm font-semibold tracking-[0.18em] text-gold uppercase md:text-base">
           {t("eyebrow")}
         </p>
-        <h2 className="font-display mt-3 text-3xl leading-tight text-ink md:text-5xl">
+        <h2
+          id="donate-title"
+          className="font-display mt-3 text-3xl leading-tight text-ink md:text-5xl"
+        >
           {t("title")}
         </h2>
         <p className="mt-5 max-w-xl text-base leading-relaxed text-ink-soft md:text-lg">
@@ -142,6 +145,7 @@ export function DonateSection() {
             title="If You Don't Know Me By Now"
             artist="Simply Red"
             tone="page"
+            handoffAnchorId="donate-title"
           />
         </div>
       </div>

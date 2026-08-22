@@ -12,9 +12,10 @@ const VISIBLE_LINES = 4;
 type PlayerEntry = {
   root: HTMLElement;
   audio: HTMLAudioElement;
+  anchorId?: string;
 };
 
-/** All mounted lyric players — hand off when a widget hits the top of the viewport. */
+/** All mounted lyric players — hand off when a section title hits the top of the viewport. */
 const players = new Map<HTMLAudioElement, PlayerEntry>();
 let handoffTimer: ReturnType<typeof setTimeout> | null = null;
 let activeFocus: HTMLAudioElement | null = null;
@@ -29,26 +30,33 @@ function anyPlaying(): HTMLAudioElement | null {
   return null;
 }
 
-/** Top band of the viewport where handoff is allowed (below sticky header). */
-function topZoneEnd() {
-  return Math.min(160, Math.max(96, window.innerHeight * 0.22));
+/** Line from viewport top where a section title counts as “at the top” (below sticky header). */
+function handoffLine() {
+  return Math.min(140, Math.max(88, window.innerHeight * 0.12));
+}
+
+function handoffElement(entry: PlayerEntry) {
+  if (entry.anchorId) {
+    const anchor = document.getElementById(entry.anchorId);
+    if (anchor) return anchor;
+  }
+  return entry.root;
 }
 
 /**
- * Widget that currently owns the top of the viewport.
- * Only returns a player whose top edge has reached that band.
+ * Player whose section title currently owns the top of the viewport.
  */
 function pickTopWidget(): HTMLAudioElement | null {
-  const zone = topZoneEnd();
+  const line = handoffLine();
   let best: HTMLAudioElement | null = null;
   let bestTop = Infinity;
 
   for (const [audio, entry] of players) {
-    const rect = entry.root.getBoundingClientRect();
-    // Still below the top band — not yet.
-    if (rect.top > zone) continue;
-    // Fully scrolled past the top band.
-    if (rect.bottom < zone * 0.35) continue;
+    const rect = handoffElement(entry).getBoundingClientRect();
+    // Title still below the handoff line.
+    if (rect.top > line) continue;
+    // Title scrolled well past the top.
+    if (rect.bottom < line * 0.35) continue;
 
     if (rect.top < bestTop) {
       bestTop = rect.top;
@@ -92,11 +100,11 @@ function scheduleHandoff() {
 
 async function runHandoff() {
   const playing = anyPlaying();
+  // Only switch tracks while the user already has something playing.
   if (!playing) {
     activeFocus = null;
     return;
   }
-  if (!mediaUnlocked) return;
 
   const focus = pickTopWidget();
   if (!focus || focus === playing) {
@@ -105,14 +113,13 @@ async function runHandoff() {
   }
   if (activeFocus === focus) return;
 
-  // Play next first (keeps mobile unlock), then pause previous.
   const ok = await playWithUnlock(focus);
   if (!ok) {
     activeFocus = playing;
     return;
   }
   activeFocus = focus;
-  if (playing !== focus && !playing.paused) playing.pause();
+  if (!playing.paused) playing.pause();
   for (const other of players.keys()) {
     if (other !== focus && !other.paused) other.pause();
   }
@@ -135,6 +142,7 @@ export function SyncedLyricPlayer({
   artist,
   tone = "hero",
   className = "",
+  handoffAnchorId,
 }: {
   audioSrc: string;
   lrcSrc: string;
@@ -142,6 +150,8 @@ export function SyncedLyricPlayer({
   artist?: string;
   tone?: Tone;
   className?: string;
+  /** Section title element id — playback starts when this reaches the top of the viewport. */
+  handoffAnchorId?: string;
 }) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -169,7 +179,7 @@ export function SyncedLyricPlayer({
 
     audio.setAttribute("playsinline", "true");
     audio.setAttribute("webkit-playsinline", "true");
-    players.set(audio, { root, audio });
+    players.set(audio, { root, audio, anchorId: handoffAnchorId });
     ensureScrollListening();
 
     const onTime = () => setTime(audio.currentTime);
@@ -207,7 +217,7 @@ export function SyncedLyricPlayer({
       audio.removeEventListener("pause", onPause);
       audio.removeEventListener("ended", onEnded);
     };
-  }, []);
+  }, [handoffAnchorId]);
 
   const active = activeLyricIndex(lines, time);
   const visibleLines =

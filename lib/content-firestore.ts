@@ -119,37 +119,41 @@ async function loadCollection<T>(
   if (!db) return null;
   try {
     const snap = await db.collection(name).get();
-    if (snap.empty) return [];
-    return snap.docs.map((doc) => map(doc.id, doc.data() as Record<string, unknown>));
-  } catch {
+    return snap.docs.map((doc) =>
+      map(doc.id, doc.data() as Record<string, unknown>),
+    );
+  } catch (err) {
+    console.error(`[content-firestore] load ${name} failed:`, err);
     return null;
   }
 }
 
 export async function fetchPosts(): Promise<BlogPost[]> {
   const rows = await loadCollection("posts", mapPost);
-  if (rows === null || rows.length === 0) return seedPosts;
+  if (rows === null) return seedPosts;
   return rows.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 }
 
 export async function fetchPublicPosts(): Promise<BlogPost[]> {
-  const all = await fetchPosts();
-  const publicOnes = all.filter((p) => !p.membersOnly);
-  if (publicOnes.length === 0 && all === seedPosts) return seedPublicPosts();
-  if (publicOnes.length === 0) return seedPublicPosts();
-  return publicOnes;
+  const rows = await loadCollection("posts", mapPost);
+  if (rows === null) return seedPublicPosts();
+  return rows
+    .filter((p) => !p.membersOnly)
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 }
 
 export async function fetchMemberPosts(): Promise<BlogPost[]> {
-  const all = await fetchPosts();
-  const members = all.filter((p) => p.membersOnly);
-  if (members.length === 0) return seedMemberPosts();
-  return members;
+  const rows = await loadCollection("posts", mapPost);
+  if (rows === null) return seedMemberPosts();
+  return rows
+    .filter((p) => p.membersOnly)
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 }
 
 export async function fetchPostBySlug(slug: string): Promise<BlogPost | undefined> {
-  const all = await fetchPosts();
-  return all.find((p) => p.slug === slug) ?? seedGetPostBySlug(slug);
+  const rows = await loadCollection("posts", mapPost);
+  if (rows === null) return seedGetPostBySlug(slug);
+  return rows.find((p) => p.slug === slug);
 }
 
 export async function fetchEvents(): Promise<SeminarEvent[]> {
