@@ -151,10 +151,9 @@ export default async function HomePage({
             </div>
             <div className="mt-10 w-full max-w-[41rem]">
               <SyncedLyricPlayer
-                audioSrc="/audio/never-can-say-goodbye.mp3"
-                lrcSrc="/audio/never-can-say-goodbye.lrc"
-                title="Never Can Say Goodbye"
-                artist="Gloria Gaynor"
+                audioSrc="/audio/hooponopono.mp3"
+                lrcSrc="/audio/hooponopono.lrc"
+                title="Ho'oponopono"
                 tone="page"
                 handoffAnchorId="about-title"
               />

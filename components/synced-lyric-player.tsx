@@ -12,15 +12,16 @@ const VISIBLE_LINES = 4;
 type PlayerEntry = {
   root: HTMLElement;
   audio: HTMLAudioElement;
-  anchorId?: string;
 };
 
-/** All mounted lyric players — hand off when a section title hits the top of the viewport. */
+/** All mounted lyric players — hand off when a widget reaches the top of the viewport. */
 const players = new Map<HTMLAudioElement, PlayerEntry>();
 let handoffTimer: ReturnType<typeof setTimeout> | null = null;
 let activeFocus: HTMLAudioElement | null = null;
 /** Set after the user taps play once — required for iOS programmatic play. */
 let mediaUnlocked = false;
+/** Cleared when the user pauses — scroll handoff stays off until they press play again. */
+let scrollHandoffEnabled = true;
 let scrollListening = false;
 
 function anyPlaying(): HTMLAudioElement | null {
@@ -30,21 +31,13 @@ function anyPlaying(): HTMLAudioElement | null {
   return null;
 }
 
-/** Line from viewport top where a section title counts as “at the top” (below sticky header). */
+/** Line from viewport top where a widget counts as “at the top” (below sticky header). */
 function handoffLine() {
   return Math.min(140, Math.max(88, window.innerHeight * 0.12));
 }
 
-function handoffElement(entry: PlayerEntry) {
-  if (entry.anchorId) {
-    const anchor = document.getElementById(entry.anchorId);
-    if (anchor) return anchor;
-  }
-  return entry.root;
-}
-
 /**
- * Player whose section title currently owns the top of the viewport.
+ * Player whose widget currently owns the top of the viewport.
  */
 function pickTopWidget(): HTMLAudioElement | null {
   const line = handoffLine();
@@ -52,10 +45,10 @@ function pickTopWidget(): HTMLAudioElement | null {
   let bestTop = Infinity;
 
   for (const [audio, entry] of players) {
-    const rect = handoffElement(entry).getBoundingClientRect();
-    // Title still below the handoff line.
+    const rect = entry.root.getBoundingClientRect();
+    // Widget still below the handoff line.
     if (rect.top > line) continue;
-    // Title scrolled well past the top.
+    // Widget scrolled well past the top.
     if (rect.bottom < line * 0.35) continue;
 
     if (rect.top < bestTop) {
@@ -99,19 +92,25 @@ function scheduleHandoff() {
 }
 
 async function runHandoff() {
-  const playing = anyPlaying();
-  // Only switch tracks while the user already has something playing.
-  if (!playing) {
-    activeFocus = null;
+  // Never autoplay until the user has pressed play, and not while they have paused.
+  if (!mediaUnlocked || !scrollHandoffEnabled) {
     return;
   }
 
+  const playing = anyPlaying();
   const focus = pickTopWidget();
-  if (!focus || focus === playing) {
-    activeFocus = focus ?? playing;
+
+  if (!focus) {
+    if (!playing) activeFocus = null;
     return;
   }
-  if (activeFocus === focus) return;
+
+  if (focus === playing) {
+    activeFocus = focus;
+    return;
+  }
+
+  if (activeFocus === focus && playing) return;
 
   const ok = await playWithUnlock(focus);
   if (!ok) {
@@ -119,7 +118,7 @@ async function runHandoff() {
     return;
   }
   activeFocus = focus;
-  if (!playing.paused) playing.pause();
+  if (playing && playing !== focus) playing.pause();
   for (const other of players.keys()) {
     if (other !== focus && !other.paused) other.pause();
   }
@@ -142,7 +141,7 @@ export function SyncedLyricPlayer({
   artist,
   tone = "hero",
   className = "",
-  handoffAnchorId,
+  handoffAnchorId: _handoffAnchorId,
 }: {
   audioSrc: string;
   lrcSrc: string;
@@ -150,7 +149,7 @@ export function SyncedLyricPlayer({
   artist?: string;
   tone?: Tone;
   className?: string;
-  /** Section title element id — playback starts when this reaches the top of the viewport. */
+  /** @deprecated Handoff is based on widget position, not section titles. */
   handoffAnchorId?: string;
 }) {
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -179,7 +178,7 @@ export function SyncedLyricPlayer({
 
     audio.setAttribute("playsinline", "true");
     audio.setAttribute("webkit-playsinline", "true");
-    players.set(audio, { root, audio, anchorId: handoffAnchorId });
+    players.set(audio, { root, audio });
     ensureScrollListening();
 
     const onTime = () => setTime(audio.currentTime);
@@ -217,7 +216,7 @@ export function SyncedLyricPlayer({
       audio.removeEventListener("pause", onPause);
       audio.removeEventListener("ended", onEnded);
     };
-  }, [handoffAnchorId]);
+  }, []);
 
   const active = activeLyricIndex(lines, time);
   const visibleLines =
@@ -229,8 +228,10 @@ export function SyncedLyricPlayer({
     const audio = audioRef.current;
     if (!audio) return;
     if (audio.paused) {
+      scrollHandoffEnabled = true;
       await playWithUnlock(audio);
     } else {
+      scrollHandoffEnabled = false;
       audio.pause();
     }
   }
