@@ -17,6 +17,7 @@ export async function SeminarStory({
   showTicket = true,
   showAllLink = false,
   showSoStrongPlayer = false,
+  eventOnTop = false,
   variant = "full",
 }: {
   locale: Locale;
@@ -26,6 +27,7 @@ export async function SeminarStory({
   showTicket?: boolean;
   showAllLink?: boolean;
   showSoStrongPlayer?: boolean;
+  eventOnTop?: boolean;
   variant?: "full" | "home";
 }) {
   const tr = await getTranslations("seminars");
@@ -45,8 +47,54 @@ export async function SeminarStory({
     ? [eventDate, eventTime].filter(Boolean).join(" · ")
     : "";
 
+  const nextEventCard = event ? (
+    <div className="border-y border-ink/15 bg-bg-deep px-6 py-10 sm:px-8 md:py-12">
+      <p className="text-xs font-semibold tracking-[0.18em] text-gold uppercase">
+        {tr("next")}
+      </p>
+      <h3 className="font-display mt-3 text-3xl leading-[1.05] text-ink sm:text-4xl md:text-5xl">
+        {eventTitle}
+      </h3>
+      <div className="mt-6">
+        <p className="font-display text-2xl leading-snug text-ink md:text-3xl">
+          {eventDate}
+        </p>
+        {eventTime ? (
+          <p className="mt-1 text-base text-ink-soft md:text-lg">{eventTime}</p>
+        ) : null}
+      </div>
+      <div className="mt-8 border-l-2 border-gold pl-5">
+        <p className="text-base font-medium text-ink md:text-lg">
+          {event.location}
+        </p>
+        {addressLines.map((line) => (
+          <p key={line} className="mt-1 text-sm text-ink-soft md:text-base">
+            {line}
+          </p>
+        ))}
+      </div>
+      {ticketOpen ? (
+        <SeminarTicketButton
+          className="mt-8"
+          eventId={event.id}
+          eventTitle={eventTitle}
+          eventMeta={[eventWhen, event.location, event.address]
+            .filter(Boolean)
+            .join(" · ")}
+          returnPath={returnPath}
+          compact
+        />
+      ) : null}
+    </div>
+  ) : null;
+
   return (
-    <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14">
+    <>
+      {eventOnTop && nextEventCard ? (
+        <div className="mb-14">{nextEventCard}</div>
+      ) : null}
+
+      <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14">
       <div>
         <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
           {tr("eyebrow")}
@@ -65,48 +113,9 @@ export async function SeminarStory({
           <SeminarStoryBlocks blocks={content.storyBlocks} />
         </div>
 
-        {event ? (
+        {event && !eventOnTop ? (
           <>
-            <div className="mt-16 border-y border-ink/15 bg-bg-deep px-6 py-10 sm:px-8 md:py-12">
-              <p className="text-xs font-semibold tracking-[0.18em] text-gold uppercase">
-                {tr("next")}
-              </p>
-              <h3 className="font-display mt-3 text-3xl leading-[1.05] text-ink sm:text-4xl md:text-5xl">
-                {eventTitle}
-              </h3>
-              <div className="mt-6">
-                <p className="font-display text-2xl leading-snug text-ink md:text-3xl">
-                  {eventDate}
-                </p>
-                {eventTime ? (
-                  <p className="mt-1 text-base text-ink-soft md:text-lg">
-                    {eventTime}
-                  </p>
-                ) : null}
-              </div>
-              <div className="mt-8 border-l-2 border-gold pl-5">
-                <p className="text-base font-medium text-ink md:text-lg">
-                  {event.location}
-                </p>
-                {addressLines.map((line) => (
-                  <p key={line} className="mt-1 text-sm text-ink-soft md:text-base">
-                    {line}
-                  </p>
-                ))}
-              </div>
-              {ticketOpen ? (
-                <SeminarTicketButton
-                  className="mt-8"
-                  eventId={event.id}
-                  eventTitle={eventTitle}
-                  eventMeta={[eventWhen, event.location, event.address]
-                    .filter(Boolean)
-                    .join(" · ")}
-                  returnPath={returnPath}
-                  compact
-                />
-              ) : null}
-            </div>
+            <div className="mt-16">{nextEventCard}</div>
 
             <div className="mt-10">
               <SeminarStoryBlocks blocks={content.eventBlocks} />
@@ -126,6 +135,27 @@ export async function SeminarStory({
                 <p className="mt-6 text-sm text-ink-soft">{tr("missed")}</p>
               </>
             ) : null}
+          </>
+        ) : null}
+
+        {event && eventOnTop ? (
+          <div className="mt-10">
+            <SeminarStoryBlocks blocks={content.eventBlocks} />
+          </div>
+        ) : null}
+
+        {event && eventOnTop && ticketOpen && variant === "full" ? (
+          <>
+            <SeminarTicketButton
+              className="mt-10"
+              eventId={event.id}
+              eventTitle={eventTitle}
+              eventMeta={[eventWhen, event.location, event.address]
+                .filter(Boolean)
+                .join(" · ")}
+              returnPath={returnPath}
+            />
+            <p className="mt-6 text-sm text-ink-soft">{tr("missed")}</p>
           </>
         ) : null}
 
@@ -157,5 +187,6 @@ export async function SeminarStory({
         <SeminarHeroVideo />
       </div>
     </div>
+    </>
   );
 }

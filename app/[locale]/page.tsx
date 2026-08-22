@@ -10,7 +10,6 @@ import { SpeedGallery } from "@/components/speed-gallery";
 import { LightboxImage } from "@/components/lightbox-image";
 import { MeetingStory } from "@/components/meeting-story";
 import { MicrochipPlayer } from "@/components/microchip-player";
-import { SeminarPromoHeroDesktop } from "@/components/seminar-promo";
 import { SeminarStory } from "@/components/seminar-story";
 import { SpiritsPlayer } from "@/components/spirits-player";
 import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
@@ -60,7 +59,7 @@ export default async function HomePage({
           aria-hidden
         />
         <div className="absolute inset-0" style={{ background: "var(--hero-overlay)" }} />
-        <div className="relative mx-auto flex min-h-[100svh] w-full flex-col justify-end gap-4 px-5 pb-8 pt-[calc(6rem+env(safe-area-inset-top)+var(--seminar-promo-h,0px))] sm:gap-8 sm:pb-16 sm:pt-28 md:px-8 md:pb-24 lg:flex-row lg:items-end lg:justify-between lg:gap-12 lg:px-10 lg:pt-28 xl:px-14">
+        <div className="relative mx-auto flex min-h-[100svh] w-full flex-col justify-end gap-4 px-5 pb-8 pt-[calc(6rem+env(safe-area-inset-top)+var(--seminar-promo-h,0px))] sm:gap-8 sm:pb-16 sm:pt-[calc(7rem+env(safe-area-inset-top)+var(--seminar-promo-h,0px))] md:px-8 md:pb-24 lg:flex-row lg:items-end lg:justify-between lg:gap-12 lg:px-10 lg:pt-[calc(7rem+env(safe-area-inset-top)+var(--seminar-promo-h,0px))] xl:px-14">
           <div className="min-w-0 max-w-6xl lg:max-w-xl xl:max-w-2xl">
             <p className="reveal font-display text-4xl leading-tight text-white drop-shadow sm:whitespace-nowrap sm:text-5xl md:text-7xl lg:text-8xl">
               {tNav("brand")}
@@ -89,7 +88,6 @@ export default async function HomePage({
           </div>
 
           <div className="w-full shrink-0 lg:ml-auto lg:w-auto lg:max-w-[41rem]">
-            <SeminarPromoHeroDesktop />
             <MicrochipPlayer handoffAnchorId="hero-title" />
           </div>
         </div>

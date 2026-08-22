@@ -18,36 +18,38 @@ export default async function SeminarsPage({
   const locale = localeParam as Locale;
   const tr = await getTranslations("seminars");
   const tMem = await getTranslations("membership");
-  const seminars = await fetchVideosByKind("seminar");
+  const seminars = await fetchVideosByKind("seminar", { firestoreOnly: true });
 
   return (
     <>
       <SiteHeader variant="solid" />
       <Section tone="default">
-        <SeminarStory locale={locale} />
+        <SeminarStory locale={locale} eventOnTop />
 
-        <div className="mt-16 border-t border-line pt-16">
-          <h2 className="font-display text-3xl">{tr("membersOnly")}</h2>
-          <ul className="mt-6 space-y-3">
-            {seminars.map((v) => (
-              <li
-                key={v.id}
-                className="flex flex-wrap items-center justify-between gap-3 border-b border-line py-4"
-              >
-                <div>
-                  <p className="font-medium">{t(v.title, locale)}</p>
-                  <p className="text-sm text-ink-soft">{v.durationLabel}</p>
-                </div>
-                <Link href="/members/seminars" className="text-sm text-accent">
-                  Happy People →
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-8">
-            <JoinButton label={tMem("cta")} />
+        {seminars.length > 0 ? (
+          <div className="mt-16 border-t border-line pt-16">
+            <h2 className="font-display text-3xl">{tr("membersOnly")}</h2>
+            <ul className="mt-6 space-y-3">
+              {seminars.map((v) => (
+                <li
+                  key={v.id}
+                  className="flex flex-wrap items-center justify-between gap-3 border-b border-line py-4"
+                >
+                  <div>
+                    <p className="font-medium">{t(v.title, locale)}</p>
+                    <p className="text-sm text-ink-soft">{v.durationLabel}</p>
+                  </div>
+                  <Link href="/members/seminars" className="text-sm text-accent">
+                    Happy People →
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-8">
+              <JoinButton label={tMem("cta")} />
+            </div>
           </div>
-        </div>
+        ) : null}
       </Section>
     </>
   );

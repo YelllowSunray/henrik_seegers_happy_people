@@ -7,7 +7,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { useAuth } from "@/components/auth-provider";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { HeaderBackButton } from "@/components/smart-back-button";
-import { SeminarPromoMobileBar } from "@/components/seminar-promo";
+import { SeminarPromoBar } from "@/components/seminar-promo";
 
 const navKeys = [
   ["about", "/over-henk"],
@@ -310,7 +310,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
             </button>
           </div>
         </div>
-        <SeminarPromoMobileBar onHero={onHero} scrolled={scrolled || menuOpen} />
+        <SeminarPromoBar onHero={onHero} scrolled={scrolled || menuOpen} />
       </header>
 
       {mobileMenu}

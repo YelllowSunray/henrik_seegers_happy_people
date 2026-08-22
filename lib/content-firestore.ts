@@ -172,10 +172,21 @@ export async function fetchVideos(): Promise<VideoItem[]> {
   return rows.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 }
 
-export async function fetchVideosByKind(kind: VideoKind): Promise<VideoItem[]> {
-  const all = await fetchVideos();
+export async function fetchVideosByKind(
+  kind: VideoKind,
+  options?: { firestoreOnly?: boolean },
+): Promise<VideoItem[]> {
+  const rows = await loadCollection("videos", mapVideo);
+
+  if (options?.firestoreOnly) {
+    if (!rows) return [];
+    return rows
+      .filter((v) => v.kind === kind)
+      .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  }
+
+  const all = rows === null || rows.length === 0 ? seedVideos : rows;
   const filtered = all.filter((v) => v.kind === kind);
-  if (filtered.length === 0 && all === seedVideos) return seedVideosByKind(kind);
   if (filtered.length === 0) return seedVideosByKind(kind);
   return filtered;
 }

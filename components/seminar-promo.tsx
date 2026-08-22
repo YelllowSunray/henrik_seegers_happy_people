@@ -8,15 +8,21 @@ import { formatEventDate } from "@/lib/seminar-content";
 import { useUpcomingEvent } from "@/lib/use-upcoming-event";
 import type { Locale } from "@/lib/types";
 
-const PROMO_HEIGHT = "2.75rem";
-
 function usePromoOffset(active: boolean) {
   useEffect(() => {
     const mobile = window.matchMedia("(max-width: 1023px)");
+
     function apply() {
-      const h = active && mobile.matches ? PROMO_HEIGHT : "0px";
-      document.documentElement.style.setProperty("--seminar-promo-h", h);
+      if (!active) {
+        document.documentElement.style.setProperty("--seminar-promo-h", "0px");
+        return;
+      }
+      document.documentElement.style.setProperty(
+        "--seminar-promo-h",
+        mobile.matches ? "2.75rem" : "2.375rem",
+      );
     }
+
     apply();
     mobile.addEventListener("change", apply);
     return () => {
@@ -26,7 +32,7 @@ function usePromoOffset(active: boolean) {
   }, [active]);
 }
 
-export function SeminarPromoMobileBar({
+export function SeminarPromoBar({
   onHero,
   scrolled,
 }: {
@@ -46,19 +52,21 @@ export function SeminarPromoMobileBar({
   const heroAtTop = onHero && !scrolled;
   const lightOnDark = onHero || scrolled;
 
+  const shellClass = heroAtTop
+    ? "border-y border-white/40 text-white"
+    : lightOnDark
+      ? "border-t border-white/10 text-white"
+      : "border-t border-line text-ink";
+
+  const dateClass = lightOnDark ? "text-white/65" : "text-ink-soft";
+  const dotClass = lightOnDark ? "text-white/35" : "text-line";
+
   return (
-    <div
-      className={`bg-transparent lg:hidden ${
-        heroAtTop
-          ? "border-y border-white/45 text-white"
-          : lightOnDark
-            ? "border-t border-white/10 text-white"
-            : "border-t border-line text-ink"
-      }`}
-    >
+    <div className={`bg-transparent ${shellClass}`}>
+      {/* Mobile */}
       <Link
         href="/seminars"
-        className="mx-auto flex max-w-7xl items-center gap-3 px-5 py-2.5 text-sm md:px-8"
+        className="mx-auto flex max-w-7xl items-center gap-3 px-5 py-2.5 text-sm md:px-8 lg:hidden"
       >
         <span className="shrink-0 text-[10px] font-semibold tracking-[0.16em] text-gold uppercase drop-shadow-sm">
           {tr("next")}
@@ -66,11 +74,7 @@ export function SeminarPromoMobileBar({
         <span className="min-w-0 flex-1 truncate font-medium drop-shadow-sm">
           {title}
         </span>
-        <span
-          className={`hidden shrink-0 drop-shadow-sm sm:inline ${
-            lightOnDark ? "text-white/70" : "text-ink-soft"
-          }`}
-        >
+        <span className={`hidden shrink-0 drop-shadow-sm sm:inline ${dateClass}`}>
           {date}
         </span>
         <span
@@ -82,36 +86,28 @@ export function SeminarPromoMobileBar({
           →
         </span>
       </Link>
+
+      {/* Desktop */}
+      <Link
+        href="/seminars"
+        className="mx-auto hidden max-w-5xl items-center justify-center gap-3 px-8 py-2 text-center transition-opacity hover:opacity-90 lg:flex"
+      >
+        <span className="shrink-0 text-[10px] font-semibold tracking-[0.18em] text-gold uppercase drop-shadow-sm">
+          {tr("next")}
+        </span>
+        <span className={`shrink-0 ${dotClass}`} aria-hidden>
+          ·
+        </span>
+        <span className="font-display shrink-0 text-[0.95rem] leading-none drop-shadow-sm">
+          {title}
+        </span>
+        <span className={`shrink-0 ${dotClass}`} aria-hidden>
+          ·
+        </span>
+        <span className={`shrink-0 text-sm ${dateClass} drop-shadow-sm`}>
+          {date}
+        </span>
+      </Link>
     </div>
-  );
-}
-
-export function SeminarPromoHeroDesktop() {
-  const event = useUpcomingEvent();
-  const locale = useLocale() as Locale;
-  const tr = useTranslations("seminars");
-
-  if (!event) return null;
-
-  const title = t(event.title, locale);
-  const date = formatEventDate(event.date, locale);
-  const when = [date, event.time].filter(Boolean).join(" · ");
-
-  return (
-    <Link
-      href="/seminars"
-      className="mb-3 hidden text-white lg:block"
-    >
-      <p className="text-[10px] font-semibold tracking-[0.16em] text-gold uppercase drop-shadow-sm">
-        {tr("next")}
-      </p>
-      <p className="font-display mt-1 text-lg leading-tight drop-shadow">
-        {title}
-      </p>
-      <p className="mt-1 text-sm text-white/80 drop-shadow-sm">{when}</p>
-      <p className="mt-2 text-xs font-semibold text-gold drop-shadow-sm">
-        {tr("reserve")} →
-      </p>
-    </Link>
   );
 }
