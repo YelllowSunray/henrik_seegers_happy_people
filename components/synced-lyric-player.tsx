@@ -24,6 +24,8 @@ let mediaUnlocked = false;
 let scrollHandoffEnabled = true;
 let scrollListening = false;
 let returnResumeListening = false;
+let unlockListening = false;
+let handoffRunId = 0;
 /** Audio to resume after the user returns from another tab (e.g. YouTube). */
 let resumeOnReturnAudio: HTMLAudioElement | null = null;
 
@@ -39,27 +41,69 @@ function handoffLine() {
   return Math.min(140, Math.max(88, window.innerHeight * 0.12));
 }
 
+function visibleRatio(rect: DOMRect): number {
+  const vh = window.innerHeight;
+  const top = Math.max(0, rect.top);
+  const bottom = Math.min(vh, rect.bottom);
+  const visible = Math.max(0, bottom - top);
+  return visible / Math.max(rect.height, 1);
+}
+
 /**
- * Player whose widget currently owns the top of the viewport.
+ * Player that should be playing: first the widget at the handoff line while
+ * scrolling, otherwise the most visible widget in the viewport (page load).
  */
-function pickTopWidget(): HTMLAudioElement | null {
+function pickFocusWidget(): HTMLAudioElement | null {
   const line = handoffLine();
-  let best: HTMLAudioElement | null = null;
+  let bestAtLine: HTMLAudioElement | null = null;
   let bestTop = Infinity;
 
   for (const [audio, entry] of players) {
     const rect = entry.root.getBoundingClientRect();
-    // Widget still below the handoff line.
     if (rect.top > line) continue;
-    // Widget scrolled well past the top.
     if (rect.bottom < line * 0.35) continue;
 
     if (rect.top < bestTop) {
       bestTop = rect.top;
+      bestAtLine = audio;
+    }
+  }
+  if (bestAtLine) return bestAtLine;
+
+  let best: HTMLAudioElement | null = null;
+  let bestRatio = 0;
+
+  for (const [audio, entry] of players) {
+    const ratio = visibleRatio(entry.root.getBoundingClientRect());
+    if (ratio > bestRatio) {
+      bestRatio = ratio;
       best = audio;
     }
   }
-  return best;
+
+  return bestRatio >= 0.2 ? best : null;
+}
+
+function waitForCanPlay(audio: HTMLAudioElement): Promise<void> {
+  if (audio.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve) => {
+    const finish = () => {
+      audio.removeEventListener("canplay", onReady);
+      audio.removeEventListener("error", onReady);
+      resolve();
+    };
+    const onReady = () => finish();
+    audio.addEventListener("canplay", onReady);
+    audio.addEventListener("error", onReady);
+    try {
+      audio.load();
+    } catch {
+      finish();
+    }
+  });
 }
 
 async function playWithUnlock(audio: HTMLAudioElement): Promise<boolean> {
@@ -95,13 +139,11 @@ function scheduleHandoff() {
 }
 
 async function runHandoff() {
-  // Never autoplay until the user has pressed play, and not while they have paused.
-  if (!mediaUnlocked || !scrollHandoffEnabled) {
-    return;
-  }
+  if (!scrollHandoffEnabled) return;
 
+  const runId = ++handoffRunId;
   const playing = anyPlaying();
-  const focus = pickTopWidget();
+  const focus = pickFocusWidget();
 
   if (!focus) {
     if (!playing) activeFocus = null;
@@ -115,8 +157,14 @@ async function runHandoff() {
 
   if (activeFocus === focus && playing) return;
 
+  await waitForCanPlay(focus);
+  if (runId !== handoffRunId) return;
+  if (pickFocusWidget() !== focus) return;
+
   const ok = await playWithUnlock(focus);
+  if (runId !== handoffRunId) return;
   if (!ok) {
+    ensureUnlockListener();
     activeFocus = playing;
     return;
   }
@@ -133,6 +181,19 @@ function ensureScrollListening() {
   const onScroll = () => scheduleHandoff();
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
+  scheduleHandoff();
+}
+
+function ensureUnlockListener() {
+  if (unlockListening || typeof window === "undefined") return;
+  unlockListening = true;
+  const unlock = () => {
+    mediaUnlocked = true;
+    scrollHandoffEnabled = true;
+    scheduleHandoff();
+  };
+  document.addEventListener("pointerdown", unlock, { once: true, passive: true });
+  document.addEventListener("keydown", unlock, { once: true });
 }
 
 function captureResumeCandidate() {
@@ -244,10 +305,14 @@ export function SyncedLyricPlayer({
     ensureScrollListening();
     ensureReturnResumeListening();
 
+    const onCanPlay = () => scheduleHandoff();
+    audio.addEventListener("canplay", onCanPlay);
+
     const onTime = () => setTime(audio.currentTime);
     const onPlay = () => {
       setPlaying(true);
       mediaUnlocked = true;
+      scrollHandoffEnabled = true;
       activeFocus = audio;
       for (const other of players.keys()) {
         if (other !== audio && !other.paused) other.pause();
@@ -268,12 +333,14 @@ export function SyncedLyricPlayer({
       threshold: [0, 0.15, 0.35, 0.6, 1],
     });
     observer.observe(root);
+    scheduleHandoff();
 
     return () => {
       observer.disconnect();
       players.delete(audio);
       if (activeFocus === audio) activeFocus = null;
       audio.pause();
+      audio.removeEventListener("canplay", onCanPlay);
       audio.removeEventListener("timeupdate", onTime);
       audio.removeEventListener("play", onPlay);
       audio.removeEventListener("pause", onPause);
