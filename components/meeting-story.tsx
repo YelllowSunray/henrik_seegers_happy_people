@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { LightboxImage } from "@/components/lightbox-image";
+import { MeetingGallery } from "@/components/meeting-gallery";
 
 type MeetingBlock = {
   song: string;
@@ -57,11 +57,7 @@ export async function MeetingStory({
         </div>
       </div>
       <div className="lg:sticky lg:top-28">
-        <LightboxImage
-          src="/images/ontmoeting-v2.jpg"
-          alt={t("eyebrow")}
-          className="aspect-[3/4] min-h-[16rem] w-full"
-        />
+        <MeetingGallery alt={t("eyebrow")} />
       </div>
     </div>
   );
