@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { MeetingGallery } from "@/components/meeting-gallery";
+import { MeetingYoutubeLink } from "@/components/meeting-youtube-link";
 import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
 
 type MeetingBlock = {
@@ -31,20 +32,7 @@ export async function MeetingStory({
           {blocks.map((block, i) => (
             <article key={`${block.song}-${i}`} className="space-y-4">
               <h3 className="font-display text-xl md:text-2xl">
-                <a
-                  href={block.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-baseline gap-2 text-accent underline decoration-accent/70 underline-offset-4 transition hover:decoration-accent"
-                >
-                  <span>{block.song}</span>
-                  <span
-                    aria-hidden
-                    className="text-sm font-semibold tracking-wide no-underline"
-                  >
-                    ↗
-                  </span>
-                </a>
+                <MeetingYoutubeLink href={block.youtube} song={block.song} />
               </h3>
               <p className="max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg">
                 {block.text}

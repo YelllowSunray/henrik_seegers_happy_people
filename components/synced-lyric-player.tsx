@@ -23,6 +23,9 @@ let mediaUnlocked = false;
 /** Cleared when the user pauses — scroll handoff stays off until they press play again. */
 let scrollHandoffEnabled = true;
 let scrollListening = false;
+let returnResumeListening = false;
+/** Audio to resume after the user returns from another tab (e.g. YouTube). */
+let resumeOnReturnAudio: HTMLAudioElement | null = null;
 
 function anyPlaying(): HTMLAudioElement | null {
   for (const audio of players.keys()) {
@@ -132,6 +135,63 @@ function ensureScrollListening() {
   window.addEventListener("resize", onScroll, { passive: true });
 }
 
+function captureResumeCandidate() {
+  if (!scrollHandoffEnabled) {
+    resumeOnReturnAudio = null;
+    return;
+  }
+  const playing = anyPlaying();
+  if (playing) {
+    resumeOnReturnAudio = playing;
+    return;
+  }
+  if (activeFocus && activeFocus.currentTime > 0 && !activeFocus.ended) {
+    resumeOnReturnAudio = activeFocus;
+  }
+}
+
+async function tryResumeAfterReturn() {
+  if (!scrollHandoffEnabled || !resumeOnReturnAudio) {
+    resumeOnReturnAudio = null;
+    return;
+  }
+  const audio = resumeOnReturnAudio;
+  resumeOnReturnAudio = null;
+  if (audio.paused && !audio.ended) {
+    await playWithUnlock(audio);
+  }
+}
+
+function ensureReturnResumeListening() {
+  if (returnResumeListening || typeof window === "undefined") return;
+  returnResumeListening = true;
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      captureResumeCandidate();
+    } else {
+      void tryResumeAfterReturn();
+    }
+  });
+
+  window.addEventListener("blur", () => {
+    captureResumeCandidate();
+  });
+
+  window.addEventListener("focus", () => {
+    void tryResumeAfterReturn();
+  });
+
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) void tryResumeAfterReturn();
+  });
+}
+
+/** Call before navigating away (e.g. YouTube) so playback resumes on return. */
+export function markAudioForResumeOnReturn() {
+  captureResumeCandidate();
+}
+
 type Tone = "hero" | "page";
 
 export function SyncedLyricPlayer({
@@ -180,6 +240,7 @@ export function SyncedLyricPlayer({
     audio.setAttribute("webkit-playsinline", "true");
     players.set(audio, { root, audio });
     ensureScrollListening();
+    ensureReturnResumeListening();
 
     const onTime = () => setTime(audio.currentTime);
     const onPlay = () => {
