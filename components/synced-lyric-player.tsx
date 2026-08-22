@@ -26,9 +26,6 @@ let scrollListening = false;
 let returnResumeListening = false;
 /** Audio to resume after the user returns from another tab (e.g. YouTube). */
 let resumeOnReturnAudio: HTMLAudioElement | null = null;
-let startupAutoplayClaimed = false;
-let startupAutoplayPending: HTMLAudioElement | null = null;
-let gestureUnlockListening = false;
 
 function anyPlaying(): HTMLAudioElement | null {
   for (const audio of players.keys()) {
@@ -195,44 +192,6 @@ export function markAudioForResumeOnReturn() {
   captureResumeCandidate();
 }
 
-function clearGestureUnlock() {
-  document.removeEventListener("pointerdown", onGestureUnlock);
-  document.removeEventListener("keydown", onGestureUnlock);
-  gestureUnlockListening = false;
-  startupAutoplayPending = null;
-}
-
-function onGestureUnlock() {
-  if (!startupAutoplayPending || mediaUnlocked) {
-    clearGestureUnlock();
-    return;
-  }
-  const audio = startupAutoplayPending;
-  void playWithUnlock(audio).then((ok) => {
-    if (ok) clearGestureUnlock();
-  });
-}
-
-function ensureGestureUnlock() {
-  if (gestureUnlockListening || typeof window === "undefined") return;
-  gestureUnlockListening = true;
-  document.addEventListener("pointerdown", onGestureUnlock, { passive: true });
-  document.addEventListener("keydown", onGestureUnlock);
-}
-
-function tryStartupAutoplay(audio: HTMLAudioElement) {
-  const start = () => {
-    void playWithUnlock(audio).then((ok) => {
-      if (!ok) {
-        startupAutoplayPending = audio;
-        ensureGestureUnlock();
-      }
-    });
-  };
-  if (audio.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) start();
-  else audio.addEventListener("canplay", start, { once: true });
-}
-
 type Tone = "hero" | "page";
 
 export function SyncedLyricPlayer({
@@ -243,7 +202,6 @@ export function SyncedLyricPlayer({
   tone = "hero",
   className = "",
   handoffAnchorId: _handoffAnchorId,
-  autoplayOnMount = false,
 }: {
   audioSrc: string;
   lrcSrc: string;
@@ -253,8 +211,6 @@ export function SyncedLyricPlayer({
   className?: string;
   /** @deprecated Handoff is based on widget position, not section titles. */
   handoffAnchorId?: string;
-  /** Start playback when the player mounts (homepage hero). */
-  autoplayOnMount?: boolean;
 }) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -311,13 +267,7 @@ export function SyncedLyricPlayer({
     });
     observer.observe(root);
 
-    if (autoplayOnMount && !startupAutoplayClaimed) {
-      startupAutoplayClaimed = true;
-      tryStartupAutoplay(audio);
-    }
-
     return () => {
-      if (startupAutoplayPending === audio) clearGestureUnlock();
       observer.disconnect();
       players.delete(audio);
       if (activeFocus === audio) activeFocus = null;
@@ -327,7 +277,7 @@ export function SyncedLyricPlayer({
       audio.removeEventListener("pause", onPause);
       audio.removeEventListener("ended", onEnded);
     };
-  }, [autoplayOnMount]);
+  }, []);
 
   const active = activeLyricIndex(lines, time);
   const visibleLines =

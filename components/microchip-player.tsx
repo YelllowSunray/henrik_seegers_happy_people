@@ -16,7 +16,6 @@ export function MicrochipPlayer({
       tone="hero"
       className="max-w-[41rem]"
       handoffAnchorId={handoffAnchorId}
-      autoplayOnMount
     />
   );
 }
