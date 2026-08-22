@@ -7,6 +7,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { useAuth } from "@/components/auth-provider";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { HeaderBackButton } from "@/components/smart-back-button";
+import { SeminarPromoMobileBar } from "@/components/seminar-promo";
 
 const navKeys = [
   ["about", "/over-henk"],
@@ -309,6 +310,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
             </button>
           </div>
         </div>
+        <SeminarPromoMobileBar onHero={onHero} scrolled={scrolled || menuOpen} />
       </header>
 
       {mobileMenu}
@@ -318,7 +320,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
           className="shrink-0 pt-[env(safe-area-inset-top)]"
           aria-hidden
         >
-          <div className="h-[4.25rem]" />
+          <div className="h-[calc(4.25rem+var(--seminar-promo-h,0px))]" />
         </div>
       )}
     </>
