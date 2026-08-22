@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { MeetingGallery } from "@/components/meeting-gallery";
+import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
 
 type MeetingBlock = {
   song: string;
@@ -15,6 +16,7 @@ export async function MeetingStory({
   const t = await getTranslations("meeting");
   const blocks = t.raw("blocks") as MeetingBlock[];
   const Title = titleAs;
+  const lastIndex = blocks.length - 1;
 
   return (
     <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14">
@@ -47,16 +49,32 @@ export async function MeetingStory({
               <p className="max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg">
                 {block.text}
               </p>
-              {i === blocks.length - 2 ? (
+              {i === lastIndex - 1 ? (
                 <p className="font-display pt-2 text-xl leading-snug text-ink md:text-2xl">
                   {t("bridge")}
                 </p>
+              ) : null}
+              {i === lastIndex ? (
+                <>
+                  <div className="mt-8 w-full max-w-[41rem]">
+                    <SyncedLyricPlayer
+                      audioSrc="/audio/sweet-little-woman.mp3"
+                      lrcSrc="/audio/sweet-little-woman.lrc"
+                      title="Sweet Little Woman"
+                      artist="Joe Cocker"
+                      tone="page"
+                    />
+                  </div>
+                  <div className="mt-8 lg:hidden">
+                    <MeetingGallery alt={t("eyebrow")} />
+                  </div>
+                </>
               ) : null}
             </article>
           ))}
         </div>
       </div>
-      <div className="lg:sticky lg:top-28">
+      <div className="hidden lg:sticky lg:top-28 lg:block">
         <MeetingGallery alt={t("eyebrow")} />
       </div>
     </div>

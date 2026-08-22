@@ -4,14 +4,21 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const IMAGES = [
-  "/images/ontmoeting-v2.jpg",
-  "/images/ontmoeting-alt.jpg",
+  "/images/ontmoeting-1.jpg",
+  "/images/ontmoeting-2.jpg",
+  "/images/ontmoeting-3.jpg",
 ] as const;
 
-/** Half the interval of SpeedGallery (1200ms → 2400ms). */
-const FRAME_MS = 2400;
+/** Slower than Lidmaatschap carousel (1200ms): 4s per image */
+const FRAME_MS = 4000;
 
-export function MeetingGallery({ alt }: { alt: string }) {
+export function MeetingGallery({
+  alt,
+  className = "",
+}: {
+  alt: string;
+  className?: string;
+}) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -22,7 +29,9 @@ export function MeetingGallery({ alt }: { alt: string }) {
   }, []);
 
   return (
-    <div className="relative aspect-[3/4] min-h-[16rem] w-full overflow-hidden bg-ink/5">
+    <div
+      className={`relative aspect-[3/4] min-h-[16rem] w-full overflow-hidden bg-ink/5 ${className}`}
+    >
       {IMAGES.map((src, i) => (
         <Image
           key={src}
@@ -31,7 +40,7 @@ export function MeetingGallery({ alt }: { alt: string }) {
           fill
           sizes="(max-width: 1024px) 100vw, 30vw"
           priority={i === 0}
-          className={`object-cover object-center transition-opacity duration-1000 ${
+          className={`object-cover object-center transition-opacity duration-500 ${
             i === index ? "opacity-100" : "opacity-0"
           }`}
         />
