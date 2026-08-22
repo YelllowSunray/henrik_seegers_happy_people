@@ -10,9 +10,9 @@ import { SpeedGallery } from "@/components/speed-gallery";
 import { LightboxImage } from "@/components/lightbox-image";
 import { MeetingStory } from "@/components/meeting-story";
 import { MicrochipPlayer } from "@/components/microchip-player";
+import { SeminarStory } from "@/components/seminar-story";
 import { SpiritsPlayer } from "@/components/spirits-player";
 import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
-import { SeminarTicketButton } from "@/components/seminar-ticket-button";
 import { t } from "@/lib/content";
 import { FACEBOOK_HREF } from "@/lib/contact";
 import { fetchEvents, fetchPublicPosts } from "@/lib/content-firestore";
@@ -174,77 +174,17 @@ export default async function HomePage({
       </Section>
 
       <Section tone="default">
-        <div className="grid items-start gap-10 lg:grid-cols-[3fr_2fr] lg:gap-12">
-          <div>
-            <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
-              {tSem("eyebrow")}
-            </p>
-            <h2
-              id="seminars-title"
-              className="font-display mt-3 text-3xl leading-tight text-ink md:text-5xl"
-            >
-              {tSem("title")}
-            </h2>
-            <p className="mt-6 max-w-xl text-ink-soft">{tSem("teaser")}</p>
-            {nextEvent && (
-              <div className="mt-10 border-y border-line py-8">
-                <p className="text-xs font-semibold tracking-[0.18em] text-gold uppercase">
-                  {tSem("next")}
-                </p>
-                <h3 className="font-display mt-2 text-3xl">
-                  {t(nextEvent.title, locale)}
-                </h3>
-                <p className="mt-3 text-ink-soft">
-                  {nextEvent.date} · {nextEvent.time} · {nextEvent.location}
-                </p>
-                {nextEvent.address ? (
-                  <p className="mt-1 text-sm text-ink-soft">{nextEvent.address}</p>
-                ) : null}
-                <p className="mt-4 max-w-2xl text-ink-soft">
-                  {t(nextEvent.description, locale)}
-                </p>
-                <p className="mt-3 max-w-2xl text-sm font-medium text-ink">
-                  {tSem("refreshments")}
-                </p>
-                <Link
-                  href="/seminars"
-                  className="mt-6 inline-flex text-sm font-semibold text-accent underline-offset-4 hover:underline"
-                >
-                  {tSem("allSeminars")}
-                </Link>
-              </div>
-            )}
-          </div>
-          <div className="relative aspect-[4/5] min-h-[16rem] overflow-hidden rounded-sm bg-ink/5 sm:min-h-[22rem]">
-            <video
-              className="absolute inset-0 h-full w-full object-cover object-top"
-              src="/videos/Hendrix_BIO.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              aria-label="Hendrik Seegers"
-            />
-          </div>
-        </div>
+        <SeminarStory
+          locale={locale}
+          titleAs="h2"
+          titleId="seminars-title"
+          returnPath="/"
+          showTicket={false}
+          showAllLink
+          variant="home"
+        />
         {nextEvent && (
-          <div className="mt-8 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
-            <SeminarTicketButton
-              className="w-full"
-              eventId={nextEvent.id}
-              eventTitle={t(nextEvent.title, locale)}
-              eventMeta={[
-                nextEvent.date,
-                nextEvent.time,
-                nextEvent.location,
-                nextEvent.address,
-              ]
-                .filter(Boolean)
-                .join(" · ")}
-              returnPath="/seminars"
-              compact
-            />
+          <div className="mt-8 w-full max-w-[41rem]">
             <SyncedLyricPlayer
               audioSrc="/audio/so-strong.mp3"
               lrcSrc="/audio/so-strong.lrc"

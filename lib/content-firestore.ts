@@ -158,7 +158,8 @@ export async function fetchPostBySlug(slug: string): Promise<BlogPost | undefine
 
 export async function fetchEvents(): Promise<SeminarEvent[]> {
   const rows = await loadCollection("events", mapEvent);
-  if (rows === null || rows.length === 0) return seedEvents;
+  if (rows === null) return seedEvents;
+  if (rows.length === 0) return seedEvents;
   return rows.sort((a, b) => a.date.localeCompare(b.date));
 }
 

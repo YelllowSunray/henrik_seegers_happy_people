@@ -133,18 +133,26 @@
       "title": {
         "nl": "De reis terug naar één",
         "en": "The journey back to one",
-        "de": "Die Reise zurück zum Einssein"
+        "de": "Die Reise zurück zum Einssein",
+        "fr": "Le voyage de retour vers l'un",
+        "es": "El viaje de regreso a la unidad",
+        "it": "Il viaggio di ritorno all'uno",
+        "ko": "하나로 돌아가는 여정"
       },
       "description": {
-        "nl": "Een middag over identiteit, verbinding en manifestatie. Leer opnieuw lachen, contact maken met wat groter is dan jezelf, en dromen in beweging zetten — live, in een warme setting.",
-        "en": "An afternoon on identity, connection and manifestation. Learn to smile again, connect with something greater than yourself, and set dreams in motion — live, in a warm setting.",
-        "de": "Ein Nachmittag über Identität, Verbindung und Manifestation. Wieder lächeln lernen, mit dem Größeren in Kontakt kommen und Träume in Bewegung setzen — live, in warmer Atmosphäre."
+        "nl": "Een intensieve en persoonlijke middag over identiteit, verbinding en manifestatie.",
+        "en": "An intensive, personal afternoon on identity, connection and manifestation.",
+        "de": "Ein intensiver, persönlicher Nachmittag über Identität, Verbindung und Manifestation.",
+        "fr": "Un après-midi intense et personnel sur l'identité, la connexion et la manifestation.",
+        "es": "Una tarde intensa y personal sobre identidad, conexión y manifestación.",
+        "it": "Un pomeriggio intenso e personale su identità, connessione e manifestazione.",
+        "ko": "정체성, 연결, 현현에 관한 깊이 있고 개인적인 오후."
       },
       "date": "2026-09-19",
       "time": "14:00–17:00",
       "location": "Van der Valk Hotel Amersfoort",
-      "address": "Ruimtevaart 22-24, 3824 MX Amersfoort",
-      "priceLabel": "€1500"
+      "address": "Ruimtevaart 22–24, 3824 MX Amersfoort",
+      "priceLabel": "€1.500"
     }
   ],
   "videos": [
