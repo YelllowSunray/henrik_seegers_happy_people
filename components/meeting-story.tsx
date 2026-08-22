@@ -58,9 +58,9 @@ export async function MeetingStory({
       </div>
       <div className="lg:sticky lg:top-28">
         <LightboxImage
-          src="/images/ontmoeting.png"
+          src="/images/ontmoeting.jpg"
           alt={t("eyebrow")}
-          className="aspect-square min-h-[16rem] w-full"
+          className="aspect-[3/4] min-h-[16rem] w-full"
         />
       </div>
     </div>
