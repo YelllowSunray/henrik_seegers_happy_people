@@ -38,7 +38,7 @@ function anyPlaying(): HTMLAudioElement | null {
 
 /** Line from viewport top where a widget counts as “at the top” (below sticky header). */
 function handoffLine() {
-  return Math.min(140, Math.max(88, window.innerHeight * 0.12));
+  return Math.min(175, Math.max(108, window.innerHeight * 0.17));
 }
 
 function visibleRatio(rect: DOMRect): number {
@@ -81,7 +81,7 @@ function pickFocusWidget(): HTMLAudioElement | null {
     }
   }
 
-  return bestRatio >= 0.2 ? best : null;
+  return bestRatio >= 0.15 ? best : null;
 }
 
 function waitForCanPlay(audio: HTMLAudioElement): Promise<void> {
