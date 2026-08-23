@@ -70,7 +70,7 @@ export default async function BlogPage({
           <div className="lg:sticky lg:top-28">
             <figure>
               <LightboxImage
-                src="/images/image3.jpg"
+                src="/images/blog.png"
                 alt={tSem("imageAlt")}
                 className="aspect-square min-h-[16rem] w-full"
               />

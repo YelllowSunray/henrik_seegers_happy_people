@@ -248,7 +248,7 @@ export default async function HomePage({
           </div>
           <figure className="min-w-0 lg:max-w-md lg:justify-self-end">
             <LightboxImage
-              src="/images/image3.jpg"
+              src="/images/blog.png"
               alt={tSem("imageAlt")}
               className="aspect-square min-h-[16rem] w-full sm:min-h-[20rem]"
             />
