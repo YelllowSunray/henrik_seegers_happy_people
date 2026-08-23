@@ -10,14 +10,18 @@ import {
 const VISIBLE_LINES = 4;
 
 type PlayerEntry = {
+  id: string;
   root: HTMLElement;
-  audio: HTMLAudioElement;
+  src: string;
 };
 
-/** All mounted lyric players — hand off when a widget reaches the top of the viewport. */
-const players = new Map<HTMLAudioElement, PlayerEntry>();
+/** Mounted lyric widgets — hand off when a widget reaches the top of the viewport. */
+const players = new Map<string, PlayerEntry>();
+
+/** Single audio element that survives route changes (homepage → blog → back). */
+let sharedAudio: HTMLAudioElement | null = null;
+let activePlayerId: string | null = null;
 let handoffTimer: ReturnType<typeof setTimeout> | null = null;
-let activeFocus: HTMLAudioElement | null = null;
 /** Set after the user taps play once — required for iOS programmatic play. */
 let mediaUnlocked = false;
 /** Cleared when the user pauses — scroll handoff stays off until they press play again. */
@@ -26,14 +30,53 @@ let scrollListening = false;
 let returnResumeListening = false;
 let unlockListening = false;
 let handoffRunId = 0;
-/** Audio to resume after the user returns from another tab (e.g. YouTube). */
-let resumeOnReturnAudio: HTMLAudioElement | null = null;
+/** True after user leaves while music was playing — keep going until they pause. */
+let routePersistPlaying = false;
+let timeListeners = new Set<(t: number) => void>();
+let playListeners = new Set<(playing: boolean) => void>();
 
-function anyPlaying(): HTMLAudioElement | null {
-  for (const audio of players.keys()) {
-    if (!audio.paused) return audio;
+function getSharedAudio(): HTMLAudioElement {
+  if (!sharedAudio) {
+    sharedAudio = new Audio();
+    sharedAudio.preload = "auto";
+    sharedAudio.setAttribute("playsinline", "true");
+    sharedAudio.setAttribute("webkit-playsinline", "true");
+    sharedAudio.addEventListener("timeupdate", () => {
+      const t = sharedAudio?.currentTime ?? 0;
+      for (const fn of timeListeners) fn(t);
+    });
+    sharedAudio.addEventListener("play", () => {
+      mediaUnlocked = true;
+      for (const fn of playListeners) fn(true);
+    });
+    sharedAudio.addEventListener("pause", () => {
+      for (const fn of playListeners) fn(false);
+    });
+    sharedAudio.addEventListener("ended", () => {
+      routePersistPlaying = false;
+      activePlayerId = null;
+      for (const fn of playListeners) fn(false);
+      for (const fn of timeListeners) fn(0);
+    });
   }
-  return null;
+  return sharedAudio;
+}
+
+function absoluteSrc(src: string): string {
+  if (typeof window === "undefined") return src;
+  try {
+    return new URL(src, window.location.origin).href;
+  } catch {
+    return src;
+  }
+}
+
+function sameSrc(a: string, b: string): boolean {
+  return absoluteSrc(a) === absoluteSrc(b);
+}
+
+function anyPlaying(): boolean {
+  return Boolean(sharedAudio && !sharedAudio.paused);
 }
 
 /** Line from viewport top where a widget counts as “at the top” (below sticky header). */
@@ -53,31 +96,36 @@ function visibleRatio(rect: DOMRect): number {
  * Player that should be playing: first the widget at the handoff line while
  * scrolling, otherwise the most visible widget in the viewport (page load).
  */
-function pickFocusWidget(): HTMLAudioElement | null {
+function pickAtHandoffLine(): PlayerEntry | null {
   const line = handoffLine();
-  let bestAtLine: HTMLAudioElement | null = null;
+  let bestAtLine: PlayerEntry | null = null;
   let bestTop = Infinity;
 
-  for (const [audio, entry] of players) {
+  for (const entry of players.values()) {
     const rect = entry.root.getBoundingClientRect();
     if (rect.top > line) continue;
     if (rect.bottom < line * 0.35) continue;
 
     if (rect.top < bestTop) {
       bestTop = rect.top;
-      bestAtLine = audio;
+      bestAtLine = entry;
     }
   }
-  if (bestAtLine) return bestAtLine;
+  return bestAtLine;
+}
 
-  let best: HTMLAudioElement | null = null;
+function pickFocusWidget(): PlayerEntry | null {
+  const atLine = pickAtHandoffLine();
+  if (atLine) return atLine;
+
+  let best: PlayerEntry | null = null;
   let bestRatio = 0;
 
-  for (const [audio, entry] of players) {
+  for (const entry of players.values()) {
     const ratio = visibleRatio(entry.root.getBoundingClientRect());
     if (ratio > bestRatio) {
       bestRatio = ratio;
-      best = audio;
+      best = entry;
     }
   }
 
@@ -112,7 +160,6 @@ async function playWithUnlock(audio: HTMLAudioElement): Promise<boolean> {
     mediaUnlocked = true;
     return true;
   } catch {
-    // iOS often blocks unmuted programmatic play; muted→unmute unlocks it.
     try {
       audio.muted = true;
       await audio.play();
@@ -130,6 +177,27 @@ async function playWithUnlock(audio: HTMLAudioElement): Promise<boolean> {
   }
 }
 
+async function playSrc(src: string, playerId: string): Promise<boolean> {
+  const audio = getSharedAudio();
+  const abs = absoluteSrc(src);
+  if (!sameSrc(audio.src || "", abs)) {
+    audio.src = abs;
+    try {
+      audio.load();
+    } catch {
+      /* ignore */
+    }
+  }
+  await waitForCanPlay(audio);
+  const ok = await playWithUnlock(audio);
+  if (ok) {
+    activePlayerId = playerId;
+    routePersistPlaying = true;
+    scrollHandoffEnabled = true;
+  }
+  return ok;
+}
+
 function scheduleHandoff() {
   if (handoffTimer) clearTimeout(handoffTimer);
   handoffTimer = setTimeout(() => {
@@ -141,38 +209,53 @@ function scheduleHandoff() {
 async function runHandoff() {
   if (!scrollHandoffEnabled) return;
 
+  // No lyric widgets on this page (e.g. blog post) — keep whatever is playing.
+  if (players.size === 0) return;
+
   const runId = ++handoffRunId;
+  const audio = getSharedAudio();
   const playing = anyPlaying();
   const focus = pickFocusWidget();
 
+  // Coming back from another page with music still going: don't steal to a
+  // different track via "most visible" fallback — only switch when a widget
+  // is clearly at the scroll handoff line.
+  if (playing && routePersistPlaying && audio.src) {
+    const matching = [...players.values()].find((p) =>
+      sameSrc(p.src, audio.src),
+    );
+    if (matching) {
+      activePlayerId = matching.id;
+      const atLine = pickAtHandoffLine();
+      if (!atLine || sameSrc(atLine.src, audio.src)) return;
+      // Different widget at the handoff line → allow normal handoff below.
+    }
+  }
+
   if (!focus) {
-    if (!playing) activeFocus = null;
+    if (!playing && !routePersistPlaying) activePlayerId = null;
     return;
   }
 
-  if (focus === playing) {
-    activeFocus = focus;
+  const alreadyThis =
+    playing &&
+    activePlayerId === focus.id &&
+    sameSrc(audio.src || "", focus.src);
+
+  if (alreadyThis) {
+    activePlayerId = focus.id;
     return;
   }
 
-  if (activeFocus === focus && playing) return;
+  if (activePlayerId === focus.id && playing) return;
 
-  await waitForCanPlay(focus);
-  if (runId !== handoffRunId) return;
-  if (pickFocusWidget() !== focus) return;
-
-  const ok = await playWithUnlock(focus);
+  const ok = await playSrc(focus.src, focus.id);
   if (runId !== handoffRunId) return;
   if (!ok) {
     ensureUnlockListener();
-    activeFocus = playing;
     return;
   }
-  activeFocus = focus;
-  if (playing && playing !== focus) playing.pause();
-  for (const other of players.keys()) {
-    if (other !== focus && !other.paused) other.pause();
-  }
+  if (pickFocusWidget()?.id !== focus.id) return;
 }
 
 function ensureScrollListening() {
@@ -197,28 +280,16 @@ function ensureUnlockListener() {
 }
 
 function captureResumeCandidate() {
-  if (!scrollHandoffEnabled) {
-    resumeOnReturnAudio = null;
-    return;
-  }
-  const playing = anyPlaying();
-  if (playing) {
-    resumeOnReturnAudio = playing;
-    return;
-  }
-  if (activeFocus && activeFocus.currentTime > 0 && !activeFocus.ended) {
-    resumeOnReturnAudio = activeFocus;
+  if (!scrollHandoffEnabled) return;
+  if (anyPlaying()) {
+    routePersistPlaying = true;
   }
 }
 
 async function tryResumeAfterReturn() {
-  if (!scrollHandoffEnabled || !resumeOnReturnAudio) {
-    resumeOnReturnAudio = null;
-    return;
-  }
-  const audio = resumeOnReturnAudio;
-  resumeOnReturnAudio = null;
-  if (audio.paused && !audio.ended) {
+  if (!scrollHandoffEnabled || !routePersistPlaying) return;
+  const audio = getSharedAudio();
+  if (audio.paused && !audio.ended && audio.src) {
     await playWithUnlock(audio);
   }
 }
@@ -251,6 +322,7 @@ function ensureReturnResumeListening() {
 /** Call before navigating away (e.g. YouTube) so playback resumes on return. */
 export function markAudioForResumeOnReturn() {
   captureResumeCandidate();
+  if (anyPlaying()) routePersistPlaying = true;
 }
 
 type Tone = "hero" | "page";
@@ -276,7 +348,9 @@ export function SyncedLyricPlayer({
   handoffAnchorId?: string;
 }) {
   const rootRef = useRef<HTMLDivElement | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const idRef = useRef(
+    `player-${Math.random().toString(36).slice(2, 10)}`,
+  );
   const [lines, setLines] = useState<LyricLine[]>([]);
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState(0);
@@ -295,39 +369,44 @@ export function SyncedLyricPlayer({
   }, [lrcSrc]);
 
   useEffect(() => {
-    const audio = audioRef.current;
     const root = rootRef.current;
-    if (!audio || !root) return;
+    if (!root) return;
 
-    audio.setAttribute("playsinline", "true");
-    audio.setAttribute("webkit-playsinline", "true");
-    players.set(audio, { root, audio });
+    const id = idRef.current;
+    const audio = getSharedAudio();
+    players.set(id, { id, root, src: audioSrc });
     ensureScrollListening();
     ensureReturnResumeListening();
 
-    const onCanPlay = () => scheduleHandoff();
-    audio.addEventListener("canplay", onCanPlay);
+    const onTime = (t: number) => {
+      if (sameSrc(audio.src || "", audioSrc)) setTime(t);
+    };
+    const onPlayState = (isPlaying: boolean) => {
+      setPlaying(isPlaying && sameSrc(audio.src || "", audioSrc));
+    };
+    timeListeners.add(onTime);
+    playListeners.add(onPlayState);
 
-    const onTime = () => setTime(audio.currentTime);
-    const onPlay = () => {
+    // Re-attach UI to already-playing track after navigating back home.
+    if (sameSrc(audio.src || "", audioSrc) && !audio.paused) {
+      activePlayerId = id;
       setPlaying(true);
-      mediaUnlocked = true;
-      scrollHandoffEnabled = true;
-      activeFocus = audio;
-      for (const other of players.keys()) {
-        if (other !== audio && !other.paused) other.pause();
-      }
-    };
-    const onPause = () => setPlaying(false);
-    const onEnded = () => {
-      setPlaying(false);
-      setTime(0);
-    };
-
-    audio.addEventListener("timeupdate", onTime);
-    audio.addEventListener("play", onPlay);
-    audio.addEventListener("pause", onPause);
-    audio.addEventListener("ended", onEnded);
+      setTime(audio.currentTime);
+      routePersistPlaying = true;
+    } else if (
+      routePersistPlaying &&
+      sameSrc(audio.src || "", audioSrc) &&
+      audio.paused &&
+      !audio.ended
+    ) {
+      void playWithUnlock(audio).then((ok) => {
+        if (ok) {
+          activePlayerId = id;
+          setPlaying(true);
+          setTime(audio.currentTime);
+        }
+      });
+    }
 
     const observer = new IntersectionObserver(() => scheduleHandoff(), {
       threshold: [0, 0.15, 0.35, 0.6, 1],
@@ -337,16 +416,16 @@ export function SyncedLyricPlayer({
 
     return () => {
       observer.disconnect();
-      players.delete(audio);
-      if (activeFocus === audio) activeFocus = null;
-      audio.pause();
-      audio.removeEventListener("canplay", onCanPlay);
-      audio.removeEventListener("timeupdate", onTime);
-      audio.removeEventListener("play", onPlay);
-      audio.removeEventListener("pause", onPause);
-      audio.removeEventListener("ended", onEnded);
+      players.delete(id);
+      timeListeners.delete(onTime);
+      playListeners.delete(onPlayState);
+      if (activePlayerId === id) {
+        // Keep audio playing across routes; just clear the widget id.
+        activePlayerId = null;
+      }
+      // Do NOT pause shared audio on unmount — blog posts should keep hearing it.
     };
-  }, []);
+  }, [audioSrc]);
 
   const active = activeLyricIndex(lines, time);
   const visibleLines =
@@ -355,28 +434,26 @@ export function SyncedLyricPlayer({
       : lines.slice(active, active + VISIBLE_LINES);
 
   async function toggle() {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (audio.paused) {
-      scrollHandoffEnabled = true;
-      await playWithUnlock(audio);
-    } else {
+    const audio = getSharedAudio();
+    const isThis =
+      sameSrc(audio.src || "", audioSrc) && !audio.paused;
+
+    if (isThis) {
       scrollHandoffEnabled = false;
+      routePersistPlaying = false;
       audio.pause();
+      return;
     }
+
+    scrollHandoffEnabled = true;
+    const ok = await playSrc(audioSrc, idRef.current);
+    if (!ok) ensureUnlockListener();
   }
 
   const isHero = tone === "hero";
 
   return (
     <div ref={rootRef} className={`w-full ${className}`}>
-      <audio
-        ref={audioRef}
-        src={audioSrc}
-        preload="auto"
-        playsInline
-      />
-
       <div
         className={`flex min-h-0 flex-col items-stretch gap-3 px-3.5 py-3 transition-[border-color] duration-300 sm:flex-row sm:gap-3 ${
           compact
