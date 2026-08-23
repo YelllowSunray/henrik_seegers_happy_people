@@ -1,8 +1,6 @@
-import { Suspense } from "react";
 import { setRequestLocale } from "next-intl/server";
 import { HomePageClassic } from "@/components/home-page-classic";
 import { HomePageClient } from "@/components/home-page-client";
-import { HomeVariantBanner } from "@/components/home-variant-banner";
 import type { Locale } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -27,9 +25,6 @@ export default async function HomePage({
       ) : (
         <HomePageClassic locale={locale} />
       )}
-      <Suspense fallback={null}>
-        <HomeVariantBanner />
-      </Suspense>
     </>
   );
 }
