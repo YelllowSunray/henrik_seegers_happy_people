@@ -26,12 +26,21 @@ let handoffTimer: ReturnType<typeof setTimeout> | null = null;
 let mediaUnlocked = false;
 /** Cleared when the user pauses — scroll handoff stays off until they press play again. */
 let scrollHandoffEnabled = true;
+/**
+ * After a direct Play tap, ignore scroll handoff until the user actually scrolls.
+ * Prevents a raced handoff (or unlock listener) from stealing the first click.
+ */
+let holdHandoffUntilScroll = false;
 let scrollListening = false;
 let returnResumeListening = false;
 let unlockListening = false;
 let handoffRunId = 0;
+/** Bumps whenever a new play request starts — stale awaits must not win. */
+let playGeneration = 0;
 /** True after user leaves while music was playing — keep going until they pause. */
 let routePersistPlaying = false;
+/** One burst of handoff retries after first widget mounts (page-load autoplay). */
+let initialAutoplayBurst = false;
 let timeListeners = new Set<(t: number) => void>();
 let playListeners = new Set<(playing: boolean) => void>();
 
@@ -81,7 +90,7 @@ function anyPlaying(): boolean {
 
 /** Line from viewport top where a widget counts as “at the top” (below sticky header). */
 function handoffLine() {
-  return Math.min(175, Math.max(108, window.innerHeight * 0.17));
+  return Math.min(215, Math.max(128, window.innerHeight * 0.22));
 }
 
 function visibleRatio(rect: DOMRect): number {
@@ -93,25 +102,26 @@ function visibleRatio(rect: DOMRect): number {
 }
 
 /**
- * Player that should be playing: first the widget at the handoff line while
- * scrolling, otherwise the most visible widget in the viewport (page load).
+ * Widget whose top has crossed the handoff line most recently (closest to the
+ * line from above). Avoids clinging to Microchip until it’s fully off-screen,
+ * which used to skip Spirits entirely.
  */
 function pickAtHandoffLine(): PlayerEntry | null {
   const line = handoffLine();
-  let bestAtLine: PlayerEntry | null = null;
-  let bestTop = Infinity;
+  let best: PlayerEntry | null = null;
+  let bestTop = -Infinity;
 
   for (const entry of players.values()) {
     const rect = entry.root.getBoundingClientRect();
     if (rect.top > line) continue;
-    if (rect.bottom < line * 0.35) continue;
+    if (rect.bottom <= 0) continue;
 
-    if (rect.top < bestTop) {
+    if (rect.top >= bestTop) {
       bestTop = rect.top;
-      bestAtLine = entry;
+      best = entry;
     }
   }
-  return bestAtLine;
+  return best;
 }
 
 function pickFocusWidget(): PlayerEntry | null {
@@ -138,12 +148,17 @@ function waitForCanPlay(audio: HTMLAudioElement): Promise<void> {
   }
 
   return new Promise((resolve) => {
+    let done = false;
     const finish = () => {
+      if (done) return;
+      done = true;
       audio.removeEventListener("canplay", onReady);
       audio.removeEventListener("error", onReady);
+      window.clearTimeout(timer);
       resolve();
     };
     const onReady = () => finish();
+    const timer = window.setTimeout(finish, 4000);
     audio.addEventListener("canplay", onReady);
     audio.addEventListener("error", onReady);
     try {
@@ -177,9 +192,15 @@ async function playWithUnlock(audio: HTMLAudioElement): Promise<boolean> {
   }
 }
 
-async function playSrc(src: string, playerId: string): Promise<boolean> {
+async function playSrc(
+  src: string,
+  playerId: string,
+  opts?: { fromUser?: boolean },
+): Promise<boolean> {
+  const generation = ++playGeneration;
   const audio = getSharedAudio();
   const abs = absoluteSrc(src);
+
   if (!sameSrc(audio.src || "", abs)) {
     audio.src = abs;
     try {
@@ -188,17 +209,26 @@ async function playSrc(src: string, playerId: string): Promise<boolean> {
       /* ignore */
     }
   }
+
   await waitForCanPlay(audio);
+  if (generation !== playGeneration) return false;
+
   const ok = await playWithUnlock(audio);
+  if (generation !== playGeneration) return false;
+
   if (ok) {
     activePlayerId = playerId;
     routePersistPlaying = true;
     scrollHandoffEnabled = true;
+    if (opts?.fromUser) {
+      holdHandoffUntilScroll = true;
+    }
   }
   return ok;
 }
 
 function scheduleHandoff() {
+  if (holdHandoffUntilScroll) return;
   if (handoffTimer) clearTimeout(handoffTimer);
   handoffTimer = setTimeout(() => {
     handoffTimer = null;
@@ -206,8 +236,16 @@ function scheduleHandoff() {
   }, 60);
 }
 
+function scheduleInitialAutoplayBurst() {
+  if (initialAutoplayBurst || typeof window === "undefined") return;
+  initialAutoplayBurst = true;
+  scheduleHandoff();
+  window.setTimeout(scheduleHandoff, 250);
+  window.setTimeout(scheduleHandoff, 700);
+}
+
 async function runHandoff() {
-  if (!scrollHandoffEnabled) return;
+  if (!scrollHandoffEnabled || holdHandoffUntilScroll) return;
 
   // No lyric widgets on this page (e.g. blog post) — keep whatever is playing.
   if (players.size === 0) return;
@@ -228,7 +266,6 @@ async function runHandoff() {
       activePlayerId = matching.id;
       const atLine = pickAtHandoffLine();
       if (!atLine || sameSrc(atLine.src, audio.src)) return;
-      // Different widget at the handoff line → allow normal handoff below.
     }
   }
 
@@ -237,43 +274,47 @@ async function runHandoff() {
     return;
   }
 
-  const alreadyThis =
+  if (
     playing &&
     activePlayerId === focus.id &&
-    sameSrc(audio.src || "", focus.src);
+    sameSrc(audio.src || "", focus.src)
+  ) {
+    return;
+  }
 
-  if (alreadyThis) {
+  if (playing && sameSrc(audio.src || "", focus.src)) {
     activePlayerId = focus.id;
     return;
   }
 
-  if (activePlayerId === focus.id && playing) return;
-
   const ok = await playSrc(focus.src, focus.id);
-  if (runId !== handoffRunId) return;
-  if (!ok) {
+  if (runId !== handoffRunId || holdHandoffUntilScroll) return;
+  if (!ok && !mediaUnlocked) {
     ensureUnlockListener();
-    return;
   }
-  if (pickFocusWidget()?.id !== focus.id) return;
 }
 
 function ensureScrollListening() {
   if (scrollListening || typeof window === "undefined") return;
   scrollListening = true;
-  const onScroll = () => scheduleHandoff();
+  const onScroll = () => {
+    if (holdHandoffUntilScroll) {
+      holdHandoffUntilScroll = false;
+    }
+    scheduleHandoff();
+  };
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
-  scheduleHandoff();
+  scheduleInitialAutoplayBurst();
 }
 
 function ensureUnlockListener() {
   if (unlockListening || typeof window === "undefined") return;
   unlockListening = true;
+  // Only unlock media — do NOT schedule handoff here. That used to race the
+  // user's first Play tap and steal/restart the track (felt like a double click).
   const unlock = () => {
     mediaUnlocked = true;
-    scrollHandoffEnabled = true;
-    scheduleHandoff();
   };
   document.addEventListener("pointerdown", unlock, { once: true, passive: true });
   document.addEventListener("keydown", unlock, { once: true });
@@ -439,15 +480,29 @@ export function SyncedLyricPlayer({
       sameSrc(audio.src || "", audioSrc) && !audio.paused;
 
     if (isThis) {
+      // Cancel any in-flight handoff/play so it can't restart after pause.
+      playGeneration += 1;
+      handoffRunId += 1;
+      holdHandoffUntilScroll = false;
       scrollHandoffEnabled = false;
       routePersistPlaying = false;
       audio.pause();
+      setPlaying(false);
       return;
     }
 
+    // Optimistic UI + claim this gesture before any raced handoff runs.
+    holdHandoffUntilScroll = true;
     scrollHandoffEnabled = true;
-    const ok = await playSrc(audioSrc, idRef.current);
-    if (!ok) ensureUnlockListener();
+    setPlaying(true);
+    setTime(sameSrc(audio.src || "", audioSrc) ? audio.currentTime : 0);
+
+    const ok = await playSrc(audioSrc, idRef.current, { fromUser: true });
+    if (!ok) {
+      setPlaying(false);
+      holdHandoffUntilScroll = false;
+      ensureUnlockListener();
+    }
   }
 
   const isHero = tone === "hero";
