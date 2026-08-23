@@ -70,7 +70,7 @@
   "seminars": {
     "eyebrow": "세미나",
     "title": "라이브 세미나",
-    "teaser": "듣기만 하는 것 이상 — 생각하게 하고, 마음을 움직이며, 자신과 삶을 새로운 시각으로 바라보도록 돕는 개인적인 경험.",
+    "teaser": "듣기만 하는 것 이상 — 참여하고, 호기심을 유지하며, 어쩌면 자신의 삶을 다르게 바라볼 수 있는 오후입니다.",
     "cta": "세미나 보기",
     "next": "다음 세미나",
     "location": "Van der Valk Hotel Amersfoort",
@@ -102,11 +102,38 @@
   "membership": {
     "eyebrow": "멤버십",
     "title": "Happy People",
+    "subtitle": "듣기만 하는 것 이상",
+    "introParagraphs": [
+      "Happy People는 사람에 관한 것입니다.",
+      "당신이 누구인지에 관한 것.",
+      "자신과 다른 사람을 어떻게 바라보는지에 관한 것.",
+      "연결에 관한 것.",
+      "선택에 관한 것.",
+      "때로는 눈치채지 못한 채 삶을 좌우하는 패턴에 관한 것.",
+      "강의가 아닙니다.",
+      "기관이 아닙니다.",
+      "완벽한 사람들이 아닙니다.",
+      "행복한 사람들이지만.",
+      "다시 보고, 느끼고, 웃고, 연결하는 법을 배우고 싶은 사람들입니다."
+    ],
+    "bridgeParagraphs": [
+      "세미나는 오후 한 번입니다.",
+      "하지만 좋은 대화나 새로운 깨달음은 문을 나서는 순간 끝나지 않습니다.",
+      "그래서 Happy People가 있습니다."
+    ],
     "price": "월 €20",
-    "pitch": "‘더 많은 콘텐츠’가 아니라 Henk, 그의 이야기, 그의 시선, Happy People 커뮤니티에 대한 접근입니다.",
+    "pitch": "‘더 많은 콘텐츠’ 구독이 아닙니다. Henk, 그의 이야기, 그의 시선, Happy People 커뮤니티에 대한 접근입니다.",
     "belongingTitle": "Happy People",
-    "belongingLead": "강의가 아닙니다. 기관이 아닙니다. 완벽한 사람들이 아닙니다. 다시 보고, 느끼고, 웃고, 연결하고 싶은 사람들입니다.",
-    "monthlyPlanTitle": "🌱 Happy People — 월 €20",
+    "communityParagraphs": [
+      "강의가 아닙니다.",
+      "기관이 아닙니다.",
+      "모두가 이미 다 이해하는 그룹이 아닙니다.",
+      "그냥 사람들입니다.",
+      "호기심 있는 사람들.",
+      "왜 자신이 하는 일을 하는지 알고 싶은 사람들.",
+      "보고, 느끼고, 웃고, 연결하는 법을 배우고 싶은 사람들."
+    ],
+    "monthlyPlanTitle": "Happy People — 월 €20",
     "monthlyBenefits": [
       "세미나 녹화본 전체 이용",
       "Henk의 새로운 개인 브이로그",
@@ -116,18 +143,26 @@
       "매월 대화, 질문, 답변이 있는 라이브 온라인 시간",
       "Happy People 커뮤니티 이용",
       "새 세미나와 활동에 대한 우선 접근",
-      "향후 라이브 세션을 위한 주제나 질문 제안 가능"
+      "향후 라이브 세션을 위한 주제와 질문 제안 가능"
     ],
-    "yearlyPlanTitle": "⭐ Happy People — 연 €200",
-    "yearlyIntro": "월간 플랜의 모든 것, 그리고 예를 들어:",
+    "yearlyPlanTitle": "Happy People — 연 €200",
+    "yearlyIntro": "월간 플랜의 모든 것, 그리고:",
     "yearlyBenefits": [
-      "월간 결제 대비 2개월 무료",
+      "월간 결제 대비 2개월 혜택",
       "Henk와의 연간 독점 온라인 세션",
       "세미나 사전 등록",
       "개인 환영 메시지",
       "특별한 연간 Happy People 순간"
     ],
-    "trial": "1주 무료 — 둘러보고, 듣고, 경험하세요",
+    "trialTitle": "먼저 둘러보고 싶으신가요?",
+    "trialIntro": "가능합니다.",
+    "trial": "1주 무료",
+    "trialSteps": [
+      "둘러보세요.",
+      "들어보세요.",
+      "경험해 보세요.",
+      "그다음 계속할지는 직접 결정하세요."
+    ],
     "teaser": "Henk, 그의 이야기, 그의 시선, Happy People 커뮤니티에 대한 접근.",
     "cta": "1주 무료 시작",
     "benefitSeminars": "세미나 녹화본 전체",
@@ -138,7 +173,7 @@
     "wordBond": "의무 없음. 작은 글씨 없음. 선택은 당신의 몫입니다: YES or NO.",
     "priceMonthly": "월 €20",
     "priceYearly": "연 €200",
-    "noObligation": "이후 월 €20 또는 연 €200. 의무 없음. 작은 글씨 없음. 선택은 당신의 몫입니다: YES or NO.",
+    "noObligation": "월 €20 또는 연 €200. 번거로움 없음. 의무 없음. 부담 없음. Happy People가 당신에게 맞는지 그냥 알아보세요. YES 또는 NO. 선택은 당신의 몫입니다.",
     "ctaMonthly": "월간 선택",
     "ctaYearly": "연간 선택",
     "monthlyLabel": "월간",

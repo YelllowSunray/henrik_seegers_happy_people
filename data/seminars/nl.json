@@ -4,57 +4,81 @@
   "storyBlocks": [
     {
       "type": "paragraph",
-      "text": "Een live seminar van Happy People is geen standaardpresentatie waarbij je achteroverleunt en alleen maar luistert."
+      "text": "Een Happy People-seminar is geen middag waarin je achteroverleunt en drie uur probeert wakker te blijven."
     },
     {
       "type": "paragraph",
-      "text": "Het is een warme, persoonlijke middag waarin verhalen, muziek, humor, psychologie en echte gesprekken samenkomen. Een middag waarin je even afstand neemt van de dagelijkse drukte en bewust tijd maakt voor jezelf."
+      "text": "Je doet mee."
     },
     {
       "type": "paragraph",
-      "text": "Je krijgt nieuwe inzichten, kijkt met meer aandacht naar je eigen leven en ontdekt welke beweging er kan ontstaan wanneer je eerlijk stilstaat bij waar je nu bent."
+      "text": "Verhalen, muziek, humor, psychologie en echte gesprekken komen samen in een middag waarin je even afstand neemt van de dagelijkse drukte."
     },
     {
       "type": "paragraph",
-      "text": "We onderzoeken wie je bent, hoe je verbinding maakt met anderen en welke overtuigingen en patronen je keuzes beïnvloeden. Niet vanuit ingewikkelde theorie, maar aan de hand van herkenbare situaties, persoonlijke verhalen en inzichten die je direct kunt toepassen."
+      "text": "Je krijgt nieuwe inzichten. Je kijkt misschien anders naar je eigen leven. En soms ontdek je iets waarvan je denkt: “Hé… daar zit wat in.”"
     },
     {
       "type": "paragraph",
-      "text": "Soms wordt er gelachen. Soms wordt het stil. Soms hoor je precies datgene waardoor je ineens anders kijkt naar een situatie waar je al langer mee rondloopt."
+      "text": "We praten over identiteit, verbinding, overtuigingen en patronen."
     },
     {
       "type": "paragraph",
-      "text": "Je hoeft niets vooraf te geloven. Je hoeft jezelf niet te veranderen. Je hoeft alleen nieuwsgierig te zijn en jezelf de ruimte te geven om te ontdekken wat deze middag voor jou kan betekenen."
+      "text": "Niet met ingewikkelde theorieën."
+    },
+    {
+      "type": "paragraph",
+      "text": "Wel met herkenbare situaties, persoonlijke verhalen en inzichten waar je zelf iets mee kunt."
+    },
+    {
+      "type": "paragraph",
+      "text": "Soms wordt er gelachen. Soms wordt het stil. En soms komt er precies die ene vraag voorbij die je al een tijdje had moeten stellen."
+    },
+    {
+      "type": "paragraph",
+      "text": "Je hoeft vooraf niets te geloven. Je hoeft jezelf niet te veranderen. Je hoeft alleen nieuwsgierig te zijn."
     }
   ],
   "eventBlocks": [
     {
       "type": "paragraph",
-      "text": "Een persoonlijke en inspirerende middag over:"
+      "text": "IDENTITEIT · VERBINDING · MANIFESTATIE"
     },
     {
       "type": "paragraph",
-      "text": "identiteit · verbinding · manifestatie"
+      "text": "Wie ben je als je de verwachtingen van anderen even loslaat?"
     },
     {
       "type": "paragraph",
-      "text": "Wie ben je wanneer je de verwachtingen van anderen even loslaat?"
+      "text": "Welke patronen bepalen soms ongemerkt je keuzes?"
     },
     {
       "type": "paragraph",
-      "text": "Welke patronen houden je tegen? Waar laat je je keuzes door sturen? En wat verandert er wanneer je gedachten, woorden en gedrag weer dezelfde richting op gaan?"
+      "text": "En wat gebeurt er wanneer je gedachten, woorden en gedrag weer dezelfde kant op gaan?"
     },
     {
       "type": "paragraph",
-      "text": "Tijdens deze middag krijg je geen kant-en-klare antwoorden. Je krijgt iets waardevollers: de ruimte om eerlijk naar jezelf te kijken, vragen te stellen, ervaringen te delen en nieuwe mogelijkheden te ontdekken."
+      "text": "Je krijgt geen kant-en-klare antwoorden."
     },
     {
       "type": "paragraph",
-      "text": "Misschien herken je een patroon waar je al langer in vastzit. Misschien ontstaat er een inzicht dat je niet had verwacht. Misschien ga je naar huis met een concrete volgende stap, een nieuwe vraag of het gevoel dat je weer dichter bij jezelf bent gekomen."
+      "text": "Je krijgt iets anders: de ruimte om zelf te kijken."
     },
     {
       "type": "paragraph",
-      "text": "Je hoeft niet precies te weten wat je zoekt. Je hoeft geen plan te hebben. Je hoeft alleen bereid te zijn om stil te staan bij waar je nu bent en bewust te kiezen welke beweging je wilt maken."
+      "text": "Om vragen te stellen. Om ervaringen te delen. Om te luisteren. En om nieuwe mogelijkheden te ontdekken."
+    },
+    {
+      "type": "paragraph",
+      "text": "Je hoeft niet precies te weten wat je zoekt. Je hoeft geen plan te hebben. Kom gewoon zoals je bent."
+    },
+    {
+      "type": "paragraph",
+      "text": "Misschien herken je een patroon waar je al langer in vastzit. Misschien ontstaat er een inzicht dat je niet had verwacht. Of misschien ga je gewoon naar huis met een goed gesprek en een hoofd vol nieuwe gedachten."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ook dat is winst."
     },
     {
       "type": "heading",
@@ -63,12 +87,13 @@
     {
       "type": "list",
       "items": [
-        "persoonlijke verhalen die raken en herkenning oproepen",
+        "persoonlijke verhalen die herkenning oproepen",
         "praktische inzichten over identiteit, relaties en overtuigingen",
-        "ruimte voor vragen, gesprek en persoonlijke reflectie",
-        "muziek, humor en momenten van echte verbinding",
-        "hapjes, drankjes en gelegenheid om andere deelnemers te ontmoeten",
-        "toegang tot de opname voor leden"
+        "ruimte voor vragen en gesprekken",
+        "muziek, humor en echte verbinding",
+        "hapjes en drankjes",
+        "gelegenheid om andere deelnemers te ontmoeten",
+        "toegang tot de opname voor Happy People-leden"
       ]
     },
     {
@@ -77,7 +102,7 @@
     },
     {
       "type": "paragraph",
-      "text": "Het aantal plaatsen is bewust beperkt. Daardoor blijft er ruimte voor persoonlijke aandacht, open gesprekken en een sfeer waarin je jezelf kunt zijn."
+      "text": "Het aantal plaatsen is bewust beperkt. Niet om interessant te doen. Maar omdat persoonlijke aandacht nu eenmaal beter werkt als je niet met duizend mensen tegelijk in een zaal zit."
     },
     {
       "type": "heading",
@@ -85,7 +110,7 @@
     },
     {
       "type": "paragraph",
-      "text": "Prijs volgt."
+      "text": "Ticketprijs volgt."
     },
     {
       "type": "paragraph",
@@ -93,19 +118,23 @@
     },
     {
       "type": "paragraph",
-      "text": "Wil je als eerste weten wanneer de ticketverkoop start? Houd Happy People dan goed in de gaten en reserveer je plek zodra de verkoop opent. Door het beperkte aantal plaatsen kan het seminar snel vol zijn."
+      "text": "Wil je als eerste weten wanneer de verkoop start? Houd Happy People dan in de gaten."
+    },
+    {
+      "type": "heading",
+      "text": "DE REIS TERUG NAAR ÉÉN"
     },
     {
       "type": "paragraph",
-      "text": "Gun jezelf deze middag."
+      "text": "Misschien gaat het uiteindelijk helemaal niet om iemand anders worden."
     },
     {
       "type": "paragraph",
-      "text": "Een moment om op adem te komen, nieuwe inspiratie op te doen en opnieuw te ontdekken wat voor jou belangrijk is."
+      "text": "Misschien gaat het erom dat je weer ontdekt wie je eigenlijk al was."
     },
     {
       "type": "paragraph",
-      "text": "Reserveer straks je ticket en geef jezelf de ruimte om terug te keren naar één."
+      "text": "Gun jezelf de ruimte om daar eens rustig naar te kijken."
     },
     {
       "type": "paragraph",

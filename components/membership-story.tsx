@@ -1,6 +1,10 @@
 import { getTranslations } from "next-intl/server";
 import { MembershipPlans } from "@/components/membership-plans";
 
+function asParagraphs(value: unknown): string[] {
+  return Array.isArray(value) ? (value as string[]) : [];
+}
+
 export async function MembershipStory({
   titleAs = "h2",
   titleId,
@@ -14,6 +18,19 @@ export async function MembershipStory({
 }) {
   const t = await getTranslations("membership");
   const Title = titleAs;
+  const introParagraphs = asParagraphs(
+    t.has("introParagraphs") ? t.raw("introParagraphs") : [],
+  );
+  const bridgeParagraphs = asParagraphs(
+    t.has("bridgeParagraphs") ? t.raw("bridgeParagraphs") : [],
+  );
+  const communityParagraphs = asParagraphs(
+    t.has("communityParagraphs")
+      ? t.raw("communityParagraphs")
+      : t.has("belongingLead")
+        ? [t("belongingLead")]
+        : [],
+  );
   const monthlyBenefits = t.raw("monthlyBenefits") as string[];
   const yearlyBenefits = t.raw("yearlyBenefits") as string[];
 
@@ -29,17 +46,49 @@ export async function MembershipStory({
         {t("title")}
       </Title>
 
-      <p className="mt-6 max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg">
-        {t("pitch")}
-      </p>
+      {t.has("subtitle") ? (
+        <p className="font-display mt-4 text-xl leading-snug text-ink md:text-2xl">
+          {t("subtitle")}
+        </p>
+      ) : null}
 
-      <div className="mt-8 max-w-2xl border-l-2 border-accent pl-5">
-        <p className="font-display text-xl leading-snug text-ink md:text-2xl">
-          {t("belongingTitle")}
+      {introParagraphs.length > 0 ? (
+        <div className="mt-8 max-w-2xl space-y-3 text-base leading-relaxed text-ink-soft md:text-lg">
+          {introParagraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+      ) : (
+        <p className="mt-6 max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg">
+          {t("pitch")}
         </p>
-        <p className="mt-3 text-base leading-relaxed text-ink-soft md:text-lg">
-          {t("belongingLead")}
+      )}
+
+      {bridgeParagraphs.length > 0 ? (
+        <div className="mt-10 max-w-2xl space-y-3 border-l-2 border-accent pl-5 text-base leading-relaxed text-ink-soft md:text-lg">
+          {bridgeParagraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+      ) : null}
+
+      {introParagraphs.length > 0 ? (
+        <p className="mt-8 max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg">
+          {t("pitch")}
         </p>
+      ) : null}
+
+      <div className="mt-8 max-w-2xl border-l-2 border-gold pl-5">
+        {t.has("belongingTitle") ? (
+          <p className="font-display text-xl leading-snug text-ink md:text-2xl">
+            {t("belongingTitle")}
+          </p>
+        ) : null}
+        <div className="mt-3 space-y-3 text-base leading-relaxed text-ink-soft md:text-lg">
+          {communityParagraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
       </div>
 
       <div className="mt-10 space-y-10">

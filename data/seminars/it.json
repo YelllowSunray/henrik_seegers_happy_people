@@ -4,37 +4,45 @@
   "storyBlocks": [
     {
       "type": "paragraph",
-      "text": "Un seminario dal vivo di Happy People non è una presentazione standard in cui ti siedi e ascolti soltanto."
+      "text": "Un seminario Happy People non è un pomeriggio in cui ti siedi e cerchi di restare sveglio per tre ore."
     },
     {
       "type": "paragraph",
-      "text": "È un pomeriggio caldo e personale in cui storie, musica, umorismo, psicologia e conversazioni vere si incontrano. Un pomeriggio in cui ti distacchi dalla routine quotidiana e ti prendi consapevolmente del tempo per te."
+      "text": "Partecipi."
     },
     {
       "type": "paragraph",
-      "text": "Acquisisci nuove prospettive, guardi la tua vita con più attenzione e scopri quale movimento può nascere quando ti fermi con onestà dove sei adesso."
+      "text": "Storie, musica, umorismo, psicologia e conversazioni vere si incontrano in un pomeriggio in cui ti distacchi dalla routine quotidiana."
     },
     {
       "type": "paragraph",
-      "text": "Esploriamo chi sei, come crei connessione con gli altri e quali convinzioni e schemi influenzano le tue scelte. Non con teoria complicata, ma attraverso situazioni riconoscibili, storie personali e intuizioni che puoi applicare subito."
+      "text": "Acquisisci nuove prospettive. Forse guardi la tua vita in modo diverso. E a volte scopri qualcosa che ti fa pensare: «Ehi… c’è qualcosa lì.»"
     },
     {
       "type": "paragraph",
-      "text": "A volte si ride. A volte c’è silenzio. A volte senti proprio ciò che ti fa vedere all’improvviso in modo diverso una situazione che porti con te da tempo."
+      "text": "Parliamo di identità, connessione, convinzioni e schemi."
     },
     {
       "type": "paragraph",
-      "text": "Non devi credere nulla in anticipo. Non devi cambiare. Devi solo essere curioso e darti lo spazio per scoprire cosa può significare questo pomeriggio per te."
+      "text": "Non con teorie complicate."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ma con situazioni riconoscibili, storie personali e intuizioni che puoi usare tu stesso."
+    },
+    {
+      "type": "paragraph",
+      "text": "A volte si ride. A volte c’è silenzio. E a volte compare proprio la domanda che avresti dovuto fare da un po’."
+    },
+    {
+      "type": "paragraph",
+      "text": "Non devi credere nulla in anticipo. Non devi cambiare. Devi solo essere curioso."
     }
   ],
   "eventBlocks": [
     {
       "type": "paragraph",
-      "text": "Un pomeriggio personale e ispirante su:"
-    },
-    {
-      "type": "paragraph",
-      "text": "identità · connessione · manifestazione"
+      "text": "IDENTITÀ · CONNESSIONE · MANIFESTAZIONE"
     },
     {
       "type": "paragraph",
@@ -42,19 +50,35 @@
     },
     {
       "type": "paragraph",
-      "text": "Quali schemi ti trattengono? Cosa guida le tue decisioni? E cosa cambia quando pensieri, parole e azioni tornano nella stessa direzione?"
+      "text": "Quali schemi plasmano a volte le tue scelte senza che te ne accorga?"
     },
     {
       "type": "paragraph",
-      "text": "In questo pomeriggio non riceverai risposte già pronte. Riceverai qualcosa di più prezioso: lo spazio per guardarti con onestà, fare domande, condividere esperienze e scoprire nuove possibilità."
+      "text": "E cosa succede quando pensieri, parole e azioni tornano nella stessa direzione?"
     },
     {
       "type": "paragraph",
-      "text": "Forse riconoscerai uno schema in cui sei bloccato da tempo. Forse nascerà un’intuizione che non ti aspettavi. Forse tornerai a casa con un passo concreto, una nuova domanda o la sensazione di essere di nuovo più vicino a te stesso."
+      "text": "Non riceverai risposte già pronte."
     },
     {
       "type": "paragraph",
-      "text": "Non devi sapere esattamente cosa stai cercando. Non ti serve un piano. Devi solo essere disposto a fermarti dove sei e scegliere consapevolmente il movimento che vuoi fare."
+      "text": "Riceverai qualcos’altro: lo spazio per guardare da solo."
+    },
+    {
+      "type": "paragraph",
+      "text": "Fare domande. Condividere esperienze. Ascoltare. E scoprire nuove possibilità."
+    },
+    {
+      "type": "paragraph",
+      "text": "Non devi sapere esattamente cosa stai cercando. Non ti serve un piano. Vieni semplicemente come sei."
+    },
+    {
+      "type": "paragraph",
+      "text": "Forse riconoscerai uno schema in cui sei bloccato da tempo. Forse nascerà un’intuizione che non ti aspettavi. O forse tornerai a casa semplicemente con una buona conversazione e la testa piena di pensieri nuovi."
+    },
+    {
+      "type": "paragraph",
+      "text": "Anche quello conta."
     },
     {
       "type": "heading",
@@ -63,12 +87,13 @@
     {
       "type": "list",
       "items": [
-        "storie personali che toccano e creano riconoscimento",
+        "storie personali che creano riconoscimento",
         "intuizioni pratiche su identità, relazioni e convinzioni",
-        "spazio per domande, conversazione e riflessione personale",
-        "musica, umorismo e momenti di vera connessione",
-        "snack, bevande e l’occasione di conoscere altri partecipanti",
-        "accesso alla registrazione per i membri"
+        "spazio per domande e conversazione",
+        "musica, umorismo e vera connessione",
+        "snack e bevande",
+        "occasione di conoscere altri partecipanti",
+        "accesso alla registrazione per i membri Happy People"
       ]
     },
     {
@@ -77,7 +102,7 @@
     },
     {
       "type": "paragraph",
-      "text": "Il numero di posti è volutamente limitato. Così resta spazio per attenzione personale, conversazioni aperte e un’atmosfera in cui puoi essere te stesso."
+      "text": "Il numero di posti è volutamente limitato. Non per sembrare esclusivo. Ma perché l’attenzione personale funziona meglio quando non sei seduto in una sala con mille persone insieme."
     },
     {
       "type": "heading",
@@ -93,19 +118,23 @@
     },
     {
       "type": "paragraph",
-      "text": "Vuoi essere il primo a sapere quando inizia la vendita dei biglietti? Tieni d’occhio Happy People e prenota il tuo posto appena si apre la vendita. Con posti limitati, il seminario può esaurirsi in fretta."
+      "text": "Vuoi essere il primo a sapere quando inizia la vendita? Tieni d’occhio Happy People."
+    },
+    {
+      "type": "heading",
+      "text": "IL VIAGGIO DI RITORNO A UNO"
     },
     {
       "type": "paragraph",
-      "text": "Regalati questo pomeriggio."
+      "text": "Forse alla fine non si tratta di diventare qualcun altro."
     },
     {
       "type": "paragraph",
-      "text": "Un momento per respirare, trovare nuova ispirazione e riscoprire ciò che conta per te."
+      "text": "Forse si tratta di riscoprire chi eri già."
     },
     {
       "type": "paragraph",
-      "text": "Prenota presto il tuo biglietto e concediti lo spazio per tornare a uno."
+      "text": "Concediti lo spazio per guardare tutto questo con calma."
     },
     {
       "type": "paragraph",

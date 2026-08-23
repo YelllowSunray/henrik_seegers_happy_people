@@ -4,37 +4,45 @@
   "storyBlocks": [
     {
       "type": "paragraph",
-      "text": "Ein Live-Seminar von Happy People ist keine Standardpräsentation, bei der du dich zurücklehnst und nur zuhörst."
+      "text": "Ein Happy People-Seminar ist kein Nachmittag, an dem du dich zurücklehnst und drei Stunden lang versuchst, wach zu bleiben."
     },
     {
       "type": "paragraph",
-      "text": "Es ist ein warmer, persönlicher Nachmittag, an dem Geschichten, Musik, Humor, Psychologie und echte Gespräche zusammenkommen. Ein Nachmittag, an dem du Abstand vom Alltag nimmst und dir bewusst Zeit für dich machst."
+      "text": "Du machst mit."
     },
     {
       "type": "paragraph",
-      "text": "Du gewinnst neue Einsichten, schaust aufmerksamer auf dein eigenes Leben und entdeckst, welche Bewegung entstehen kann, wenn du ehrlich innehältst, wo du gerade stehst."
+      "text": "Geschichten, Musik, Humor, Psychologie und echte Gespräche kommen in einem Nachmittag zusammen, an dem du Abstand vom Alltag nimmst."
     },
     {
       "type": "paragraph",
-      "text": "Wir erforschen, wer du bist, wie du Verbindung mit anderen aufbaust und welche Überzeugungen und Muster deine Entscheidungen beeinflussen. Nicht mit komplizierter Theorie, sondern anhand von nachvollziehbaren Situationen, persönlichen Geschichten und Einsichten, die du direkt anwenden kannst."
+      "text": "Du gewinnst neue Einsichten. Du schaust vielleicht anders auf dein eigenes Leben. Und manchmal entdeckst du etwas, bei dem du denkst: „Hey … da steckt etwas drin.“"
     },
     {
       "type": "paragraph",
-      "text": "Manchmal wird gelacht. Manchmal wird es still. Manchmal hörst du genau das, wodurch du plötzlich anders auf eine Situation blickst, mit der du schon länger herumträgst."
+      "text": "Wir sprechen über Identität, Verbindung, Überzeugungen und Muster."
     },
     {
       "type": "paragraph",
-      "text": "Du musst im Voraus nichts glauben. Du musst dich nicht verändern. Du musst nur neugierig sein und dir den Raum geben zu entdecken, was dieser Nachmittag für dich bedeuten kann."
+      "text": "Nicht mit komplizierten Theorien."
+    },
+    {
+      "type": "paragraph",
+      "text": "Sondern mit nachvollziehbaren Situationen, persönlichen Geschichten und Einsichten, die du selbst nutzen kannst."
+    },
+    {
+      "type": "paragraph",
+      "text": "Manchmal wird gelacht. Manchmal wird es still. Und manchmal kommt genau die eine Frage, die du schon länger hättest stellen sollen."
+    },
+    {
+      "type": "paragraph",
+      "text": "Du musst im Voraus nichts glauben. Du musst dich nicht verändern. Du musst nur neugierig sein."
     }
   ],
   "eventBlocks": [
     {
       "type": "paragraph",
-      "text": "Ein persönlicher und inspirierender Nachmittag über:"
-    },
-    {
-      "type": "paragraph",
-      "text": "Identität · Verbindung · Manifestation"
+      "text": "IDENTITÄT · VERBINDUNG · MANIFESTATION"
     },
     {
       "type": "paragraph",
@@ -42,19 +50,35 @@
     },
     {
       "type": "paragraph",
-      "text": "Welche Muster halten dich zurück? Wodurch lässt du deine Entscheidungen leiten? Und was verändert sich, wenn Gedanken, Worte und Handeln wieder in dieselbe Richtung gehen?"
+      "text": "Welche Muster bestimmen manchmal unbemerkt deine Entscheidungen?"
     },
     {
       "type": "paragraph",
-      "text": "An diesem Nachmittag bekommst du keine fertigen Antworten. Du bekommst etwas Wertvolleres: den Raum, ehrlich auf dich selbst zu schauen, Fragen zu stellen, Erfahrungen zu teilen und neue Möglichkeiten zu entdecken."
+      "text": "Und was passiert, wenn Gedanken, Worte und Handeln wieder in dieselbe Richtung gehen?"
     },
     {
       "type": "paragraph",
-      "text": "Vielleicht erkennst du ein Muster, in dem du schon länger feststeckst. Vielleicht entsteht eine Einsicht, die du nicht erwartet hast. Vielleicht gehst du mit einem konkreten nächsten Schritt, einer neuen Frage oder dem Gefühl nach Hause, wieder näher bei dir selbst zu sein."
+      "text": "Du bekommst keine fertigen Antworten."
     },
     {
       "type": "paragraph",
-      "text": "Du musst nicht genau wissen, wonach du suchst. Du brauchst keinen Plan. Du musst nur bereit sein, innezuhalten, wo du jetzt bist, und bewusst zu wählen, welche Bewegung du machen willst."
+      "text": "Du bekommst etwas anderes: den Raum, selbst hinzuschauen."
+    },
+    {
+      "type": "paragraph",
+      "text": "Fragen zu stellen. Erfahrungen zu teilen. Zuzuhören. Und neue Möglichkeiten zu entdecken."
+    },
+    {
+      "type": "paragraph",
+      "text": "Du musst nicht genau wissen, wonach du suchst. Du brauchst keinen Plan. Komm einfach, wie du bist."
+    },
+    {
+      "type": "paragraph",
+      "text": "Vielleicht erkennst du ein Muster, in dem du schon länger feststeckst. Vielleicht entsteht eine Einsicht, die du nicht erwartet hast. Oder vielleicht gehst du einfach mit einem guten Gespräch und einem Kopf voller neuer Gedanken nach Hause."
+    },
+    {
+      "type": "paragraph",
+      "text": "Auch das zählt."
     },
     {
       "type": "heading",
@@ -63,12 +87,13 @@
     {
       "type": "list",
       "items": [
-        "persönliche Geschichten, die berühren und Wiedererkennung wecken",
+        "persönliche Geschichten, die Wiedererkennung wecken",
         "praktische Einsichten zu Identität, Beziehungen und Überzeugungen",
-        "Raum für Fragen, Gespräch und persönliche Reflexion",
-        "Musik, Humor und Momente echter Verbindung",
-        "Snacks, Getränke und Gelegenheit, andere Teilnehmer kennenzulernen",
-        "Zugang zur Aufnahme für Mitglieder"
+        "Raum für Fragen und Gespräche",
+        "Musik, Humor und echte Verbindung",
+        "Snacks und Getränke",
+        "Gelegenheit, andere Teilnehmer kennenzulernen",
+        "Zugang zur Aufnahme für Happy People-Mitglieder"
       ]
     },
     {
@@ -77,7 +102,7 @@
     },
     {
       "type": "paragraph",
-      "text": "Die Anzahl der Plätze ist bewusst begrenzt. So bleibt Raum für persönliche Aufmerksamkeit, offene Gespräche und eine Atmosphäre, in der du du selbst sein kannst."
+      "text": "Die Anzahl der Plätze ist bewusst begrenzt. Nicht, um interessant zu wirken. Sondern weil persönliche Aufmerksamkeit einfach besser funktioniert, wenn du nicht mit tausend Menschen gleichzeitig in einem Saal sitzt."
     },
     {
       "type": "heading",
@@ -85,7 +110,7 @@
     },
     {
       "type": "paragraph",
-      "text": "Preis folgt."
+      "text": "Ticketpreis folgt."
     },
     {
       "type": "paragraph",
@@ -93,19 +118,23 @@
     },
     {
       "type": "paragraph",
-      "text": "Möchtest du als Erster erfahren, wann der Ticketverkauf startet? Halte Happy People gut im Blick und reserviere deinen Platz, sobald der Verkauf öffnet. Wegen der begrenzten Plätze kann das Seminar schnell ausgebucht sein."
+      "text": "Möchtest du als Erster erfahren, wann der Verkauf startet? Halte Happy People im Blick."
+    },
+    {
+      "type": "heading",
+      "text": "DIE REISE ZURÜCK ZU EINS"
     },
     {
       "type": "paragraph",
-      "text": "Gönn dir diesen Nachmittag."
+      "text": "Vielleicht geht es am Ende gar nicht darum, jemand anderes zu werden."
     },
     {
       "type": "paragraph",
-      "text": "Ein Moment, um durchzuatmen, neue Inspiration zu finden und neu zu entdecken, was dir wichtig ist."
+      "text": "Vielleicht geht es darum, wieder zu entdecken, wer du eigentlich schon warst."
     },
     {
       "type": "paragraph",
-      "text": "Reserviere bald dein Ticket und gib dir den Raum, zurück zu eins zu kehren."
+      "text": "Gönn dir den Raum, in Ruhe danach zu schauen."
     },
     {
       "type": "paragraph",

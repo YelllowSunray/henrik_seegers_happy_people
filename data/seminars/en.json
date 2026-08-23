@@ -4,57 +4,81 @@
   "storyBlocks": [
     {
       "type": "paragraph",
-      "text": "A Happy People live seminar is not a standard presentation where you lean back and only listen."
+      "text": "A Happy People seminar is not an afternoon where you lean back and try to stay awake for three hours."
     },
     {
       "type": "paragraph",
-      "text": "It is a warm, personal afternoon where stories, music, humour, psychology and real conversations come together. An afternoon where you step away from daily pressure and consciously make time for yourself."
+      "text": "You take part."
     },
     {
       "type": "paragraph",
-      "text": "You gain new insights, look at your own life with more attention, and discover what movement can arise when you honestly pause at where you are now."
+      "text": "Stories, music, humour, psychology and real conversations come together in an afternoon where you step away from the daily rush."
     },
     {
       "type": "paragraph",
-      "text": "We explore who you are, how you connect with others, and which beliefs and patterns influence your choices. Not through complicated theory, but through relatable situations, personal stories and insights you can apply directly."
+      "text": "You gain new insights. You may look at your own life differently. And sometimes you discover something that makes you think: “Hey… there’s something in that.”"
     },
     {
       "type": "paragraph",
-      "text": "Sometimes we laugh. Sometimes it goes quiet. Sometimes you hear exactly what makes you look differently at something you have been carrying for a while."
+      "text": "We talk about identity, connection, beliefs and patterns."
     },
     {
       "type": "paragraph",
-      "text": "You do not have to believe anything in advance. You do not have to change yourself. You only need to be curious and give yourself the space to discover what this afternoon can mean for you."
+      "text": "Not with complicated theories."
+    },
+    {
+      "type": "paragraph",
+      "text": "But with recognisable situations, personal stories and insights you can use yourself."
+    },
+    {
+      "type": "paragraph",
+      "text": "Sometimes we laugh. Sometimes it goes quiet. And sometimes exactly the question appears that you should have asked a while ago."
+    },
+    {
+      "type": "paragraph",
+      "text": "You do not have to believe anything in advance. You do not have to change yourself. You only need to be curious."
     }
   ],
   "eventBlocks": [
     {
       "type": "paragraph",
-      "text": "A personal and inspiring afternoon about:"
+      "text": "IDENTITY · CONNECTION · MANIFESTATION"
     },
     {
       "type": "paragraph",
-      "text": "identity · connection · manifestation"
+      "text": "Who are you when you let go of other people’s expectations for a moment?"
     },
     {
       "type": "paragraph",
-      "text": "Who are you when you let go of other people's expectations for a moment?"
+      "text": "Which patterns sometimes quietly shape your choices?"
     },
     {
       "type": "paragraph",
-      "text": "Which patterns hold you back? What drives your choices? And what changes when your thoughts, words and actions move in the same direction again?"
+      "text": "And what happens when your thoughts, words and actions point in the same direction again?"
     },
     {
       "type": "paragraph",
-      "text": "During this afternoon you will not get ready-made answers. You get something more valuable: the space to look honestly at yourself, ask questions, share experiences and discover new possibilities."
+      "text": "You will not get ready-made answers."
     },
     {
       "type": "paragraph",
-      "text": "Maybe you recognise a pattern you have been stuck in. Maybe an unexpected insight arises. Maybe you go home with a concrete next step, a new question, or the feeling that you have come closer to yourself again."
+      "text": "You get something else: the space to look for yourself."
     },
     {
       "type": "paragraph",
-      "text": "You do not need to know exactly what you are looking for. You do not need a plan. You only need to be willing to pause at where you are now and consciously choose which movement you want to make."
+      "text": "To ask questions. To share experiences. To listen. And to discover new possibilities."
+    },
+    {
+      "type": "paragraph",
+      "text": "You do not need to know exactly what you are looking for. You do not need a plan. Just come as you are."
+    },
+    {
+      "type": "paragraph",
+      "text": "Maybe you recognise a pattern you have been stuck in for a while. Maybe an unexpected insight arises. Or maybe you simply go home with a good conversation and a head full of new thoughts."
+    },
+    {
+      "type": "paragraph",
+      "text": "That counts too."
     },
     {
       "type": "heading",
@@ -63,12 +87,13 @@
     {
       "type": "list",
       "items": [
-        "personal stories that move you and feel recognisable",
+        "personal stories that create recognition",
         "practical insights on identity, relationships and beliefs",
-        "space for questions, conversation and personal reflection",
-        "music, humour and moments of real connection",
-        "snacks, drinks and a chance to meet other participants",
-        "access to the recording for members"
+        "space for questions and conversation",
+        "music, humour and real connection",
+        "snacks and drinks",
+        "a chance to meet other participants",
+        "access to the recording for Happy People members"
       ]
     },
     {
@@ -77,7 +102,7 @@
     },
     {
       "type": "paragraph",
-      "text": "The number of places is deliberately limited. That keeps room for personal attention, open conversations and an atmosphere where you can be yourself."
+      "text": "The number of places is deliberately limited. Not to seem exclusive. But because personal attention works better when you are not sitting in a hall with a thousand people at once."
     },
     {
       "type": "heading",
@@ -85,7 +110,7 @@
     },
     {
       "type": "paragraph",
-      "text": "Price to follow."
+      "text": "Ticket price to follow."
     },
     {
       "type": "paragraph",
@@ -93,19 +118,23 @@
     },
     {
       "type": "paragraph",
-      "text": "Want to be the first to know when ticket sales open? Keep a close eye on Happy People and reserve your place as soon as sales begin. With limited places, the seminar can fill up quickly."
+      "text": "Want to be the first to know when sales start? Keep an eye on Happy People."
+    },
+    {
+      "type": "heading",
+      "text": "THE JOURNEY BACK TO ONE"
     },
     {
       "type": "paragraph",
-      "text": "Give yourself this afternoon."
+      "text": "Maybe it is not about becoming someone else in the end."
     },
     {
       "type": "paragraph",
-      "text": "A moment to catch your breath, find new inspiration and rediscover what matters to you."
+      "text": "Maybe it is about rediscovering who you already were."
     },
     {
       "type": "paragraph",
-      "text": "Reserve your ticket soon and give yourself the space to return to one."
+      "text": "Give yourself the space to look at that calmly."
     },
     {
       "type": "paragraph",

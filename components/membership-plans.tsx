@@ -72,10 +72,33 @@ export function MembershipPlans({
 
   return (
     <div className={className}>
-      <p className="text-sm font-semibold tracking-[0.16em] text-gold uppercase">
-        {trialExpired ? t("trialEnded") : t("trial")}
-      </p>
-      <p className="mt-2 max-w-xl text-ink-soft">
+      {trialExpired ? (
+        <p className="text-sm font-semibold tracking-[0.16em] text-gold uppercase">
+          {t("trialEnded")}
+        </p>
+      ) : t.has("trialTitle") ? (
+        <>
+          <p className="font-display text-2xl text-ink">{t("trialTitle")}</p>
+          {t.has("trialIntro") ? (
+            <p className="mt-2 text-base text-ink-soft">{t("trialIntro")}</p>
+          ) : null}
+          <p className="mt-4 text-sm font-semibold tracking-[0.16em] text-gold uppercase">
+            {t("trial")}
+          </p>
+          {t.has("trialSteps") ? (
+            <ul className="mt-3 max-w-xl space-y-1 text-base text-ink-soft">
+              {(t.raw("trialSteps") as string[]).map((step) => (
+                <li key={step}>{step}</li>
+              ))}
+            </ul>
+          ) : null}
+        </>
+      ) : (
+        <p className="text-sm font-semibold tracking-[0.16em] text-gold uppercase">
+          {t("trial")}
+        </p>
+      )}
+      <p className="mt-3 max-w-xl text-ink-soft">
         {trialExpired ? t("trialEndedLead") : t("noObligation")}
       </p>
 

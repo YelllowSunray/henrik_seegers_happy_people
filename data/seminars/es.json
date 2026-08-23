@@ -4,37 +4,45 @@
   "storyBlocks": [
     {
       "type": "paragraph",
-      "text": "Un seminario en vivo de Happy People no es una presentación estándar en la que te sientas y solo escuches."
+      "text": "Un seminario de Happy People no es una tarde en la que te sientas y tratas de mantenerte despierto durante tres horas."
     },
     {
       "type": "paragraph",
-      "text": "Es una tarde cálida y personal en la que historias, música, humor, psicología y conversaciones reales se unen. Una tarde en la que te alejas del día a día y te tomas tiempo de forma consciente para ti."
+      "text": "Participas."
     },
     {
       "type": "paragraph",
-      "text": "Ganas nuevas perspectivas, miras tu vida con más atención y descubres qué movimiento puede surgir cuando te detienes con honestidad donde estás ahora."
+      "text": "Historias, música, humor, psicología y conversaciones reales se unen en una tarde en la que te alejas del ajetreo diario."
     },
     {
       "type": "paragraph",
-      "text": "Exploramos quién eres, cómo creas conexión con los demás y qué creencias y patrones influyen en tus decisiones. No con teoría complicada, sino con situaciones reconocibles, historias personales e ideas que puedes aplicar directamente."
+      "text": "Ganas nuevas perspectivas. Quizá mires tu vida de otra manera. Y a veces descubres algo que te hace pensar: «Oye… hay algo en eso.»"
     },
     {
       "type": "paragraph",
-      "text": "A veces se ríe. A veces hay silencio. A veces escuchas justo lo que te hace ver de repente de otra manera una situación que llevas tiempo arrastrando."
+      "text": "Hablamos de identidad, conexión, creencias y patrones."
     },
     {
       "type": "paragraph",
-      "text": "No tienes que creer nada de antemano. No tienes que cambiar. Solo necesitas curiosidad y darte espacio para descubrir qué puede significar esta tarde para ti."
+      "text": "No con teorías complicadas."
+    },
+    {
+      "type": "paragraph",
+      "text": "Sino con situaciones reconocibles, historias personales e ideas que puedes usar tú mismo."
+    },
+    {
+      "type": "paragraph",
+      "text": "A veces se ríe. A veces hay silencio. Y a veces aparece exactamente la pregunta que llevabas tiempo debiendo hacer."
+    },
+    {
+      "type": "paragraph",
+      "text": "No tienes que creer nada de antemano. No tienes que cambiar. Solo necesitas curiosidad."
     }
   ],
   "eventBlocks": [
     {
       "type": "paragraph",
-      "text": "Una tarde personal e inspiradora sobre:"
-    },
-    {
-      "type": "paragraph",
-      "text": "identidad · conexión · manifestación"
+      "text": "IDENTIDAD · CONEXIÓN · MANIFESTACIÓN"
     },
     {
       "type": "paragraph",
@@ -42,19 +50,35 @@
     },
     {
       "type": "paragraph",
-      "text": "¿Qué patrones te frenan? ¿Qué guía tus decisiones? ¿Y qué cambia cuando pensamientos, palabras y acciones vuelven a ir en la misma dirección?"
+      "text": "¿Qué patrones moldean a veces tus decisiones sin que te des cuenta?"
     },
     {
       "type": "paragraph",
-      "text": "En esta tarde no recibirás respuestas prefabricadas. Recibirás algo más valioso: espacio para mirarte con honestidad, hacer preguntas, compartir experiencias y descubrir nuevas posibilidades."
+      "text": "¿Y qué ocurre cuando pensamientos, palabras y acciones vuelven a ir en la misma dirección?"
     },
     {
       "type": "paragraph",
-      "text": "Quizá reconozcas un patrón en el que llevas tiempo atascado. Quizá surja una comprensión que no esperabas. Quizá te vayas con un siguiente paso concreto, una nueva pregunta o la sensación de estar otra vez más cerca de ti mismo."
+      "text": "No recibirás respuestas prefabricadas."
     },
     {
       "type": "paragraph",
-      "text": "No necesitas saber exactamente qué buscas. No necesitas un plan. Solo necesitas estar dispuesto a detenerte donde estás y elegir conscientemente el movimiento que quieres hacer."
+      "text": "Recibirás otra cosa: espacio para mirar por ti mismo."
+    },
+    {
+      "type": "paragraph",
+      "text": "Hacer preguntas. Compartir experiencias. Escuchar. Y descubrir nuevas posibilidades."
+    },
+    {
+      "type": "paragraph",
+      "text": "No necesitas saber exactamente qué buscas. No necesitas un plan. Simplemente ven como eres."
+    },
+    {
+      "type": "paragraph",
+      "text": "Quizá reconozcas un patrón en el que llevas tiempo atascado. Quizá surja una comprensión que no esperabas. O quizá simplemente te vayas a casa con una buena conversación y la cabeza llena de pensamientos nuevos."
+    },
+    {
+      "type": "paragraph",
+      "text": "Eso también cuenta."
     },
     {
       "type": "heading",
@@ -63,12 +87,13 @@
     {
       "type": "list",
       "items": [
-        "historias personales que conmueven y generan reconocimiento",
+        "historias personales que generan reconocimiento",
         "ideas prácticas sobre identidad, relaciones y creencias",
-        "espacio para preguntas, conversación y reflexión personal",
-        "música, humor y momentos de conexión real",
-        "aperitivos, bebidas y la oportunidad de conocer a otros participantes",
-        "acceso a la grabación para miembros"
+        "espacio para preguntas y conversación",
+        "música, humor y conexión real",
+        "aperitivos y bebidas",
+        "oportunidad de conocer a otros participantes",
+        "acceso a la grabación para miembros de Happy People"
       ]
     },
     {
@@ -77,7 +102,7 @@
     },
     {
       "type": "paragraph",
-      "text": "El número de plazas es deliberadamente limitado. Así queda espacio para atención personal, conversaciones abiertas y una atmósfera en la que puedes ser tú mismo."
+      "text": "El número de plazas es deliberadamente limitado. No para parecer exclusivo. Sino porque la atención personal funciona mejor cuando no estás sentado en un salón con mil personas a la vez."
     },
     {
       "type": "heading",
@@ -93,19 +118,23 @@
     },
     {
       "type": "paragraph",
-      "text": "¿Quieres ser el primero en saber cuándo empieza la venta de entradas? Mantente atento a Happy People y reserva tu plaza en cuanto se abra la venta. Con plazas limitadas, el seminario puede llenarse rápido."
+      "text": "¿Quieres ser el primero en saber cuándo empieza la venta? Mantente atento a Happy People."
+    },
+    {
+      "type": "heading",
+      "text": "EL VIAJE DE REGRESO A UNO"
     },
     {
       "type": "paragraph",
-      "text": "Regálate esta tarde."
+      "text": "Quizá al final no se trate de convertirse en otra persona."
     },
     {
       "type": "paragraph",
-      "text": "Un momento para respirar, encontrar nueva inspiración y redescubrir lo que importa para ti."
+      "text": "Quizá se trate de redescubrir quién ya eras."
     },
     {
       "type": "paragraph",
-      "text": "Reserva pronto tu entrada y date el espacio para volver a uno."
+      "text": "Date el espacio para mirar eso con calma."
     },
     {
       "type": "paragraph",
