@@ -255,26 +255,28 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
 
       <Section tone="default">
         <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14">
-          <MembershipStory titleAs="h2" titleId="membership-title" />
+          <div>
+            <MembershipStory titleAs="h2" titleId="membership-title" />
+            <div className="mt-10 w-full max-w-[41rem]">
+              <p className="mb-4 text-base leading-relaxed text-ink md:text-lg">
+                {tMem("paradisePrompt")}
+              </p>
+              <SyncedLyricPlayer
+                audioSrc="/audio/pocketful-of-sunshine.mp3"
+                lrcSrc="/audio/pocketful-of-sunshine.lrc"
+                title="Pocketful of Sunshine"
+                artist="Natasha Bedingfield"
+                tone="page"
+                handoffAnchorId="membership-title"
+              />
+              <p className="mt-4 text-sm leading-relaxed text-ink-soft italic md:text-base">
+                {tMem("paradiseNote")}
+              </p>
+            </div>
+          </div>
           <div className="lg:sticky lg:top-28">
             <SpeedGallery />
           </div>
-        </div>
-        <div className="mt-10 w-full max-w-[41rem]">
-          <p className="mb-4 text-base leading-relaxed text-ink md:text-lg">
-            {tMem("paradisePrompt")}
-          </p>
-          <SyncedLyricPlayer
-            audioSrc="/audio/pocketful-of-sunshine.mp3"
-            lrcSrc="/audio/pocketful-of-sunshine.lrc"
-            title="Pocketful of Sunshine"
-            artist="Natasha Bedingfield"
-            tone="page"
-            handoffAnchorId="membership-title"
-          />
-          <p className="mt-4 text-sm leading-relaxed text-ink-soft italic md:text-base">
-            {tMem("paradiseNote")}
-          </p>
         </div>
       </Section>
 

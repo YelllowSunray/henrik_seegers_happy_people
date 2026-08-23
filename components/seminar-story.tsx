@@ -18,7 +18,6 @@ export async function SeminarStory({
   showAllLink = false,
   showSoStrongPlayer = false,
   eventOnTop = false,
-  copyVariant = "default",
   variant = "full",
 }: {
   locale: Locale;
@@ -29,11 +28,10 @@ export async function SeminarStory({
   showAllLink?: boolean;
   showSoStrongPlayer?: boolean;
   eventOnTop?: boolean;
-  copyVariant?: "default" | "client";
   variant?: "full" | "home";
 }) {
   const tr = await getTranslations("seminars");
-  const content = getSeminarContent(locale, variant, copyVariant);
+  const content = getSeminarContent(locale, variant);
   const events = await fetchEvents();
   const event = events[0];
   const Title = titleAs;
