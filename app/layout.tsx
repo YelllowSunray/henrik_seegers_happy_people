@@ -31,6 +31,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       data-scroll-behavior="smooth"
       className={`${display.variable} ${body.variable} h-full`}
     >
+      <head>
+        <link
+          rel="preload"
+          href="/audio/microchip.mp3"
+          as="fetch"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="site-grain min-h-full antialiased">{children}</body>
     </html>
   );

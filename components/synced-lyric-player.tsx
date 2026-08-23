@@ -41,6 +41,8 @@ let playGeneration = 0;
 let routePersistPlaying = false;
 /** One burst of handoff retries after first widget mounts (page-load autoplay). */
 let initialAutoplayBurst = false;
+let initialAutoplayTimers: number[] = [];
+const preloadedSrc = new Set<string>();
 let timeListeners = new Set<(t: number) => void>();
 let playListeners = new Set<(playing: boolean) => void>();
 
@@ -142,6 +144,26 @@ function pickFocusWidget(): PlayerEntry | null {
   return bestRatio >= 0.15 ? best : null;
 }
 
+function preloadAudio(src: string) {
+  if (typeof window === "undefined") return;
+  const abs = absoluteSrc(src);
+  if (preloadedSrc.has(abs)) return;
+  preloadedSrc.add(abs);
+  const probe = new Audio();
+  probe.preload = "auto";
+  probe.src = abs;
+  try {
+    probe.load();
+  } catch {
+    /* ignore */
+  }
+}
+
+function clearInitialAutoplayTimers() {
+  for (const id of initialAutoplayTimers) window.clearTimeout(id);
+  initialAutoplayTimers = [];
+}
+
 function waitForCanPlay(audio: HTMLAudioElement): Promise<void> {
   if (audio.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
     return Promise.resolve();
@@ -169,7 +191,27 @@ function waitForCanPlay(audio: HTMLAudioElement): Promise<void> {
   });
 }
 
-async function playWithUnlock(audio: HTMLAudioElement): Promise<boolean> {
+async function playWithUnlock(
+  audio: HTMLAudioElement,
+  autoplay = false,
+): Promise<boolean> {
+  // Muted-first is more reliable for page-load autoplay (Chrome, Vercel CDN lag).
+  if (autoplay) {
+    try {
+      audio.muted = true;
+      await audio.play();
+      audio.muted = false;
+      mediaUnlocked = true;
+      return true;
+    } catch {
+      try {
+        audio.muted = false;
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
   try {
     await audio.play();
     mediaUnlocked = true;
@@ -195,7 +237,7 @@ async function playWithUnlock(audio: HTMLAudioElement): Promise<boolean> {
 async function playSrc(
   src: string,
   playerId: string,
-  opts?: { fromUser?: boolean },
+  opts?: { fromUser?: boolean; autoplay?: boolean },
 ): Promise<boolean> {
   const generation = ++playGeneration;
   const audio = getSharedAudio();
@@ -213,10 +255,11 @@ async function playSrc(
   await waitForCanPlay(audio);
   if (generation !== playGeneration) return false;
 
-  const ok = await playWithUnlock(audio);
+  const ok = await playWithUnlock(audio, Boolean(opts?.autoplay));
   if (generation !== playGeneration) return false;
 
   if (ok) {
+    clearInitialAutoplayTimers();
     activePlayerId = playerId;
     routePersistPlaying = true;
     scrollHandoffEnabled = true;
@@ -239,9 +282,17 @@ function scheduleHandoff() {
 function scheduleInitialAutoplayBurst() {
   if (initialAutoplayBurst || typeof window === "undefined") return;
   initialAutoplayBurst = true;
-  scheduleHandoff();
-  window.setTimeout(scheduleHandoff, 250);
-  window.setTimeout(scheduleHandoff, 700);
+  const delays = [0, 200, 500, 1000, 1800, 3000, 4500];
+  for (const ms of delays) {
+    const id = window.setTimeout(() => {
+      if (anyPlaying()) {
+        clearInitialAutoplayTimers();
+        return;
+      }
+      scheduleHandoff();
+    }, ms);
+    initialAutoplayTimers.push(id);
+  }
 }
 
 async function runHandoff() {
@@ -287,7 +338,9 @@ async function runHandoff() {
     return;
   }
 
-  const ok = await playSrc(focus.src, focus.id);
+  const ok = await playSrc(focus.src, focus.id, {
+    autoplay: !mediaUnlocked && !playing,
+  });
   if (runId !== handoffRunId || holdHandoffUntilScroll) return;
   if (!ok && !mediaUnlocked) {
     ensureUnlockListener();
@@ -311,10 +364,13 @@ function ensureScrollListening() {
 function ensureUnlockListener() {
   if (unlockListening || typeof window === "undefined") return;
   unlockListening = true;
-  // Only unlock media — do NOT schedule handoff here. That used to race the
-  // user's first Play tap and steal/restart the track (felt like a double click).
-  const unlock = () => {
+  const unlock = (e: Event) => {
     mediaUnlocked = true;
+    const target = e.target;
+    if (target instanceof Element && target.closest("[data-lyric-player]")) {
+      return;
+    }
+    if (!anyPlaying()) scheduleHandoff();
   };
   document.addEventListener("pointerdown", unlock, { once: true, passive: true });
   document.addEventListener("keydown", unlock, { once: true });
@@ -415,6 +471,7 @@ export function SyncedLyricPlayer({
 
     const id = idRef.current;
     const audio = getSharedAudio();
+    preloadAudio(audioSrc);
     players.set(id, { id, root, src: audioSrc });
     ensureScrollListening();
     ensureReturnResumeListening();
@@ -508,7 +565,7 @@ export function SyncedLyricPlayer({
   const isHero = tone === "hero";
 
   return (
-    <div ref={rootRef} className={`w-full ${className}`}>
+    <div ref={rootRef} data-lyric-player className={`w-full ${className}`}>
       <div
         className={`flex min-h-0 flex-col items-stretch gap-3 px-3.5 py-3 transition-[border-color] duration-300 sm:flex-row sm:gap-3 ${
           compact
