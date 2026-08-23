@@ -7,6 +7,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { useAuth } from "@/components/auth-provider";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { HeaderBackButton } from "@/components/smart-back-button";
+import { ClientHomeMobileNav } from "@/components/client-home-mobile-nav";
 import { SeminarPromoBar } from "@/components/seminar-promo";
 
 const navKeys = [
@@ -16,11 +17,18 @@ const navKeys = [
   ["blog", "/blog"],
 ] as const;
 
-export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" }) {
+export function SiteHeader({
+  variant = "hero",
+  clientHomeNav = false,
+}: {
+  variant?: "hero" | "solid";
+  clientHomeNav?: boolean;
+}) {
   const t = useTranslations("nav");
   const { user, isMember, isAdmin, signOut, loading } = useAuth();
   const onHero = variant === "hero";
   const pathname = usePathname();
+  const isClientHome = clientHomeNav && pathname === "/";
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -96,17 +104,21 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
             </div>
 
             <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-6">
-              {navKeys.map(([key, href]) => (
-                <Link
-                  key={key}
-                  href={href}
-                  className="rounded-lg px-3 py-3.5 text-lg font-medium text-white/90 transition hover:bg-white/10 hover:text-white"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {t(key)}
-                </Link>
-              ))}
-              {!isMember && (
+              {isClientHome ? (
+                <ClientHomeMobileNav onNavigate={() => setMenuOpen(false)} />
+              ) : (
+                navKeys.map(([key, href]) => (
+                  <Link
+                    key={key}
+                    href={href}
+                    className="rounded-lg px-3 py-3.5 text-lg font-medium text-white/90 transition hover:bg-white/10 hover:text-white"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {t(key)}
+                  </Link>
+                ))
+              )}
+              {!isClientHome && !isMember && (
                 <Link
                   href="/happy-people"
                   className="rounded-lg px-3 py-3.5 text-lg font-medium text-white/90 transition hover:bg-white/10 hover:text-white"
@@ -115,13 +127,15 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                   {t("membership")}
                 </Link>
               )}
-              <Link
-                href="/contact"
-                className="rounded-lg px-3 py-3.5 text-lg font-medium text-white/90 transition hover:bg-white/10 hover:text-white"
-                onClick={() => setMenuOpen(false)}
-              >
-                {t("contact")}
-              </Link>
+              {!isClientHome && (
+                <Link
+                  href="/contact"
+                  className="rounded-lg px-3 py-3.5 text-lg font-medium text-white/90 transition hover:bg-white/10 hover:text-white"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {t("contact")}
+                </Link>
+              )}
               {isMember && (
                 <Link
                   href="/members"

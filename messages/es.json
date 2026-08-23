@@ -577,5 +577,109 @@
         "text": "Y ahí termina el experimento: no con la afirmación de que tuviéramos realmente una relación amorosa, sino con la imagen de dos personas que se encontraron en un momento excepcional — y de las cuales una nunca olvidará ese encuentro."
       }
     ]
+  },
+  "homeClient": {
+    "variantBanner": "Comparar versiones de la página de inicio",
+    "variantClassic": "Original",
+    "variantClient": "Versión corta",
+    "nav": {
+      "message": "El mensaje",
+      "about": "Sobre Henk",
+      "meeting": "El encuentro",
+      "seminars": "Seminarios",
+      "journey": "El viaje de regreso a uno",
+      "blog": "Blog",
+      "twinFlames": "Llama gemela",
+      "membership": "Membresía",
+      "donate": "Apoyo",
+      "happyPeople": "Happy People"
+    },
+    "message": {
+      "eyebrow": "El mensaje",
+      "title": "Quizá nunca estuvimos perdidos",
+      "subtitle": "Quizá solo olvidamos quiénes somos realmente.",
+      "opening": "Vengo del planeta Outherspace y estoy aquí en la Tierra para ayudarte — y a todos los Lost Boys y Fallen Angels. Juntos nos reunimos de nuevo como uno.",
+      "paragraphs": [
+        "Intento hacer a la gente consciente de lo que estamos haciendo con este mundo. Porque el camino en el que estamos — destruyendo poco a poco la Tierra de la que todos dependemos — no puede ser el camino correcto.",
+        "Creo que hay otra vía: el camino de los Happy People. Una vía en la que podemos volver a vivir felices juntos, comerciar con honestidad, cumplir nuestra palabra y unir palabras y acciones.",
+        "Mediante el estudio, la curiosidad y un hambre infinita de aprender, descubrí algo que cambió mi vida.",
+        "La codicia empezó a ceder; la empatía tomó su lugar.",
+        "Descubrí que ayudar a alguien que está atascado no siempre requiere soluciones complicadas.",
+        "A veces empieza con algo sencillo: entender que el otro tiene un mundo propio.",
+        "Theory of mind.",
+        "No eres una extensión de tus padres, y nadie más es una extensión de ti.",
+        "Todos tienen pensamientos, sentimientos, experiencias y un mundo interior que nunca podrás ver por completo.",
+        "Quizá la empatía empieza ahí.",
+        "No estamos separados unos de otros. Somos seres humanos, cada uno con su propio mundo interior, mientras compartimos el mismo mundo a nuestro alrededor.",
+        "Quizá los Lost Boys y Fallen Angels no están perdidos en absoluto.",
+        "Quizá simplemente están de camino a casa.",
+        "De vuelta a sí mismos. De vuelta los unos a los otros. De vuelta a algo que nunca se perdió realmente.",
+        "No escribo esto para convencerte.",
+        "Lo escribo para hacerte pensar. Para hacerte mirar de nuevo.",
+        "Porque quizá el mayor cambio no empieza al cambiar el mundo que nos rodea.",
+        "Quizá empieza cuando por fin entendemos a la persona que está a nuestro lado.",
+        "Y quizá el camino hacia adelante no siempre es un camino hacia algo nuevo.",
+        "Quizá es un regreso a algo antiguo que nunca se perdió realmente."
+      ],
+      "closingQuote": "Quizá nunca estuvimos perdidos — quizá solo olvidamos quiénes somos realmente."
+    },
+    "about": {
+      "eyebrow": "Sobre Henk",
+      "title": "Hendrik Seegers",
+      "teaser": "From here to eternity and back",
+      "paragraphs": [
+        "Hendrik Seegers, nacido en 1965 en Weesperkarspel, ha mirado más allá de lo visible en superficie toda su vida.",
+        "Veía conexiones, emociones y matices que a veces eran menos evidentes para otros. Esa forma de ver se ha convertido cada vez más en parte de quién es.",
+        "Su vida también conoce profundas líneas de fractura.",
+        "En 1998 perdió a su hija Daniëlle. Más tarde también perdió a su madre. Esas pérdidas hicieron personales las preguntas sobre el amor, la muerte y la continuidad humana.",
+        "En 2016 Hendrik vivió una experiencia cercana a la muerte. Describe haber dejado su cuerpo y haber experimentado otro estado de conciencia. Allí encontró algo que vivió como Dios y sintió que su tiempo aún no había llegado.",
+        "Más tarde atravesó de nuevo un periodo extremadamente difícil. También entonces volvió.",
+        "Después quedó sobre todo una pregunta: ¿dónde ha ido el alma de Daniëlle?",
+        "Según su propia experiencia, recibió una respuesta: que la volvería a ver en una próxima vida.",
+        "Lo veas como experiencia espiritual, intuición u otra cosa, se convirtió en una parte importante de su búsqueda.",
+        "También las interpretaciones psiquiátricas, una lesión en la cabeza y una fuerte reacción a la medicación le hicieron reflexionar sobre lo fácil que es interpretar a una persona sin que se vea la historia completa.",
+        "Quizá ese es el hilo conductor de su vida: seguir mirando cuando otros ya creen saber lo que ven.",
+        "Hendrik no quiere decirte qué debes creer. Quiere explorar, experimentar y compartir.",
+        "Porque quizá la pregunta más interesante no empieza con lo que sabemos sobre la vida. Sino con lo que aún no sabemos sobre la muerte."
+      ]
+    },
+    "blog": {
+      "eyebrow": "Blog",
+      "title": "Próximamente",
+      "lead": "Pronto aparecerán aquí las primeras historias de Henk.",
+      "body": "Historias personales. Pensamientos. Observaciones. Cosas que me conmueven, me hacen pensar o simplemente deben contarse. Vuelve pronto."
+    },
+    "twinFlames": {
+      "eyebrow": "Llama gemela",
+      "title": "Llama gemela",
+      "imageCaption": "If you meet your twin flame, it feels like you're going 160 km/h over a bumpy road.",
+      "paragraphs": [
+        "Es un encuentro que no puedes dejar simplemente de lado.",
+        "Como si alguien tocara algo en ti que había estado oculto todo ese tiempo.",
+        "Quizá se siente como reconocimiento. Quizá como confusión. Quizá ambas cosas a la vez.",
+        "Una llama gemela no tiene por qué ser alguien con quien entres en una relación.",
+        "Quizá es alguien que te muestra algo sobre ti mismo que antes no podías ver.",
+        "Y quizá ese es el verdadero significado de un encuentro así: no que encuentres a alguien, sino que te redescubras a ti mismo."
+      ]
+    },
+    "journey": {
+      "eyebrow": "El viaje de regreso a uno",
+      "title": "El viaje de regreso a uno",
+      "paragraphs": [
+        "Quizá al final no se trata de convertirse en otra persona.",
+        "Quizá se trata de redescubrir quién ya eras.",
+        "Date el espacio para mirarlo con calma.",
+        "Quizá tu viaje empieza aquí."
+      ]
+    },
+    "happyPeopleClose": {
+      "eyebrow": "Happy People",
+      "title": "El camino de los Happy People",
+      "tagline": "Happy People — el camino de regreso a ti mismo, a los demás y a la conexión."
+    },
+    "meeting": {
+      "title": "Volví a ser yo mismo",
+      "readMore": "Leer más"
+    }
   }
 }

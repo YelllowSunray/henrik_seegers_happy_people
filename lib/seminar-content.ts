@@ -5,7 +5,10 @@ import fr from "@/data/seminars/fr.json";
 import it from "@/data/seminars/it.json";
 import ko from "@/data/seminars/ko.json";
 import nl from "@/data/seminars/nl.json";
+import nlClient from "@/data/seminars/nl-client.json";
 import type { Locale } from "@/lib/types";
+
+export type SeminarCopyVariant = "default" | "client";
 
 export type SeminarStoryBlock =
   | { type: "heading"; text: string }
@@ -54,7 +57,20 @@ function condenseBySections(
 export function getSeminarContent(
   locale: Locale,
   variant: "full" | "home" = "full",
+  copyVariant: SeminarCopyVariant = "default",
 ): SeminarPageContent {
+  if (copyVariant === "client") {
+    if (locale === "nl") {
+      return nlClient as SeminarPageContent;
+    }
+    const content = byLocale[locale] ?? en;
+    return {
+      ...content,
+      ticketSalesOpen: false,
+      storyBlocks: condenseBySections(content.storyBlocks, 0.35),
+      eventBlocks: condenseBySections(content.eventBlocks, 0.7),
+    };
+  }
   const content = byLocale[locale] ?? en;
   if (variant === "full") return content;
   return {

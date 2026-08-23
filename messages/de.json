@@ -577,5 +577,109 @@
         "text": "Und dort endet das Experiment: nicht mit der Behauptung, dass wir tatsächlich eine Liebesbeziehung hatten, sondern mit dem Bild zweier Menschen, die einander in einem außergewöhnlichen Moment begegneten — und von denen einer diese Begegnung nie vergessen wird."
       }
     ]
+  },
+  "homeClient": {
+    "variantBanner": "Homepage-Versionen vergleichen",
+    "variantClassic": "Original",
+    "variantClient": "Kürzere Version",
+    "nav": {
+      "message": "Die Botschaft",
+      "about": "Über Henk",
+      "meeting": "Die Begegnung",
+      "seminars": "Seminare",
+      "journey": "Die Reise zurück zu Eins",
+      "blog": "Blog",
+      "twinFlames": "Twin Flames",
+      "membership": "Mitgliedschaft",
+      "donate": "Unterstützung",
+      "happyPeople": "Happy People"
+    },
+    "message": {
+      "eyebrow": "Die Botschaft",
+      "title": "Vielleicht waren wir nie verloren",
+      "subtitle": "Vielleicht haben wir nur vergessen, wer wir wirklich sind.",
+      "opening": "Ich komme vom Planeten Outherspace und bin hier auf der Erde, um dir zu helfen — und allen Lost Boys und Fallen Angels. Gemeinsam vereinen wir uns wieder als eins.",
+      "paragraphs": [
+        "Ich versuche, Menschen bewusst zu machen, was wir mit dieser Welt tun. Denn der Weg, auf dem wir uns befinden — langsam aber sicher die Erde zu zerstören, von der wir alle abhängen — kann nicht der richtige Weg sein.",
+        "Ich glaube, es gibt einen anderen Weg: den Weg der Happy People. Einen Weg, auf dem wir wieder glücklich zusammenleben, ehrlich handeln, unser Wort halten und Worte und Taten eins werden lassen.",
+        "Durch Studium, Neugier und einen endlosen Hunger zu lernen entdeckte ich etwas, das mein Leben veränderte.",
+        "Habsucht wich; Empathie nahm ihren Platz ein.",
+        "Ich entdeckte, dass jemandem zu helfen, der feststeckt, nicht immer komplizierte Lösungen erfordert.",
+        "Manchmal beginnt es mit etwas Einfachem: zu verstehen, dass der andere eine eigene Welt hat.",
+        "Theory of mind.",
+        "Du bist keine Erweiterung deiner Eltern, und niemand sonst ist eine Erweiterung von dir.",
+        "Jeder hat Gedanken, Gefühle, Erfahrungen und eine Innenwelt, die du nie vollständig sehen kannst.",
+        "Vielleicht beginnt Empathie dort.",
+        "Wir sind nicht voneinander getrennt. Wir sind Menschen, jeder mit einer eigenen Innenwelt, während wir dieselbe Welt um uns herum teilen.",
+        "Vielleicht sind die Lost Boys und Fallen Angels gar nicht verloren.",
+        "Vielleicht sind sie einfach auf dem Weg nach Hause.",
+        "Zurück zu sich selbst. Zurück zueinander. Zurück zu etwas, das nie wirklich verloren war.",
+        "Ich schreibe dies nicht, um dich zu überzeugen.",
+        "Ich schreibe es, um dich zum Nachdenken zu bringen. Um dich wieder hinsehen zu lassen.",
+        "Denn vielleicht beginnt die größte Veränderung nicht damit, die Welt um uns herum zu verändern.",
+        "Vielleicht beginnt sie, wenn wir endlich den Menschen neben uns verstehen.",
+        "Und vielleicht ist der Weg nach vorn nicht immer ein Weg zu etwas Neuem.",
+        "Vielleicht ist es eine Rückkehr zu etwas Altem, das nie wirklich verloren war."
+      ],
+      "closingQuote": "Vielleicht waren wir nie verloren — vielleicht haben wir nur vergessen, wer wir wirklich sind."
+    },
+    "about": {
+      "eyebrow": "Über Henk",
+      "title": "Hendrik Seegers",
+      "teaser": "From here to eternity and back",
+      "paragraphs": [
+        "Hendrik Seegers, geboren 1965 in Weesperkarspel, hat sein Leben lang weiter geschaut als das, was an der Oberfläche sichtbar ist.",
+        "Er sah Zusammenhänge, Emotionen und Nuancen, die für andere manchmal weniger selbstverständlich waren. Diese Art zu sehen ist immer mehr Teil dessen geworden, wer er ist.",
+        "Sein Leben kennt auch tiefe Bruchlinien.",
+        "1998 verlor er seine Tochter Daniëlle. Später verlor er auch seine Mutter. Diese Verluste machten Fragen über Liebe, Tod und Fortbestand des Menschen für ihn persönlich.",
+        "2016 erlebte Hendrik eine Nahtoderfahrung. Er beschreibt, dass er seinen Körper verließ und einen anderen Bewusstseinszustand erlebte. Dort begegnete er etwas, das er als Gott erlebte, und hatte das Gefühl, dass seine Zeit noch nicht gekommen war.",
+        "Später durchlebte er erneut eine extrem schwere Zeit. Auch damals kam er zurück.",
+        "Im Nachhinein blieb vor allem eine Frage: Wo ist Daniëlles Seele geblieben?",
+        "Laut seiner eigenen Erfahrung erhielt er eine Antwort: dass er sie in einem nächsten Leben wiedersehen würde.",
+        "Ob man das als spirituelle Erfahrung, Intuition oder etwas anderes sieht — es wurde ein wichtiger Teil seiner Suche.",
+        "Auch psychiatrische Deutungen, körperliche Kopfverletzungen und eine heftige Reaktion auf Medikamente ließen ihn darüber nachdenken, wie leicht ein Mensch interpretiert wird, ohne dass die ganze Geschichte sichtbar ist.",
+        "Vielleicht ist das der rote Faden seines Lebens: weiterhin hinsehen, wenn andere schon glauben zu wissen, was sie sehen.",
+        "Hendrik will nicht sagen, was du glauben sollst. Er will erforschen, erleben und teilen.",
+        "Denn vielleicht beginnt die interessanteste Frage nicht mit dem, was wir über das Leben wissen. Sondern mit dem, was wir über den Tod noch nicht wissen."
+      ]
+    },
+    "blog": {
+      "eyebrow": "Blog",
+      "title": "Demnächst",
+      "lead": "Hier erscheinen bald die ersten Geschichten von Henk.",
+      "body": "Persönliche Geschichten. Gedanken. Beobachtungen. Dinge, die mich berühren, zum Nachdenken bringen oder einfach erzählt werden müssen. Komm bald wieder."
+    },
+    "twinFlames": {
+      "eyebrow": "Twin Flames",
+      "title": "Twin Flames",
+      "imageCaption": "If you meet your twin flame, it feels like you're going 160 km/h over a bumpy road.",
+      "paragraphs": [
+        "Es ist eine Begegnung, die man nicht einfach beiseitelegt.",
+        "Als ob jemand etwas in dir berührt, das die ganze Zeit verborgen war.",
+        "Vielleicht fühlt es sich wie Wiedererkennen an. Vielleicht wie Verwirrung. Vielleicht beides zugleich.",
+        "Eine Twin Flame muss nicht jemand sein, mit dem du eine Beziehung eingehst.",
+        "Vielleicht ist es jemand, der dir etwas über dich selbst zeigt, das du vorher nicht sehen konntest.",
+        "Und vielleicht ist das die eigentliche Bedeutung einer solchen Begegnung: nicht dass du jemanden findest, sondern dass du dich selbst neu entdeckst."
+      ]
+    },
+    "journey": {
+      "eyebrow": "Die Reise zurück zu eins",
+      "title": "Die Reise zurück zu eins",
+      "paragraphs": [
+        "Vielleicht geht es letztlich gar nicht darum, jemand anders zu werden.",
+        "Vielleicht geht es darum, wieder zu entdecken, wer du eigentlich schon warst.",
+        "Gönn dir den Raum, in Ruhe hinzuschauen.",
+        "Vielleicht beginnt deine Reise hier."
+      ]
+    },
+    "happyPeopleClose": {
+      "eyebrow": "Happy People",
+      "title": "Der Weg der Happy People",
+      "tagline": "Happy People — der Weg zurück zu dir selbst, zueinander und zur Verbindung."
+    },
+    "meeting": {
+      "title": "Ich wurde wieder ich selbst",
+      "readMore": "Mehr lesen"
+    }
   }
 }

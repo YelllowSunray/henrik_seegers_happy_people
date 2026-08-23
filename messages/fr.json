@@ -577,5 +577,109 @@
         "text": "Et c’est là que l’expérience se termine : non pas avec l’affirmation que nous avions réellement une relation amoureuse, mais avec l’image de deux personnes qui se sont rencontrées à un moment exceptionnel — et dont l’une n’oubliera jamais cette rencontre."
       }
     ]
+  },
+  "homeClient": {
+    "variantBanner": "Comparer les versions de la page d’accueil",
+    "variantClassic": "Original",
+    "variantClient": "Version courte",
+    "nav": {
+      "message": "Le message",
+      "about": "À propos de Henk",
+      "meeting": "La rencontre",
+      "seminars": "Séminaires",
+      "journey": "Le voyage de retour vers l’un",
+      "blog": "Blog",
+      "twinFlames": "Flammes jumelles",
+      "membership": "Adhésion",
+      "donate": "Soutien",
+      "happyPeople": "Happy People"
+    },
+    "message": {
+      "eyebrow": "Le message",
+      "title": "Peut-être n’avons-nous jamais été perdus",
+      "subtitle": "Peut-être avons-nous seulement oublié qui nous sommes vraiment.",
+      "opening": "Je viens de la planète Outherspace, et je suis ici sur Terre pour t’aider — et tous les Lost Boys et Fallen Angels. Ensemble, nous nous réunissons à nouveau en un.",
+      "paragraphs": [
+        "J’essaie de sensibiliser les gens à ce que nous faisons de ce monde. Car le chemin sur lequel nous sommes — détruisant lentement mais sûrement la Terre dont nous dépendons tous — ne peut pas être le bon chemin.",
+        "Je crois qu’il existe une autre voie : celle des Happy People. Une voie où nous pouvons à nouveau vivre heureux ensemble, commercer honnêtement, tenir parole et faire correspondre nos paroles et nos actes.",
+        "Par l’étude, la curiosité et une faim infinie d’apprendre, j’ai découvert quelque chose qui a changé ma vie.",
+        "L’avidité a commencé à céder ; l’empathie a pris sa place.",
+        "J’ai découvert qu’aider quelqu’un qui est bloqué ne demande pas toujours des solutions compliquées.",
+        "Parfois cela commence par quelque chose de simple : comprendre que l’autre a un monde à lui.",
+        "Theory of mind.",
+        "Tu n’es pas une extension de tes parents, et personne d’autre n’est une extension de toi.",
+        "Chacun a des pensées, des sentiments, des expériences et un monde intérieur que tu ne peux jamais voir entièrement.",
+        "Peut-être que l’empathie commence là.",
+        "Nous ne sommes pas séparés les uns des autres. Nous sommes des êtres humains, chacun avec son propre monde intérieur, tout en partageant le même monde autour de nous.",
+        "Peut-être que les Lost Boys et Fallen Angels ne sont pas perdus du tout.",
+        "Peut-être qu’ils sont simplement en route vers la maison.",
+        "Retour à eux-mêmes. Retour les uns aux autres. Retour à quelque chose qui n’a jamais vraiment été perdu.",
+        "Je n’écris pas ceci pour te convaincre.",
+        "Je l’écris pour te faire réfléchir. Pour te faire regarder à nouveau.",
+        "Car peut-être que le plus grand changement ne commence pas en changeant le monde autour de nous.",
+        "Peut-être commence-t-il lorsque nous comprenons enfin la personne à côté de nous.",
+        "Et peut-être que la voie vers l’avant n’est pas toujours un chemin vers quelque chose de nouveau.",
+        "Peut-être est-ce un retour vers quelque chose d’ancien qui n’a jamais vraiment été perdu."
+      ],
+      "closingQuote": "Peut-être n’avons-nous jamais été perdus — peut-être avons-nous seulement oublié qui nous sommes vraiment."
+    },
+    "about": {
+      "eyebrow": "À propos de Henk",
+      "title": "Hendrik Seegers",
+      "teaser": "From here to eternity and back",
+      "paragraphs": [
+        "Hendrik Seegers, né en 1965 à Weesperkarspel, a toujours regardé au-delà de ce qui est visible en surface.",
+        "Il voyait des liens, des émotions et des nuances qui étaient parfois moins évidents pour les autres. Cette façon de voir est devenue de plus en plus partie de qui il est.",
+        "Sa vie connaît aussi de profondes lignes de fracture.",
+        "En 1998, il a perdu sa fille Daniëlle. Plus tard, il a aussi perdu sa mère. Ces pertes ont rendu personnelles les questions sur l’amour, la mort et la continuité humaine.",
+        "En 2016, Hendrik a vécu une expérience de mort imminente. Il décrit avoir quitté son corps et avoir vécu un autre état de conscience. Là, il a rencontré quelque chose qu’il a vécu comme Dieu et a senti que son heure n’était pas encore venue.",
+        "Plus tard, il a traversé à nouveau une période extrêmement difficile. Là aussi, il est revenu.",
+        "Après coup, une question surtout est restée : où est passée l’âme de Daniëlle ?",
+        "Selon sa propre expérience, il a reçu une réponse : qu’il la reverrait dans une prochaine vie.",
+        "Que l’on y voie une expérience spirituelle, une intuition ou autre chose, cela est devenu une partie importante de sa quête.",
+        "Des interprétations psychiatriques, une blessure à la tête et une forte réaction aux médicaments l’ont aussi fait réfléchir à la facilité avec laquelle une personne peut être interprétée sans que toute l’histoire soit visible.",
+        "Peut-être est-ce le fil rouge de sa vie : continuer à regarder quand les autres pensent déjà savoir ce qu’ils voient.",
+        "Hendrik ne veut pas dire ce que tu dois croire. Il veut explorer, vivre et partager.",
+        "Car peut-être que la question la plus intéressante ne commence pas par ce que nous savons de la vie. Mais par ce que nous ne savons pas encore de la mort."
+      ]
+    },
+    "blog": {
+      "eyebrow": "Blog",
+      "title": "Bientôt",
+      "lead": "Les premières histoires de Henk apparaîtront ici bientôt.",
+      "body": "Histoires personnelles. Pensées. Observations. Des choses qui me touchent, me font réfléchir ou doivent simplement être racontées. Reviens bientôt."
+    },
+    "twinFlames": {
+      "eyebrow": "Flammes jumelles",
+      "title": "Flammes jumelles",
+      "imageCaption": "If you meet your twin flame, it feels like you're going 160 km/h over a bumpy road.",
+      "paragraphs": [
+        "C’est une rencontre que l’on ne peut pas simplement mettre de côté.",
+        "Comme si quelqu’un touchait quelque chose en toi qui était caché tout ce temps.",
+        "Peut-être que cela ressemble à une reconnaissance. Peut-être à de la confusion. Peut-être les deux à la fois.",
+        "Une flamme jumelle n’a pas forcément à être quelqu’un avec qui tu entres en relation.",
+        "Peut-être que c’est quelqu’un qui te montre quelque chose sur toi-même que tu ne pouvais pas voir auparavant.",
+        "Et peut-être que c’est là le vrai sens d’une telle rencontre : non pas trouver quelqu’un, mais te redécouvrir toi-même."
+      ]
+    },
+    "journey": {
+      "eyebrow": "Le voyage de retour vers l’un",
+      "title": "Le voyage de retour vers l’un",
+      "paragraphs": [
+        "Peut-être qu’il ne s’agit pas du tout de devenir quelqu’un d’autre.",
+        "Peut-être qu’il s’agit de redécouvrir qui tu étais déjà.",
+        "Accorde-toi l’espace d’y regarder calmement.",
+        "Peut-être que ton voyage commence ici."
+      ]
+    },
+    "happyPeopleClose": {
+      "eyebrow": "Happy People",
+      "title": "Le chemin des Happy People",
+      "tagline": "Happy People — le chemin de retour vers soi, vers les autres et vers la connexion."
+    },
+    "meeting": {
+      "title": "Je suis redevenu moi-même",
+      "readMore": "Lire la suite"
+    }
   }
 }
