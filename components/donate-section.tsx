@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { LightboxImage } from "@/components/lightbox-image";
-import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
 import {
   DONATION_DEFAULT_EUR,
   DONATION_PRESETS_EUR,
@@ -137,17 +136,6 @@ export function DonateSection() {
           </p>
         </div>
         {error && <p className="mt-4 text-sm text-red-700">{error}</p>}
-
-        <div className="mt-8 w-full">
-          <SyncedLyricPlayer
-            audioSrc="/audio/if-you-dont-know.mp3"
-            lrcSrc="/audio/if-you-dont-know.lrc"
-            title="If You Don't Know Me By Now"
-            artist="Simply Red"
-            tone="page"
-            handoffAnchorId="donate-title"
-          />
-        </div>
       </div>
 
       <aside className="relative overflow-hidden">
