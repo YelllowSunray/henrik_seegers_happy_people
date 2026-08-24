@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   Suspense,
@@ -13,7 +14,11 @@ import { useSearchParams } from "next/navigation";
 import { usePathname, useRouter } from "@/i18n/navigation";
 
 const SCROLL_KEY = "hp.scrollByKey";
+const STACK_KEY = "hp.navStack";
 const RESTORE_FLAG = "hp.restoreScroll";
+const PENDING_RESTORE = "hp.pendingRestore";
+
+type StackEntry = { path: string; scrollY: number };
 
 function readMap(): Record<string, number> {
   try {
@@ -34,7 +39,24 @@ function writeMap(map: Record<string, number>) {
   }
 }
 
+function readStack(): StackEntry[] {
+  try {
+    return JSON.parse(sessionStorage.getItem(STACK_KEY) || "[]") as StackEntry[];
+  } catch {
+    return [];
+  }
+}
+
+function writeStack(stack: StackEntry[]) {
+  try {
+    sessionStorage.setItem(STACK_KEY, JSON.stringify(stack.slice(-20)));
+  } catch {
+    /* quota / private mode */
+  }
+}
+
 function persistKey(pageKey: string, y: number) {
+  if (y < 0) return;
   const map = readMap();
   map[pageKey] = y;
   writeMap(map);
@@ -43,6 +65,127 @@ function persistKey(pageKey: string, y: number) {
 function pathKey(pathname: string, search: string) {
   const q = !search ? "" : search.startsWith("?") ? search : `?${search}`;
   return `${pathname}${q}`;
+}
+
+function maxScrollY() {
+  return Math.max(
+    0,
+    document.documentElement.scrollHeight - window.innerHeight,
+  );
+}
+
+function clampScrollY(y: number) {
+  return Math.min(Math.max(0, y), maxScrollY());
+}
+
+function readPendingRestore(): StackEntry | null {
+  try {
+    const raw = sessionStorage.getItem(PENDING_RESTORE);
+    if (!raw) return null;
+    return JSON.parse(raw) as StackEntry;
+  } catch {
+    return null;
+  }
+}
+
+function startScrollRestore(
+  targetY: number,
+  pageKey: string,
+  restoringRef: React.MutableRefObject<boolean>,
+  scrollRef: React.MutableRefObject<number>,
+) {
+  restoringRef.current = true;
+  scrollRef.current = targetY;
+  persistKey(pageKey, targetY);
+
+  let cancelled = false;
+  let timers: number[] = [];
+  let doneTimer = 0;
+  let ro: ResizeObserver | null = null;
+  let lastProgrammaticAt = 0;
+
+  const finish = (finalY?: number) => {
+    if (cancelled) return;
+    cancelled = true;
+    ro?.disconnect();
+    timers.forEach((t) => window.clearTimeout(t));
+    if (doneTimer) window.clearTimeout(doneTimer);
+    window.removeEventListener("wheel", onUserIntent);
+    window.removeEventListener("touchmove", onUserIntent);
+    window.removeEventListener("keydown", onKeyIntent);
+    window.removeEventListener("scroll", onUserScroll, { capture: true });
+    restoringRef.current = false;
+    const y = finalY ?? window.scrollY;
+    scrollRef.current = y;
+    persistKey(pageKey, y);
+  };
+
+  const onUserIntent = () => finish();
+  const onKeyIntent = (e: KeyboardEvent) => {
+    const keys = [
+      "ArrowUp",
+      "ArrowDown",
+      "PageUp",
+      "PageDown",
+      "Home",
+      "End",
+      " ",
+    ];
+    if (keys.includes(e.key)) finish();
+  };
+  const onUserScroll = () => {
+    if (cancelled) return;
+    if (Date.now() - lastProgrammaticAt > 80) finish();
+  };
+
+  const attempt = () => {
+    if (cancelled) return;
+    const desired = clampScrollY(targetY);
+    const current = window.scrollY;
+
+    if (Math.abs(current - desired) <= 64) {
+      finish(desired);
+      return;
+    }
+
+    // Still loading — page not tall enough yet; scroll down when we can.
+    if (current < desired - 64) {
+      lastProgrammaticAt = Date.now();
+      window.scrollTo({ top: desired, left: 0, behavior: "auto" });
+      if (Math.abs(window.scrollY - desired) <= 64) finish(desired);
+      return;
+    }
+
+    // Next.js reset us to the top after a successful restore.
+    if (targetY > 200 && current < 120) {
+      lastProgrammaticAt = Date.now();
+      window.scrollTo({ top: desired, left: 0, behavior: "auto" });
+      if (Math.abs(window.scrollY - desired) <= 64) finish(desired);
+    }
+  };
+
+  window.addEventListener("wheel", onUserIntent, { passive: true });
+  window.addEventListener("touchmove", onUserIntent, { passive: true });
+  window.addEventListener("keydown", onKeyIntent);
+  window.addEventListener("scroll", onUserScroll, { capture: true, passive: true });
+
+  attempt();
+  requestAnimationFrame(attempt);
+
+  if (typeof ResizeObserver !== "undefined") {
+    ro = new ResizeObserver(() => {
+      if (!cancelled) attempt();
+    });
+    ro.observe(document.documentElement);
+    ro.observe(document.body);
+  }
+
+  timers = [50, 120, 250, 450, 700, 1000, 1500, 2000].map((ms) =>
+    window.setTimeout(attempt, ms),
+  );
+  doneTimer = window.setTimeout(() => finish(clampScrollY(targetY)), 2200);
+
+  return () => finish();
 }
 
 type NavMemoryApi = {
@@ -60,6 +203,7 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
   const keyRef = useRef(key);
   const scrollRef = useRef(0);
   const restoringRef = useRef(false);
+  const cleanupRestoreRef = useRef<(() => void) | null>(null);
 
   keyRef.current = key;
 
@@ -72,9 +216,6 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Browser back/forward → restore saved scroll for the page we land on.
-  // Do not persist here: keyRef may already be the destination and would
-  // overwrite that page's saved scroll with the leaving page's scrollY.
   useEffect(() => {
     function onPopState() {
       sessionStorage.setItem(RESTORE_FLAG, "1");
@@ -83,7 +224,6 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
-  // Save scroll for the page we're leaving before in-app link navigations.
   useEffect(() => {
     function capture() {
       const y = window.scrollY;
@@ -108,46 +248,53 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  useEffect(() => {
-    const shouldRestore = sessionStorage.getItem(RESTORE_FLAG) === "1";
-    if (shouldRestore) {
-      sessionStorage.removeItem(RESTORE_FLAG);
+  const runRestore = useCallback(
+    (pageKey: string) => {
+      cleanupRestoreRef.current?.();
+      cleanupRestoreRef.current = null;
+
+      const pending = readPendingRestore();
+      sessionStorage.removeItem(PENDING_RESTORE);
+
       const map = readMap();
-      const y = Number(map[key] ?? 0);
-      scrollRef.current = y;
-      restoringRef.current = true;
-
-      const restore = () => {
-        window.scrollTo({ top: y, left: 0, behavior: "auto" });
-      };
-      restore();
-      requestAnimationFrame(() => {
-        restore();
-        requestAnimationFrame(restore);
-      });
-      const timers = [50, 100, 200, 400, 700, 1200].map((ms) =>
-        window.setTimeout(restore, ms),
+      const y = Number(
+        pending?.path === pageKey ? pending.scrollY : (map[pageKey] ?? 0),
       );
-      const done = window.setTimeout(() => {
-        restoringRef.current = false;
-        scrollRef.current = window.scrollY;
-        persistKey(key, window.scrollY);
-      }, 1300);
 
-      return () => {
-        timers.forEach((t) => window.clearTimeout(t));
-        window.clearTimeout(done);
+      if (y <= 0) {
         restoringRef.current = false;
-      };
-    }
+        scrollRef.current = 0;
+        return undefined;
+      }
 
-    restoringRef.current = false;
+      cleanupRestoreRef.current = startScrollRestore(
+        y,
+        pageKey,
+        restoringRef,
+        scrollRef,
+      );
+      return cleanupRestoreRef.current;
+    },
+    [],
+  );
+
+  useLayoutEffect(() => {
+    const shouldRestore = sessionStorage.getItem(RESTORE_FLAG) === "1";
+    if (!shouldRestore) return undefined;
+    sessionStorage.removeItem(RESTORE_FLAG);
+    return runRestore(key);
+  }, [key, runRestore]);
+
+  useEffect(() => {
+    if (restoringRef.current) return undefined;
+
+    cleanupRestoreRef.current?.();
+    cleanupRestoreRef.current = null;
     scrollRef.current = 0;
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     return undefined;
   }, [key]);
 
-  // Persist scroll while reading this page — always under this effect's pageKey.
   useEffect(() => {
     const pageKey = key;
     if (!restoringRef.current) {
@@ -171,9 +318,13 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("pagehide", onHide);
     return () => {
-      // Persist under the page this effect belonged to — not the new keyRef.
       if (!restoringRef.current) {
         persistKey(pageKey, scrollRef.current);
+        if (sessionStorage.getItem(RESTORE_FLAG) !== "1") {
+          const stack = readStack();
+          stack.push({ path: pageKey, scrollY: scrollRef.current });
+          writeStack(stack);
+        }
       }
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("pagehide", onHide);
@@ -186,12 +337,23 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
     scrollRef.current = y;
     persistKey(pageKey, y);
 
+    const stack = readStack();
+    const prev = stack.length > 0 ? stack[stack.length - 1]! : null;
+    if (prev) {
+      persistKey(prev.path, prev.scrollY);
+      sessionStorage.setItem(PENDING_RESTORE, JSON.stringify(prev));
+      writeStack(stack.slice(0, -1));
+    }
+
+    sessionStorage.setItem(RESTORE_FLAG, "1");
+
     if (typeof window !== "undefined" && window.history.length > 1) {
-      sessionStorage.setItem(RESTORE_FLAG, "1");
       router.back();
       return;
     }
-    router.push("/");
+
+    const target = (prev?.path ?? "/") as "/";
+    router.push(target, { scroll: false });
   }, [router]);
 
   const api = useMemo(() => ({ goBack }), [goBack]);

@@ -17,7 +17,6 @@ export async function SeminarStory({
   showTicket = true,
   showAllLink = false,
   showSoStrongPlayer = false,
-  eventOnTop = false,
   variant = "full",
 }: {
   locale: Locale;
@@ -27,7 +26,6 @@ export async function SeminarStory({
   showTicket?: boolean;
   showAllLink?: boolean;
   showSoStrongPlayer?: boolean;
-  eventOnTop?: boolean;
   variant?: "full" | "home";
 }) {
   const tr = await getTranslations("seminars");
@@ -90,10 +88,6 @@ export async function SeminarStory({
 
   return (
     <>
-      {eventOnTop && nextEventCard ? (
-        <div className="mb-14">{nextEventCard}</div>
-      ) : null}
-
       <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14">
       <div>
         <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
@@ -109,14 +103,14 @@ export async function SeminarStory({
           {content.subtitle}
         </p>
 
+        {nextEventCard ? <div className="mt-10">{nextEventCard}</div> : null}
+
         <div className="mt-10">
           <SeminarStoryBlocks blocks={content.storyBlocks} />
         </div>
 
-        {event && !eventOnTop ? (
+        {event ? (
           <>
-            <div className="mt-16">{nextEventCard}</div>
-
             <div className="mt-10">
               <SeminarStoryBlocks blocks={content.eventBlocks} />
             </div>
@@ -135,27 +129,6 @@ export async function SeminarStory({
                 <p className="mt-6 text-sm text-ink-soft">{tr("missed")}</p>
               </>
             ) : null}
-          </>
-        ) : null}
-
-        {event && eventOnTop ? (
-          <div className="mt-10">
-            <SeminarStoryBlocks blocks={content.eventBlocks} />
-          </div>
-        ) : null}
-
-        {event && eventOnTop && ticketOpen && variant === "full" ? (
-          <>
-            <SeminarTicketButton
-              className="mt-10"
-              eventId={event.id}
-              eventTitle={eventTitle}
-              eventMeta={[eventWhen, event.location, event.address]
-                .filter(Boolean)
-                .join(" · ")}
-              returnPath={returnPath}
-            />
-            <p className="mt-6 text-sm text-ink-soft">{tr("missed")}</p>
           </>
         ) : null}
 

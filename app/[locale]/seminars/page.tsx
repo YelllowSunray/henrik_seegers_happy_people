@@ -24,7 +24,7 @@ export default async function SeminarsPage({
     <>
       <SiteHeader variant="solid" />
       <Section tone="default">
-        <SeminarStory locale={locale} eventOnTop />
+        <SeminarStory locale={locale} />
 
         {seminars.length > 0 ? (
           <div className="mt-16 border-t border-line pt-16">
