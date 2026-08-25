@@ -1,4 +1,15 @@
-export const locales = ["nl", "en", "de", "es", "it", "fr", "ko"] as const;
+export const locales = [
+  "nl",
+  "en",
+  "de",
+  "es",
+  "it",
+  "fr",
+  "ko",
+  "ru",
+  "zh",
+  "ar",
+] as const;
 
 export type Locale = (typeof locales)[number];
 
@@ -13,4 +24,10 @@ export const localeLabels: Record<
   it: { short: "IT", native: "Italiano" },
   fr: { short: "FR", native: "Français" },
   ko: { short: "KO", native: "한국어" },
+  ru: { short: "RU", native: "Русский" },
+  zh: { short: "中文", native: "中文" },
+  ar: { short: "AR", native: "العربية" },
 };
+
+/** Locales that should render right-to-left. */
+export const rtlLocales: ReadonlySet<Locale> = new Set(["ar"]);

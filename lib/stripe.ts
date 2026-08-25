@@ -28,9 +28,12 @@ const PAYMENT_METHODS_BY_LOCALE: Record<string, CheckoutPaymentMethod[]> = {
   fr: ["card", "sepa_debit"],
   es: ["card", "sepa_debit"],
   it: ["card", "sepa_debit"],
-  // English / Korea — cards
+  // English / Korea / Russian / Chinese / Arabic — cards
   en: ["card"],
   ko: ["card"],
+  ru: ["card"],
+  zh: ["card"],
+  ar: ["card"],
 };
 
 export function paymentMethodsForLocale(
@@ -43,7 +46,18 @@ export function paymentMethodsForLocale(
 export function stripeCheckoutLocale(
   locale: string,
 ): Stripe.Checkout.SessionCreateParams.Locale {
-  const allowed = new Set(["nl", "en", "de", "es", "fr", "it", "ko"]);
+  const allowed = new Set([
+    "nl",
+    "en",
+    "de",
+    "es",
+    "fr",
+    "it",
+    "ko",
+    "ru",
+    "zh",
+    "ar",
+  ]);
   if (allowed.has(locale)) {
     return locale as Stripe.Checkout.SessionCreateParams.Locale;
   }

@@ -1,3 +1,4 @@
+import ar from "@/data/seminars/ar.json";
 import de from "@/data/seminars/de.json";
 import en from "@/data/seminars/en.json";
 import es from "@/data/seminars/es.json";
@@ -5,6 +6,8 @@ import fr from "@/data/seminars/fr.json";
 import it from "@/data/seminars/it.json";
 import ko from "@/data/seminars/ko.json";
 import nl from "@/data/seminars/nl.json";
+import ru from "@/data/seminars/ru.json";
+import zh from "@/data/seminars/zh.json";
 import type { Locale } from "@/lib/types";
 
 export type SeminarStoryBlock =
@@ -27,6 +30,9 @@ const byLocale: Record<Locale, SeminarPageContent> = {
   it: it as SeminarPageContent,
   fr: fr as SeminarPageContent,
   ko: ko as SeminarPageContent,
+  ru: ru as SeminarPageContent,
+  zh: zh as SeminarPageContent,
+  ar: ar as SeminarPageContent,
 };
 
 /** Keep the first ~ratio of content sections (split at headings). */

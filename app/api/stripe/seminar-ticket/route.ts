@@ -13,7 +13,7 @@ export const runtime = "nodejs";
 
 function localeFromReferer(req: Request) {
   const referer = req.headers.get("referer") || "";
-  const match = referer.match(/\/(nl|en|de|es|it|fr|ko)(\/|$)/);
+  const match = referer.match(/\/(nl|en|de|es|it|fr|ko|ru|zh|ar)(\/|$)/);
   return match?.[1] ?? "nl";
 }
 

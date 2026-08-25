@@ -14,6 +14,9 @@ const LABELS: Record<string, string> = {
   es: "Atrás",
   it: "Indietro",
   ko: "뒤로",
+  ru: "Назад",
+  zh: "返回",
+  ar: "رجوع",
 };
 
 function isHomePath(pathname: string) {
