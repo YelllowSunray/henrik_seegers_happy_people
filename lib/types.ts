@@ -22,6 +22,8 @@ export type SeminarEvent = {
   title: LocalizedString;
   description: LocalizedString;
   date: string;
+  /** When true, the public site shows a “later this year” label instead of the date. */
+  dateUncertain?: boolean;
   time: string;
   location: string;
   /** Street address / venue details */

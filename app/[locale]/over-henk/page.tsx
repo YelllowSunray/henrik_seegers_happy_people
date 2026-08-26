@@ -1,7 +1,25 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { LightboxImage } from "@/components/lightbox-image";
+import { buildPageMetadata } from "@/lib/seo";
+import type { Locale } from "@/lib/types";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "about" });
+  return buildPageMetadata({
+    locale: locale as Locale,
+    pathname: "/over-henk",
+    title: t("title"),
+    description: t("teaser"),
+  });
+}
 
 export default async function AboutPage({
   params,
@@ -30,16 +48,12 @@ export default async function AboutPage({
             </p>
             <div className="mt-8 max-w-2xl space-y-5 text-base leading-relaxed text-ink-soft md:text-lg">
               {paragraphs.map((paragraph, i) => (
-                <p
-                  key={i}
-                  className={i === 0 ? "text-ink" : undefined}
-                >
+                <p key={i} className={i === 0 ? "text-ink" : undefined}>
                   {paragraph}
                 </p>
               ))}
             </div>
           </div>
-
           <div className="lg:sticky lg:top-28">
             <LightboxImage
               src="/images/adhd-pic.jpg"

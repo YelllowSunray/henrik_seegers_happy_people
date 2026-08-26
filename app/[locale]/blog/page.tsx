@@ -1,14 +1,32 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { LightboxImage } from "@/components/lightbox-image";
+import { buildPageMetadata } from "@/lib/seo";
 import { t } from "@/lib/content";
 import { FACEBOOK_HREF } from "@/lib/contact";
 import { fetchPublicPosts } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const tr = await getTranslations({ locale, namespace: "blog" });
+  const meta = await getTranslations({ locale, namespace: "meta" });
+  return buildPageMetadata({
+    locale: locale as Locale,
+    pathname: "/blog",
+    title: tr("title"),
+    description: meta("description"),
+  });
+}
 
 export default async function BlogPage({
   params,

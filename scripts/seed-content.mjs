@@ -64,6 +64,7 @@ await seedCollection("events", seed.events, (e) => ({
     title: e.title,
     description: e.description,
     date: e.date,
+    ...(e.dateUncertain ? { dateUncertain: true } : {}),
     time: e.time,
     location: e.location,
     ...(e.address ? { address: e.address } : {}),

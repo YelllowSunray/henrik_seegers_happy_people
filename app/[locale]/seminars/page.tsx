@@ -1,12 +1,29 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { JoinButton } from "@/components/join-button";
 import { SeminarStory } from "@/components/seminar-story";
+import { buildPageMetadata } from "@/lib/seo";
 import { fetchVideosByKind } from "@/lib/content-firestore";
 import { t } from "@/lib/content";
 import type { Locale } from "@/lib/types";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const tr = await getTranslations({ locale, namespace: "seminars" });
+  return buildPageMetadata({
+    locale: locale as Locale,
+    pathname: "/seminars",
+    title: tr("title"),
+    description: tr("teaser"),
+  });
+}
 
 export default async function SeminarsPage({
   params,

@@ -349,6 +349,7 @@ export function AdminPortal() {
           description:
             (data.description as SeminarEvent["description"]) ?? { nl: "" },
           date: String(data.date ?? ""),
+          dateUncertain: Boolean(data.dateUncertain),
           time: String(data.time ?? ""),
           location: String(data.location ?? ""),
           address:
@@ -760,7 +761,7 @@ export function AdminPortal() {
                   items={events.map((e) => ({
                     id: e.id,
                     title: nl(e.title),
-                    meta: `${e.date} · ${e.location}${e.address ? ` · ${e.address}` : ""}`,
+                    meta: `${e.dateUncertain ? "Later this year" : e.date} · ${e.location}${e.address ? ` · ${e.address}` : ""}`,
                     audience: "public" as const,
                   }))}
                   onEdit={setEditingId}
@@ -1034,6 +1035,7 @@ function EventForm({
       title: { nl: String(fd.get("title")) },
       description: { nl: String(fd.get("description")) },
       date: String(fd.get("date")),
+      dateUncertain: fd.get("dateUncertain") === "on",
       time: String(fd.get("time")),
       location: String(
         fd.get("location") || "Van der Valk Hotel Amersfoort",
@@ -1101,6 +1103,22 @@ function EventForm({
           className={fieldClass}
         />
       </Field>
+      <label className="flex cursor-pointer items-start gap-3 rounded-sm border border-line bg-bg/50 px-4 py-3">
+        <input
+          type="checkbox"
+          name="dateUncertain"
+          defaultChecked={Boolean(initial?.dateUncertain)}
+          className="mt-1 h-4 w-4 shrink-0 accent-accent"
+        />
+        <span>
+          <span className="block text-sm font-medium text-ink">
+            {t("fieldDateUncertain")}
+          </span>
+          <span className="mt-1 block text-xs leading-relaxed text-ink-soft">
+            {t("fieldDateUncertainHint")}
+          </span>
+        </span>
+      </label>
       <div className="flex flex-wrap gap-2 pt-1">
         <button type="submit" className={btnClass} disabled={disabled}>
           {saveLabel}

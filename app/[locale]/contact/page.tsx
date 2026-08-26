@@ -1,7 +1,25 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
+import { buildPageMetadata } from "@/lib/seo";
 import { FACEBOOK_HREF, WHATSAPP_DISPLAY, WHATSAPP_HREF } from "@/lib/contact";
+import type { Locale } from "@/lib/types";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "contact" });
+  return buildPageMetadata({
+    locale: locale as Locale,
+    pathname: "/contact",
+    title: t("title"),
+    description: t("body"),
+  });
+}
 
 export default async function ContactPage({
   params,

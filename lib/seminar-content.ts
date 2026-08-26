@@ -8,7 +8,7 @@ import ko from "@/data/seminars/ko.json";
 import nl from "@/data/seminars/nl.json";
 import ru from "@/data/seminars/ru.json";
 import zh from "@/data/seminars/zh.json";
-import type { Locale } from "@/lib/types";
+import type { Locale, SeminarEvent } from "@/lib/types";
 
 export type SeminarStoryBlock =
   | { type: "heading"; text: string }
@@ -78,4 +78,13 @@ export function formatEventDate(isoDate: string, locale: string): string {
     month: "long",
     year: "numeric",
   }).format(date);
+}
+
+export function getEventDateLabel(
+  event: SeminarEvent,
+  locale: Locale,
+  laterThisYearLabel: string,
+): string {
+  if (event.dateUncertain) return laterThisYearLabel;
+  return formatEventDate(event.date, locale);
 }

@@ -3,6 +3,9 @@
     "title": "Happy People — Hendrik Seegers",
     "description": "Enlightenment Seminars for people who are stuck in life. Happy People의 길."
   },
+  "site": {
+    "underConstruction": "사이트 공사 중"
+  },
   "nav": {
     "home": "홈",
     "about": "헹크 소개",
@@ -89,7 +92,8 @@
     "ticketForThis": "이 세미나 티켓",
     "buyTicketFor": "“{title}” 티켓 구매",
     "allSeminars": "다가오는 모든 세미나",
-    "refreshments": "간단한 다과와 음료가 제공됩니다."
+    "refreshments": "간단한 다과와 음료가 제공됩니다.",
+    "dateLaterThisYear": "올해 예정"
   },
   "blog": {
     "eyebrow": "Blog",
@@ -384,7 +388,9 @@
     "selectedMember": "선택한 회원",
     "fieldEmailHint": "목록에 없는 회원일 때만 필요",
     "accountsLink": "테스트 계정",
-    "fieldAddress": "주소"
+    "fieldAddress": "주소",
+    "fieldDateUncertain": "날짜 대신 “올해 예정” 표시",
+    "fieldDateUncertainHint": "정확한 날짜가 아직 정해지지 않았을 때 사용하세요. 제목과 장소는 그대로 표시됩니다."
   },
   "adminAccounts": {
     "eyebrow": "Developer",

@@ -3,6 +3,9 @@
     "title": "Happy People — Hendrik Seegers",
     "description": "ندوات تنويرية للأشخاص العالقين في الحياة. مسار Happy People."
   },
+  "site": {
+    "underConstruction": "الموقع لا يزال قيد الإنشاء"
+  },
   "nav": {
     "home": "الصفحة الرئيسية",
     "about": "حول Henk",
@@ -89,7 +92,8 @@
     "ticketForThis": "تذكرة حضور هذه الندوة",
     "buyTicketFor": "اشتري تذكرة لـ “{title}”",
     "allSeminars": "جميع الندوات القادمة",
-    "refreshments": "سيتم توفير الوجبات الخفيفة والمشروبات."
+    "refreshments": "سيتم توفير الوجبات الخفيفة والمشروبات.",
+    "dateLaterThisYear": "لاحقًا هذا العام"
   },
   "blog": {
     "eyebrow": "مدونة",
@@ -384,7 +388,9 @@
     "selectedMember": "عضو مختار",
     "fieldEmailHint": "مطلوب فقط إذا لم يكن العضو في القائمة",
     "accountsLink": "حسابات تجريبية",
-    "fieldAddress": "العنوان"
+    "fieldAddress": "العنوان",
+    "fieldDateUncertain": "عرض «لاحقًا هذا العام» بدل التاريخ",
+    "fieldDateUncertainHint": "استخدم هذا الخيار عندما لا يكون التاريخ المحدد معروفًا بعد. يبقى العنوان والمكان ظاهرين."
   },
   "adminAccounts": {
     "eyebrow": "المطور",

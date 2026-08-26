@@ -1,8 +1,27 @@
+import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { MembershipStory } from "@/components/membership-story";
 import { LightboxImage } from "@/components/lightbox-image";
+import { buildPageMetadata } from "@/lib/seo";
+import type { Locale } from "@/lib/types";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "membership" });
+  const intro = t.raw("introParagraphs") as string[];
+  return buildPageMetadata({
+    locale: locale as Locale,
+    pathname: "/happy-people",
+    title: t("title"),
+    description: intro[0] ?? t("subtitle"),
+  });
+}
 
 export default async function MembershipPage({
   params,

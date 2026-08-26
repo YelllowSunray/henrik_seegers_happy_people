@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { MembersShell } from "@/components/members-shell";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function MembersLayout({
   children,

@@ -1,8 +1,26 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { SpiritsPlayer } from "@/components/spirits-player";
 import { LightboxImage } from "@/components/lightbox-image";
+import { buildPageMetadata } from "@/lib/seo";
+import type { Locale } from "@/lib/types";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "message" });
+  return buildPageMetadata({
+    locale: locale as Locale,
+    pathname: "/boodschap",
+    title: t("title"),
+    description: t("short"),
+  });
+}
 
 export default async function MessagePage({
   params,

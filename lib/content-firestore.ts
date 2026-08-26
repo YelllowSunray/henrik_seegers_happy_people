@@ -58,6 +58,7 @@ function mapEvent(id: string, data: Record<string, unknown>): SeminarEvent {
     title: asLocalized(data.title),
     description: asLocalized(data.description),
     date: String(data.date ?? ""),
+    dateUncertain: Boolean(data.dateUncertain),
     time: String(data.time ?? ""),
     location: String(data.location ?? "Van der Valk Hotel Amersfoort"),
     address:

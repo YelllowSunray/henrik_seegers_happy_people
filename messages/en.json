@@ -3,6 +3,9 @@
     "title": "Happy People — Hendrik Seegers",
     "description": "Enlightenment Seminars for people who are stuck in life. The path of Happy People."
   },
+  "site": {
+    "underConstruction": "Site still under construction"
+  },
   "nav": {
     "home": "Home",
     "about": "About Henk",
@@ -89,7 +92,8 @@
     "ticketForThis": "Ticket for this seminar",
     "buyTicketFor": "Buy ticket for “{title}”",
     "allSeminars": "All upcoming seminars",
-    "refreshments": "Snacks and drinks will be provided."
+    "refreshments": "Snacks and drinks will be provided.",
+    "dateLaterThisYear": "Later this year"
   },
   "blog": {
     "eyebrow": "Blog",
@@ -384,7 +388,9 @@
     "selectedMember": "Selected member",
     "fieldEmailHint": "Only needed if the member is not in the list",
     "accountsLink": "Test accounts",
-    "fieldAddress": "Address"
+    "fieldAddress": "Address",
+    "fieldDateUncertain": "Show “Later this year” instead of the date",
+    "fieldDateUncertainHint": "Use when the exact seminar date is not fixed yet. The title and location stay visible."
   },
   "adminAccounts": {
     "eyebrow": "Developer",

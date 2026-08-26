@@ -3,6 +3,9 @@
     "title": "Happy People — Hendrik Seegers",
     "description": "为生活困顿者举办的启蒙讲座。 Happy People的路径。"
   },
+  "site": {
+    "underConstruction": "网站建设中"
+  },
   "nav": {
     "home": "首页",
     "about": "关于Henk",
@@ -89,7 +92,8 @@
     "ticketForThis": "本次研讨会门票",
     "buyTicketFor": "购买“{title}”门票",
     "allSeminars": "所有即将举行的研讨会",
-    "refreshments": "将提供零食和饮料。"
+    "refreshments": "将提供零食和饮料。",
+    "dateLaterThisYear": "今年稍后"
   },
   "blog": {
     "eyebrow": "博客",
@@ -384,7 +388,9 @@
     "selectedMember": "选定成员",
     "fieldEmailHint": "仅当成员不在列表中时才需要",
     "accountsLink": "测试账户",
-    "fieldAddress": "地址"
+    "fieldAddress": "地址",
+    "fieldDateUncertain": "显示“今年稍后”而不是具体日期",
+    "fieldDateUncertainHint": "当确切日期尚未确定时使用。标题和地点仍会显示。"
   },
   "adminAccounts": {
     "eyebrow": "开发者",

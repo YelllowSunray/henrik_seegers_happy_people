@@ -40,6 +40,7 @@ for (const event of seed.events) {
         title: event.title,
         description: event.description,
         date: event.date,
+        ...(event.dateUncertain ? { dateUncertain: true } : {}),
         time: event.time,
         location: event.location,
         ...(event.address ? { address: event.address } : {}),

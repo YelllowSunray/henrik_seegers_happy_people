@@ -162,6 +162,7 @@ export const events: SeminarEvent[] = [
       ko: "정체성, 연결, 현현에 관한 개인적이고 영감을 주는 오후.",
     },
     date: "2026-09-19",
+    dateUncertain: true,
     time: "14:00–17:00",
     location: "Van der Valk Hotel Amersfoort",
     address: "Ruimtevaart 22–24, 3824 MX Amersfoort",

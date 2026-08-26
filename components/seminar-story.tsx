@@ -4,7 +4,7 @@ import { SeminarHeroVideo } from "@/components/seminar-hero-video";
 import { SeminarStoryBlocks } from "@/components/seminar-story-blocks";
 import { SeminarTicketButton } from "@/components/seminar-ticket-button";
 import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
-import { formatEventDate, getSeminarContent } from "@/lib/seminar-content";
+import { formatEventDate, getEventDateLabel, getSeminarContent } from "@/lib/seminar-content";
 import { t } from "@/lib/content";
 import { fetchEvents } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
@@ -36,8 +36,10 @@ export async function SeminarStory({
   const ticketOpen = content.ticketSalesOpen && showTicket;
 
   const eventTitle = event ? t(event.title, locale) : "";
-  const eventDate = event ? formatEventDate(event.date, locale) : "";
-  const eventTime = event?.time ?? "";
+  const eventDate = event
+    ? getEventDateLabel(event, locale, tr("dateLaterThisYear"))
+    : "";
+  const eventTime = event && !event.dateUncertain ? (event.time ?? "") : "";
   const addressLines = event?.address
     ? event.address.split(/,\s*/)
     : [];

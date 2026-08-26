@@ -1,14 +1,41 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { BlogBody } from "@/components/blog-body";
+import { buildPageMetadata } from "@/lib/seo";
 import { t } from "@/lib/content";
 import { fetchPostBySlug } from "@/lib/content-firestore";
 import type { Locale } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale: localeParam, slug } = await params;
+  const locale = localeParam as Locale;
+  const post = await fetchPostBySlug(slug);
+
+  if (!post || post.membersOnly) {
+    return { title: "Not found", robots: { index: false, follow: false } };
+  }
+
+  const title = t(post.title, locale);
+  const description = t(post.excerpt, locale);
+
+  return buildPageMetadata({
+    locale,
+    pathname: `/blog/${slug}`,
+    title,
+    description,
+    type: "article",
+  });
+}
 
 export default async function BlogPostPage({
   params,

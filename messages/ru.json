@@ -3,6 +3,9 @@
     "title": "Happy People — Hendrik Seegers",
     "description": "Семинары просветления для людей, которые застряли в жизни. Путь Happy People."
   },
+  "site": {
+    "underConstruction": "Сайт ещё в разработке"
+  },
   "nav": {
     "home": "Главная",
     "about": "О Хенке",
@@ -89,7 +92,8 @@
     "ticketForThis": "Билет на этот семинар",
     "buyTicketFor": "Купить билет на «{title}»",
     "allSeminars": "Все предстоящие семинары",
-    "refreshments": "Будут предоставлены закуски и напитки."
+    "refreshments": "Будут предоставлены закуски и напитки.",
+    "dateLaterThisYear": "Позже в этом году"
   },
   "blog": {
     "eyebrow": "Блог",
@@ -384,7 +388,9 @@
     "selectedMember": "Выбранный участник",
     "fieldEmailHint": "Нужно только если участника нет в списке",
     "accountsLink": "Тестовые аккаунты",
-    "fieldAddress": "Адрес"
+    "fieldAddress": "Адрес",
+    "fieldDateUncertain": "Показывать «Позже в этом году» вместо даты",
+    "fieldDateUncertainHint": "Используйте, если точная дата ещё не определена. Название и место остаются видимыми."
   },
   "adminAccounts": {
     "eyebrow": "Разработчик",
