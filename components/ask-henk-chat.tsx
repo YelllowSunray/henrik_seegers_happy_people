@@ -127,8 +127,17 @@ function watchSilence(
   let heardSpeech = false;
   let lastLoud = Date.now();
   const startedAt = Date.now();
+  let cleaned = false;
+  let fired = false;
+
+  const fireSilence = () => {
+    if (fired || cleaned) return;
+    fired = true;
+    onSilence();
+  };
 
   const iv = window.setInterval(() => {
+    if (cleaned || fired) return;
     analyser.getByteTimeDomainData(data);
     let sum = 0;
     for (let i = 0; i < data.length; i++) {
@@ -140,23 +149,28 @@ function watchSilence(
       heardSpeech = true;
       lastLoud = Date.now();
     } else if (heardSpeech && Date.now() - lastLoud > 1500) {
-      onSilence();
+      fireSilence();
     } else if (!heardSpeech && Date.now() - startedAt > 12000) {
-      // No speech for a while — stop so we don't hang forever
-      onSilence();
+      fireSilence();
     } else if (Date.now() - startedAt > 45000) {
-      onSilence();
+      fireSilence();
     }
   }, 120);
 
   return () => {
+    if (cleaned) return;
+    cleaned = true;
     window.clearInterval(iv);
     try {
       source.disconnect();
     } catch {
       /* ignore */
     }
-    void ctx.close();
+    if (ctx.state !== "closed") {
+      void ctx.close().catch(() => {
+        /* already closed */
+      });
+    }
   };
 }
 
@@ -611,8 +625,7 @@ export function AskHenkChat({
       return;
     }
 
-    // Unlock audio + optionally mic on user gesture
-    setPhase("idle");
+    // Unlock mic on this user gesture
     if (micSupported) {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -620,9 +633,32 @@ export function AskHenkChat({
         });
         stream.getTracks().forEach((tr) => tr.stop());
       } catch {
-        /* permission can be granted on first listen */
+        /* can ask again when listening starts */
       }
     }
+
+    // Opening greeting from Henk, then listen
+    const raw = t.raw("convoIntros");
+    const intros = Array.isArray(raw)
+      ? raw.filter((s): s is string => typeof s === "string" && s.trim().length > 0)
+      : [];
+    const intro =
+      intros[Math.floor(Math.random() * Math.max(intros.length, 1))] ??
+      t("convoIntroFallback");
+
+    setError(null);
+    stickToBottom.current = true;
+    setTurns((prev) => {
+      const nextTurns = [...prev, { role: "assistant" as const, content: intro }];
+      const idx = nextTurns.length - 1;
+      window.setTimeout(() => {
+        readAloud(intro, idx, {
+          key: `intro:${intro}`,
+          afterSpeak: afterHenkSpoke,
+        });
+      }, 60);
+      return nextTurns;
+    });
   }
 
   const last = turns[turns.length - 1];

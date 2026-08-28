@@ -625,6 +625,14 @@
     "statusListening": "Jouw beurt — spreek nu",
     "statusTranscribing": "Begrijpen…",
     "statusThinking": "Henk denkt na…",
-    "statusReady": "Klaar — tik op de mic of typ"
+    "statusReady": "Klaar — tik op de mic of typ",
+    "convoIntros": [
+      "Hoi, ik ben Henk van Happy People. Waar wil je het over hebben?",
+      "Hey, welkom. Ik ben Henk. Vertel me eens — wat speelt er bij jou?",
+      "Goed dat je er bent. Ik ben Henk van Happy People. Waar kunnen we samen naar kijken?",
+      "Hoi, ik ben Henk. Laten we in gesprek gaan — waar denk je aan?",
+      "Welkom bij Happy People. Ik ben Henk. Wat wil je vandaag met me delen?"
+    ],
+    "convoIntroFallback": "Hoi, ik ben Henk van Happy People. Waar wil je het over hebben?"
   }
 }

@@ -625,6 +625,12 @@
     "statusListening": "À toi — parle maintenant",
     "statusTranscribing": "Compréhension…",
     "statusThinking": "Henk réfléchit…",
-    "statusReady": "Prêt — micro ou texte"
+    "statusReady": "Prêt — micro ou texte",
+    "convoIntros": [
+      "Salut, je suis Henk de Happy People. De quoi veux-tu parler ?",
+      "Hey, bienvenue. Je suis Henk. Dis-moi — qu’est-ce qui te traverse ?",
+      "Content que tu sois là. Je suis Henk de Happy People. Qu’est-ce qu’on regarde ensemble ?"
+    ],
+    "convoIntroFallback": "Salut, je suis Henk de Happy People. De quoi veux-tu parler ?"
   }
 }

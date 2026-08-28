@@ -625,6 +625,11 @@
     "statusListening": "당신 차례 — 지금 말하세요",
     "statusTranscribing": "인식 중…",
     "statusThinking": "Henk가 생각 중…",
-    "statusReady": "준비됨 — 마이크 또는 입력"
+    "statusReady": "준비됨 — 마이크 또는 입력",
+    "convoIntros": [
+      "안녕, 나는 Happy People의 Henk야. 무엇에 대해 이야기하고 싶어?",
+      "환영해. 나는 Henk야. 지금 마음에 있는 게 뭐야?"
+    ],
+    "convoIntroFallback": "안녕, 나는 Happy People의 Henk야. 무엇에 대해 이야기하고 싶어?"
   }
 }

@@ -625,6 +625,11 @@
     "statusListening": "دورك — تحدّث الآن",
     "statusTranscribing": "يفهم…",
     "statusThinking": "Henk يفكر…",
-    "statusReady": "جاهز — ميكروفون أو نص"
+    "statusReady": "جاهز — ميكروفون أو نص",
+    "convoIntros": [
+      "مرحبًا، أنا Henk من Happy People. عن ماذا تريد أن نتحدث؟",
+      "أهلًا بك. أنا Henk. أخبرني — ما الذي يشغل بالك؟"
+    ],
+    "convoIntroFallback": "مرحبًا، أنا Henk من Happy People. عن ماذا تريد أن نتحدث؟"
   }
 }

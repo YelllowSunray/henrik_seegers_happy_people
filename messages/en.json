@@ -625,6 +625,14 @@
     "statusListening": "Your turn — speak now",
     "statusTranscribing": "Understanding you…",
     "statusThinking": "Henk is thinking…",
-    "statusReady": "Ready — tap the mic or type"
+    "statusReady": "Ready — tap the mic or type",
+    "convoIntros": [
+      "Hi, I’m Henk from Happy People. What would you like to talk about?",
+      "Hey, welcome. I’m Henk. Tell me — what’s on your mind?",
+      "Good you’re here. I’m Henk from Happy People. What shall we look at together?",
+      "Hi, I’m Henk. Let’s talk — what are you thinking about?",
+      "Welcome to Happy People. I’m Henk. What would you like to share today?"
+    ],
+    "convoIntroFallback": "Hi, I’m Henk from Happy People. What would you like to talk about?"
   }
 }

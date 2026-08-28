@@ -625,6 +625,11 @@
     "statusListening": "Ваш ход — говорите",
     "statusTranscribing": "Распознаю…",
     "statusThinking": "Henk думает…",
-    "statusReady": "Готово — микрофон или текст"
+    "statusReady": "Готово — микрофон или текст",
+    "convoIntros": [
+      "Привет, я Хенк из Happy People. О чём хочешь поговорить?",
+      "Добро пожаловать. Я Хенк. Расскажи — что у тебя на уме?"
+    ],
+    "convoIntroFallback": "Привет, я Хенк из Happy People. О чём хочешь поговорить?"
   }
 }

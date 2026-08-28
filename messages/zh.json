@@ -625,6 +625,11 @@
     "statusListening": "轮到你 — 请说话",
     "statusTranscribing": "识别中…",
     "statusThinking": "Henk 正在思考…",
-    "statusReady": "就绪 — 麦克风或输入"
+    "statusReady": "就绪 — 麦克风或输入",
+    "convoIntros": [
+      "你好，我是 Happy People 的 Henk。你想聊些什么？",
+      "欢迎。我是 Henk。告诉我——你在想什么？"
+    ],
+    "convoIntroFallback": "你好，我是 Happy People 的 Henk。你想聊些什么？"
   }
 }
