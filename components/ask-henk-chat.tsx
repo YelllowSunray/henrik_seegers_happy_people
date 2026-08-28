@@ -221,6 +221,8 @@ export function AskHenkChat({
   const aliveRef = useRef(true);
   /** Gespreksmodus: mic only after Henk finishes speaking (blocks early listen). */
   const allowListenRef = useRef(false);
+  /** True from readAloud start until TTS end/error — hard-blocks the mic. */
+  const henkSpeakingRef = useRef(false);
 
   useEffect(() => {
     conversationModeRef.current = conversationMode;
@@ -246,6 +248,7 @@ export function AskHenkChat({
       aliveRef.current = false;
       conversationModeRef.current = false;
       allowListenRef.current = false;
+      henkSpeakingRef.current = false;
       abortRef.current?.abort();
       abortRef.current = null;
       stopSpeaking();
@@ -287,11 +290,17 @@ export function AskHenkChat({
   function readAloud(
     content: string,
     index: number,
-    opts?: { afterSpeak?: () => void; key?: string },
+    opts?: {
+      afterSpeak?: () => void;
+      /** If set, called instead of afterSpeak when TTS fails */
+      onSpeakFailed?: () => void;
+      key?: string;
+    },
   ) {
     if (!aliveRef.current) return;
     if (!canSpeak() || !content.trim()) {
-      opts?.afterSpeak?.();
+      henkSpeakingRef.current = false;
+      (opts?.onSpeakFailed ?? opts?.afterSpeak)?.();
       return;
     }
 
@@ -303,33 +312,42 @@ export function AskHenkChat({
     lastSpokenKeyRef.current = key;
 
     stopSpeaking();
+    henkSpeakingRef.current = true;
     setSpeakingIndex(index);
     setPhase("speaking");
 
     void (async () => {
       // iOS often suspends AudioContext after the mic — wake it before Maarten
       await resumeSpeechAudio();
-      if (!aliveRef.current || lastSpokenKeyRef.current !== key) return;
+      if (!aliveRef.current || lastSpokenKeyRef.current !== key) {
+        henkSpeakingRef.current = false;
+        return;
+      }
 
       const spoken = speakDutch(content, {
         onEnd: () => {
+          henkSpeakingRef.current = false;
           if (!aliveRef.current) return;
           setSpeakingIndex(null);
           lastSpokenKeyRef.current = null;
           opts?.afterSpeak?.();
         },
         onError: () => {
+          henkSpeakingRef.current = false;
           if (!aliveRef.current) return;
           setSpeakingIndex(null);
           lastSpokenKeyRef.current = null;
-          opts?.afterSpeak?.();
+          (opts?.onSpeakFailed ?? opts?.afterSpeak)?.();
         },
       });
 
       if (!spoken) {
+        henkSpeakingRef.current = false;
         lastSpokenKeyRef.current = null;
         setSpeakingIndex(null);
-        if (aliveRef.current) opts?.afterSpeak?.();
+        if (aliveRef.current) {
+          (opts?.onSpeakFailed ?? opts?.afterSpeak)?.();
+        }
       }
     })();
   }
@@ -351,20 +369,23 @@ export function AskHenkChat({
     ) {
       return;
     }
-    // Don't open the mic while Henk's intro/reply is still playing
-    if (conversationModeRef.current && !allowListenRef.current) {
-      return;
-    }
+    // Never open the mic while Henk is speaking (or about to)
+    if (henkSpeakingRef.current) return;
+    if (conversationModeRef.current && !allowListenRef.current) return;
+
     setError(null);
     stopSpeaking();
     setSpeakingIndex(null);
     lastSpokenKeyRef.current = null;
-    // Reinforce unlock on mic tap (user gesture) for later TTS on iOS
     void unlockSpeechAudio();
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      if (!aliveRef.current || !allowListenRef.current) {
+      if (
+        !aliveRef.current ||
+        henkSpeakingRef.current ||
+        !allowListenRef.current
+      ) {
         stream.getTracks().forEach((tr) => tr.stop());
         return;
       }
@@ -469,6 +490,7 @@ export function AskHenkChat({
   }
 
   function afterHenkSpoke() {
+    henkSpeakingRef.current = false;
     if (!aliveRef.current || !conversationModeRef.current) {
       setPhase("idle");
       return;
@@ -716,7 +738,7 @@ export function AskHenkChat({
 
   async function toggleConversationMode() {
     warmSpeechVoices();
-    // Must start before any await — keeps iOS audio unlocked for later turns
+    // Unlock audio on this tap BEFORE any mic work — so Maarten can play first
     const unlockPromise = unlockSpeechAudio();
     const next = !conversationMode;
     setConversationMode(next);
@@ -724,6 +746,7 @@ export function AskHenkChat({
 
     if (!next) {
       allowListenRef.current = false;
+      henkSpeakingRef.current = false;
       stopSpeaking();
       setSpeakingIndex(null);
       lastSpokenKeyRef.current = null;
@@ -732,26 +755,19 @@ export function AskHenkChat({
       return;
     }
 
-    // Block mic until intro TTS finishes
+    // Mic stays closed until intro TTS finishes — do NOT getUserMedia here
+    // (that turns the system mic on before Henk speaks).
     allowListenRef.current = false;
-    setPhase("thinking");
+    henkSpeakingRef.current = true;
+    setPhase("speaking");
     setError(null);
 
-    // Mic permission on this user gesture (do not start listening yet)
-    if (micSupported) {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-        });
-        stream.getTracks().forEach((tr) => tr.stop());
-      } catch {
-        setError(t("micDenied"));
-        /* still try intro speech; user can tap Start talking later */
-      }
-    }
     await unlockPromise.catch(() => undefined);
 
-    if (!aliveRef.current || !conversationModeRef.current) return;
+    if (!aliveRef.current || !conversationModeRef.current) {
+      henkSpeakingRef.current = false;
+      return;
+    }
 
     const raw = t.raw("convoIntros");
     const intros = Array.isArray(raw)
@@ -768,10 +784,15 @@ export function AskHenkChat({
       return [...prev, { role: "assistant" as const, content: intro }];
     });
 
-    // Speak immediately after unlock — never schedule from inside setState
     readAloud(intro, speakIdx, {
       key: `intro:${intro}`,
       afterSpeak: afterHenkSpoke,
+      // If TTS fails, don't auto-open the mic — let the user tap when ready
+      onSpeakFailed: () => {
+        allowListenRef.current = true;
+        henkSpeakingRef.current = false;
+        setPhase("idle");
+      },
     });
   }
 
@@ -846,6 +867,7 @@ export function AskHenkChat({
               <button
                 type="button"
                 onClick={() => {
+                  henkSpeakingRef.current = false;
                   stopSpeaking();
                   setSpeakingIndex(null);
                   lastSpokenKeyRef.current = null;
