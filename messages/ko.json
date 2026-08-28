@@ -604,6 +604,27 @@
     "signIn": "Henk와 채팅하려면 로그인하세요.",
     "openChat": "Henk와 채팅",
     "closeChat": "채팅 닫기",
-    "typing": "Henk가 입력 중…"
+    "typing": "Henk가 입력 중…",
+    "autoSpeakOn": "읽어주기 켜짐",
+    "autoSpeakOff": "읽어주기 꺼짐",
+    "speak": "읽어주기",
+    "stopSpeak": "중지",
+    "micStart": "Henk에게 말하기",
+    "micStop": "녹음 중지",
+    "micListening": "듣는 중…",
+    "micTranscribing": "인식 중…",
+    "micDenied": "말하려면 마이크 권한이 필요합니다.",
+    "micEmpty": "녹음된 소리가 없습니다. 다시 시도하세요.",
+    "micFailed": "알아듣지 못했습니다. 다시 시도하세요.",
+    "convoOn": "대화 모드",
+    "convoOff": "대화 모드",
+    "convoHint": "Henk가 네덜란드어 남성 목소리로 읽은 뒤, 마이크가 켜져 당신이 답할 수 있습니다.",
+    "convoStartTalk": "말하기 시작",
+    "convoPlaceholder": "또는 여기에 입력…",
+    "statusSpeaking": "Henk가 말하는 중…",
+    "statusListening": "당신 차례 — 지금 말하세요",
+    "statusTranscribing": "인식 중…",
+    "statusThinking": "Henk가 생각 중…",
+    "statusReady": "준비됨 — 마이크 또는 입력"
   }
 }

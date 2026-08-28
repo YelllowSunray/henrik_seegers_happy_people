@@ -604,6 +604,27 @@
     "signIn": "Accedi per chattare con Henk.",
     "openChat": "Chatta con Henk",
     "closeChat": "Chiudi chat",
-    "typing": "Henk sta scrivendo…"
+    "typing": "Henk sta scrivendo…",
+    "autoSpeakOn": "Lettura attiva",
+    "autoSpeakOff": "Lettura disattiva",
+    "speak": "Leggi ad alta voce",
+    "stopSpeak": "Stop",
+    "micStart": "Parla con Henk",
+    "micStop": "Ferma registrazione",
+    "micListening": "In ascolto…",
+    "micTranscribing": "Comprensione…",
+    "micDenied": "Serve l’accesso al microfono per parlare.",
+    "micEmpty": "Nessun audio catturato. Riprova.",
+    "micFailed": "Non è stato possibile capire. Riprova.",
+    "convoOn": "Modalità conversazione",
+    "convoOff": "Modalità conversazione",
+    "convoHint": "Henk legge ad alta voce (voce maschile olandese), poi si apre il microfono per la tua risposta.",
+    "convoStartTalk": "Inizia a parlare",
+    "convoPlaceholder": "Oppure digita qui…",
+    "statusSpeaking": "Henk sta parlando…",
+    "statusListening": "Tocca a te — parla ora",
+    "statusTranscribing": "Comprensione…",
+    "statusThinking": "Henk sta pensando…",
+    "statusReady": "Pronto — microfono o testo"
   }
 }

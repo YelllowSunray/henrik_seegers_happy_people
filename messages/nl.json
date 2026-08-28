@@ -604,6 +604,27 @@
     "signIn": "Log in om met Henk te chatten.",
     "openChat": "Chat met Henk",
     "closeChat": "Chat sluiten",
-    "typing": "Henk is aan het typen…"
+    "typing": "Henk is aan het typen…",
+    "autoSpeakOn": "Gespreksmodus",
+    "autoSpeakOff": "Gespreksmodus",
+    "speak": "Voorlezen",
+    "stopSpeak": "Stop",
+    "micStart": "Spreek met Henk",
+    "micStop": "Stop opname",
+    "micListening": "Luisteren…",
+    "micTranscribing": "Begrijpen…",
+    "micDenied": "Microfoontoegang is nodig om te spreken.",
+    "micEmpty": "Geen geluid opgenomen. Probeer opnieuw.",
+    "micFailed": "Kon dat niet verstaan. Probeer opnieuw.",
+    "convoOn": "Gespreksmodus",
+    "convoOff": "Gespreksmodus",
+    "convoHint": "Henk leest voor (mannelijke Nederlandse stem), daarna gaat de microfoon aan voor jouw antwoord — als een spraakgesprek.",
+    "convoStartTalk": "Begin met praten",
+    "convoPlaceholder": "Of typ hier…",
+    "statusSpeaking": "Henk spreekt…",
+    "statusListening": "Jouw beurt — spreek nu",
+    "statusTranscribing": "Begrijpen…",
+    "statusThinking": "Henk denkt na…",
+    "statusReady": "Klaar — tik op de mic of typ"
   }
 }

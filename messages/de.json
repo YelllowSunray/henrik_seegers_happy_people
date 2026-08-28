@@ -604,6 +604,27 @@
     "signIn": "Melde dich an, um mit Henk zu chatten.",
     "openChat": "Chat mit Henk",
     "closeChat": "Chat schließen",
-    "typing": "Henk tippt…"
+    "typing": "Henk tippt…",
+    "autoSpeakOn": "Vorlesen an",
+    "autoSpeakOff": "Vorlesen aus",
+    "speak": "Vorlesen",
+    "stopSpeak": "Stopp",
+    "micStart": "Mit Henk sprechen",
+    "micStop": "Aufnahme stoppen",
+    "micListening": "Hört zu…",
+    "micTranscribing": "Versteht…",
+    "micDenied": "Mikrofonzugriff wird zum Sprechen benötigt.",
+    "micEmpty": "Kein Audio aufgenommen. Bitte erneut versuchen.",
+    "micFailed": "Das konnte nicht verstanden werden. Bitte erneut versuchen.",
+    "convoOn": "Gesprächsmodus",
+    "convoOff": "Gesprächsmodus",
+    "convoHint": "Henk spricht vor (männliche niederländische Stimme), dann öffnet sich das Mikrofon für deine Antwort.",
+    "convoStartTalk": "Sprechen starten",
+    "convoPlaceholder": "Oder hier tippen…",
+    "statusSpeaking": "Henk spricht…",
+    "statusListening": "Du bist dran — jetzt sprechen",
+    "statusTranscribing": "Versteht…",
+    "statusThinking": "Henk denkt nach…",
+    "statusReady": "Bereit — Mikro tippen oder tippen"
   }
 }

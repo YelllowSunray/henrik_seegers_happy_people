@@ -604,6 +604,27 @@
     "signIn": "登录后即可与 Henk 聊天。",
     "openChat": "与 Henk 聊天",
     "closeChat": "关闭聊天",
-    "typing": "Henk 正在输入…"
+    "typing": "Henk 正在输入…",
+    "autoSpeakOn": "朗读开",
+    "autoSpeakOff": "朗读关",
+    "speak": "朗读",
+    "stopSpeak": "停止",
+    "micStart": "对 Henk 说话",
+    "micStop": "停止录音",
+    "micListening": "正在听…",
+    "micTranscribing": "识别中…",
+    "micDenied": "需要麦克风权限才能说话。",
+    "micEmpty": "未录到声音。请再试一次。",
+    "micFailed": "无法识别。请再试一次。",
+    "convoOn": "对话模式",
+    "convoOff": "对话模式",
+    "convoHint": "Henk 用荷兰语男声朗读后，麦克风会打开供你回答——像语音对话。",
+    "convoStartTalk": "开始说话",
+    "convoPlaceholder": "或在此输入…",
+    "statusSpeaking": "Henk 正在说话…",
+    "statusListening": "轮到你 — 请说话",
+    "statusTranscribing": "识别中…",
+    "statusThinking": "Henk 正在思考…",
+    "statusReady": "就绪 — 麦克风或输入"
   }
 }

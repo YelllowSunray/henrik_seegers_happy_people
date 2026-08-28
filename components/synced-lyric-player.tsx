@@ -422,6 +422,49 @@ export function markAudioForResumeOnReturn() {
   if (anyPlaying()) routePersistPlaying = true;
 }
 
+/** Chat overlay paused the shared track — restore when the chat closes. */
+let pausedByChatOverlay = false;
+let playingBeforeChatOverlay = false;
+let handoffBeforeChatOverlay = true;
+
+/** Pause site music while the Henk chatbot is open (mobile + desktop). */
+export function pauseMusicForChat() {
+  if (typeof window === "undefined") return;
+  if (pausedByChatOverlay) return;
+
+  const audio = getSharedAudio();
+  playingBeforeChatOverlay = Boolean(audio.src && !audio.paused);
+  handoffBeforeChatOverlay = scrollHandoffEnabled;
+  pausedByChatOverlay = true;
+
+  // Stop scroll handoff from starting another track under the chat.
+  scrollHandoffEnabled = false;
+  holdHandoffUntilScroll = false;
+  playGeneration += 1;
+  handoffRunId += 1;
+
+  if (playingBeforeChatOverlay) {
+    audio.pause();
+  }
+}
+
+/** Resume music that was playing before the chatbot opened. */
+export function resumeMusicAfterChat() {
+  if (typeof window === "undefined") return;
+  if (!pausedByChatOverlay) return;
+
+  pausedByChatOverlay = false;
+  scrollHandoffEnabled = handoffBeforeChatOverlay;
+
+  if (playingBeforeChatOverlay) {
+    playingBeforeChatOverlay = false;
+    routePersistPlaying = true;
+    void tryResumeAfterReturn();
+  } else {
+    playingBeforeChatOverlay = false;
+  }
+}
+
 type Tone = "hero" | "page";
 
 export function SyncedLyricPlayer({

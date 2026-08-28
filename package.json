@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@stripe/stripe-js": "^9.13.0",
+    "edge-tts-universal": "^1.4.0",
     "firebase": "^12.17.1",
     "firebase-admin": "^14.2.0",
     "next": "16.3.0",

@@ -604,6 +604,27 @@
     "signIn": "سجّل الدخول للدردشة مع Henk.",
     "openChat": "الدردشة مع Henk",
     "closeChat": "إغلاق الدردشة",
-    "typing": "Henk يكتب…"
+    "typing": "Henk يكتب…",
+    "autoSpeakOn": "القراءة الصوتية مفعّلة",
+    "autoSpeakOff": "القراءة الصوتية متوقفة",
+    "speak": "اقرأ بصوت عالٍ",
+    "stopSpeak": "إيقاف",
+    "micStart": "تحدث إلى Henk",
+    "micStop": "إيقاف التسجيل",
+    "micListening": "يستمع…",
+    "micTranscribing": "يفهم…",
+    "micDenied": "يلزم إذن الميكروفون للتحدث.",
+    "micEmpty": "لم يُلتقط صوت. حاول مرة أخرى.",
+    "micFailed": "تعذر الفهم. حاول مرة أخرى.",
+    "convoOn": "وضع المحادثة",
+    "convoOff": "وضع المحادثة",
+    "convoHint": "يقرأ Henk بصوت ذكوري هولندي، ثم يُفتح الميكروفون لردّك — مثل محادثة صوتية.",
+    "convoStartTalk": "ابدأ بالحديث",
+    "convoPlaceholder": "أو اكتب هنا…",
+    "statusSpeaking": "Henk يتحدث…",
+    "statusListening": "دورك — تحدّث الآن",
+    "statusTranscribing": "يفهم…",
+    "statusThinking": "Henk يفكر…",
+    "statusReady": "جاهز — ميكروفون أو نص"
   }
 }

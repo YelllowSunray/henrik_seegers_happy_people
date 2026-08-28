@@ -604,6 +604,27 @@
     "signIn": "Войдите, чтобы общаться с Henk.",
     "openChat": "Чат с Henk",
     "closeChat": "Закрыть чат",
-    "typing": "Henk печатает…"
+    "typing": "Henk печатает…",
+    "autoSpeakOn": "Озвучивание вкл.",
+    "autoSpeakOff": "Озвучивание выкл.",
+    "speak": "Озвучить",
+    "stopSpeak": "Стоп",
+    "micStart": "Говорить с Henk",
+    "micStop": "Остановить запись",
+    "micListening": "Слушаю…",
+    "micTranscribing": "Распознаю…",
+    "micDenied": "Для разговора нужен доступ к микрофону.",
+    "micEmpty": "Звук не записан. Попробуйте ещё раз.",
+    "micFailed": "Не удалось распознать. Попробуйте ещё раз.",
+    "convoOn": "Режим разговора",
+    "convoOff": "Режим разговора",
+    "convoHint": "Henk читает вслух (мужской нидерландский голос), затем включается микрофон для вашего ответа.",
+    "convoStartTalk": "Начать говорить",
+    "convoPlaceholder": "Или введите здесь…",
+    "statusSpeaking": "Henk говорит…",
+    "statusListening": "Ваш ход — говорите",
+    "statusTranscribing": "Распознаю…",
+    "statusThinking": "Henk думает…",
+    "statusReady": "Готово — микрофон или текст"
   }
 }
