@@ -7,9 +7,11 @@ import {
   canSpeak,
   clearSpeechPrefetchCache,
   holdSpeechAudioSession,
+  pauseSilentKeepAlive,
   prefetchDutchSpeech,
   resumeSpeechAudio,
   speakDutch,
+  startSilentKeepAlive,
   stopSpeaking,
   unlockSpeechAudio,
   warmSpeechVoices,
@@ -375,8 +377,8 @@ export function AskHenkChat({
     if (conversationModeRef.current && !allowListenRef.current) return;
 
     setError(null);
-    // Do NOT stopSpeaking() here — that was cutting off the intro when the
-    // mic opened. Speech must already have finished before allowListen is set.
+    // Pause keep-alive while the mic owns the audio session (iOS)
+    pauseSilentKeepAlive();
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -386,6 +388,7 @@ export function AskHenkChat({
         (conversationModeRef.current && !allowListenRef.current)
       ) {
         stream.getTracks().forEach((tr) => tr.stop());
+        void startSilentKeepAlive();
         return;
       }
       mediaStreamRef.current = stream;
@@ -443,13 +446,20 @@ export function AskHenkChat({
     mediaRecorderRef.current = null;
     if (!aliveRef.current) return;
 
-    // Mic often suspends AudioContext on iOS — wake before the reply TTS
+    // Re-claim playback on the same unlocked element before Maarten
+    holdSpeechAudioSession();
+    await startSilentKeepAlive();
     await resumeSpeechAudio();
+    // Give iOS a moment to leave record mode
+    await new Promise<void>((r) => window.setTimeout(r, 150));
     if (!aliveRef.current) return;
 
     if (!blobs.length) {
       setError(t("micEmpty"));
-      setPhase(conversationModeRef.current ? "idle" : "idle");
+      setPhase("idle");
+      if (conversationModeRef.current) {
+        allowListenRef.current = true;
+      }
       return;
     }
 
@@ -762,6 +772,7 @@ export function AskHenkChat({
         });
         stream.getTracks().forEach((tr) => tr.stop());
         await unlockSpeechAudio();
+        await startSilentKeepAlive();
         holdSpeechAudioSession();
       } catch {
         setError(t("micDenied"));
@@ -771,6 +782,7 @@ export function AskHenkChat({
       }
     } else {
       await unlockSpeechAudio();
+      await startSilentKeepAlive();
       holdSpeechAudioSession();
     }
 
