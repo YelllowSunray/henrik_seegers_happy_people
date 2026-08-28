@@ -6,10 +6,10 @@ import { useAuth } from "@/components/auth-provider";
 import {
   canSpeak,
   clearSpeechPrefetchCache,
+  holdSpeechAudioSession,
   prefetchDutchSpeech,
   resumeSpeechAudio,
   speakDutch,
-  splitSpeakChunks,
   stopSpeaking,
   unlockSpeechAudio,
   warmSpeechVoices,
@@ -593,13 +593,6 @@ export function AskHenkChat({
           const live = full.trimEnd();
           if (live) {
             ensureAssistant(live);
-            // Prefetch finished Maarten chunks while Groq still streams
-            const parts = splitSpeakChunks(live);
-            const endsComplete = /[.!?…]["'"»”]?\s*$/u.test(live);
-            const ready = endsComplete ? parts : parts.slice(0, -1);
-            for (const part of ready) {
-              if (part.trim().length >= 12) prefetchDutchSpeech(part);
-            }
           }
         }
         full += decoder.decode();
@@ -613,10 +606,8 @@ export function AskHenkChat({
         ensureAssistant(finalAssistant);
         if (!aliveRef.current || ac.signal.aborted) return;
 
-        // Ensure every final chunk is in flight before play starts
-        for (const part of splitSpeakChunks(finalAssistant)) {
-          if (part.trim().length >= 12) prefetchDutchSpeech(part);
-        }
+        // One Maarten request for the full reply (sentence-split broke mobile audio)
+        prefetchDutchSpeech(finalAssistant);
         setBusy(false);
 
         readAloud(finalAssistant, speakIdx, {
@@ -740,8 +731,8 @@ export function AskHenkChat({
   async function toggleConversationMode() {
     warmSpeechVoices();
     ensureMusicPausedForChat();
-    // Unlock TTS on this tap (non-blocking) — dedicated element, won't kill Maarten
     void unlockSpeechAudio();
+    holdSpeechAudioSession();
 
     const next = !conversationMode;
     setConversationMode(next);
@@ -758,30 +749,39 @@ export function AskHenkChat({
       return;
     }
 
-    // Block recording until intro audio has fully finished
     allowListenRef.current = false;
     henkSpeakingRef.current = true;
     setPhase("thinking");
     setError(null);
 
-    // 1) Mic permission on this user gesture — release tracks, do NOT record yet
+    // Pick intro + start Maarten download DURING the permission dialog
+    const raw = t.raw("convoIntros");
+    const intros = Array.isArray(raw)
+      ? raw.filter((s): s is string => typeof s === "string" && s.trim().length > 0)
+      : [];
+    const intro =
+      intros[Math.floor(Math.random() * Math.max(intros.length, 1))] ??
+      t("convoIntroFallback");
+    prefetchDutchSpeech(intro);
+
+    // Mic permission on this gesture — release tracks, do NOT record yet
     if (micSupported) {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: true,
         });
         stream.getTracks().forEach((tr) => tr.stop());
-        // "Allow" counts as a gesture on iOS — re-unlock before Maarten loads
         await unlockSpeechAudio();
+        holdSpeechAudioSession();
       } catch {
         setError(t("micDenied"));
         henkSpeakingRef.current = false;
         allowListenRef.current = true;
         setPhase("idle");
-        // Still show intro as text; user can tap when ready
       }
     } else {
       await unlockSpeechAudio();
+      holdSpeechAudioSession();
     }
 
     ensureMusicPausedForChat();
@@ -792,14 +792,6 @@ export function AskHenkChat({
       return;
     }
 
-    const raw = t.raw("convoIntros");
-    const intros = Array.isArray(raw)
-      ? raw.filter((s): s is string => typeof s === "string" && s.trim().length > 0)
-      : [];
-    const intro =
-      intros[Math.floor(Math.random() * Math.max(intros.length, 1))] ??
-      t("convoIntroFallback");
-
     stickToBottom.current = true;
     let speakIdx = 0;
     setTurns((prev) => {
@@ -807,13 +799,11 @@ export function AskHenkChat({
       return [...prev, { role: "assistant" as const, content: intro }];
     });
 
-    // 2) Speak intro (mic tracks are stopped — only listening starts in afterSpeak)
     henkSpeakingRef.current = true;
     readAloud(intro, speakIdx, {
       key: `intro:${intro}`,
       afterSpeak: afterHenkSpoke,
       onSpeakFailed: () => {
-        // Don't auto-record if Maarten never played
         henkSpeakingRef.current = false;
         allowListenRef.current = true;
         setSpeakingIndex(null);
