@@ -31,7 +31,14 @@ function TypingDots() {
   );
 }
 
-export function AskHenkChat({ compact = false }: { compact?: boolean }) {
+export function AskHenkChat({
+  compact = false,
+  fill = false,
+}: {
+  compact?: boolean;
+  /** Fill parent height (mobile full-screen sheet). */
+  fill?: boolean;
+}) {
   const t = useTranslations("askHenk");
   const locale = useLocale();
   const { user } = useAuth();
@@ -49,8 +56,8 @@ export function AskHenkChat({ compact = false }: { compact?: boolean }) {
   }, [turns, henkTyping]);
 
   useEffect(() => {
-    if (compact) inputRef.current?.focus();
-  }, [compact]);
+    if (compact || fill) inputRef.current?.focus({ preventScroll: true });
+  }, [compact, fill]);
 
   async function onSend(e: FormEvent) {
     e.preventDefault();
@@ -196,14 +203,20 @@ export function AskHenkChat({ compact = false }: { compact?: boolean }) {
   return (
     <div
       className={`flex flex-col bg-bg ${
-        compact ? "" : "overflow-hidden rounded-2xl border border-line"
+        fill
+          ? "h-full min-h-0"
+          : compact
+            ? ""
+            : "overflow-hidden rounded-2xl border border-line"
       }`}
     >
       <div
-        className={`flex flex-col gap-3 overflow-y-auto p-4 ${
-          compact
-            ? "h-[min(24rem,55vh)]"
-            : "max-h-[min(28rem,60vh)] min-h-[16rem]"
+        className={`flex flex-col gap-3 overflow-y-auto overscroll-contain p-4 ${
+          fill
+            ? "min-h-0 flex-1"
+            : compact
+              ? "h-[min(24rem,55vh)]"
+              : "max-h-[min(28rem,60vh)] min-h-[16rem]"
         }`}
       >
         {turns.length === 0 && !henkTyping && (
@@ -273,7 +286,7 @@ export function AskHenkChat({ compact = false }: { compact?: boolean }) {
 
       <form
         onSubmit={onSend}
-        className="flex gap-2 border-t border-line p-3"
+        className="flex shrink-0 gap-2 border-t border-line bg-bg p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
       >
         <input
           ref={inputRef}
@@ -281,7 +294,9 @@ export function AskHenkChat({ compact = false }: { compact?: boolean }) {
           onChange={(e) => setText(e.target.value)}
           placeholder={t("placeholder")}
           disabled={busy}
-          className="min-w-0 flex-1 rounded-full border border-line bg-bg-deep px-4 py-2.5 text-sm outline-none focus:border-accent"
+          enterKeyHint="send"
+          autoComplete="off"
+          className="min-w-0 flex-1 rounded-full border border-line bg-bg-deep px-4 py-2.5 text-base outline-none focus:border-accent md:text-sm"
         />
         <button
           type="submit"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useState, type CSSProperties } from "react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "@/i18n/navigation";
 import { AskHenkChat } from "@/components/ask-henk-chat";
@@ -29,11 +29,24 @@ function ChatBubbleIcon({ className }: { className?: string }) {
   );
 }
 
+function CloseIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden>
+      <path
+        d="M6 6l12 12M18 6 6 18"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 export function ClubChatFab() {
   const t = useTranslations("askHenk");
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const panelRef = useRef<HTMLDivElement>(null);
+  const [vvStyle, setVvStyle] = useState<CSSProperties | undefined>();
   const titleId = useId();
 
   const hideOnPage =
@@ -50,69 +63,123 @@ export function ClubChatFab() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  // Lock page scroll while the sheet is open (mobile keyboard-friendly)
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  // Keep the mobile sheet inside the visual viewport when the keyboard opens (iOS Safari)
+  useEffect(() => {
+    if (!open) {
+      setVvStyle(undefined);
+      return;
+    }
+
+    const vv = window.visualViewport;
+    if (!vv) return;
+
+    const sync = () => {
+      const isMobile = window.matchMedia("(max-width: 767px)").matches;
+      if (!isMobile) {
+        setVvStyle(undefined);
+        return;
+      }
+      setVvStyle({
+        position: "fixed",
+        top: vv.offsetTop,
+        left: vv.offsetLeft,
+        width: vv.width,
+        height: vv.height,
+        right: "auto",
+        bottom: "auto",
+      });
+    };
+
+    sync();
+    vv.addEventListener("resize", sync);
+    vv.addEventListener("scroll", sync);
+    window.addEventListener("resize", sync);
+    return () => {
+      vv.removeEventListener("resize", sync);
+      vv.removeEventListener("scroll", sync);
+      window.removeEventListener("resize", sync);
+    };
+  }, [open]);
+
   if (hideOnPage) return null;
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-end p-4 md:p-8 pb-[calc(1rem+env(safe-area-inset-bottom))] md:pb-[calc(2rem+env(safe-area-inset-bottom))]">
-      <div className="pointer-events-auto flex flex-col items-end gap-3">
-        {open && (
+    <>
+      {open && (
+        <>
+          {/* Mobile: full-screen sheet pinned to the visual viewport */}
           <div
-            ref={panelRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
-            className="flex w-[min(100vw-2rem,24rem)] flex-col overflow-hidden rounded-2xl border border-line bg-bg shadow-2xl shadow-ink/25"
+            style={vvStyle}
+            className="fixed inset-0 z-50 flex flex-col bg-bg md:hidden"
           >
-            <div className="flex items-center justify-between gap-3 border-b border-line bg-ink px-4 py-3 text-white">
-              <div>
-                <p
-                  id={titleId}
-                  className="font-display text-lg leading-tight"
-                >
-                  {t("title")}
-                </p>
-              </div>
+            <div className="flex shrink-0 items-center justify-between gap-3 border-b border-line bg-ink px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] text-white">
+              <p id={titleId} className="font-display text-lg leading-tight">
+                {t("title")}
+              </p>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
                 className="rounded-full p-1.5 text-white/80 transition hover:bg-white/10 hover:text-white"
                 aria-label={t("closeChat")}
               >
-                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
-                  <path
-                    d="M6 6l12 12M18 6 6 18"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                  />
-                </svg>
+                <CloseIcon className="h-5 w-5" />
               </button>
             </div>
-            <AskHenkChat compact />
+            <div className="flex min-h-0 flex-1 flex-col">
+              <AskHenkChat fill />
+            </div>
           </div>
-        )}
 
+          {/* Desktop: floating card above the FAB */}
+          <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 hidden justify-end p-8 pb-[calc(2rem+env(safe-area-inset-bottom))] md:flex">
+            <div className="pointer-events-auto flex w-[min(100vw-4rem,24rem)] flex-col overflow-hidden rounded-2xl border border-line bg-bg shadow-2xl shadow-ink/25">
+              <div className="flex items-center justify-between gap-3 border-b border-line bg-ink px-4 py-3 text-white">
+                <p className="font-display text-lg leading-tight">{t("title")}</p>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="rounded-full p-1.5 text-white/80 transition hover:bg-white/10 hover:text-white"
+                  aria-label={t("closeChat")}
+                >
+                  <CloseIcon className="h-5 w-5" />
+                </button>
+              </div>
+              <AskHenkChat compact />
+            </div>
+          </div>
+        </>
+      )}
+
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-end p-4 md:p-8 pb-[calc(1rem+env(safe-area-inset-bottom))] md:pb-[calc(2rem+env(safe-area-inset-bottom))]">
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-label={open ? t("closeChat") : t("openChat")}
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-ink text-white shadow-lg shadow-ink/25 transition hover:bg-accent"
+          className={`pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full bg-ink text-white shadow-lg shadow-ink/25 transition hover:bg-accent ${
+            open ? "hidden md:flex" : "flex"
+          }`}
         >
           {open ? (
-            <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden>
-              <path
-                d="M6 6l12 12M18 6 6 18"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              />
-            </svg>
+            <CloseIcon className="h-6 w-6" />
           ) : (
             <ChatBubbleIcon className="h-7 w-7" />
           )}
         </button>
       </div>
-    </div>
+    </>
   );
 }
