@@ -738,8 +738,9 @@ export function AskHenkChat({
 
   async function toggleConversationMode() {
     warmSpeechVoices();
-    // Unlock audio on this tap BEFORE any mic work — so Maarten can play first
-    const unlockPromise = unlockSpeechAudio();
+    // Start unlock on this tap (sync play/resume) — do NOT await it.
+    // Awaiting hung forever on some iOS builds and blocked the intro entirely.
+    void unlockSpeechAudio();
     const next = !conversationMode;
     setConversationMode(next);
     conversationModeRef.current = next;
@@ -755,19 +756,11 @@ export function AskHenkChat({
       return;
     }
 
-    // Mic stays closed until intro TTS finishes — do NOT getUserMedia here
-    // (that turns the system mic on before Henk speaks).
+    // Mic stays closed until intro TTS finishes
     allowListenRef.current = false;
-    henkSpeakingRef.current = true;
-    setPhase("speaking");
     setError(null);
 
-    await unlockPromise.catch(() => undefined);
-
-    if (!aliveRef.current || !conversationModeRef.current) {
-      henkSpeakingRef.current = false;
-      return;
-    }
+    if (!aliveRef.current) return;
 
     const raw = t.raw("convoIntros");
     const intros = Array.isArray(raw)
@@ -784,10 +777,10 @@ export function AskHenkChat({
       return [...prev, { role: "assistant" as const, content: intro }];
     });
 
+    // Speak right away on the same user gesture — no awaits before this
     readAloud(intro, speakIdx, {
       key: `intro:${intro}`,
       afterSpeak: afterHenkSpoke,
-      // If TTS fails, don't auto-open the mic — let the user tap when ready
       onSpeakFailed: () => {
         allowListenRef.current = true;
         henkSpeakingRef.current = false;

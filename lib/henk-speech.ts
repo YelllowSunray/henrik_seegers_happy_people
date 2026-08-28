@@ -126,6 +126,7 @@ export function canSpeak(): boolean {
 /**
  * Call from a user gesture (Gespreksmodus toggle / mic tap) so later TTS
  * still works on iOS after mic + network round-trips.
+ * Never hangs — iOS can leave audio.play() pending forever on data-URIs.
  */
 export async function unlockSpeechAudio(): Promise<void> {
   if (typeof window === "undefined") return;
@@ -135,21 +136,27 @@ export async function unlockSpeechAudio(): Promise<void> {
     ctx && ctx.state === "suspended" ? ctx.resume() : Promise.resolve();
 
   const audio = getSharedAudio();
-  audio.muted = true;
-  audio.src = SILENT_WAV;
+  try {
+    audio.muted = true;
+    audio.src = SILENT_WAV;
+  } catch {
+    /* ignore */
+  }
   const playEl = audio.play().catch(() => undefined);
 
-  await Promise.all([resumeCtx, playEl]);
+  await Promise.race([
+    Promise.all([resumeCtx, playEl]),
+    new Promise<void>((resolve) => window.setTimeout(resolve, 350)),
+  ]);
 
   try {
     audio.pause();
   } catch {
     /* ignore */
   }
-  audio.muted = false;
-  audio.removeAttribute("src");
   try {
-    audio.load();
+    audio.muted = false;
+    audio.removeAttribute("src");
   } catch {
     /* ignore */
   }
@@ -162,7 +169,10 @@ export async function resumeSpeechAudio(): Promise<void> {
   const ctx = audioCtx;
   if (ctx && ctx.state === "suspended") {
     try {
-      await ctx.resume();
+      await Promise.race([
+        ctx.resume(),
+        new Promise<void>((resolve) => window.setTimeout(resolve, 350)),
+      ]);
     } catch {
       /* ignore */
     }
@@ -286,11 +296,15 @@ function speakBrowserFallback(text: string, gen: number, opts?: SpeakOpts) {
 
 async function requestSpeakBlob(text: string): Promise<Blob | null> {
   try {
+    const ac = new AbortController();
+    const timer = window.setTimeout(() => ac.abort(), 12000);
     const res = await fetch("/api/ask-henk/speak", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text }),
+      signal: ac.signal,
     });
+    window.clearTimeout(timer);
     if (!res.ok) return null;
     const blob = await res.blob();
     if (!blob.size) return null;
