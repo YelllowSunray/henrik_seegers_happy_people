@@ -5,8 +5,13 @@ import { useLocale, useTranslations } from "next-intl";
 import { useAuth } from "@/components/auth-provider";
 import {
   canSpeak,
+  clearSpeechPrefetchCache,
+  prefetchDutchSpeech,
+  resumeSpeechAudio,
   speakDutch,
+  splitSpeakChunks,
   stopSpeaking,
+  unlockSpeechAudio,
   warmSpeechVoices,
 } from "@/lib/henk-speech";
 import {
@@ -213,6 +218,7 @@ export function AskHenkChat({
   const recordingRef = useRef(recording);
   const startRecordingRef = useRef<() => Promise<void>>(async () => {});
   const lastSpokenKeyRef = useRef<string | null>(null);
+  const aliveRef = useRef(true);
 
   useEffect(() => {
     conversationModeRef.current = conversationMode;
@@ -225,6 +231,7 @@ export function AskHenkChat({
   }, [recording]);
 
   useEffect(() => {
+    aliveRef.current = true;
     setMicSupported(
       typeof navigator !== "undefined" &&
         !!navigator.mediaDevices?.getUserMedia &&
@@ -234,9 +241,17 @@ export function AskHenkChat({
     warmSpeechVoices();
     pauseMusicForChat();
     return () => {
+      aliveRef.current = false;
+      conversationModeRef.current = false;
+      abortRef.current?.abort();
+      abortRef.current = null;
       stopSpeaking();
+      clearSpeechPrefetchCache();
       silenceStopRef.current?.();
+      silenceStopRef.current = null;
       mediaStreamRef.current?.getTracks().forEach((tr) => tr.stop());
+      mediaStreamRef.current = null;
+      mediaRecorderRef.current = null;
       resumeMusicAfterChat();
     };
   }, []);
@@ -271,6 +286,7 @@ export function AskHenkChat({
     index: number,
     opts?: { afterSpeak?: () => void; key?: string },
   ) {
+    if (!aliveRef.current) return;
     if (!canSpeak() || !content.trim()) {
       opts?.afterSpeak?.();
       return;
@@ -287,24 +303,32 @@ export function AskHenkChat({
     setSpeakingIndex(index);
     setPhase("speaking");
 
-    const spoken = speakDutch(content, {
-      onEnd: () => {
-        setSpeakingIndex(null);
-        lastSpokenKeyRef.current = null;
-        opts?.afterSpeak?.();
-      },
-      onError: () => {
-        setSpeakingIndex(null);
-        lastSpokenKeyRef.current = null;
-        opts?.afterSpeak?.();
-      },
-    });
+    void (async () => {
+      // iOS often suspends AudioContext after the mic — wake it before Maarten
+      await resumeSpeechAudio();
+      if (!aliveRef.current || lastSpokenKeyRef.current !== key) return;
 
-    if (!spoken) {
-      lastSpokenKeyRef.current = null;
-      setSpeakingIndex(null);
-      opts?.afterSpeak?.();
-    }
+      const spoken = speakDutch(content, {
+        onEnd: () => {
+          if (!aliveRef.current) return;
+          setSpeakingIndex(null);
+          lastSpokenKeyRef.current = null;
+          opts?.afterSpeak?.();
+        },
+        onError: () => {
+          if (!aliveRef.current) return;
+          setSpeakingIndex(null);
+          lastSpokenKeyRef.current = null;
+          opts?.afterSpeak?.();
+        },
+      });
+
+      if (!spoken) {
+        lastSpokenKeyRef.current = null;
+        setSpeakingIndex(null);
+        if (aliveRef.current) opts?.afterSpeak?.();
+      }
+    })();
   }
 
   async function stopMicTracks() {
@@ -316,6 +340,7 @@ export function AskHenkChat({
 
   async function startRecording() {
     if (
+      !aliveRef.current ||
       busyRef.current ||
       recordingRef.current ||
       !micSupported ||
@@ -327,6 +352,8 @@ export function AskHenkChat({
     stopSpeaking();
     setSpeakingIndex(null);
     lastSpokenKeyRef.current = null;
+    // Reinforce unlock on mic tap (user gesture) for later TTS on iOS
+    void unlockSpeechAudio();
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -383,6 +410,11 @@ export function AskHenkChat({
     chunksRef.current = [];
     await stopMicTracks();
     mediaRecorderRef.current = null;
+    if (!aliveRef.current) return;
+
+    // Mic often suspends AudioContext on iOS — wake before the reply TTS
+    await resumeSpeechAudio();
+    if (!aliveRef.current) return;
 
     if (!blobs.length) {
       setError(t("micEmpty"));
@@ -426,7 +458,7 @@ export function AskHenkChat({
   }
 
   function afterHenkSpoke() {
-    if (!conversationModeRef.current) {
+    if (!aliveRef.current || !conversationModeRef.current) {
       setPhase("idle");
       return;
     }
@@ -435,7 +467,7 @@ export function AskHenkChat({
   }
 
   async function sendMessage(message: string) {
-    if (!message.trim() || busyRef.current) return;
+    if (!message.trim() || busyRef.current || !aliveRef.current) return;
 
     stopSpeaking();
     setSpeakingIndex(null);
@@ -490,13 +522,46 @@ export function AskHenkChat({
       const decoder = new TextDecoder();
       let full = "";
 
-      // ── Gespreksmodus: buffer text fast, show it, speak immediately (no typewriter) ──
+      // ── Gespreksmodus: stream text, prefetch first Maarten sentence early ──
       if (shouldSpeak) {
         setHenkTyping(true);
+        let assistantStarted = false;
+        let speakIdx = 0;
+
+        const ensureAssistant = (content: string) => {
+          if (!assistantStarted) {
+            assistantStarted = true;
+            setTurns((prev) => {
+              speakIdx = prev.length;
+              return [...prev, { role: "assistant" as const, content }];
+            });
+          } else {
+            setTurns((prev) => {
+              const next = [...prev];
+              next[next.length - 1] = {
+                role: "assistant",
+                content,
+              };
+              return next;
+            });
+          }
+        };
+
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
           full += decoder.decode(value, { stream: true });
+          const live = full.trimEnd();
+          if (live) {
+            ensureAssistant(live);
+            // Prefetch finished Maarten chunks while Groq still streams
+            const parts = splitSpeakChunks(live);
+            const endsComplete = /[.!?…]["'"»”]?\s*$/u.test(live);
+            const ready = endsComplete ? parts : parts.slice(0, -1);
+            for (const part of ready) {
+              if (part.trim().length >= 12) prefetchDutchSpeech(part);
+            }
+          }
         }
         full += decoder.decode();
         finalAssistant = full.trim();
@@ -506,17 +571,15 @@ export function AskHenkChat({
           throw new Error(t("sendFailed"));
         }
 
-        let speakIdx = 0;
-        setTurns((prev) => {
-          speakIdx = prev.length;
-          return [
-            ...prev,
-            { role: "assistant" as const, content: finalAssistant },
-          ];
-        });
+        ensureAssistant(finalAssistant);
+        if (!aliveRef.current || ac.signal.aborted) return;
+
+        // Ensure every final chunk is in flight before play starts
+        for (const part of splitSpeakChunks(finalAssistant)) {
+          if (part.trim().length >= 12) prefetchDutchSpeech(part);
+        }
         setBusy(false);
 
-        // Start Maarten as soon as the full reply exists — don't wait for UI typing
         readAloud(finalAssistant, speakIdx, {
           key: `auto:${finalAssistant.length}:${finalAssistant.slice(0, 48)}`,
           afterSpeak: afterHenkSpoke,
@@ -634,6 +697,8 @@ export function AskHenkChat({
 
   async function toggleConversationMode() {
     warmSpeechVoices();
+    // Must start before any await — keeps iOS audio unlocked for later turns
+    const unlockPromise = unlockSpeechAudio();
     const next = !conversationMode;
     setConversationMode(next);
     conversationModeRef.current = next;
@@ -658,6 +723,7 @@ export function AskHenkChat({
         /* can ask again when listening starts */
       }
     }
+    await unlockPromise.catch(() => undefined);
 
     // Opening greeting from Henk, then listen
     const raw = t.raw("convoIntros");

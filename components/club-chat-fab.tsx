@@ -10,6 +10,7 @@ import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { usePathname } from "@/i18n/navigation";
 import { AskHenkChat } from "@/components/ask-henk-chat";
+import { stopSpeaking } from "@/lib/henk-speech";
 
 function ChatBubbleIcon({ className }: { className?: string }) {
   return (
@@ -186,10 +187,15 @@ export function ClubChatFab() {
 
   useEffect(() => setMounted(true), []);
 
+  function closeChat() {
+    stopSpeaking();
+    setOpen(false);
+  }
+
   useEffect(() => {
     if (!open) return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") closeChat();
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -243,7 +249,7 @@ export function ClubChatFab() {
         titleId={titleId}
         title={t("title")}
         closeLabel={t("closeChat")}
-        onClose={() => setOpen(false)}
+        onClose={closeChat}
       />
     ) : null;
 
@@ -265,7 +271,7 @@ export function ClubChatFab() {
               </p>
               <button
                 type="button"
-                onClick={() => setOpen(false)}
+                onClick={closeChat}
                 className="rounded-full p-1.5 text-white/80 transition hover:bg-white/10 hover:text-white"
                 aria-label={t("closeChat")}
               >
@@ -280,7 +286,10 @@ export function ClubChatFab() {
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-end p-4 md:p-8 pb-[calc(1rem+env(safe-area-inset-bottom))] md:pb-[calc(2rem+env(safe-area-inset-bottom))]">
         <button
           type="button"
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => {
+            if (open) closeChat();
+            else setOpen(true);
+          }}
           aria-expanded={open}
           aria-label={open ? t("closeChat") : t("openChat")}
           className={`pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full bg-ink text-white shadow-lg shadow-ink/25 transition hover:bg-accent ${
