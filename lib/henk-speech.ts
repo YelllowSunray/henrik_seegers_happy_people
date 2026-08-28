@@ -2,6 +2,8 @@
 
 let speakGeneration = 0;
 let sharedAudio: HTMLAudioElement | null = null;
+/** Separate element so unlock never tears down an in-flight Maarten play. */
+let unlockAudioEl: HTMLAudioElement | null = null;
 let currentAudio: HTMLAudioElement | null = null;
 let audioCtx: AudioContext | null = null;
 let currentSource: AudioBufferSourceNode | null = null;
@@ -123,10 +125,22 @@ export function canSpeak(): boolean {
   return typeof window !== "undefined";
 }
 
+function getUnlockAudio(): HTMLAudioElement {
+  if (!unlockAudioEl) {
+    unlockAudioEl = new Audio();
+    unlockAudioEl.setAttribute("playsinline", "true");
+    unlockAudioEl.setAttribute("webkit-playsinline", "true");
+    (unlockAudioEl as HTMLAudioElement & { playsInline?: boolean }).playsInline =
+      true;
+  }
+  return unlockAudioEl;
+}
+
 /**
  * Call from a user gesture (Gespreksmodus toggle / mic tap) so later TTS
  * still works on iOS after mic + network round-trips.
  * Never hangs — iOS can leave audio.play() pending forever on data-URIs.
+ * Uses a dedicated element so unlock cannot kill Maarten mid-play.
  */
 export async function unlockSpeechAudio(): Promise<void> {
   if (typeof window === "undefined") return;
@@ -135,7 +149,7 @@ export async function unlockSpeechAudio(): Promise<void> {
   const resumeCtx =
     ctx && ctx.state === "suspended" ? ctx.resume() : Promise.resolve();
 
-  const audio = getSharedAudio();
+  const audio = getUnlockAudio();
   try {
     audio.muted = true;
     audio.src = SILENT_WAV;
@@ -383,6 +397,11 @@ async function playViaWebAudio(
   if (gen !== speakGeneration) return "abort";
 
   stopBufferSource();
+
+  // Tiny/empty buffers "end" instantly and falsely trigger afterSpeak → mic
+  if (buffer.duration < 0.12) {
+    return "fail";
+  }
 
   return new Promise((resolve) => {
     if (gen !== speakGeneration) {

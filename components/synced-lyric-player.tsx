@@ -423,19 +423,40 @@ export function markAudioForResumeOnReturn() {
 }
 
 /** Chat overlay paused the shared track — restore when the chat closes. */
-let pausedByChatOverlay = false;
+let chatPauseDepth = 0;
 let playingBeforeChatOverlay = false;
 let handoffBeforeChatOverlay = true;
+
+/** Force-pause site music without changing the chat pause refcount. */
+export function ensureMusicPausedForChat() {
+  if (typeof window === "undefined") return;
+  const audio = getSharedAudio();
+  scrollHandoffEnabled = false;
+  holdHandoffUntilScroll = false;
+  playGeneration += 1;
+  handoffRunId += 1;
+  try {
+    audio.pause();
+  } catch {
+    /* ignore */
+  }
+}
 
 /** Pause site music while the Henk chatbot is open (mobile + desktop). */
 export function pauseMusicForChat() {
   if (typeof window === "undefined") return;
-  if (pausedByChatOverlay) return;
 
   const audio = getSharedAudio();
-  playingBeforeChatOverlay = Boolean(audio.src && !audio.paused);
-  handoffBeforeChatOverlay = scrollHandoffEnabled;
-  pausedByChatOverlay = true;
+  const wasPlaying = Boolean(audio.src && !audio.paused);
+
+  if (chatPauseDepth === 0) {
+    playingBeforeChatOverlay = wasPlaying;
+    handoffBeforeChatOverlay = scrollHandoffEnabled;
+  } else if (wasPlaying) {
+    // Nested/re-entrant pause (e.g. Gespreksmodus) — keep resume intent
+    playingBeforeChatOverlay = true;
+  }
+  chatPauseDepth += 1;
 
   // Stop scroll handoff from starting another track under the chat.
   scrollHandoffEnabled = false;
@@ -443,17 +464,22 @@ export function pauseMusicForChat() {
   playGeneration += 1;
   handoffRunId += 1;
 
-  if (playingBeforeChatOverlay) {
+  // Always force-pause — even on re-entry (Strict Mode / Gespreksmodus).
+  try {
     audio.pause();
+  } catch {
+    /* ignore */
   }
 }
 
 /** Resume music that was playing before the chatbot opened. */
 export function resumeMusicAfterChat() {
   if (typeof window === "undefined") return;
-  if (!pausedByChatOverlay) return;
+  if (chatPauseDepth <= 0) return;
 
-  pausedByChatOverlay = false;
+  chatPauseDepth -= 1;
+  if (chatPauseDepth > 0) return;
+
   scrollHandoffEnabled = handoffBeforeChatOverlay;
 
   if (playingBeforeChatOverlay) {

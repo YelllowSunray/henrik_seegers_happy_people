@@ -16,6 +16,7 @@ import {
 } from "@/lib/henk-speech";
 import {
   pauseMusicForChat,
+  ensureMusicPausedForChat,
   resumeMusicAfterChat,
 } from "@/components/synced-lyric-player";
 
@@ -369,22 +370,20 @@ export function AskHenkChat({
     ) {
       return;
     }
-    // Never open the mic while Henk is speaking (or about to)
+    // Never open the mic while Henk is speaking / intro still running
     if (henkSpeakingRef.current) return;
     if (conversationModeRef.current && !allowListenRef.current) return;
 
     setError(null);
-    stopSpeaking();
-    setSpeakingIndex(null);
-    lastSpokenKeyRef.current = null;
-    void unlockSpeechAudio();
+    // Do NOT stopSpeaking() here — that was cutting off the intro when the
+    // mic opened. Speech must already have finished before allowListen is set.
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       if (
         !aliveRef.current ||
         henkSpeakingRef.current ||
-        !allowListenRef.current
+        (conversationModeRef.current && !allowListenRef.current)
       ) {
         stream.getTracks().forEach((tr) => tr.stop());
         return;
@@ -490,13 +489,15 @@ export function AskHenkChat({
   }
 
   function afterHenkSpoke() {
+    // Only open the mic after Maarten has fully finished
     henkSpeakingRef.current = false;
+    setSpeakingIndex(null);
     if (!aliveRef.current || !conversationModeRef.current) {
       setPhase("idle");
       return;
     }
-    // Only now may the mic open for the next turn
     allowListenRef.current = true;
+    ensureMusicPausedForChat();
     void startRecordingRef.current();
   }
 
@@ -738,9 +739,10 @@ export function AskHenkChat({
 
   async function toggleConversationMode() {
     warmSpeechVoices();
-    // Start unlock on this tap (sync play/resume) — do NOT await it.
-    // Awaiting hung forever on some iOS builds and blocked the intro entirely.
+    ensureMusicPausedForChat();
+    // Unlock TTS on this tap (non-blocking) — dedicated element, won't kill Maarten
     void unlockSpeechAudio();
+
     const next = !conversationMode;
     setConversationMode(next);
     conversationModeRef.current = next;
@@ -756,11 +758,39 @@ export function AskHenkChat({
       return;
     }
 
-    // Mic stays closed until intro TTS finishes
+    // Block recording until intro audio has fully finished
     allowListenRef.current = false;
+    henkSpeakingRef.current = true;
+    setPhase("thinking");
     setError(null);
 
-    if (!aliveRef.current) return;
+    // 1) Mic permission on this user gesture — release tracks, do NOT record yet
+    if (micSupported) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
+        stream.getTracks().forEach((tr) => tr.stop());
+        // "Allow" counts as a gesture on iOS — re-unlock before Maarten loads
+        await unlockSpeechAudio();
+      } catch {
+        setError(t("micDenied"));
+        henkSpeakingRef.current = false;
+        allowListenRef.current = true;
+        setPhase("idle");
+        // Still show intro as text; user can tap when ready
+      }
+    } else {
+      await unlockSpeechAudio();
+    }
+
+    ensureMusicPausedForChat();
+    await resumeSpeechAudio();
+
+    if (!aliveRef.current || !conversationModeRef.current) {
+      henkSpeakingRef.current = false;
+      return;
+    }
 
     const raw = t.raw("convoIntros");
     const intros = Array.isArray(raw)
@@ -777,13 +807,16 @@ export function AskHenkChat({
       return [...prev, { role: "assistant" as const, content: intro }];
     });
 
-    // Speak right away on the same user gesture — no awaits before this
+    // 2) Speak intro (mic tracks are stopped — only listening starts in afterSpeak)
+    henkSpeakingRef.current = true;
     readAloud(intro, speakIdx, {
       key: `intro:${intro}`,
       afterSpeak: afterHenkSpoke,
       onSpeakFailed: () => {
-        allowListenRef.current = true;
+        // Don't auto-record if Maarten never played
         henkSpeakingRef.current = false;
+        allowListenRef.current = true;
+        setSpeakingIndex(null);
         setPhase("idle");
       },
     });

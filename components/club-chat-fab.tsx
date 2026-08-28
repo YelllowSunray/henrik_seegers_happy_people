@@ -11,6 +11,10 @@ import { useTranslations } from "next-intl";
 import { usePathname } from "@/i18n/navigation";
 import { AskHenkChat } from "@/components/ask-henk-chat";
 import { stopSpeaking } from "@/lib/henk-speech";
+import {
+  pauseMusicForChat,
+  resumeMusicAfterChat,
+} from "@/components/synced-lyric-player";
 
 function ChatBubbleIcon({ className }: { className?: string }) {
   return (
@@ -189,7 +193,13 @@ export function ClubChatFab() {
 
   function closeChat() {
     stopSpeaking();
+    resumeMusicAfterChat();
     setOpen(false);
+  }
+
+  function openChat() {
+    pauseMusicForChat();
+    setOpen(true);
   }
 
   useEffect(() => {
@@ -288,7 +298,7 @@ export function ClubChatFab() {
           type="button"
           onClick={() => {
             if (open) closeChat();
-            else setOpen(true);
+            else openChat();
           }}
           aria-expanded={open}
           aria-label={open ? t("closeChat") : t("openChat")}
