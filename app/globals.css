@@ -96,6 +96,57 @@ body {
   animation: drift 18s ease-in-out infinite alternate;
 }
 
+@keyframes henk-dot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes henk-caret {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.henk-typing-dot {
+  display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: henk-dot 1.2s ease-in-out infinite;
+}
+
+.henk-typing-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.henk-typing-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.henk-caret {
+  display: inline-block;
+  width: 0.1em;
+  height: 1em;
+  margin-left: 0.1em;
+  vertical-align: -0.12em;
+  background: currentColor;
+  animation: henk-caret 1s steps(1, end) infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -106,6 +157,11 @@ body {
   .reveal-delay-2,
   .reveal-delay-3,
   .hero-kenema {
+    animation: none !important;
+  }
+
+  .henk-typing-dot,
+  .henk-caret {
     animation: none !important;
   }
 }

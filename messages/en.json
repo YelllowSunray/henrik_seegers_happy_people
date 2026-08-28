@@ -259,7 +259,9 @@
     "trialBannerLead": "You’re in the club without a card. Pick a plan now (card at checkout) or later.",
     "trialChoosePlan": "Choose subscription",
     "lockedTrialTitle": "Your free week is over",
-    "lockedTrial": "Choose a plan to reopen seminars, vlogs, quotes, and messages from Henk."
+    "lockedTrial": "Choose a plan to reopen seminars, vlogs, quotes, and messages from Henk.",
+    "ask": "Chat with Henk",
+    "descAsk": "Talk with Henk about Happy People"
   },
   "auth": {
     "email": "Email",
@@ -583,5 +585,25 @@
         "text": "And there the experiment ends: not with the claim that we actually had a love relationship, but with the image of two people who met each other at an exceptional moment — and of whom one will never forget that meeting."
       }
     ]
+  },
+  "askHenk": {
+    "eyebrow": "Henk",
+    "title": "Chat with Henk",
+    "lead": "Ask anything about the path of Happy People.",
+    "disclaimer": "",
+    "liveChatLink": "",
+    "empty": "What would you like to ask?",
+    "prompt1": "What are Happy People?",
+    "prompt2": "Who are the Lost Boys and Fallen Angels?",
+    "prompt3": "What is theory of mind?",
+    "placeholder": "Write a message…",
+    "send": "Send",
+    "thinking": "…",
+    "sendFailed": "Couldn’t send right now. Please try again.",
+    "fromHenk": "Henk",
+    "signIn": "Sign in to chat with Henk.",
+    "openChat": "Chat with Henk",
+    "closeChat": "Close chat",
+    "typing": "Henk is typing…"
   }
 }

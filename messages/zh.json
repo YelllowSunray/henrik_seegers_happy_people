@@ -248,7 +248,7 @@
     "newBadge": "{count}新款",
     "welcomeNewLead": "一些新的东西正在等待 - 检查下面的聊天、视频博客或消息。",
     "updatesWaiting": "{count}更新等待",
-    "chatFab": "与Henk聊天",
+    "chatFab": "与 Henk 聊天",
     "chatUnreadFab": "Henk新品",
     "pillLive": "现场俱乐部",
     "pillChat": "与Henk聊天",
@@ -259,7 +259,9 @@
     "trialBannerLead": "你在俱乐部里没有卡。立即选择一个计划（在结账时刷卡）或稍后选择。",
     "trialChoosePlan": "选择订阅",
     "lockedTrialTitle": "你的免费一周结束了",
-    "lockedTrial": "选择重新开放来自Henk的研讨会、视频博客、引言和消息的计划。"
+    "lockedTrial": "选择重新开放来自Henk的研讨会、视频博客、引言和消息的计划。",
+    "ask": "与 Henk 聊天",
+    "descAsk": "与 Henk 聊聊 Happy People"
   },
   "auth": {
     "email": "电子邮件",
@@ -583,5 +585,25 @@
         "text": "实验就结束了：不是声称我们实际上有过一段爱情关系，而是两个人在一个特殊时刻相遇的形象——人们永远不会忘记那次会面。"
       }
     ]
+  },
+  "askHenk": {
+    "eyebrow": "Henk",
+    "title": "与 Henk 聊天",
+    "lead": "询问 Happy People 之路。",
+    "disclaimer": "",
+    "liveChatLink": "",
+    "empty": "你想问什么？",
+    "prompt1": "什么是 Happy People？",
+    "prompt2": "Lost Boys 和 Fallen Angels 是谁？",
+    "prompt3": "什么是 theory of mind？",
+    "placeholder": "输入消息…",
+    "send": "发送",
+    "thinking": "…",
+    "sendFailed": "暂时无法发送。请再试一次。",
+    "fromHenk": "Henk",
+    "signIn": "登录后即可与 Henk 聊天。",
+    "openChat": "与 Henk 聊天",
+    "closeChat": "关闭聊天",
+    "typing": "Henk 正在输入…"
   }
 }

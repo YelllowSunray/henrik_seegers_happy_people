@@ -259,7 +259,9 @@
     "trialBannerLead": "أنت في النادي بدون بطاقة. اختر خطة الآن (البطاقة عند الخروج) أو لاحقًا.",
     "trialChoosePlan": "اختر الاشتراك",
     "lockedTrialTitle": "انتهى أسبوعك المجاني",
-    "lockedTrial": "اختر خطة لإعادة فتح الندوات ومدونات الفيديو والاقتباسات والرسائل من Henk."
+    "lockedTrial": "اختر خطة لإعادة فتح الندوات ومدونات الفيديو والاقتباسات والرسائل من Henk.",
+    "ask": "الدردشة مع Henk",
+    "descAsk": "تحدث مع Henk عن Happy People"
   },
   "auth": {
     "email": "البريد الإلكتروني",
@@ -583,5 +585,25 @@
         "text": "وهنا تنتهي التجربة: ليس بالادعاء بأن لدينا علاقة حب بالفعل، ولكن بصورة شخصين التقيا ببعضهما البعض في لحظة استثنائية - ولن ينسى أحدهما ذلك اللقاء أبدًا."
       }
     ]
+  },
+  "askHenk": {
+    "eyebrow": "Henk",
+    "title": "الدردشة مع Henk",
+    "lead": "اسأل عن طريق Happy People.",
+    "disclaimer": "",
+    "liveChatLink": "",
+    "empty": "ماذا تريد أن تسأل؟",
+    "prompt1": "من هم Happy People؟",
+    "prompt2": "من هم Lost Boys و Fallen Angels؟",
+    "prompt3": "ما هي theory of mind؟",
+    "placeholder": "اكتب رسالة…",
+    "send": "إرسال",
+    "thinking": "…",
+    "sendFailed": "تعذر الإرسال الآن. حاول مرة أخرى.",
+    "fromHenk": "Henk",
+    "signIn": "سجّل الدخول للدردشة مع Henk.",
+    "openChat": "الدردشة مع Henk",
+    "closeChat": "إغلاق الدردشة",
+    "typing": "Henk يكتب…"
   }
 }

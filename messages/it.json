@@ -248,7 +248,7 @@
     "newBadge": "{count} nuovo",
     "welcomeNewLead": "C’è qualcosa di nuovo — guarda chat, vlog o messaggi sotto.",
     "updatesWaiting": "{count} aggiornamenti in attesa",
-    "chatFab": "Chat con Henk",
+    "chatFab": "Chatta con Henk",
     "chatUnreadFab": "Nuovo da Henk",
     "pillLive": "Club live",
     "pillChat": "Chat con Henk",
@@ -259,7 +259,9 @@
     "trialBannerLead": "Sei nel club senza carta. Scegli un piano ora (carta al checkout) o più tardi.",
     "trialChoosePlan": "Scegli abbonamento",
     "lockedTrialTitle": "La tua settimana gratis è finita",
-    "lockedTrial": "Scegli un piano per riaprire seminari, vlog, citazioni e messaggi di Henk."
+    "lockedTrial": "Scegli un piano per riaprire seminari, vlog, citazioni e messaggi di Henk.",
+    "ask": "Chatta con Henk",
+    "descAsk": "Parla con Henk di Happy People"
   },
   "auth": {
     "email": "Email",
@@ -583,5 +585,25 @@
         "text": "E lì finisce l’esperimento: non con l’affermazione che avessimo davvero una relazione d’amore, ma con l’immagine di due persone che si sono incontrate in un momento eccezionale — e di cui una non dimenticherà mai quell’incontro."
       }
     ]
+  },
+  "askHenk": {
+    "eyebrow": "Henk",
+    "title": "Chatta con Henk",
+    "lead": "Fai domande sul percorso di Happy People.",
+    "disclaimer": "",
+    "liveChatLink": "",
+    "empty": "Cosa vuoi chiedere?",
+    "prompt1": "Cosa sono gli Happy People?",
+    "prompt2": "Chi sono i Lost Boys e i Fallen Angels?",
+    "prompt3": "Cos’è la theory of mind?",
+    "placeholder": "Scrivi un messaggio…",
+    "send": "Invia",
+    "thinking": "…",
+    "sendFailed": "Impossibile inviare ora. Riprova.",
+    "fromHenk": "Henk",
+    "signIn": "Accedi per chattare con Henk.",
+    "openChat": "Chatta con Henk",
+    "closeChat": "Chiudi chat",
+    "typing": "Henk sta scrivendo…"
   }
 }

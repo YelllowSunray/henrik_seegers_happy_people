@@ -8,6 +8,7 @@ import { LocaleHtmlAttrs } from "@/components/locale-html-attrs";
 import { NavigationMemory } from "@/components/navigation-memory";
 import { SmartBackButton } from "@/components/smart-back-button";
 import { SiteFooter } from "@/components/site-footer";
+import { ClubChatFab } from "@/components/club-chat-fab";
 import { rtlLocales, type Locale } from "@/i18n/locales";
 
 export function generateStaticParams() {
@@ -41,6 +42,7 @@ export default async function LocaleLayout({
             <SiteFooter />
           </div>
           <SmartBackButton />
+          <ClubChatFab />
         </NavigationMemory>
       </AuthProvider>
     </NextIntlClientProvider>

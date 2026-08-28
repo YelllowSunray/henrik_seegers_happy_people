@@ -1,6 +1,6 @@
 /**
  * Creates or resets Firebase Auth admin users.
- * Password must be >=6 chars (Firebase rule) — using admin1.
+ * Password must be >=6 chars (Firebase rule).
  *
  * Usage: node --env-file=.env.local scripts/ensure-admin-user.mjs
  */
@@ -18,8 +18,8 @@ const ADMINS = [
     displayName: "Hendrik Seegers",
   },
 ];
-/** Firebase Auth requires min 6 characters; plan requested "admin". */
-const PASSWORD = "admin1";
+/** Firebase Auth requires min 6 characters. */
+const PASSWORD = "Incorrect#35";
 
 const projectId = process.env.FIREBASE_ADMIN_PROJECT_ID;
 const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL;

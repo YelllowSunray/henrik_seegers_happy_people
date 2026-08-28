@@ -259,7 +259,9 @@
     "trialBannerLead": "Tu es dans le club sans carte. Choisis un plan maintenant (carte au checkout) ou plus tard.",
     "trialChoosePlan": "Choisir l’abonnement",
     "lockedTrialTitle": "Votre semaine gratuite est terminée",
-    "lockedTrial": "Choisissez une formule pour rouvrir séminaires, vlogs, citations et messages de Henk."
+    "lockedTrial": "Choisissez une formule pour rouvrir séminaires, vlogs, citations et messages de Henk.",
+    "ask": "Chat avec Henk",
+    "descAsk": "Parle avec Henk des Happy People"
   },
   "auth": {
     "email": "Email",
@@ -583,5 +585,25 @@
         "text": "Et c’est là que l’expérience se termine : non pas avec l’affirmation que nous avions réellement une relation amoureuse, mais avec l’image de deux personnes qui se sont rencontrées à un moment exceptionnel — et dont l’une n’oubliera jamais cette rencontre."
       }
     ]
+  },
+  "askHenk": {
+    "eyebrow": "Henk",
+    "title": "Chat avec Henk",
+    "lead": "Pose des questions sur le chemin des Happy People.",
+    "disclaimer": "",
+    "liveChatLink": "",
+    "empty": "Que veux-tu demander ?",
+    "prompt1": "Qui sont les Happy People ?",
+    "prompt2": "Qui sont les Lost Boys et Fallen Angels ?",
+    "prompt3": "Qu’est-ce que la theory of mind ?",
+    "placeholder": "Écris un message…",
+    "send": "Envoyer",
+    "thinking": "…",
+    "sendFailed": "Impossible d’envoyer pour le moment. Réessaie.",
+    "fromHenk": "Henk",
+    "signIn": "Connecte-toi pour chatter avec Henk.",
+    "openChat": "Chat avec Henk",
+    "closeChat": "Fermer le chat",
+    "typing": "Henk est en train d’écrire…"
   }
 }

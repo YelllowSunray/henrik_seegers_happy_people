@@ -259,7 +259,9 @@
     "trialBannerLead": "카드 없이 클럽에 있습니다. 지금 플랜을 선택하거나(체크아웃 시 카드) 나중에 하세요.",
     "trialChoosePlan": "구독 선택",
     "lockedTrialTitle": "무료 주간이 끝났습니다",
-    "lockedTrial": "헨크의 세미나, 브이로그, 인용문, 메시지를 다시 열려면 요금제를 선택하세요."
+    "lockedTrial": "헨크의 세미나, 브이로그, 인용문, 메시지를 다시 열려면 요금제를 선택하세요.",
+    "ask": "Henk와 채팅",
+    "descAsk": "Happy People에 대해 Henk와 대화"
   },
   "auth": {
     "email": "이메일",
@@ -583,5 +585,25 @@
         "text": "실험은 거기서 끝난다. 우리가 실제로 연애 관계였다고 주장하는 것이 아니라, 특별한 순간에 만난 두 사람의 모습으로 — 그중 한 사람은 그 만남을 결코 잊지 못할 것이다."
       }
     ]
+  },
+  "askHenk": {
+    "eyebrow": "Henk",
+    "title": "Henk와 채팅",
+    "lead": "Happy People의 길에 대해 물어보세요.",
+    "disclaimer": "",
+    "liveChatLink": "",
+    "empty": "무엇을 물어보고 싶나요?",
+    "prompt1": "Happy People이란?",
+    "prompt2": "Lost Boys와 Fallen Angels는 누구인가요?",
+    "prompt3": "theory of mind란?",
+    "placeholder": "메시지를 입력하세요…",
+    "send": "보내기",
+    "thinking": "…",
+    "sendFailed": "지금은 보낼 수 없습니다. 다시 시도해 주세요.",
+    "fromHenk": "Henk",
+    "signIn": "Henk와 채팅하려면 로그인하세요.",
+    "openChat": "Henk와 채팅",
+    "closeChat": "채팅 닫기",
+    "typing": "Henk가 입력 중…"
   }
 }
