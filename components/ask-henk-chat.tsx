@@ -971,7 +971,7 @@ export function AskHenkChat({
         {turns.map((turn, i) => (
           <div
             key={`${turn.role}-${i}`}
-            className={`flex ${turn.role === "user" ? "justify-end" : "justify-start"}`}
+            className={`flex ${turn.role === "user" ? "justify-start" : "justify-end"}`}
           >
             <div
               className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-wrap ${
@@ -1023,7 +1023,7 @@ export function AskHenkChat({
         ))}
 
         {henkTyping && (
-          <div className="flex justify-start">
+          <div className="flex justify-end">
             <div className="max-w-[85%] rounded-2xl bg-bg-deep px-3.5 py-2.5 text-sm text-ink">
               <p className="mb-1.5 text-[10px] font-semibold tracking-[0.14em] text-accent uppercase">
                 {t("fromHenk")}
