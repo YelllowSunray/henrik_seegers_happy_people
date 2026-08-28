@@ -219,6 +219,8 @@ export function AskHenkChat({
   const startRecordingRef = useRef<() => Promise<void>>(async () => {});
   const lastSpokenKeyRef = useRef<string | null>(null);
   const aliveRef = useRef(true);
+  /** Gespreksmodus: mic only after Henk finishes speaking (blocks early listen). */
+  const allowListenRef = useRef(false);
 
   useEffect(() => {
     conversationModeRef.current = conversationMode;
@@ -243,6 +245,7 @@ export function AskHenkChat({
     return () => {
       aliveRef.current = false;
       conversationModeRef.current = false;
+      allowListenRef.current = false;
       abortRef.current?.abort();
       abortRef.current = null;
       stopSpeaking();
@@ -348,6 +351,10 @@ export function AskHenkChat({
     ) {
       return;
     }
+    // Don't open the mic while Henk's intro/reply is still playing
+    if (conversationModeRef.current && !allowListenRef.current) {
+      return;
+    }
     setError(null);
     stopSpeaking();
     setSpeakingIndex(null);
@@ -357,6 +364,10 @@ export function AskHenkChat({
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      if (!aliveRef.current || !allowListenRef.current) {
+        stream.getTracks().forEach((tr) => tr.stop());
+        return;
+      }
       mediaStreamRef.current = stream;
       chunksRef.current = [];
       const mime = pickRecorderMime();
@@ -462,7 +473,8 @@ export function AskHenkChat({
       setPhase("idle");
       return;
     }
-    // Open the mic for the next turn
+    // Only now may the mic open for the next turn
+    allowListenRef.current = true;
     void startRecordingRef.current();
   }
 
@@ -472,6 +484,10 @@ export function AskHenkChat({
     stopSpeaking();
     setSpeakingIndex(null);
     lastSpokenKeyRef.current = null;
+    // While Henk thinks/speaks, keep the mic closed
+    if (conversationModeRef.current) {
+      allowListenRef.current = false;
+    }
     setText("");
     setError(null);
     setBusy(true);
@@ -692,7 +708,10 @@ export function AskHenkChat({
 
   function toggleMic() {
     if (recording) stopRecording();
-    else void startRecording();
+    else {
+      allowListenRef.current = true;
+      void startRecording();
+    }
   }
 
   async function toggleConversationMode() {
@@ -704,6 +723,7 @@ export function AskHenkChat({
     conversationModeRef.current = next;
 
     if (!next) {
+      allowListenRef.current = false;
       stopSpeaking();
       setSpeakingIndex(null);
       lastSpokenKeyRef.current = null;
@@ -712,7 +732,12 @@ export function AskHenkChat({
       return;
     }
 
-    // Unlock mic on this user gesture
+    // Block mic until intro TTS finishes
+    allowListenRef.current = false;
+    setPhase("thinking");
+    setError(null);
+
+    // Mic permission on this user gesture (do not start listening yet)
     if (micSupported) {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -720,12 +745,14 @@ export function AskHenkChat({
         });
         stream.getTracks().forEach((tr) => tr.stop());
       } catch {
-        /* can ask again when listening starts */
+        setError(t("micDenied"));
+        /* still try intro speech; user can tap Start talking later */
       }
     }
     await unlockPromise.catch(() => undefined);
 
-    // Opening greeting from Henk, then listen
+    if (!aliveRef.current || !conversationModeRef.current) return;
+
     const raw = t.raw("convoIntros");
     const intros = Array.isArray(raw)
       ? raw.filter((s): s is string => typeof s === "string" && s.trim().length > 0)
@@ -734,18 +761,17 @@ export function AskHenkChat({
       intros[Math.floor(Math.random() * Math.max(intros.length, 1))] ??
       t("convoIntroFallback");
 
-    setError(null);
     stickToBottom.current = true;
+    let speakIdx = 0;
     setTurns((prev) => {
-      const nextTurns = [...prev, { role: "assistant" as const, content: intro }];
-      const idx = nextTurns.length - 1;
-      window.setTimeout(() => {
-        readAloud(intro, idx, {
-          key: `intro:${intro}`,
-          afterSpeak: afterHenkSpoke,
-        });
-      }, 60);
-      return nextTurns;
+      speakIdx = prev.length;
+      return [...prev, { role: "assistant" as const, content: intro }];
+    });
+
+    // Speak immediately after unlock — never schedule from inside setState
+    readAloud(intro, speakIdx, {
+      key: `intro:${intro}`,
+      afterSpeak: afterHenkSpoke,
     });
   }
 
@@ -862,15 +888,27 @@ export function AskHenkChat({
           <div className="my-auto space-y-3 text-center">
             <p className="text-ink-soft">{t("empty")}</p>
             {conversationMode ? (
-              <button
-                type="button"
-                onClick={() => void startRecording()}
-                disabled={!micSupported || recording || busy}
-                className="mx-auto flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white"
-              >
-                <MicIcon className="h-5 w-5" />
-                {t("convoStartTalk")}
-              </button>
+              phase === "thinking" ||
+              phase === "speaking" ||
+              phase === "listening" ||
+              phase === "transcribing" ? (
+                <p className="text-sm font-medium text-ink-soft">
+                  {statusLabel ?? t("statusSpeaking")}
+                </p>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    allowListenRef.current = true;
+                    void startRecording();
+                  }}
+                  disabled={!micSupported || recording || busy}
+                  className="mx-auto flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white"
+                >
+                  <MicIcon className="h-5 w-5" />
+                  {t("convoStartTalk")}
+                </button>
+              )
             ) : (
               <div className="flex flex-wrap justify-center gap-2">
                 {[t("prompt1"), t("prompt2"), t("prompt3")].map((prompt) => (
