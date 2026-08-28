@@ -460,7 +460,10 @@ export function AskHenkChat({
     let assistantIndex = -1;
 
     try {
-      await sleep(500 + Math.random() * 400, ac.signal);
+      // Conversation mode: skip the “thinking pause” so Maarten can start sooner
+      if (!shouldSpeak) {
+        await sleep(500 + Math.random() * 400, ac.signal);
+      }
 
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
@@ -486,6 +489,42 @@ export function AskHenkChat({
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let full = "";
+
+      // ── Gespreksmodus: buffer text fast, show it, speak immediately (no typewriter) ──
+      if (shouldSpeak) {
+        setHenkTyping(true);
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          full += decoder.decode(value, { stream: true });
+        }
+        full += decoder.decode();
+        finalAssistant = full.trim();
+        setHenkTyping(false);
+
+        if (!finalAssistant) {
+          throw new Error(t("sendFailed"));
+        }
+
+        let speakIdx = 0;
+        setTurns((prev) => {
+          speakIdx = prev.length;
+          return [
+            ...prev,
+            { role: "assistant" as const, content: finalAssistant },
+          ];
+        });
+        setBusy(false);
+
+        // Start Maarten as soon as the full reply exists — don't wait for UI typing
+        readAloud(finalAssistant, speakIdx, {
+          key: `auto:${finalAssistant.length}:${finalAssistant.slice(0, 48)}`,
+          afterSpeak: afterHenkSpoke,
+        });
+        return;
+      }
+
+      // ── Normal chat: typewriter reveal ──
       let shown = 0;
       let assistantStarted = false;
       const reduceMotion =
@@ -561,24 +600,7 @@ export function AskHenkChat({
       }
 
       setBusy(false);
-
-      if (shouldSpeak && finalAssistant) {
-        // Prefer index captured when the assistant bubble was created
-        setTurns((prev) => {
-          const idx =
-            assistantIndex >= 0 ? assistantIndex : Math.max(0, prev.length - 1);
-          // Defer speak so React can commit the final bubble once
-          window.setTimeout(() => {
-            readAloud(finalAssistant, idx, {
-              key: `auto:${finalAssistant.length}:${finalAssistant.slice(0, 48)}`,
-              afterSpeak: afterHenkSpoke,
-            });
-          }, 80);
-          return prev;
-        });
-      } else {
-        setPhase("idle");
-      }
+      setPhase("idle");
     } catch (err) {
       if ((err as Error).name === "AbortError") return;
       setError((err as Error).message || t("sendFailed"));
