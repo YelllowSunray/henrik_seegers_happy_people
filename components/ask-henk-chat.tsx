@@ -362,6 +362,51 @@ export function AskHenkChat({
     mediaStreamRef.current = null;
   }
 
+  async function startRecordingWithStream(stream: MediaStream) {
+    if (
+      !aliveRef.current ||
+      busyRef.current ||
+      recordingRef.current ||
+      mediaRecorderRef.current
+    ) {
+      stream.getTracks().forEach((tr) => tr.stop());
+      return;
+    }
+    if (henkSpeakingRef.current) {
+      stream.getTracks().forEach((tr) => tr.stop());
+      return;
+    }
+
+    pauseSilentKeepAlive();
+    setError(null);
+    mediaStreamRef.current = stream;
+    chunksRef.current = [];
+    const mime = pickRecorderMime();
+    const recorder = mime
+      ? new MediaRecorder(stream, { mimeType: mime })
+      : new MediaRecorder(stream);
+    mediaRecorderRef.current = recorder;
+
+    recorder.ondataavailable = (ev) => {
+      if (ev.data.size > 0) chunksRef.current.push(ev.data);
+    };
+    recorder.onstop = () => {
+      void finishRecording(recorder.mimeType || mime || "audio/webm");
+    };
+
+    recorder.start(250);
+    setRecording(true);
+    setPhase("listening");
+
+    if (conversationModeRef.current) {
+      silenceStopRef.current = watchSilence(stream, () => {
+        if (mediaRecorderRef.current?.state === "recording") {
+          stopRecording();
+        }
+      });
+    }
+  }
+
   async function startRecording() {
     if (
       !aliveRef.current ||
@@ -372,12 +417,10 @@ export function AskHenkChat({
     ) {
       return;
     }
-    // Never open the mic while Henk is speaking / intro still running
     if (henkSpeakingRef.current) return;
     if (conversationModeRef.current && !allowListenRef.current) return;
 
     setError(null);
-    // Pause keep-alive while the mic owns the audio session (iOS)
     pauseSilentKeepAlive();
 
     try {
@@ -391,35 +434,10 @@ export function AskHenkChat({
         void startSilentKeepAlive();
         return;
       }
-      mediaStreamRef.current = stream;
-      chunksRef.current = [];
-      const mime = pickRecorderMime();
-      const recorder = mime
-        ? new MediaRecorder(stream, { mimeType: mime })
-        : new MediaRecorder(stream);
-      mediaRecorderRef.current = recorder;
-
-      recorder.ondataavailable = (ev) => {
-        if (ev.data.size > 0) chunksRef.current.push(ev.data);
-      };
-      recorder.onstop = () => {
-        void finishRecording(recorder.mimeType || mime || "audio/webm");
-      };
-
-      recorder.start(250);
-      setRecording(true);
-      setPhase("listening");
-
-      if (conversationModeRef.current) {
-        silenceStopRef.current = watchSilence(stream, () => {
-          if (mediaRecorderRef.current?.state === "recording") {
-            stopRecording();
-          }
-        });
-      }
+      await startRecordingWithStream(stream);
     } catch {
       await stopMicTracks();
-      setPhase(conversationModeRef.current ? "idle" : "idle");
+      setPhase("idle");
       setError(t("micDenied"));
     }
   }
@@ -448,8 +466,8 @@ export function AskHenkChat({
 
     // Re-claim playback on the same unlocked element before Maarten
     holdSpeechAudioSession();
-    await startSilentKeepAlive();
-    await resumeSpeechAudio();
+    void startSilentKeepAlive();
+    void resumeSpeechAudio();
     // Give iOS a moment to leave record mode
     await new Promise<void>((r) => window.setTimeout(r, 150));
     if (!aliveRef.current) return;
@@ -741,6 +759,7 @@ export function AskHenkChat({
   async function toggleConversationMode() {
     warmSpeechVoices();
     ensureMusicPausedForChat();
+    // Kick off unlock on this tap — never block the mic on it
     void unlockSpeechAudio();
     holdSpeechAudioSession();
 
@@ -759,39 +778,39 @@ export function AskHenkChat({
       return;
     }
 
-    // User speaks first — no Henk intro. Mic opens, then Henk answers aloud.
+    // User speaks first — open mic as soon as permission is granted
     allowListenRef.current = false;
     henkSpeakingRef.current = false;
     setPhase("thinking");
     setError(null);
 
-    if (micSupported) {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-        });
-        stream.getTracks().forEach((tr) => tr.stop());
-        await unlockSpeechAudio();
-        await startSilentKeepAlive();
-        holdSpeechAudioSession();
-      } catch {
-        setError(t("micDenied"));
-        allowListenRef.current = true;
-        setPhase("idle");
-        return;
-      }
-    } else {
-      await unlockSpeechAudio();
-      await startSilentKeepAlive();
-      holdSpeechAudioSession();
+    if (!micSupported) {
+      setError(t("micDenied"));
+      allowListenRef.current = true;
+      setPhase("idle");
+      return;
     }
 
-    ensureMusicPausedForChat();
+    try {
+      // Permission + start listening on the same stream (no second getUserMedia,
+      // no await on silent keep-alive — that hung forever on iOS).
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      if (!aliveRef.current || !conversationModeRef.current) {
+        stream.getTracks().forEach((tr) => tr.stop());
+        return;
+      }
 
-    if (!aliveRef.current || !conversationModeRef.current) return;
+      void unlockSpeechAudio();
+      holdSpeechAudioSession();
+      ensureMusicPausedForChat();
 
-    allowListenRef.current = true;
-    void startRecordingRef.current();
+      allowListenRef.current = true;
+      await startRecordingWithStream(stream);
+    } catch {
+      setError(t("micDenied"));
+      allowListenRef.current = true;
+      setPhase("idle");
+    }
   }
 
   const last = turns[turns.length - 1];

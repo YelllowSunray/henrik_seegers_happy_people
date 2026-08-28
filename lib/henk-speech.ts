@@ -128,7 +128,7 @@ export function releaseSpeechAudioSession() {
 
 /**
  * Loop silent audio on the SAME element Maarten will use.
- * iOS only allows later play() on an element that already played from a gesture.
+ * Never hangs — iOS can leave play() pending forever.
  */
 export async function startSilentKeepAlive(): Promise<void> {
   if (typeof window === "undefined") return;
@@ -139,11 +139,15 @@ export async function startSilentKeepAlive(): Promise<void> {
     audio.loop = true;
     audio.muted = false;
     audio.volume = 0.01;
-    if (audio.src !== SILENT_WAV) {
+    if (!audio.src || audio.src === "" || !audio.src.includes("audio/wav")) {
       audio.src = SILENT_WAV;
     }
-    await audio.play();
-    htmlAudioUnlocked = true;
+    await Promise.race([
+      audio.play().then(() => {
+        htmlAudioUnlocked = true;
+      }),
+      new Promise<void>((resolve) => window.setTimeout(resolve, 400)),
+    ]);
   } catch {
     /* may fail after mic without a fresh gesture */
   }
