@@ -241,6 +241,7 @@ export function AskHenkChat({
     >
       <div
         ref={listRef}
+        data-henk-chat-scroll
         onScroll={onListScroll}
         className={`flex flex-col gap-3 overflow-y-auto overscroll-contain p-4 [-webkit-overflow-scrolling:touch] ${
           fill

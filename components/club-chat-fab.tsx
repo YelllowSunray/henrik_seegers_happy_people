@@ -72,13 +72,13 @@ function MobileChatSheet({
   closeLabel: string;
   onClose: () => void;
 }) {
-  const [shellStyle, setShellStyle] = useState<CSSProperties>({
+  const [panelStyle, setPanelStyle] = useState<CSSProperties>({
     position: "fixed",
     top: 0,
     left: 0,
     width: "100%",
     height: "100%",
-    zIndex: 10000,
+    zIndex: 10001,
   });
   const [keyboardOpen, setKeyboardOpen] = useState(false);
 
@@ -89,56 +89,85 @@ function MobileChatSheet({
       const offsetTop = vv?.offsetTop ?? 0;
       const offsetLeft = vv?.offsetLeft ?? 0;
       const width = vv?.width ?? window.innerWidth;
-      // Keyboard roughly open when visual viewport is clearly shorter than layout
       const openKb = height < window.innerHeight * 0.85;
       setKeyboardOpen(openKb);
-      setShellStyle({
+      // Keep the interactive panel inside the visual viewport only.
+      // An opaque layout-viewport backdrop underneath prevents website flash
+      // while iOS animates the keyboard.
+      setPanelStyle({
         position: "fixed",
         top: 0,
         left: 0,
         width: `${width}px`,
-        height: `${height}px`,
-        transform: `translate(${offsetLeft}px, ${offsetTop}px)`,
-        zIndex: 10000,
+        height: `${Math.round(height)}px`,
+        transform: `translate3d(${Math.round(offsetLeft)}px, ${Math.round(offsetTop)}px, 0)`,
+        zIndex: 10001,
       });
     };
 
     sync();
-    vv?.addEventListener("resize", sync);
-    vv?.addEventListener("scroll", sync);
-    window.addEventListener("resize", sync);
+    // rAF keeps us in sync with Safari's keyboard animation frames
+    let raf = 0;
+    const onVvChange = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(sync);
+    };
+    vv?.addEventListener("resize", onVvChange);
+    vv?.addEventListener("scroll", onVvChange);
+    window.addEventListener("resize", onVvChange);
     return () => {
-      vv?.removeEventListener("resize", sync);
-      vv?.removeEventListener("scroll", sync);
-      window.removeEventListener("resize", sync);
+      cancelAnimationFrame(raf);
+      vv?.removeEventListener("resize", onVvChange);
+      vv?.removeEventListener("scroll", onVvChange);
+      window.removeEventListener("resize", onVvChange);
     };
   }, []);
 
+  // Block touch scrolling of the page behind the chat
+  useEffect(() => {
+    const block = (e: TouchEvent) => {
+      // Allow scrolling inside the message list only
+      const target = e.target as HTMLElement | null;
+      if (target?.closest("[data-henk-chat-scroll]")) return;
+      e.preventDefault();
+    };
+    document.addEventListener("touchmove", block, { passive: false });
+    return () => document.removeEventListener("touchmove", block);
+  }, []);
+
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={titleId}
-      style={shellStyle}
-      className="flex flex-col overflow-hidden bg-[var(--bg,#f3efe6)]"
-    >
-      <header className="flex shrink-0 items-center justify-between gap-3 border-b border-line bg-ink px-4 py-3 text-white">
-        <p id={titleId} className="font-display text-lg leading-tight">
-          {title}
-        </p>
-        <button
-          type="button"
-          onClick={onClose}
-          className="rounded-full p-1.5 text-white/80 transition hover:bg-white/10 hover:text-white"
-          aria-label={closeLabel}
-        >
-          <CloseIcon className="h-5 w-5" />
-        </button>
-      </header>
-      <div className="flex min-h-0 flex-1 flex-col">
-        <AskHenkChat fill keyboardOpen={keyboardOpen} />
+    <>
+      {/* Always covers the full layout viewport — never resizes with the keyboard */}
+      <div
+        aria-hidden
+        className="fixed inset-0 min-h-full min-h-[100dvh] bg-[var(--bg,#f3efe6)]"
+        style={{ zIndex: 10000 }}
+      />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        style={panelStyle}
+        className="flex flex-col overflow-hidden bg-[var(--bg,#f3efe6)]"
+      >
+        <header className="flex shrink-0 items-center justify-between gap-3 border-b border-line bg-ink px-4 py-3 text-white">
+          <p id={titleId} className="font-display text-lg leading-tight">
+            {title}
+          </p>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full p-1.5 text-white/80 transition hover:bg-white/10 hover:text-white"
+            aria-label={closeLabel}
+          >
+            <CloseIcon className="h-5 w-5" />
+          </button>
+        </header>
+        <div className="flex min-h-0 flex-1 flex-col">
+          <AskHenkChat fill keyboardOpen={keyboardOpen} />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -170,28 +199,38 @@ export function ClubChatFab() {
   useEffect(() => {
     if (!open || !isMobile) return;
     const scrollY = window.scrollY;
-    const { style } = document.body;
-    const prev = {
-      position: style.position,
-      top: style.top,
-      left: style.left,
-      right: style.right,
-      overflow: style.overflow,
-      width: style.width,
+    const { style: bodyStyle } = document.body;
+    const { style: htmlStyle } = document.documentElement;
+    const prevBody = {
+      position: bodyStyle.position,
+      top: bodyStyle.top,
+      left: bodyStyle.left,
+      right: bodyStyle.right,
+      overflow: bodyStyle.overflow,
+      width: bodyStyle.width,
     };
-    style.position = "fixed";
-    style.top = `-${scrollY}px`;
-    style.left = "0";
-    style.right = "0";
-    style.width = "100%";
-    style.overflow = "hidden";
+    const prevHtml = {
+      overflow: htmlStyle.overflow,
+      background: htmlStyle.background,
+    };
+    bodyStyle.position = "fixed";
+    bodyStyle.top = `-${scrollY}px`;
+    bodyStyle.left = "0";
+    bodyStyle.right = "0";
+    bodyStyle.width = "100%";
+    bodyStyle.overflow = "hidden";
+    htmlStyle.overflow = "hidden";
+    // Match chat cream so any momentary gap never shows site content
+    htmlStyle.background = "#f3efe6";
     return () => {
-      style.position = prev.position;
-      style.top = prev.top;
-      style.left = prev.left;
-      style.right = prev.right;
-      style.overflow = prev.overflow;
-      style.width = prev.width;
+      bodyStyle.position = prevBody.position;
+      bodyStyle.top = prevBody.top;
+      bodyStyle.left = prevBody.left;
+      bodyStyle.right = prevBody.right;
+      bodyStyle.overflow = prevBody.overflow;
+      bodyStyle.width = prevBody.width;
+      htmlStyle.overflow = prevHtml.overflow;
+      htmlStyle.background = prevHtml.background;
       window.scrollTo(0, scrollY);
     };
   }, [open, isMobile]);
