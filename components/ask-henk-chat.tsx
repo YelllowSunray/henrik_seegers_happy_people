@@ -34,10 +34,13 @@ function TypingDots() {
 export function AskHenkChat({
   compact = false,
   fill = false,
+  keyboardOpen = false,
 }: {
   compact?: boolean;
   /** Fill parent height (mobile full-screen sheet). */
   fill?: boolean;
+  /** When true, drop safe-area bottom padding (keyboard already insets the sheet). */
+  keyboardOpen?: boolean;
 }) {
   const t = useTranslations("askHenk");
   const locale = useLocale();
@@ -47,17 +50,37 @@ export function AskHenkChat({
   const [busy, setBusy] = useState(false);
   const [henkTyping, setHenkTyping] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const stickToBottom = useRef(true);
+
+  function scrollMessagesToEnd(behavior: ScrollBehavior = "auto") {
+    const list = listRef.current;
+    if (!list) return;
+    if (behavior === "smooth") {
+      list.scrollTo({ top: list.scrollHeight, behavior: "smooth" });
+    } else {
+      list.scrollTop = list.scrollHeight;
+    }
+  }
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [turns, henkTyping]);
+    if (!stickToBottom.current) return;
+    scrollMessagesToEnd(busy ? "auto" : "smooth");
+  }, [turns, henkTyping, busy, keyboardOpen]);
 
+  // Re-stick to bottom when the keyboard opens / viewport resizes
   useEffect(() => {
-    if (compact || fill) inputRef.current?.focus({ preventScroll: true });
-  }, [compact, fill]);
+    if (!fill) return;
+    const vv = window.visualViewport;
+    const onResize = () => {
+      if (stickToBottom.current) scrollMessagesToEnd("auto");
+    };
+    vv?.addEventListener("resize", onResize);
+    return () => vv?.removeEventListener("resize", onResize);
+  }, [fill]);
 
   async function onSend(e: FormEvent) {
     e.preventDefault();
@@ -68,16 +91,17 @@ export function AskHenkChat({
     setError(null);
     setBusy(true);
     setHenkTyping(true);
+    stickToBottom.current = true;
 
     const history = turns.slice(-8);
     setTurns((prev) => [...prev, { role: "user", content: message }]);
+    requestAnimationFrame(() => scrollMessagesToEnd("auto"));
 
     abortRef.current?.abort();
     const ac = new AbortController();
     abortRef.current = ac;
 
     try {
-      // Brief pause so it feels like Henk read the message first
       await sleep(700 + Math.random() * 500, ac.signal);
 
       const headers: Record<string, string> = {
@@ -134,7 +158,6 @@ export function AskHenkChat({
             revealUpTo(full.length);
             break;
           }
-          // Human-ish typing: a few characters at a time, slower on punctuation
           const nextChar = full[shown] ?? "";
           const chunkSize =
             nextChar === "\n"
@@ -162,7 +185,6 @@ export function AskHenkChat({
         if (done) break;
         full += decoder.decode(value, { stream: true });
         if (!assistantStarted && full.trim()) {
-          // Keep the typing dots a moment longer before the first letters appear
           await sleep(350 + Math.random() * 250, ac.signal);
           setHenkTyping(false);
         }
@@ -200,18 +222,27 @@ export function AskHenkChat({
     last?.role === "assistant" &&
     last.content.length > 0;
 
+  function onListScroll() {
+    const list = listRef.current;
+    if (!list) return;
+    const distance = list.scrollHeight - list.scrollTop - list.clientHeight;
+    stickToBottom.current = distance < 80;
+  }
+
   return (
     <div
-      className={`flex flex-col bg-bg ${
+      className={`flex min-h-0 flex-col bg-bg ${
         fill
-          ? "h-full min-h-0"
+          ? "h-full"
           : compact
             ? ""
             : "overflow-hidden rounded-2xl border border-line"
       }`}
     >
       <div
-        className={`flex flex-col gap-3 overflow-y-auto overscroll-contain p-4 ${
+        ref={listRef}
+        onScroll={onListScroll}
+        className={`flex flex-col gap-3 overflow-y-auto overscroll-contain p-4 [-webkit-overflow-scrolling:touch] ${
           fill
             ? "min-h-0 flex-1"
             : compact
@@ -227,7 +258,10 @@ export function AskHenkChat({
                 <button
                   key={prompt}
                   type="button"
-                  onClick={() => setText(prompt)}
+                  onClick={() => {
+                    setText(prompt);
+                    inputRef.current?.focus();
+                  }}
                   className="rounded-full border border-line bg-bg-deep px-3 py-1.5 text-left text-sm text-ink-soft transition hover:border-accent hover:text-ink"
                 >
                   {prompt}
@@ -275,23 +309,33 @@ export function AskHenkChat({
             </div>
           </div>
         )}
-        <div ref={bottomRef} />
+        <div ref={bottomRef} className="h-px w-full shrink-0" />
       </div>
 
       {error && (
-        <p className="border-t border-line px-4 py-2 text-sm text-red-700">
+        <p className="shrink-0 border-t border-line px-4 py-2 text-sm text-red-700">
           {error}
         </p>
       )}
 
       <form
         onSubmit={onSend}
-        className="flex shrink-0 gap-2 border-t border-line bg-bg p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+        className={`flex shrink-0 gap-2 border-t border-line bg-bg p-3 ${
+          fill && !keyboardOpen
+            ? "pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+            : ""
+        }`}
       >
         <input
           ref={inputRef}
           value={text}
           onChange={(e) => setText(e.target.value)}
+          onFocus={() => {
+            stickToBottom.current = true;
+            // After keyboard animates, pin messages to the bottom of the sheet
+            window.setTimeout(() => scrollMessagesToEnd("auto"), 50);
+            window.setTimeout(() => scrollMessagesToEnd("auto"), 300);
+          }}
           placeholder={t("placeholder")}
           disabled={busy}
           enterKeyHint="send"

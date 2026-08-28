@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useId, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useId,
+  useState,
+  type CSSProperties,
+} from "react";
+import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { usePathname } from "@/i18n/navigation";
 import { AskHenkChat } from "@/components/ask-henk-chat";
@@ -42,17 +48,114 @@ function CloseIcon({ className }: { className?: string }) {
   );
 }
 
+function useIsMobile(breakpoint = 768) {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
+    const sync = () => setMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, [breakpoint]);
+  return mobile;
+}
+
+/** Full-screen mobile sheet sized to the visual viewport (keyboard-safe on iOS). */
+function MobileChatSheet({
+  titleId,
+  title,
+  closeLabel,
+  onClose,
+}: {
+  titleId: string;
+  title: string;
+  closeLabel: string;
+  onClose: () => void;
+}) {
+  const [shellStyle, setShellStyle] = useState<CSSProperties>({
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    zIndex: 10000,
+  });
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+
+  useEffect(() => {
+    const vv = window.visualViewport;
+    const sync = () => {
+      const height = vv?.height ?? window.innerHeight;
+      const offsetTop = vv?.offsetTop ?? 0;
+      const offsetLeft = vv?.offsetLeft ?? 0;
+      const width = vv?.width ?? window.innerWidth;
+      // Keyboard roughly open when visual viewport is clearly shorter than layout
+      const openKb = height < window.innerHeight * 0.85;
+      setKeyboardOpen(openKb);
+      setShellStyle({
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: `${width}px`,
+        height: `${height}px`,
+        transform: `translate(${offsetLeft}px, ${offsetTop}px)`,
+        zIndex: 10000,
+      });
+    };
+
+    sync();
+    vv?.addEventListener("resize", sync);
+    vv?.addEventListener("scroll", sync);
+    window.addEventListener("resize", sync);
+    return () => {
+      vv?.removeEventListener("resize", sync);
+      vv?.removeEventListener("scroll", sync);
+      window.removeEventListener("resize", sync);
+    };
+  }, []);
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={titleId}
+      style={shellStyle}
+      className="flex flex-col overflow-hidden bg-[var(--bg,#f3efe6)]"
+    >
+      <header className="flex shrink-0 items-center justify-between gap-3 border-b border-line bg-ink px-4 py-3 text-white">
+        <p id={titleId} className="font-display text-lg leading-tight">
+          {title}
+        </p>
+        <button
+          type="button"
+          onClick={onClose}
+          className="rounded-full p-1.5 text-white/80 transition hover:bg-white/10 hover:text-white"
+          aria-label={closeLabel}
+        >
+          <CloseIcon className="h-5 w-5" />
+        </button>
+      </header>
+      <div className="flex min-h-0 flex-1 flex-col">
+        <AskHenkChat fill keyboardOpen={keyboardOpen} />
+      </div>
+    </div>
+  );
+}
+
 export function ClubChatFab() {
   const t = useTranslations("askHenk");
   const pathname = usePathname();
+  const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
-  const [vvStyle, setVvStyle] = useState<CSSProperties | undefined>();
+  const [mounted, setMounted] = useState(false);
   const titleId = useId();
 
   const hideOnPage =
     pathname.startsWith("/members/ask") ||
     pathname.startsWith("/admin") ||
     pathname.startsWith("/auth");
+
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     if (!open) return;
@@ -63,69 +166,61 @@ export function ClubChatFab() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  // Lock page scroll while the sheet is open (mobile keyboard-friendly)
+  // Hard-lock background scroll (iOS-safe)
   useEffect(() => {
-    if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    if (!open || !isMobile) return;
+    const scrollY = window.scrollY;
+    const { style } = document.body;
+    const prev = {
+      position: style.position,
+      top: style.top,
+      left: style.left,
+      right: style.right,
+      overflow: style.overflow,
+      width: style.width,
+    };
+    style.position = "fixed";
+    style.top = `-${scrollY}px`;
+    style.left = "0";
+    style.right = "0";
+    style.width = "100%";
+    style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = prev;
+      style.position = prev.position;
+      style.top = prev.top;
+      style.left = prev.left;
+      style.right = prev.right;
+      style.overflow = prev.overflow;
+      style.width = prev.width;
+      window.scrollTo(0, scrollY);
     };
-  }, [open]);
+  }, [open, isMobile]);
 
-  // Keep the mobile sheet inside the visual viewport when the keyboard opens (iOS Safari)
-  useEffect(() => {
-    if (!open) {
-      setVvStyle(undefined);
-      return;
-    }
+  if (hideOnPage || !mounted) return null;
 
-    const vv = window.visualViewport;
-    if (!vv) return;
-
-    const sync = () => {
-      const isMobile = window.matchMedia("(max-width: 767px)").matches;
-      if (!isMobile) {
-        setVvStyle(undefined);
-        return;
-      }
-      setVvStyle({
-        position: "fixed",
-        top: vv.offsetTop,
-        left: vv.offsetLeft,
-        width: vv.width,
-        height: vv.height,
-        right: "auto",
-        bottom: "auto",
-      });
-    };
-
-    sync();
-    vv.addEventListener("resize", sync);
-    vv.addEventListener("scroll", sync);
-    window.addEventListener("resize", sync);
-    return () => {
-      vv.removeEventListener("resize", sync);
-      vv.removeEventListener("scroll", sync);
-      window.removeEventListener("resize", sync);
-    };
-  }, [open]);
-
-  if (hideOnPage) return null;
+  const overlay =
+    open && isMobile ? (
+      <MobileChatSheet
+        titleId={titleId}
+        title={t("title")}
+        closeLabel={t("closeChat")}
+        onClose={() => setOpen(false)}
+      />
+    ) : null;
 
   return (
     <>
-      {open && (
-        <>
-          {/* Mobile: full-screen sheet pinned to the visual viewport */}
+      {overlay ? createPortal(overlay, document.body) : null}
+
+      {open && !isMobile && (
+        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-end p-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
-            style={vvStyle}
-            className="fixed inset-0 z-50 flex flex-col bg-bg md:hidden"
+            className="pointer-events-auto flex w-[min(100vw-4rem,24rem)] flex-col overflow-hidden rounded-2xl border border-line bg-bg shadow-2xl shadow-ink/25"
           >
-            <div className="flex shrink-0 items-center justify-between gap-3 border-b border-line bg-ink px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] text-white">
+            <div className="flex items-center justify-between gap-3 border-b border-line bg-ink px-4 py-3 text-white">
               <p id={titleId} className="font-display text-lg leading-tight">
                 {t("title")}
               </p>
@@ -138,29 +233,9 @@ export function ClubChatFab() {
                 <CloseIcon className="h-5 w-5" />
               </button>
             </div>
-            <div className="flex min-h-0 flex-1 flex-col">
-              <AskHenkChat fill />
-            </div>
+            <AskHenkChat compact />
           </div>
-
-          {/* Desktop: floating card above the FAB */}
-          <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 hidden justify-end p-8 pb-[calc(2rem+env(safe-area-inset-bottom))] md:flex">
-            <div className="pointer-events-auto flex w-[min(100vw-4rem,24rem)] flex-col overflow-hidden rounded-2xl border border-line bg-bg shadow-2xl shadow-ink/25">
-              <div className="flex items-center justify-between gap-3 border-b border-line bg-ink px-4 py-3 text-white">
-                <p className="font-display text-lg leading-tight">{t("title")}</p>
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="rounded-full p-1.5 text-white/80 transition hover:bg-white/10 hover:text-white"
-                  aria-label={t("closeChat")}
-                >
-                  <CloseIcon className="h-5 w-5" />
-                </button>
-              </div>
-              <AskHenkChat compact />
-            </div>
-          </div>
-        </>
+        </div>
       )}
 
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-end p-4 md:p-8 pb-[calc(1rem+env(safe-area-inset-bottom))] md:pb-[calc(2rem+env(safe-area-inset-bottom))]">
@@ -170,10 +245,10 @@ export function ClubChatFab() {
           aria-expanded={open}
           aria-label={open ? t("closeChat") : t("openChat")}
           className={`pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full bg-ink text-white shadow-lg shadow-ink/25 transition hover:bg-accent ${
-            open ? "hidden md:flex" : "flex"
+            open && isMobile ? "hidden" : open ? "flex" : "flex"
           }`}
         >
-          {open ? (
+          {open && !isMobile ? (
             <CloseIcon className="h-6 w-6" />
           ) : (
             <ChatBubbleIcon className="h-7 w-7" />
