@@ -749,22 +749,12 @@ export function AskHenkChat({
       return;
     }
 
+    // User speaks first — no Henk intro. Mic opens, then Henk answers aloud.
     allowListenRef.current = false;
-    henkSpeakingRef.current = true;
+    henkSpeakingRef.current = false;
     setPhase("thinking");
     setError(null);
 
-    // Pick intro + start Maarten download DURING the permission dialog
-    const raw = t.raw("convoIntros");
-    const intros = Array.isArray(raw)
-      ? raw.filter((s): s is string => typeof s === "string" && s.trim().length > 0)
-      : [];
-    const intro =
-      intros[Math.floor(Math.random() * Math.max(intros.length, 1))] ??
-      t("convoIntroFallback");
-    prefetchDutchSpeech(intro);
-
-    // Mic permission on this gesture — release tracks, do NOT record yet
     if (micSupported) {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -775,9 +765,9 @@ export function AskHenkChat({
         holdSpeechAudioSession();
       } catch {
         setError(t("micDenied"));
-        henkSpeakingRef.current = false;
         allowListenRef.current = true;
         setPhase("idle");
+        return;
       }
     } else {
       await unlockSpeechAudio();
@@ -785,31 +775,11 @@ export function AskHenkChat({
     }
 
     ensureMusicPausedForChat();
-    await resumeSpeechAudio();
 
-    if (!aliveRef.current || !conversationModeRef.current) {
-      henkSpeakingRef.current = false;
-      return;
-    }
+    if (!aliveRef.current || !conversationModeRef.current) return;
 
-    stickToBottom.current = true;
-    let speakIdx = 0;
-    setTurns((prev) => {
-      speakIdx = prev.length;
-      return [...prev, { role: "assistant" as const, content: intro }];
-    });
-
-    henkSpeakingRef.current = true;
-    readAloud(intro, speakIdx, {
-      key: `intro:${intro}`,
-      afterSpeak: afterHenkSpoke,
-      onSpeakFailed: () => {
-        henkSpeakingRef.current = false;
-        allowListenRef.current = true;
-        setSpeakingIndex(null);
-        setPhase("idle");
-      },
-    });
+    allowListenRef.current = true;
+    void startRecordingRef.current();
   }
 
   const last = turns[turns.length - 1];
