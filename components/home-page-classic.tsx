@@ -121,18 +121,6 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
         </div>
       </Section>
 
-      <Section tone="default">
-        <SeminarStory
-          locale={locale}
-          titleAs="h2"
-          titleId="seminars-title"
-          returnPath="/"
-          showTicket={false}
-          showSoStrongPlayer={Boolean(nextEvent)}
-          variant="full"
-        />
-      </Section>
-
       <Section tone="deep">
         <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14">
           <div>
@@ -177,6 +165,18 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
 
       <Section tone="deep" id="meeting">
         <MeetingStory titleId="meeting-title" />
+      </Section>
+
+      <Section tone="default">
+        <SeminarStory
+          locale={locale}
+          titleAs="h2"
+          titleId="seminars-title"
+          returnPath="/"
+          showTicket={false}
+          showSoStrongPlayer={Boolean(nextEvent)}
+          variant="full"
+        />
       </Section>
 
       <Section
