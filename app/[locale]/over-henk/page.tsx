@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { LightboxImage } from "@/components/lightbox-image";
+import { ExpandableParagraphs } from "@/components/expandable-paragraphs";
 import { buildPageMetadata } from "@/lib/seo";
 import type { Locale } from "@/lib/types";
 
@@ -46,13 +47,11 @@ export default async function AboutPage({
             <p className="mt-4 max-w-2xl text-base text-ink-soft md:text-lg">
               {t("teaser")}
             </p>
-            <div className="mt-8 max-w-2xl space-y-5 text-base leading-relaxed text-ink-soft md:text-lg">
-              {paragraphs.map((paragraph, i) => (
-                <p key={i} className={i === 0 ? "text-ink" : undefined}>
-                  {paragraph}
-                </p>
-              ))}
-            </div>
+            <ExpandableParagraphs
+              paragraphs={paragraphs}
+              readMoreLabel={t("readMore")}
+              emphasizeFirst
+            />
           </div>
           <div className="lg:sticky lg:top-28">
             <LightboxImage

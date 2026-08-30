@@ -13,6 +13,7 @@ import { MicrochipPlayer } from "@/components/microchip-player";
 import { SeminarStory } from "@/components/seminar-story";
 import { SpiritsPlayer } from "@/components/spirits-player";
 import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
+import { ExpandableParagraphs } from "@/components/expandable-paragraphs";
 import { t } from "@/lib/content";
 import { FACEBOOK_HREF } from "@/lib/contact";
 import { fetchEvents, fetchPublicPosts } from "@/lib/content-firestore";
@@ -136,13 +137,11 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
             <p className="mt-4 max-w-2xl text-base text-ink-soft md:text-lg">
               {tAbout("teaser")}
             </p>
-            <div className="mt-8 max-w-2xl space-y-5 text-base leading-relaxed text-ink-soft md:text-lg">
-              {(tAbout.raw("paragraphs") as string[]).map((paragraph, i) => (
-                <p key={i} className={i === 0 ? "text-ink" : undefined}>
-                  {paragraph}
-                </p>
-              ))}
-            </div>
+            <ExpandableParagraphs
+              paragraphs={tAbout.raw("paragraphs") as string[]}
+              readMoreLabel={tAbout("readMore")}
+              emphasizeFirst
+            />
             <div className="mt-10 w-full max-w-[41rem]">
               <SyncedLyricPlayer
                 audioSrc="/audio/hooponopono.mp3"

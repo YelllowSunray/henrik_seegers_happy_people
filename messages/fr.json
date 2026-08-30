@@ -30,7 +30,7 @@
   },
   "message": {
     "eyebrow": "Le message",
-    "short": "Je viens de la planète Out­herspace, et je suis ici sur Terre pour t’aider — et réunir tous les Lost Boys et Fallen Angels. Ensemble, nous nous réunissons à nouveau comme un.",
+    "short": "Je viens de la planète \"OutherSpace\", et je suis ici sur Terre pour t’aider — et réunir tous les Lost Boys et Fallen Angels. Ensemble, nous nous réunissons à nouveau comme un.",
     "body": "Je crois au chemin des Happy People : commercer honnêtement, tenir parole, et voir l’autre comme un être à part entière — avec empathie plutôt qu’avidité. Car peut-être le plus grand changement commence lorsque nous comprenons enfin la personne à nos côtés.",
     "body2": "Par l’étude, la curiosité et une faim sans fin d’apprendre, j’ai découvert quelque chose qui a transformé ma vie. L’avidité a commencé à s’effacer ; l’empathie a pris sa place. La vie est redevenue plus légère, et j’ai découvert qu’aider quelqu’un qui est bloqué n’exige pas toujours des solutions compliquées. Parfois, il ne faut que quelques gestes simples — si simples qu’un enfant de cinq ans peut les apprendre.",
     "paragraphs": [
@@ -68,7 +68,8 @@
       "Et parfois cela arrive dans un tout petit moment. Un regard dans les yeux de quelqu’un, une rencontre inattendue ou une conversation apparemment fortuite peut suffire à Hendrik pour retrouver ce sentiment qu’il existe encore une autre couche derrière la réalité visible.",
       "Sa quête n’est donc pas encore terminée. Il veut continuer à explorer, à expérimenter et à partager — non pour convaincre les autres, mais pour mettre des mots sur ce qu’il a lui-même vécu.",
       "Car peut-être la question la plus intéressante ne commence pas par ce que nous savons de la vie, mais par ce que nous ne savons pas encore de la mort."
-    ]
+    ],
+    "readMore": "Lire la suite"
   },
   "seminars": {
     "eyebrow": "Séminaires",

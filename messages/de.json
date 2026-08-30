@@ -30,7 +30,7 @@
   },
   "message": {
     "eyebrow": "Die Botschaft",
-    "short": "Ich komme vom Planeten Out­herspace und bin hier auf der Erde, um dir zu helfen — und alle Lost Boys und Fallen Angels zu vereinen. Gemeinsam vereinen wir uns wieder als eins.",
+    "short": "Ich komme vom Planeten \"OutherSpace\" und bin hier auf der Erde, um dir zu helfen — und alle Lost Boys und Fallen Angels zu vereinen. Gemeinsam vereinen wir uns wieder als eins.",
     "body": "Ich glaube an den Weg der Happy People: ehrlich handeln, unser Wort halten und einander als eigene Wesen sehen — mit Empathie statt Gier. Denn vielleicht beginnt die größte Veränderung, wenn wir endlich den Menschen neben uns verstehen.",
     "body2": "Durch Studium, Neugier und einen unendlichen Hunger zu lernen entdeckte ich etwas, das mein Leben wendete. Gier begann zu weichen; Empathie nahm ihren Platz ein. Das Leben wurde wieder leichter, und ich entdeckte, dass jemandem zu helfen, der feststeckt, nicht immer komplizierte Lösungen braucht. Manchmal genügen ein paar einfache Handlungen — so einfach, dass selbst ein fünfjähriges Kind sie lernen kann.",
     "paragraphs": [
@@ -68,7 +68,8 @@
       "Und manchmal geschieht das in einem ganz kleinen Moment. Ein Blick in jemandes Augen, eine unerwartete Begegnung oder ein scheinbar zufälliges Gespräch kann für Hendrik genügen, um erneut das Gefühl zu bekommen, dass hinter der sichtbaren Wirklichkeit noch eine andere Schicht liegt.",
       "Seine Suche ist deshalb noch nicht vorbei. Er will weiter forschen, erfahren und teilen — nicht um andere zu überzeugen, sondern um dem, was er selbst erlebt hat, Worte zu geben.",
       "Denn vielleicht beginnt die interessanteste Frage nicht bei dem, was wir über das Leben wissen, sondern bei dem, was wir über den Tod noch nicht wissen."
-    ]
+    ],
+    "readMore": "Weiterlesen"
   },
   "seminars": {
     "eyebrow": "Seminare",

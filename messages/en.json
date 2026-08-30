@@ -30,7 +30,7 @@
   },
   "message": {
     "eyebrow": "The message",
-    "short": "I come from the planet Out­herspace, and I am here on Earth to help you — and reunite all the Lost Boys and Fallen Angels. Together, we reunite as one.",
+    "short": "I come from the planet \"OutherSpace\", and I am here on Earth to help you — and reunite all the Lost Boys and Fallen Angels. Together, we reunite as one.",
     "body": "I believe in the path of the Happy People: trade honestly, keep our word, and see each other as beings of our own — with empathy instead of greed. Because perhaps the greatest change begins when we finally understand the person standing next to us.",
     "body2": "Through study, curiosity and an endless hunger to learn, I discovered something that turned my life around. Greed began to fall away; empathy took its place. Life became lighter again, and I discovered that helping someone who is stuck does not always require complicated solutions. Sometimes it takes only a few simple actions — things so simple that even a five-year-old can learn them.",
     "paragraphs": [
@@ -68,7 +68,8 @@
       "And sometimes that happens in a very small moment. A glance in someone’s eyes, an unexpected meeting, or an apparently chance conversation can be enough for Hendrik to feel again that behind the visible world another layer still exists.",
       "So his search is not over yet. He wants to keep exploring, experiencing and sharing — not to convince others, but to give words to what he himself has lived through.",
       "Because perhaps the most interesting question does not begin with what we know about life, but with what we do not yet know about death."
-    ]
+    ],
+    "readMore": "Read more"
   },
   "seminars": {
     "eyebrow": "Seminars",
