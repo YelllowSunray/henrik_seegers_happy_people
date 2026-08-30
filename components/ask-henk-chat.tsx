@@ -750,14 +750,6 @@ export function AskHenkChat({
     await sendMessage(text);
   }
 
-  function toggleMic() {
-    if (recording) stopRecording();
-    else {
-      allowListenRef.current = true;
-      void startRecording();
-    }
-  }
-
   async function toggleConversationMode() {
     warmSpeechVoices();
     ensureMusicPausedForChat();
@@ -1048,28 +1040,6 @@ export function AskHenkChat({
             : ""
         }`}
       >
-        {micSupported && (
-          <button
-            type="button"
-            onClick={toggleMic}
-            disabled={busy || transcribing || phase === "speaking"}
-            aria-pressed={recording}
-            aria-label={recording ? t("micStop") : t("micStart")}
-            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition disabled:opacity-40 ${
-              recording
-                ? "bg-red-600 text-white animate-pulse"
-                : conversationMode
-                  ? "bg-ink text-white hover:bg-accent"
-                  : "border border-line bg-bg-deep text-ink hover:border-accent hover:text-accent"
-            }`}
-          >
-            {recording ? (
-              <StopIcon className="h-5 w-5" />
-            ) : (
-              <MicIcon className="h-5 w-5" />
-            )}
-          </button>
-        )}
         <input
           ref={inputRef}
           value={
