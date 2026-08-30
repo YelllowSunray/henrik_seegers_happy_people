@@ -853,30 +853,28 @@ export function AskHenkChat({
     >
       {(speechSupported || micSupported) && (
         <div
-          className={`shrink-0 border-b border-line px-3 py-2.5 ${
-            conversationMode ? "bg-ink text-white" : "bg-bg"
+          className={`shrink-0 border-b border-line px-3 py-3 ${
+            conversationMode ? "bg-red-50" : "bg-bg"
           }`}
         >
           <div className="flex items-center justify-between gap-2">
             <button
               type="button"
               onClick={() => void toggleConversationMode()}
-              className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide transition ${
+              className={`inline-flex items-center gap-2.5 rounded-full px-5 py-2.5 text-sm font-bold tracking-wide text-white shadow-md transition ${
                 conversationMode
-                  ? "bg-white/15 text-white"
-                  : "bg-bg-deep text-ink-soft hover:text-ink"
+                  ? "bg-red-600 ring-2 ring-red-600/35 ring-offset-2 ring-offset-red-50"
+                  : "bg-red-600 hover:bg-red-700 hover:shadow-lg"
               }`}
               aria-pressed={conversationMode}
             >
               <span
-                className={`h-2 w-2 rounded-full ${
+                className={`h-2.5 w-2.5 rounded-full bg-white ${
                   conversationMode
-                    ? phase === "listening"
-                      ? "bg-red-400 animate-pulse"
-                      : phase === "speaking"
-                        ? "bg-gold animate-pulse"
-                        : "bg-accent"
-                    : "bg-ink-soft/40"
+                    ? phase === "listening" || phase === "speaking"
+                      ? "animate-pulse"
+                      : ""
+                    : "opacity-70"
                 }`}
               />
               {conversationMode ? t("convoOn") : t("convoOff")}
@@ -893,11 +891,7 @@ export function AskHenkChat({
                   if (conversationMode) afterHenkSpoke();
                   else setPhase("idle");
                 }}
-                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium ${
-                  conversationMode
-                    ? "bg-white/10 text-white/90"
-                    : "bg-bg-deep text-ink-soft"
-                }`}
+                className="inline-flex items-center gap-1 rounded-full border border-line bg-bg px-3 py-1.5 text-xs font-medium text-ink-soft"
               >
                 <StopIcon className="h-3.5 w-3.5" />
                 {t("stopSpeak")}
@@ -906,7 +900,7 @@ export function AskHenkChat({
           </div>
 
           {conversationMode && statusLabel && (
-            <p className="mt-1.5 text-xs font-semibold tracking-wide text-gold uppercase">
+            <p className="mt-2 text-xs font-semibold tracking-wide text-red-700 uppercase">
               {statusLabel}
             </p>
           )}
