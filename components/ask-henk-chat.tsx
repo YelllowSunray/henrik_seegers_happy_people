@@ -77,25 +77,6 @@ function MicIcon({ className }: { className?: string }) {
   );
 }
 
-function SpeakerIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden>
-      <path
-        d="M4 10v4h3l5 4V6L7 10H4Z"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M16 9.5a3.5 3.5 0 0 1 0 5M18.5 7a6 6 0 0 1 0 10"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
 function StopIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden>
@@ -969,38 +950,9 @@ export function AskHenkChat({
               }`}
             >
               {turn.role === "assistant" && (
-                <div className="mb-1 flex items-center justify-between gap-2">
-                  <p className="text-[10px] font-semibold tracking-[0.14em] text-accent uppercase">
-                    {t("fromHenk")}
-                  </p>
-                  {speechSupported && turn.content.trim() && !showCaret && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (speakingIndex === i) {
-                          stopSpeaking();
-                          setSpeakingIndex(null);
-                          lastSpokenKeyRef.current = null;
-                          setPhase("idle");
-                        } else {
-                          readAloud(turn.content, i, {
-                            key: `manual:${i}:${turn.content.slice(0, 40)}`,
-                          });
-                        }
-                      }}
-                      className="rounded-full p-1 text-accent/80 transition hover:bg-accent/10 hover:text-accent"
-                      aria-label={
-                        speakingIndex === i ? t("stopSpeak") : t("speak")
-                      }
-                    >
-                      {speakingIndex === i ? (
-                        <StopIcon className="h-3.5 w-3.5" />
-                      ) : (
-                        <SpeakerIcon className="h-3.5 w-3.5" />
-                      )}
-                    </button>
-                  )}
-                </div>
+                <p className="mb-1 text-[10px] font-semibold tracking-[0.14em] text-accent uppercase">
+                  {t("fromHenk")}
+                </p>
               )}
               {turn.content}
               {showCaret && i === turns.length - 1 ? (
