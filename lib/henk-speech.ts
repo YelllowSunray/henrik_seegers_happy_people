@@ -1,4 +1,4 @@
-/** Dutch male speech — neural Maarten via API. iOS-safe single-element playback. */
+/** Dutch male speech — neural Maarten via API. iOS/desktop-safe single-element playback. */
 
 let speakGeneration = 0;
 let sharedAudio: HTMLAudioElement | null = null;
@@ -8,8 +8,6 @@ let currentSource: AudioBufferSourceNode | null = null;
 let objectUrl: string | null = null;
 let keepAliveOsc: OscillatorNode | null = null;
 let keepAliveGain: GainNode | null = null;
-/** True after a user-gesture unlock of the shared HTMLAudioElement. */
-let htmlAudioUnlocked = false;
 
 const prefetchCache = new Map<string, Promise<Blob | null>>();
 
@@ -17,10 +15,6 @@ export function clearSpeechPrefetchCache() {
   prefetchCache.clear();
 }
 
-/**
- * ~0.25s near-silent WAV (looped as keep-alive).
- * Must be non-empty so iOS treats the element as actively playing.
- */
 const SILENT_WAV =
   "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=";
 
@@ -101,7 +95,6 @@ function stopKeepAliveOsc() {
   }
 }
 
-/** Near-silent Web Audio tone — backup keep-alive alongside HTML loop. */
 export function holdSpeechAudioSession() {
   if (typeof window === "undefined") return;
   const ctx = getAudioContext();
@@ -126,30 +119,24 @@ export function releaseSpeechAudioSession() {
   stopKeepAliveOsc();
 }
 
-/**
- * Loop silent audio on the SAME element Maarten will use.
- * Never hangs — iOS can leave play() pending forever.
- */
+/** Prime the shared element during a user gesture (never hangs). */
 export async function startSilentKeepAlive(): Promise<void> {
   if (typeof window === "undefined") return;
   const audio = getSharedAudio();
   try {
     audio.onended = null;
     audio.onerror = null;
+    audio.oncanplaythrough = null;
     audio.loop = true;
     audio.muted = false;
     audio.volume = 0.01;
-    if (!audio.src || audio.src === "" || !audio.src.includes("audio/wav")) {
-      audio.src = SILENT_WAV;
-    }
+    audio.src = SILENT_WAV;
     await Promise.race([
-      audio.play().then(() => {
-        htmlAudioUnlocked = true;
-      }),
-      new Promise<void>((resolve) => window.setTimeout(resolve, 400)),
+      audio.play().catch(() => undefined),
+      new Promise<void>((r) => window.setTimeout(r, 400)),
     ]);
   } catch {
-    /* may fail after mic without a fresh gesture */
+    /* ignore */
   }
 }
 
@@ -157,16 +144,12 @@ export function pauseSilentKeepAlive() {
   const audio = sharedAudio;
   if (!audio) return;
   try {
-    if (audio.loop) audio.pause();
+    audio.pause();
   } catch {
     /* ignore */
   }
 }
 
-/**
- * Stop Maarten / cancel in-flight speak, but keep the element unlocked
- * (do not .load() — that forces another user gesture on iOS).
- */
 export function stopSpeaking() {
   speakGeneration += 1;
   stopBufferSource();
@@ -176,6 +159,7 @@ export function stopSpeaking() {
   if (audio) {
     audio.onended = null;
     audio.onerror = null;
+    audio.oncanplaythrough = null;
     try {
       audio.pause();
     } catch {
@@ -193,10 +177,7 @@ export function canSpeak(): boolean {
   return typeof window !== "undefined";
 }
 
-/**
- * Call from a user gesture (Gespreksmodus / mic). Unlocks the shared element
- * Maarten will reuse after recording.
- */
+/** Call from a click/tap (Gespreksmodus, Send, speaker, mic). */
 export async function unlockSpeechAudio(): Promise<void> {
   if (typeof window === "undefined") return;
 
@@ -205,21 +186,7 @@ export async function unlockSpeechAudio(): Promise<void> {
     void ctx.resume().catch(() => undefined);
   }
 
-  const audio = getSharedAudio();
-  try {
-    audio.loop = true;
-    audio.muted = false;
-    audio.volume = 0.01;
-    audio.src = SILENT_WAV;
-    await Promise.race([
-      audio.play(),
-      new Promise<void>((resolve) => window.setTimeout(resolve, 400)),
-    ]);
-    htmlAudioUnlocked = true;
-  } catch {
-    /* ignore */
-  }
-
+  await startSilentKeepAlive();
   holdSpeechAudioSession();
   warmSpeakEndpoint();
 }
@@ -230,7 +197,7 @@ export async function resumeSpeechAudio(): Promise<void> {
     try {
       await Promise.race([
         ctx.resume(),
-        new Promise<void>((resolve) => window.setTimeout(resolve, 350)),
+        new Promise<void>((r) => window.setTimeout(r, 350)),
       ]);
     } catch {
       /* ignore */
@@ -325,18 +292,34 @@ export function prefetchDutchSpeech(text: string) {
   prefetchCache.set(key, requestSpeakBlob(key));
 }
 
+/**
+ * Play Maarten MP3 on the shared element.
+ * Clears handlers before changing src — otherwise iOS/Chrome fire a false error
+ * when aborting the silent keep-alive load.
+ */
 async function playViaHtmlAudio(
   blob: Blob,
   gen: number,
 ): Promise<"ok" | "abort" | "fail"> {
   if (gen !== speakGeneration) return "abort";
 
+  const audio = getSharedAudio();
+
+  // Detach handlers + pause BEFORE swapping src (avoids false onerror)
+  audio.onended = null;
+  audio.onerror = null;
+  audio.oncanplaythrough = null;
+  try {
+    audio.pause();
+  } catch {
+    /* ignore */
+  }
+
   revokeObjectUrl();
   const url = URL.createObjectURL(blob);
   objectUrl = url;
-
-  const audio = getSharedAudio();
   currentAudio = audio;
+
   audio.loop = false;
   audio.muted = false;
   audio.volume = 1;
@@ -349,17 +332,15 @@ async function playViaHtmlAudio(
     }
 
     let settled = false;
-    let playStarted = false;
     const finish = (result: "ok" | "abort" | "fail") => {
       if (settled) return;
       settled = true;
       audio.onended = null;
       audio.onerror = null;
-      audio.oncanplaythrough = null;
       if (currentAudio === audio) currentAudio = null;
       window.setTimeout(() => {
         if (objectUrl === url) revokeObjectUrl();
-      }, 500);
+      }, 400);
       resolve(result);
     };
 
@@ -371,49 +352,25 @@ async function playViaHtmlAudio(
       finish("ok");
       void startSilentKeepAlive();
     };
-    audio.onerror = () => finish("fail");
 
-    const tryPlay = () => {
-      if (settled || playStarted) return;
-      playStarted = true;
-      void audio.play().then(
-        () => {
-          htmlAudioUnlocked = true;
-        },
-        async () => {
-          playStarted = false;
-          await startSilentKeepAlive();
-          if (gen !== speakGeneration || settled) {
-            finish("abort");
-            return;
-          }
-          playStarted = true;
-          audio.loop = false;
-          audio.volume = 1;
-          audio.src = url;
-          void audio.play().then(
-            () => {
-              htmlAudioUnlocked = true;
-            },
-            () => finish("fail"),
-          );
-        },
-      );
+    // Only treat errors after we've begun loading the new URL
+    let armed = false;
+    audio.onerror = () => {
+      if (armed) finish("fail");
     };
 
     audio.src = url;
-    if (audio.readyState >= 2) {
-      tryPlay();
-    } else {
-      audio.oncanplaythrough = () => {
-        audio.oncanplaythrough = null;
-        tryPlay();
-      };
-      audio.load();
-      window.setTimeout(() => {
-        if (!settled && !playStarted) tryPlay();
-      }, 800);
-    }
+    armed = true;
+
+    void audio.play().then(
+      () => {
+        /* playing */
+      },
+      () => {
+        // Autoplay blocked — try Web Audio / browser TTS upstream
+        finish("fail");
+      },
+    );
   });
 }
 
@@ -474,6 +431,56 @@ async function playViaWebAudio(
   });
 }
 
+/** Last resort — often works on desktop Chrome without a fresh gesture. */
+function speakBrowserFallback(
+  text: string,
+  gen: number,
+  opts?: SpeakOpts,
+) {
+  if (!window.speechSynthesis) {
+    opts?.onError?.();
+    return;
+  }
+
+  const synth = window.speechSynthesis;
+  synth.cancel();
+
+  const utter = new SpeechSynthesisUtterance(text.trim());
+  utter.lang = "nl-NL";
+  utter.rate = 1;
+
+  const voices = synth.getVoices();
+  const nl = voices.find((v) => /^nl/i.test(v.lang));
+  if (nl) {
+    utter.voice = nl;
+    utter.lang = nl.lang;
+  }
+
+  let finished = false;
+  const done = (ok: boolean) => {
+    if (finished || gen !== speakGeneration) return;
+    finished = true;
+    if (ok) opts?.onEnd?.();
+    else opts?.onError?.();
+  };
+
+  utter.onend = () => done(true);
+  utter.onerror = () => done(false);
+
+  // Some engines need a tick after cancel
+  window.setTimeout(() => {
+    if (gen !== speakGeneration) return;
+    synth.speak(utter);
+  }, 40);
+
+  // Safety: if the engine silently never starts
+  window.setTimeout(() => {
+    if (!finished && gen === speakGeneration && !synth.speaking) {
+      done(false);
+    }
+  }, 2500);
+}
+
 async function playBlob(
   blob: Blob,
   gen: number,
@@ -487,9 +494,6 @@ async function playBlob(
   return playViaWebAudio(blob, gen);
 }
 
-/**
- * Speak with Maarten on the gesture-unlocked shared audio element.
- */
 export function speakDutch(text: string, opts?: SpeakOpts): boolean {
   if (typeof window === "undefined" || !text.trim()) return false;
 
@@ -497,9 +501,7 @@ export function speakDutch(text: string, opts?: SpeakOpts): boolean {
   const gen = speakGeneration;
   const trimmed = text.trim();
 
-  // Keep session warm while Edge synthesizes
   holdSpeechAudioSession();
-  void startSilentKeepAlive();
 
   void (async () => {
     try {
@@ -507,15 +509,17 @@ export function speakDutch(text: string, opts?: SpeakOpts): boolean {
       if (gen !== speakGeneration) return;
 
       if (!blob) {
-        opts?.onError?.();
-        void startSilentKeepAlive();
+        speakBrowserFallback(trimmed, gen, opts);
         return;
       }
 
-      // Brief yield so iOS can leave record mode after mic teardown
-      await new Promise<void>((r) => window.setTimeout(r, 120));
-      await resumeSpeechAudio();
+      await new Promise<void>((r) => window.setTimeout(r, 80));
       if (gen !== speakGeneration) return;
+
+      const ctx = getAudioContext();
+      if (ctx?.state === "suspended") {
+        await ctx.resume().catch(() => undefined);
+      }
 
       pauseSilentKeepAlive();
       stopKeepAliveOsc();
@@ -523,16 +527,13 @@ export function speakDutch(text: string, opts?: SpeakOpts): boolean {
       const result = await playBlob(blob, gen);
       if (result === "abort") return;
       if (result === "fail") {
-        void startSilentKeepAlive();
-        holdSpeechAudioSession();
-        opts?.onError?.();
+        speakBrowserFallback(trimmed, gen, opts);
         return;
       }
       opts?.onEnd?.();
     } catch {
       if (gen === speakGeneration) {
-        void startSilentKeepAlive();
-        opts?.onError?.();
+        speakBrowserFallback(trimmed, gen, opts);
       }
     }
   })();
@@ -546,8 +547,4 @@ export function warmSpeechVoices() {
   window.speechSynthesis.addEventListener("voiceschanged", () => {
     void window.speechSynthesis.getVoices();
   });
-}
-
-export function isHtmlAudioUnlocked() {
-  return htmlAudioUnlocked;
 }

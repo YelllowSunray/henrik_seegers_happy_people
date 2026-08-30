@@ -309,50 +309,43 @@ export function AskHenkChat({
 
     const key = opts?.key ?? `${index}:${content.slice(0, 80)}`;
     if (lastSpokenKeyRef.current === key) {
-      // Already speaking / spoke this exact reply — don't double-read
       return;
     }
     lastSpokenKeyRef.current = key;
+
+    // Re-prime audio on this call stack when possible (speaker tap / after Send unlock)
+    void unlockSpeechAudio();
 
     stopSpeaking();
     henkSpeakingRef.current = true;
     setSpeakingIndex(index);
     setPhase("speaking");
 
-    void (async () => {
-      // iOS often suspends AudioContext after the mic — wake it before Maarten
-      await resumeSpeechAudio();
-      if (!aliveRef.current || lastSpokenKeyRef.current !== key) {
+    const spoken = speakDutch(content, {
+      onEnd: () => {
         henkSpeakingRef.current = false;
-        return;
-      }
-
-      const spoken = speakDutch(content, {
-        onEnd: () => {
-          henkSpeakingRef.current = false;
-          if (!aliveRef.current) return;
-          setSpeakingIndex(null);
-          lastSpokenKeyRef.current = null;
-          opts?.afterSpeak?.();
-        },
-        onError: () => {
-          henkSpeakingRef.current = false;
-          if (!aliveRef.current) return;
-          setSpeakingIndex(null);
-          lastSpokenKeyRef.current = null;
-          (opts?.onSpeakFailed ?? opts?.afterSpeak)?.();
-        },
-      });
-
-      if (!spoken) {
-        henkSpeakingRef.current = false;
-        lastSpokenKeyRef.current = null;
+        if (!aliveRef.current) return;
         setSpeakingIndex(null);
-        if (aliveRef.current) {
-          (opts?.onSpeakFailed ?? opts?.afterSpeak)?.();
-        }
+        lastSpokenKeyRef.current = null;
+        opts?.afterSpeak?.();
+      },
+      onError: () => {
+        henkSpeakingRef.current = false;
+        if (!aliveRef.current) return;
+        setSpeakingIndex(null);
+        lastSpokenKeyRef.current = null;
+        (opts?.onSpeakFailed ?? opts?.afterSpeak)?.();
+      },
+    });
+
+    if (!spoken) {
+      henkSpeakingRef.current = false;
+      lastSpokenKeyRef.current = null;
+      setSpeakingIndex(null);
+      if (aliveRef.current) {
+        (opts?.onSpeakFailed ?? opts?.afterSpeak)?.();
       }
-    })();
+    }
   }
 
   async function stopMicTracks() {
@@ -531,6 +524,12 @@ export function AskHenkChat({
 
   async function sendMessage(message: string) {
     if (!message.trim() || busyRef.current || !aliveRef.current) return;
+
+    // Keep audio session warm for Gespreksmodus auto-speak after the reply
+    if (conversationModeRef.current) {
+      void unlockSpeechAudio();
+      holdSpeechAudioSession();
+    }
 
     stopSpeaking();
     setSpeakingIndex(null);
@@ -744,6 +743,9 @@ export function AskHenkChat({
 
   async function onSend(e: FormEvent) {
     e.preventDefault();
+    // Unlock Maarten on this click — before the async reply wait
+    void unlockSpeechAudio();
+    holdSpeechAudioSession();
     if (recording) stopRecording();
     await sendMessage(text);
   }
