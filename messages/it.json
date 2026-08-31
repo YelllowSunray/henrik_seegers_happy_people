@@ -115,8 +115,6 @@
       "Di connessione.",
       "Di scelte.",
       "Dei modelli che a volte plasmano la tua vita senza che te ne accorga.",
-      "Non un corso.",
-      "Non un’istituzione.",
       "Non persone perfette.",
       "Felici, però.",
       "Solo persone che vogliono imparare di nuovo a guardare, sentire, ridere e connettersi."
@@ -262,7 +260,8 @@
     "lockedTrialTitle": "La tua settimana gratis è finita",
     "lockedTrial": "Scegli un piano per riaprire seminari, vlog, citazioni e messaggi di Henk.",
     "ask": "Chatta con Henk",
-    "descAsk": "Parla con Henk di Happy People"
+    "descAsk": "Parla con Henk di Happy People",
+    "audioUnsupported": "Your browser does not support audio playback."
   },
   "auth": {
     "email": "Email",
@@ -393,7 +392,11 @@
     "accountsLink": "Account di test",
     "fieldAddress": "Indirizzo",
     "fieldDateUncertain": "Mostra “Più avanti quest'anno” al posto della data",
-    "fieldDateUncertainHint": "Usa questa opzione quando la data esatta non è ancora fissata. Titolo e luogo restano visibili."
+    "fieldDateUncertainHint": "Usa questa opzione quando la data esatta non è ancora fissata. Titolo e luogo restano visibili.",
+    "fieldAudio": "Audio",
+    "fieldImage": "Image",
+    "vlogAudioHint": "Vlogs are audio recordings with a photo and text. Upload files or paste a URL.",
+    "uploading": "Uploading…"
   },
   "adminAccounts": {
     "eyebrow": "Developer",
@@ -568,7 +571,7 @@
       {
         "song": "Pocketful of Sunshine — Natasha Bedingfield",
         "youtube": "https://www.youtube.com/watch?v=gte3BoXKwP0",
-        "text": "Un commento sul dipingere l’esterno mi rimase in testa per un tempo sorprendente. Forse era solo un’offerta gentile — ma per me prese un significato molto più personale."
+        "text": "Un commento sul dipingere l’esterno mi rimase in testa per un tempo sorprendente. Forse era solo un’offerta gentile — per appendere la luce insieme, ma per me prese un significato molto più personale."
       },
       {
         "song": "To Love a Woman — Lionel Richie & Enrique Iglesias",

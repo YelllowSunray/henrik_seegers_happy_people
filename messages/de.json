@@ -115,8 +115,6 @@
       "Um Verbindung.",
       "Um Entscheidungen.",
       "Um die Muster, die manchmal unbemerkt dein Leben bestimmen.",
-      "Kein Kurs.",
-      "Keine Institution.",
       "Keine perfekten Menschen.",
       "Glücklich aber.",
       "Einfach Menschen, die wieder lernen wollen zu schauen, zu fühlen, zu lachen und sich zu verbinden."
@@ -262,7 +260,8 @@
     "lockedTrialTitle": "Deine Gratiswoche ist vorbei",
     "lockedTrial": "Wähle einen Plan, um Seminare, Vlogs, Zitate und Nachrichten von Henk wieder zu öffnen.",
     "ask": "Chat mit Henk",
-    "descAsk": "Sprich mit Henk über Happy People"
+    "descAsk": "Sprich mit Henk über Happy People",
+    "audioUnsupported": "Your browser does not support audio playback."
   },
   "auth": {
     "email": "E-Mail",
@@ -393,7 +392,11 @@
     "accountsLink": "Testkonten",
     "fieldAddress": "Adresse",
     "fieldDateUncertain": "„Noch dieses Jahr“ statt Datum anzeigen",
-    "fieldDateUncertainHint": "Wenn das genaue Datum noch nicht feststeht. Titel und Ort bleiben sichtbar."
+    "fieldDateUncertainHint": "Wenn das genaue Datum noch nicht feststeht. Titel und Ort bleiben sichtbar.",
+    "fieldAudio": "Audio",
+    "fieldImage": "Image",
+    "vlogAudioHint": "Vlogs are audio recordings with a photo and text. Upload files or paste a URL.",
+    "uploading": "Uploading…"
   },
   "adminAccounts": {
     "eyebrow": "Developer",
@@ -568,7 +571,7 @@
       {
         "song": "Pocketful of Sunshine — Natasha Bedingfield",
         "youtube": "https://www.youtube.com/watch?v=gte3BoXKwP0",
-        "text": "Eine Bemerkung über das Streichen der Außenfassade blieb auffällig lange in meinem Kopf. Vielleicht war es einfach ein freundliches Angebot — aber für mich bekam es eine viel persönlichere Bedeutung."
+        "text": "Eine Bemerkung über das Streichen der Außenfassade blieb auffällig lange in meinem Kopf. Vielleicht war es einfach ein freundliches Angebot — um gemeinsam das Licht aufzuhängen, aber für mich bekam es eine viel persönlichere Bedeutung."
       },
       {
         "song": "To Love a Woman — Lionel Richie & Enrique Iglesias",

@@ -115,8 +115,6 @@
       "La connexion.",
       "Les choix.",
       "Les schémas qui parfois façonnent ta vie sans que tu t’en rendes compte.",
-      "Pas un cours.",
-      "Pas une institution.",
       "Pas des gens parfaits.",
       "Heureux, pourtant.",
       "Juste des gens qui veulent réapprendre à regarder, ressentir, rire et se connecter."
@@ -262,7 +260,8 @@
     "lockedTrialTitle": "Votre semaine gratuite est terminée",
     "lockedTrial": "Choisissez une formule pour rouvrir séminaires, vlogs, citations et messages de Henk.",
     "ask": "Chat avec Henk",
-    "descAsk": "Parle avec Henk des Happy People"
+    "descAsk": "Parle avec Henk des Happy People",
+    "audioUnsupported": "Your browser does not support audio playback."
   },
   "auth": {
     "email": "Email",
@@ -393,7 +392,11 @@
     "accountsLink": "Comptes de test",
     "fieldAddress": "Adresse",
     "fieldDateUncertain": "Afficher « Plus tard cette année » au lieu de la date",
-    "fieldDateUncertainHint": "À utiliser quand la date exacte n’est pas encore fixée. Le titre et le lieu restent visibles."
+    "fieldDateUncertainHint": "À utiliser quand la date exacte n’est pas encore fixée. Le titre et le lieu restent visibles.",
+    "fieldAudio": "Audio",
+    "fieldImage": "Image",
+    "vlogAudioHint": "Vlogs are audio recordings with a photo and text. Upload files or paste a URL.",
+    "uploading": "Uploading…"
   },
   "adminAccounts": {
     "eyebrow": "Developer",
@@ -568,7 +571,7 @@
       {
         "song": "Pocketful of Sunshine — Natasha Bedingfield",
         "youtube": "https://www.youtube.com/watch?v=gte3BoXKwP0",
-        "text": "Une remarque sur peindre l’extérieur est restée étonnamment longtemps dans ma tête. C’était peut-être simplement une offre aimable — mais pour moi cela a pris un sens bien plus personnel."
+        "text": "Une remarque sur peindre l’extérieur est restée étonnamment longtemps dans ma tête. C’était peut-être simplement une offre aimable — pour accrocher la lumière ensemble, mais pour moi cela a pris un sens bien plus personnel."
       },
       {
         "song": "To Love a Woman — Lionel Richie & Enrique Iglesias",

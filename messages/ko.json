@@ -115,8 +115,6 @@
       "연결에 관한 것.",
       "선택에 관한 것.",
       "때로는 눈치채지 못한 채 삶을 좌우하는 패턴에 관한 것.",
-      "강의가 아닙니다.",
-      "기관이 아닙니다.",
       "완벽한 사람들이 아닙니다.",
       "행복한 사람들이지만.",
       "다시 보고, 느끼고, 웃고, 연결하는 법을 배우고 싶은 사람들입니다."
@@ -262,7 +260,8 @@
     "lockedTrialTitle": "무료 주간이 끝났습니다",
     "lockedTrial": "헨크의 세미나, 브이로그, 인용문, 메시지를 다시 열려면 요금제를 선택하세요.",
     "ask": "Henk와 채팅",
-    "descAsk": "Happy People에 대해 Henk와 대화"
+    "descAsk": "Happy People에 대해 Henk와 대화",
+    "audioUnsupported": "Your browser does not support audio playback."
   },
   "auth": {
     "email": "이메일",
@@ -393,7 +392,11 @@
     "accountsLink": "테스트 계정",
     "fieldAddress": "주소",
     "fieldDateUncertain": "날짜 대신 “올해 예정” 표시",
-    "fieldDateUncertainHint": "정확한 날짜가 아직 정해지지 않았을 때 사용하세요. 제목과 장소는 그대로 표시됩니다."
+    "fieldDateUncertainHint": "정확한 날짜가 아직 정해지지 않았을 때 사용하세요. 제목과 장소는 그대로 표시됩니다.",
+    "fieldAudio": "Audio",
+    "fieldImage": "Image",
+    "vlogAudioHint": "Vlogs are audio recordings with a photo and text. Upload files or paste a URL.",
+    "uploading": "Uploading…"
   },
   "adminAccounts": {
     "eyebrow": "Developer",
@@ -568,7 +571,7 @@
       {
         "song": "Pocketful of Sunshine — Natasha Bedingfield",
         "youtube": "https://www.youtube.com/watch?v=gte3BoXKwP0",
-        "text": "외벽을 칠하자는 말이 유난히 오래 머릿속에 남았다. 그저 친절한 제안이었을 수도 있지만 — 내게는 훨씬 더 개인적인 의미가 되었다."
+        "text": "외벽을 칠하자는 말이 유난히 오래 머릿속에 남았다. 그저 친절한 제안이었을 수도 있지만 — 함께 조명을 다는 것, 내게는 훨씬 더 개인적인 의미가 되었다."
       },
       {
         "song": "To Love a Woman — Lionel Richie & Enrique Iglesias",

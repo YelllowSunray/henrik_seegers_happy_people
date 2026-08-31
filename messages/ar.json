@@ -115,8 +115,6 @@
       "حول الاتصال.",
       "حول الاختيارات.",
       "حول الأنماط التي تشكل حياتك بهدوء في بعض الأحيان.",
-      "ليست دورة.",
-      "ليست مؤسسة.",
       "ليسوا أشخاصًا مثاليين.",
       "سعيد رغم ذلك.",
       "فقط الأشخاص الذين يرغبون في التعلم مرة أخرى لكي ينظروا ويشعروا ويضحكوا ويتواصلوا."
@@ -262,7 +260,8 @@
     "lockedTrialTitle": "انتهى أسبوعك المجاني",
     "lockedTrial": "اختر خطة لإعادة فتح الندوات ومدونات الفيديو والاقتباسات والرسائل من Henk.",
     "ask": "الدردشة مع Henk",
-    "descAsk": "تحدث مع Henk عن Happy People"
+    "descAsk": "تحدث مع Henk عن Happy People",
+    "audioUnsupported": "Your browser does not support audio playback."
   },
   "auth": {
     "email": "البريد الإلكتروني",
@@ -393,7 +392,11 @@
     "accountsLink": "حسابات تجريبية",
     "fieldAddress": "العنوان",
     "fieldDateUncertain": "عرض «لاحقًا هذا العام» بدل التاريخ",
-    "fieldDateUncertainHint": "استخدم هذا الخيار عندما لا يكون التاريخ المحدد معروفًا بعد. يبقى العنوان والمكان ظاهرين."
+    "fieldDateUncertainHint": "استخدم هذا الخيار عندما لا يكون التاريخ المحدد معروفًا بعد. يبقى العنوان والمكان ظاهرين.",
+    "fieldAudio": "Audio",
+    "fieldImage": "Image",
+    "vlogAudioHint": "Vlogs are audio recordings with a photo and text. Upload files or paste a URL.",
+    "uploading": "Uploading…"
   },
   "adminAccounts": {
     "eyebrow": "المطور",
@@ -568,7 +571,7 @@
       {
         "song": "Pocketful of Sunshine — Natasha Bedingfield",
         "youtube": "https://www.youtube.com/watch?v=gte3BoXKwP0",
-        "text": "بقيت ملاحظة حول طلاء الجزء الخارجي طويلة في رأسي بشكل ملحوظ. ربما كان مجرد عرض لطيف، لكن بالنسبة لي كان له معنى شخصي أكثر بكثير."
+        "text": "بقيت ملاحظة حول طلاء الجزء الخارجي طويلة في رأسي بشكل ملحوظ. ربما كان مجرد عرض لطيف — لتعليق الضوء معًا، لكن بالنسبة لي كان له معنى شخصي أكثر بكثير."
       },
       {
         "song": "To Love a Woman — Lionel Richie & Enrique Iglesias",

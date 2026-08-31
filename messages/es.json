@@ -115,8 +115,6 @@
       "De conexión.",
       "De decisiones.",
       "De los patrones que a veces moldean tu vida sin que te des cuenta.",
-      "No es un curso.",
-      "No es una institución.",
       "No son personas perfectas.",
       "Felices, eso sí.",
       "Solo personas que quieren volver a aprender a mirar, sentir, reír y conectar."
@@ -262,7 +260,8 @@
     "lockedTrialTitle": "Tu semana gratis ha terminado",
     "lockedTrial": "Elige un plan para volver a abrir seminarios, vlogs, citas y mensajes de Henk.",
     "ask": "Chat con Henk",
-    "descAsk": "Habla con Henk sobre Happy People"
+    "descAsk": "Habla con Henk sobre Happy People",
+    "audioUnsupported": "Your browser does not support audio playback."
   },
   "auth": {
     "email": "Email",
@@ -393,7 +392,11 @@
     "accountsLink": "Cuentas de prueba",
     "fieldAddress": "Dirección",
     "fieldDateUncertain": "Mostrar “Más adelante este año” en lugar de la fecha",
-    "fieldDateUncertainHint": "Úsalo cuando la fecha exacta aún no esté fijada. El título y el lugar siguen visibles."
+    "fieldDateUncertainHint": "Úsalo cuando la fecha exacta aún no esté fijada. El título y el lugar siguen visibles.",
+    "fieldAudio": "Audio",
+    "fieldImage": "Image",
+    "vlogAudioHint": "Vlogs are audio recordings with a photo and text. Upload files or paste a URL.",
+    "uploading": "Uploading…"
   },
   "adminAccounts": {
     "eyebrow": "Developer",
@@ -568,7 +571,7 @@
       {
         "song": "Pocketful of Sunshine — Natasha Bedingfield",
         "youtube": "https://www.youtube.com/watch?v=gte3BoXKwP0",
-        "text": "Un comentario sobre pintar el exterior se me quedó mucho tiempo en la cabeza. Quizá era solo una oferta amable — pero para mí cobró un significado mucho más personal."
+        "text": "Un comentario sobre pintar el exterior se me quedó mucho tiempo en la cabeza. Quizá era solo una oferta amable — para colgar la luz juntos, pero para mí cobró un significado mucho más personal."
       },
       {
         "song": "To Love a Woman — Lionel Richie & Enrique Iglesias",

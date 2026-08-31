@@ -22,7 +22,7 @@ import {
   MemberIdentity,
   memberOptionLabel,
 } from "@/components/member-status-badge";
-import { getClientDb, isFirebaseConfigured } from "@/lib/firebase/client";
+import { getClientDb, getClientStorage, isFirebaseConfigured } from "@/lib/firebase/client";
 import { memberBillingKind } from "@/lib/member-status";
 import { Link } from "@/i18n/navigation";
 import type {
@@ -190,8 +190,12 @@ export function AdminPortal() {
                   id: d.id,
                   title: data.title ?? { nl: "" },
                   description: data.description ?? { nl: "" },
+                  body: data.body,
                   kind: (data.kind ?? "seminar") as VideoKind,
+                  mediaType: data.mediaType as VideoItem["mediaType"],
                   videoUrl: data.videoUrl,
+                  audioUrl: data.audioUrl,
+                  thumbnail: data.thumbnail,
                   publishedAt: String(data.publishedAt ?? ""),
                   durationLabel: data.durationLabel,
                 } as VideoItem;
@@ -369,8 +373,12 @@ export function AdminPortal() {
           title: (data.title as VideoItem["title"]) ?? { nl: "" },
           description:
             (data.description as VideoItem["description"]) ?? { nl: "" },
+          body: data.body as VideoItem["body"],
           kind: (data.kind as VideoKind) ?? "seminar",
+          mediaType: data.mediaType as VideoItem["mediaType"],
           videoUrl: data.videoUrl as string | undefined,
+          audioUrl: data.audioUrl as string | undefined,
+          thumbnail: data.thumbnail as string | undefined,
           publishedAt: String(data.publishedAt ?? ""),
           durationLabel: data.durationLabel as string | undefined,
         } as VideoItem;
@@ -782,7 +790,7 @@ export function AdminPortal() {
                     .map((v) => ({
                       id: v.id,
                       title: nl(v.title),
-                      meta: `${v.kind} · ${v.publishedAt}`,
+                      meta: `${v.kind}${v.mediaType === "audio" || v.audioUrl ? " · audio" : ""} · ${v.publishedAt}`,
                       audience: "club" as const,
                     }))}
                   onEdit={setEditingId}
@@ -1153,32 +1161,95 @@ function VideoForm({
   onSubmit: (data: Record<string, unknown>) => void;
 }) {
   const t = useTranslations("admin");
+  const [kind, setKind] = useState(
+    initial?.kind === "sample" ? "seminar" : initial?.kind || "vlog",
+  );
+  const [audioUrl, setAudioUrl] = useState(initial?.audioUrl ?? "");
+  const [thumbnail, setThumbnail] = useState(initial?.thumbnail ?? "");
+  const [uploading, setUploading] = useState<"audio" | "image" | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  async function uploadFile(file: File, folder: "audio" | "images") {
+    if (!isFirebaseConfigured) {
+      throw new Error("Firebase not configured.");
+    }
+    const { getDownloadURL, ref, uploadBytes } = await import(
+      "firebase/storage"
+    );
+    const storage = getClientStorage();
+    const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const path = `club-media/vlogs/${folder}/${Date.now()}-${safe}`;
+    const storageRef = ref(storage, path);
+    await uploadBytes(storageRef, file, { contentType: file.type });
+    return getDownloadURL(storageRef);
+  }
+
+  async function onPickAudio(file: File | null) {
+    if (!file) return;
+    setUploadError(null);
+    setUploading("audio");
+    try {
+      const url = await uploadFile(file, "audio");
+      setAudioUrl(url);
+    } catch (e) {
+      setUploadError(e instanceof Error ? e.message : "Upload failed");
+    } finally {
+      setUploading(null);
+    }
+  }
+
+  async function onPickImage(file: File | null) {
+    if (!file) return;
+    setUploadError(null);
+    setUploading("image");
+    try {
+      const url = await uploadFile(file, "images");
+      setThumbnail(url);
+    } catch (e) {
+      setUploadError(e instanceof Error ? e.message : "Upload failed");
+    } finally {
+      setUploading(null);
+    }
+  }
+
   function handle(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+    const selectedKind = String(fd.get("kind") || kind);
+    const text = String(fd.get("body") || fd.get("description") || "");
+    const isAudioVlog = selectedKind === "vlog";
+
     onSubmit({
       title: { nl: String(fd.get("title")) },
-      description: { nl: String(fd.get("description")) },
-      kind: String(fd.get("kind")),
-      videoUrl: String(fd.get("videoUrl") || ""),
+      description: { nl: text },
+      body: { nl: text },
+      kind: selectedKind,
+      mediaType: isAudioVlog ? "audio" : "video",
+      videoUrl: isAudioVlog
+        ? ""
+        : String(fd.get("videoUrl") || ""),
+      audioUrl: isAudioVlog ? audioUrl : "",
+      thumbnail: isAudioVlog ? thumbnail : String(fd.get("thumbnail") || ""),
       durationLabel: String(fd.get("duration") || ""),
       publishedAt:
         String(fd.get("publishedAt")) ||
         new Date().toISOString().slice(0, 10),
     });
   }
+
+  const busy = disabled || uploading != null;
+
   return (
     <form onSubmit={handle} className="grid max-w-xl gap-4">
       <Field label={audienceLabel}>
         <select
           name="kind"
           className={fieldClass}
-          defaultValue={
-            initial?.kind === "sample" ? "seminar" : initial?.kind || "seminar"
-          }
+          value={kind}
+          onChange={(e) => setKind(e.target.value as "seminar" | "vlog")}
         >
-          <option value="seminar">{kindSeminar}</option>
           <option value="vlog">{kindVlog}</option>
+          <option value="seminar">{kindSeminar}</option>
         </select>
       </Field>
       <Field label={t("fieldTitle")}>
@@ -1189,26 +1260,100 @@ function VideoForm({
           className={fieldClass}
         />
       </Field>
-      <Field label={t("fieldDescription")}>
-        <input
-          name="description"
-          defaultValue={nl(initial?.description)}
-          className={fieldClass}
-        />
-      </Field>
-      <Field label={t("fieldUrl")}>
-        <input
-          name="videoUrl"
-          defaultValue={initial?.videoUrl}
-          className={fieldClass}
-        />
-      </Field>
+
+      {kind === "vlog" ? (
+        <>
+          <p className="text-sm text-ink-soft">{t("vlogAudioHint")}</p>
+          <Field label={t("fieldBody")}>
+            <textarea
+              name="body"
+              required
+              rows={6}
+              defaultValue={nl(initial?.body ?? initial?.description)}
+              className={fieldClass}
+            />
+          </Field>
+          <Field label={t("fieldAudio")}>
+            <input
+              type="url"
+              value={audioUrl}
+              onChange={(e) => setAudioUrl(e.target.value)}
+              placeholder="https://…"
+              className={fieldClass}
+            />
+            <input
+              type="file"
+              accept="audio/*"
+              className="mt-2 block w-full text-sm"
+              disabled={busy}
+              onChange={(e) => void onPickAudio(e.target.files?.[0] ?? null)}
+            />
+            {uploading === "audio" ? (
+              <span className="mt-1 block text-xs text-ink-soft">
+                {t("uploading")}
+              </span>
+            ) : null}
+          </Field>
+          <Field label={t("fieldImage")}>
+            <input
+              type="url"
+              value={thumbnail}
+              onChange={(e) => setThumbnail(e.target.value)}
+              placeholder="https://…"
+              className={fieldClass}
+            />
+            <input
+              type="file"
+              accept="image/*"
+              className="mt-2 block w-full text-sm"
+              disabled={busy}
+              onChange={(e) => void onPickImage(e.target.files?.[0] ?? null)}
+            />
+            {uploading === "image" ? (
+              <span className="mt-1 block text-xs text-ink-soft">
+                {t("uploading")}
+              </span>
+            ) : null}
+            {thumbnail ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={thumbnail}
+                alt=""
+                className="mt-3 h-28 w-28 rounded-md object-cover"
+              />
+            ) : null}
+          </Field>
+        </>
+      ) : (
+        <>
+          <Field label={t("fieldDescription")}>
+            <input
+              name="description"
+              defaultValue={nl(initial?.description)}
+              className={fieldClass}
+            />
+          </Field>
+          <Field label={t("fieldUrl")}>
+            <input
+              name="videoUrl"
+              defaultValue={initial?.videoUrl}
+              className={fieldClass}
+            />
+          </Field>
+        </>
+      )}
+
+      {uploadError ? (
+        <p className="text-sm text-red-700">{uploadError}</p>
+      ) : null}
+
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label={t("fieldDuration")}>
           <input
             name="duration"
             defaultValue={initial?.durationLabel}
             className={fieldClass}
+            placeholder="8 min"
           />
         </Field>
         <Field label={t("fieldDate")}>
@@ -1223,7 +1368,7 @@ function VideoForm({
         </Field>
       </div>
       <div className="flex flex-wrap gap-2 pt-1">
-        <button type="submit" className={btnClass} disabled={disabled}>
+        <button type="submit" className={btnClass} disabled={busy}>
           {saveLabel}
         </button>
         {initial && (

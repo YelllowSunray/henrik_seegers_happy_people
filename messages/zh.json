@@ -115,8 +115,6 @@
       "关于连接。",
       "关于选择。",
       "关于有时悄悄塑造你生活的模式。",
-      "不是课程。",
-      "不是一个机构。",
       "不完美的人。",
       "但很快乐。",
       "只是那些想要再次学习如何观察、感觉、欢笑和交流的人。"
@@ -262,7 +260,8 @@
     "lockedTrialTitle": "你的免费一周结束了",
     "lockedTrial": "选择重新开放来自Henk的研讨会、视频博客、引言和消息的计划。",
     "ask": "与 Henk 聊天",
-    "descAsk": "与 Henk 聊聊 Happy People"
+    "descAsk": "与 Henk 聊聊 Happy People",
+    "audioUnsupported": "Your browser does not support audio playback."
   },
   "auth": {
     "email": "电子邮件",
@@ -393,7 +392,11 @@
     "accountsLink": "测试账户",
     "fieldAddress": "地址",
     "fieldDateUncertain": "显示“今年稍后”而不是具体日期",
-    "fieldDateUncertainHint": "当确切日期尚未确定时使用。标题和地点仍会显示。"
+    "fieldDateUncertainHint": "当确切日期尚未确定时使用。标题和地点仍会显示。",
+    "fieldAudio": "Audio",
+    "fieldImage": "Image",
+    "vlogAudioHint": "Vlogs are audio recordings with a photo and text. Upload files or paste a URL.",
+    "uploading": "Uploading…"
   },
   "adminAccounts": {
     "eyebrow": "开发者",
@@ -568,7 +571,7 @@
       {
         "song": "Pocketful of Sunshine — Natasha Bedingfield",
         "youtube": "https://www.youtube.com/watch?v=gte3BoXKwP0",
-        "text": "关于绘制外部的评论在我脑海中停留了很长一段时间。也许这只是一个善意的提议——但对我来说，它具有更个人化的意义。"
+        "text": "关于绘制外部的评论在我脑海中停留了很长一段时间。也许这只是一个善意的提议——一起挂灯，但对我来说，它具有更个人化的意义。"
       },
       {
         "song": "To Love a Woman — Lionel Richie & Enrique Iglesias",

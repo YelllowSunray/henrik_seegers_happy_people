@@ -1,12 +1,36 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdminEmail() {
+      return signedIn()
+        && request.auth.token.email in [
+          'henk.seegers1965@gmail.com',
+          'hendrik.seegers1991@icloud.com'
+        ];
+    }
+
     match /profiles/{userId}/{fileName} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null
+      allow read: if signedIn();
+      allow write: if signedIn()
         && request.auth.uid == userId
         && request.resource.size < 5 * 1024 * 1024
         && request.resource.contentType.matches('image/.*');
+    }
+
+    // Club media for admin CMS (vlog audio, images, seminar files)
+    match /club-media/{allPaths=**} {
+      allow read: if signedIn();
+      allow write: if isAdminEmail()
+        && request.resource.size < 80 * 1024 * 1024
+        && (
+          request.resource.contentType.matches('image/.*')
+          || request.resource.contentType.matches('audio/.*')
+          || request.resource.contentType.matches('video/.*')
+        );
     }
   }
 }

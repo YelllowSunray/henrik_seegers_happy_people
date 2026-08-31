@@ -35,9 +35,15 @@ export type VideoItem = {
   id: string;
   title: LocalizedString;
   description: LocalizedString;
+  /** Longer body text (especially for audio vlogs). */
+  body?: LocalizedString;
   kind: VideoKind;
+  /** video | audio — vlogs can be audio recordings with a picture + text */
+  mediaType?: "video" | "audio";
   /** External URL (YouTube/Vimeo/Storage) or empty for placeholder */
   videoUrl?: string;
+  /** Audio file URL (Firebase Storage / CDN) for audio vlogs */
+  audioUrl?: string;
   thumbnail?: string;
   publishedAt: string;
   durationLabel?: string;

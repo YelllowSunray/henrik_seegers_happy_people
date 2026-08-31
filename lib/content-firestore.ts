@@ -72,15 +72,25 @@ function mapEvent(id: string, data: Record<string, unknown>): SeminarEvent {
 
 function mapVideo(id: string, data: Record<string, unknown>): VideoItem {
   const kind = String(data.kind ?? "seminar") as VideoKind;
+  const mediaRaw = String(data.mediaType ?? "");
+  const mediaType =
+    mediaRaw === "audio" || mediaRaw === "video"
+      ? mediaRaw
+      : typeof data.audioUrl === "string" && data.audioUrl.trim()
+        ? "audio"
+        : "video";
   return {
     id,
     title: asLocalized(data.title),
     description: asLocalized(data.description),
+    body: data.body != null ? asLocalized(data.body) : undefined,
     kind:
       kind === "vlog" || kind === "sample" || kind === "seminar"
         ? kind
         : "seminar",
+    mediaType,
     videoUrl: typeof data.videoUrl === "string" ? data.videoUrl : undefined,
+    audioUrl: typeof data.audioUrl === "string" ? data.audioUrl : undefined,
     thumbnail: typeof data.thumbnail === "string" ? data.thumbnail : undefined,
     publishedAt: String(data.publishedAt ?? ""),
     durationLabel:

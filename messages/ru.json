@@ -115,8 +115,6 @@
       "О связи.",
       "О выборе.",
       "О паттернах, которые иногда тихо формируют вашу жизнь.",
-      "Не курс.",
-      "Не институт.",
       "Не идеальные люди.",
       "Но счастливые.",
       "Просто люди, которые снова хотят учиться смотреть, чувствовать, смеяться и соединяться."
@@ -262,7 +260,8 @@
     "lockedTrialTitle": "Ваша бесплатная неделя закончилась",
     "lockedTrial": "Выберите план, чтобы снова открыть семинары, влоги, цитаты и сообщения от Хенка.",
     "ask": "Чат с Henk",
-    "descAsk": "Поговорите с Henk о Happy People"
+    "descAsk": "Поговорите с Henk о Happy People",
+    "audioUnsupported": "Your browser does not support audio playback."
   },
   "auth": {
     "email": "Эл. почта",
@@ -393,7 +392,11 @@
     "accountsLink": "Тестовые аккаунты",
     "fieldAddress": "Адрес",
     "fieldDateUncertain": "Показывать «Позже в этом году» вместо даты",
-    "fieldDateUncertainHint": "Используйте, если точная дата ещё не определена. Название и место остаются видимыми."
+    "fieldDateUncertainHint": "Используйте, если точная дата ещё не определена. Название и место остаются видимыми.",
+    "fieldAudio": "Audio",
+    "fieldImage": "Image",
+    "vlogAudioHint": "Vlogs are audio recordings with a photo and text. Upload files or paste a URL.",
+    "uploading": "Uploading…"
   },
   "adminAccounts": {
     "eyebrow": "Разработчик",
@@ -568,7 +571,7 @@
       {
         "song": "Pocketful of Sunshine — Natasha Bedingfield",
         "youtube": "https://www.youtube.com/watch?v=gte3BoXKwP0",
-        "text": "Замечание о покраске фасада удивительно долго оставалось у меня в голове. Может, это было просто доброе предложение — но для меня оно обрело гораздо более личный смысл."
+        "text": "Замечание о покраске фасада удивительно долго оставалось у меня в голове. Может, это было просто доброе предложение — повесить свет вместе, но для меня оно обрело гораздо более личный смысл."
       },
       {
         "song": "To Love a Woman — Lionel Richie & Enrique Iglesias",
