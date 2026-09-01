@@ -491,102 +491,107 @@
     "eyebrow": "相遇",
     "title": "那场相遇，造就了今天的我",
     "imageAlt": "相遇",
-    "bridge": "我想知道……真的爱我吗？",
+    "bridge": "",
     "blocks": [
       {
         "song": "Hallelujah — Alexandra Burke",
         "youtube": "https://www.youtube.com/watch?v=aplWTXEcY70",
-        "text": "我从格罗宁根来到GGZ Centraal Almere，当时我几乎无法控制自己的情绪。经过几天的困惑、疲惫和巨大的精神风暴之后，我正在寻找答案。"
+        "text": "从格罗宁根出发，我来到了 GGZ Almere，带着头部受伤和满脑子的疑问。给我的药物只让我头脑中的不安越来越大。我不知道该往哪里找，但在内心深处，我感到我可以重新找回自己。我的故事还没有结束。"
       },
       {
         "song": "Crazy — Gnarls Barkley",
         "youtube": "https://www.youtube.com/watch?v=-N4jf6rtyuw",
-        "text": "我的思绪以每小时一千英里的速度飞驰，一切似乎都纠缠在一起。回想起来，我感觉好像我不再知道我的现实在哪里结束，混乱从哪里开始。"
+        "text": "我的头脑像风暴一样咆哮，思绪向四面八方飞窜。但在那混乱之下，我的一部分仍然屹立着。非常缓慢地，我又听到了自己的声音。我开始重新找回自己。"
       },
       {
         "song": "The Real Slim Shady — Eminem",
         "youtube": "https://www.youtube.com/watch?v=eJO5HU_7_1w",
-        "text": "我被视为一个完全放松管制的人，而我自己却试图了解发生在我身上的事情。每个人似乎都有我的形象——除了我自己。"
+        "text": "周围出现了我应该成为什么样的画面，而我仍在寻找答案。我决定不再通过别人的眼睛来看自己。我必须自己决定我是谁。"
       },
       {
-        "song": "I'm a Creep — Daniel Homeless Mustard",
+        "song": "I'm a Creep — Daniel Mustard",
         "youtube": "https://www.youtube.com/watch?v=vtLiL3uReoI",
-        "text": "在那混乱之下，主要是一个人感到失落和脆弱。对世界来说并不危险，但拼命寻找真正看到外面发生的事情的人。"
+        "text": "有时我几乎认不出自己，感到自己偏离了多远。但在内心深处，有一个声音说：这不是终点。那个声音越来越响。我开始跟随它。"
       },
       {
         "song": "I Love Me — Meghan Trainor",
         "youtube": "https://www.youtube.com/watch?v=xzoNK3JDBhw",
-        "text": "我必须在某个地方再次找到自己。也许康复最终就从这里开始：敢于再次审视自己。"
+        "text": "我再次看着自己，看到的不仅是我的错误。我看到了我的历史、我的力量以及塑造我的一切。我不需要修复自己——只需要再次拥抱自己。"
       },
       {
         "song": "Angel Eyes — Wet Wet Wet",
         "youtube": "https://www.youtube.com/watch?v=Wgid1me8POs",
-        "text": "紧张了好几天，突然有人坐在我对面，很平静。我看着她——对我来说，那一刻感觉好像暂时什么都不存在了。"
+        "text": "有些时刻会打开一扇门，通向深藏在内心的东西。我再次看到了真正是谁的一瞥。感觉像回到了自己身边。力量从未消失。"
       },
       {
         "song": "Every Little Thing She Does Is Magic — The Police",
         "youtube": "https://www.youtube.com/watch?v=aENX1Sf3fgQ",
-        "text": "慢慢地，联系从谈话变成了对我来说很特别的事情。她看、听和回应的方式一直困扰着我。"
+        "text": "我体内又有了动静：能量、好奇心和生活的热情。仿佛深处有一团火焰重新被点燃。火一直在我的心里。"
       },
       {
         "song": "Are You With Me — Lost Frequencies",
         "youtube": "https://www.youtube.com/watch?v=dumrK4YCkf4",
-        "text": "我们一起解决我的问题，一一解决。在问题和答案之间的某个地方，我心中升起一种感觉：你真的和我在一起吗？"
+        "text": "我明白下一步必须由我自己迈出。不是等待答案，而是再次相信自己。我夺回了我的生活。"
       },
       {
         "song": "Would I Lie to You? — Charles & Eddie",
         "youtube": "https://www.youtube.com/watch?v=G_UXvcr22rM",
-        "text": "我开始测试我的感觉是否可能是相互的。不是直接的，而是一些小评论、眼神和问题，这些都超出了必要的范围。"
+        "text": "我开始再次问自己：我在想什么、感受什么、相信什么。看得越深，我自己的答案就越清晰。我的真理在我内心。"
       },
       {
         "song": "It Must Be Love — Madness",
         "youtube": "https://www.youtube.com/watch?v=vmezIIrFQmY",
-        "text": "也许是爱，也许是我那一刻的经历。但我确信一件事：这种感觉来得出乎意料，而且持续的时间比我想象的要长得多。"
+        "text": "又有了感觉——强烈、意外、鲜活。也许我不必理解它从何而来。重要的是我又能感受了。"
       },
       {
         "song": "You Take My Breath Away — Berlin",
         "youtube": "https://www.youtube.com/watch?v=Bx51eegLTY8",
-        "text": "有些会议并不引人注目——它们只是触动了你内心深处的某个地方。对我来说，她就是这样的一次聚会。"
+        "text": "有些时刻让你突然停下，以不同的方式看自己。仿佛经过很长时间，你又与自己面对面。我终于再次认出了那个人。"
       },
       {
         "song": "All of Me — John Legend",
         "youtube": "https://www.youtube.com/watch?v=450p7goxZqg",
-        "text": "在那段时间里，我第一次感觉自己不再仅仅被视为一个文件或一个问题。我感觉自己被视为一个人——以及随之而来的一切。"
+        "text": "我又把自己看作一个整体：力量与脆弱、成功与错误。没有什么需要隐藏。我的一切都属于我的故事。"
       },
       {
         "song": "If You Don’t Know Me by Now — Simply Red",
         "youtube": "https://www.youtube.com/watch?v=zTcu7MCtuTs",
-        "text": "但是这么短的时间内她到底能了解我多少呢？在她专业的外表背后，我到底看到了多少？"
+        "text": "也许不是每个人都需要理解我。只要我真正了解自己。自我认知成了我的自由。"
       },
       {
         "song": "Caravan of Love — The Housemartins",
         "youtube": "https://www.youtube.com/watch?v=ehfiQd7lcPY",
-        "text": "在机构之外，我的生活仍在继续，但在我看来，这次会议一直伴随着我。来自那个黑暗时期的一小部分温暖。"
+        "text": "我的过去仍是故事的一部分，但不决定我的去向。我带走塑造我的东西，留下阻碍我的东西。我向前看。"
       },
       {
         "song": "Don’t Stop Me Now — Queen",
         "youtube": "https://www.youtube.com/watch?v=aJez0ljzSQw",
-        "text": "当我再次有了更多的能量时，感觉好像我又开始生活了。世界再次敞开了——在我的记忆中，她在其中占据了特殊的位置。"
+        "text": "当能量回来时，我又感到了旧的火花。雄心、好奇心和生活的热情回来了。引擎再次启动。我又回来了。"
       },
       {
         "song": "Pocketful of Sunshine — Natasha Bedingfield",
         "youtube": "https://www.youtube.com/watch?v=gte3BoXKwP0",
-        "text": "关于绘制外部的评论在我脑海中停留了很长一段时间。也许这只是一个善意的提议——一起挂灯，但对我来说，它具有更个人化的意义。"
+        "text": "光、空间和未来回来了。计划和梦想重新有了意义。未来不再是威胁，而是机会。"
       },
       {
         "song": "To Love a Woman — Lionel Richie & Enrique Iglesias",
         "youtube": "https://www.youtube.com/watch?v=36Dp1L8Fgh4",
-        "text": "我开始想，如果职业接触和个人感情之间不存在距离，会是什么样子。至少对我来说，渴望是存在的。"
+        "text": "我发现心中仍有多少爱——对人、对生活、对一切尚未到来的事物。敏感不是弱点，而是力量。在其中我也再次找到了自己。"
       },
       {
         "song": "Do You Love Me? — KISS",
         "youtube": "https://www.youtube.com/watch?v=nwsE7tVHk-k",
-        "text": "最后只剩下一个我一直不敢直接问的问题：你是否也感受到了什么，或者这只是我的故事？"
+        "text": "问题变了：不再是别人对我有什么感觉，而是我自己有什么感觉。我能完全接受自己吗？答案必须来自我内心。"
+      },
+      {
+        "song": "I Wanna Know — Really Love Me?",
+        "youtube": "https://www.youtube.com/watch?v=r3Pr11v5Pfc",
+        "text": "我想理解发生了什么，以及为什么失去了自己。但并非一切都需要立刻解释。有些答案会在你停止寻找时出现。"
       },
       {
         "song": "Paradise by the Dashboard Light — Meat Loaf & Ellen Foley",
         "youtube": "https://www.youtube.com/watch?v=C11MzbEcHlw",
-        "text": "实验就结束了：不是声称我们实际上有过一段爱情关系，而是两个人在一个特殊时刻相遇的形象——人们永远不会忘记那次会面。"
+        "text": "事后看来，这不是终点，而是转折点。发生的事也许是一面镜子，但我找回的力量完全属于我。在真正重要的时刻，我内心的力量升起来了。我又成为了我自己。"
       }
     ]
   },

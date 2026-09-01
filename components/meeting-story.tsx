@@ -42,7 +42,7 @@ export async function MeetingStory({
               <p className="max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg">
                 {block.text}
               </p>
-              {i === lastIndex - 1 ? (
+              {i === lastIndex - 1 && t("bridge").trim() ? (
                 <p className="font-display pt-2 text-xl leading-snug text-ink md:text-2xl">
                   {t("bridge")}
                 </p>
