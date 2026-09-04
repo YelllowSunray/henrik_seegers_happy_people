@@ -19,28 +19,22 @@ export function MemberStatusBadge({
   if (!profile || profile.isAdmin) return null;
 
   const label =
-    meta.kind === "trial"
-      ? meta.daysLeft != null
-        ? t("badgeTrialDays", { days: meta.daysLeft })
-        : t("subscribersTrialShort")
-      : meta.kind === "paid"
-        ? meta.plan === "yearly"
-          ? t("badgePaidYearly")
-          : meta.plan === "monthly"
-            ? t("badgePaidMonthly")
-            : t("subscribersPaidShort")
-        : profile.subscriptionStatus === "past_due"
-          ? t("statusPastDue")
-          : profile.subscriptionStatus === "canceled"
-            ? t("statusCanceled")
-            : t("badgeOther");
+    meta.kind === "paid"
+      ? meta.plan === "yearly"
+        ? t("badgePaidYearly")
+        : meta.plan === "monthly"
+          ? t("badgePaidMonthly")
+          : t("subscribersPaidShort")
+      : profile.subscriptionStatus === "past_due"
+        ? t("statusPastDue")
+        : profile.subscriptionStatus === "canceled"
+          ? t("statusCanceled")
+          : t("badgeOther");
 
   const tone =
-    meta.kind === "trial"
-      ? "bg-gold/25 text-ink"
-      : meta.kind === "paid"
-        ? "bg-accent/15 text-accent"
-        : "bg-bg-deep text-ink-soft";
+    meta.kind === "paid"
+      ? "bg-accent/15 text-accent"
+      : "bg-bg-deep text-ink-soft";
 
   return (
     <span
@@ -54,8 +48,6 @@ export function MemberStatusBadge({
 export function memberOptionLabel(
   profile: MemberProfile,
   labels: {
-    trial: string;
-    trialDays: (days: number) => string;
     paid: string;
     paidMonthly: string;
     paidYearly: string;
@@ -67,17 +59,13 @@ export function memberOptionLabel(
   const primary = email && name !== email ? `${name} · ${email}` : name;
   const meta = memberBillingMeta(profile);
   const status =
-    meta.kind === "trial"
-      ? meta.daysLeft != null
-        ? labels.trialDays(meta.daysLeft)
-        : labels.trial
-      : meta.kind === "paid"
-        ? meta.plan === "yearly"
-          ? labels.paidYearly
-          : meta.plan === "monthly"
-            ? labels.paidMonthly
-            : labels.paid
-        : labels.other;
+    meta.kind === "paid"
+      ? meta.plan === "yearly"
+        ? labels.paidYearly
+        : meta.plan === "monthly"
+          ? labels.paidMonthly
+          : labels.paid
+      : labels.other;
   return `${primary} (${status})`;
 }
 

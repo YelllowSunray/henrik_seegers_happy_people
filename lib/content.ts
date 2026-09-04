@@ -188,38 +188,6 @@ export const videos: VideoItem[] = [
     durationLabel: "3 min",
   },
   {
-    id: "v-sem-1",
-    title: {
-      nl: "Seminar #01 — Terug naar één",
-      en: "Seminar #01 — Back to one",
-      de: "Seminar #01 — Zurück zum Einssein",
-    },
-    description: {
-      nl: "Volledige opname — alleen voor Happy People-leden.",
-      en: "Full recording — Happy People members only.",
-      de: "Volle Aufnahme — nur für Happy People-Mitglieder.",
-    },
-    kind: "seminar",
-    publishedAt: "2026-07-15",
-    durationLabel: "1u 48m",
-  },
-  {
-    id: "v-sem-2",
-    title: {
-      nl: "Seminar #02 — Contact met opa & oma",
-      en: "Seminar #02 — Contact with grandpa & grandma",
-      de: "Seminar #02 — Kontakt mit Opa & Oma",
-    },
-    description: {
-      nl: "Techniek en verhalen over verbinding met overleden dierbaren.",
-      en: "Technique and stories about connecting with loved ones who have passed.",
-      de: "Technik und Geschichten über Verbindung mit Verstorbenen.",
-    },
-    kind: "seminar",
-    publishedAt: "2026-07-22",
-    durationLabel: "2u 05m",
-  },
-  {
     id: "v-vlog-1",
     title: {
       nl: "Vlog: glimlach op standje maximaal",

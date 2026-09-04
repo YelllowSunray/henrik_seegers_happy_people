@@ -5,13 +5,14 @@ import { MembersWelcome } from "@/components/members-welcome";
 import { WhatsNewStrip } from "@/components/whats-new-strip";
 import { ClubDestinations } from "@/components/club-destinations";
 import { DonateThanksBanner } from "@/components/donate-thanks-banner";
-import { t } from "@/lib/content";
 import {
+  fetchEvents,
   fetchMemberPosts,
   fetchPersonalMessages,
   fetchQuotes,
   fetchVideosByKind,
 } from "@/lib/content-firestore";
+import { t } from "@/lib/content";
 import type { Locale } from "@/lib/types";
 
 export default async function MembersHomePage({
@@ -23,14 +24,19 @@ export default async function MembersHomePage({
   setRequestLocale(localeParam);
   const locale = localeParam as Locale;
   const tr = await getTranslations("members");
-  const [seminars, vlogs, quotes, teachings, messages] = await Promise.all([
+  const trSeminars = await getTranslations("seminars");
+  const today = new Date().toISOString().slice(0, 10);
+  const [seminars, vlogs, quotes, teachings, messages, events] =
+    await Promise.all([
     fetchVideosByKind("seminar"),
     fetchVideosByKind("vlog"),
     fetchQuotes(),
     fetchMemberPosts(),
     fetchPersonalMessages(),
+    fetchEvents(),
   ]);
   const latestSeminar = seminars[0];
+  const upcomingEvent = events.find((event) => event.date >= today);
   const latestVlog = vlogs[0];
   const latestQuote = quotes[0];
 
@@ -93,7 +99,7 @@ export default async function MembersHomePage({
       <MembersWelcome />
       <WhatsNewStrip />
 
-      {latestSeminar && (
+      {latestSeminar ? (
         <section className="reveal reveal-delay-1">
           <p className="text-xs font-semibold tracking-[0.18em] text-accent uppercase">
             {tr("featured")}
@@ -138,7 +144,37 @@ export default async function MembersHomePage({
             </div>
           </Link>
         </section>
-      )}
+      ) : upcomingEvent ? (
+        <section className="reveal reveal-delay-1">
+          <p className="text-xs font-semibold tracking-[0.18em] text-accent uppercase">
+            {tr("upcomingLive")}
+          </p>
+          <Link
+            href="/seminars"
+            className="group relative mt-4 block overflow-hidden border border-line bg-bg-deep/40 p-6 md:p-10"
+          >
+            <p className="text-xs font-semibold tracking-[0.18em] text-gold uppercase">
+              {tr("liveSeminar")}
+            </p>
+            <h2 className="font-display mt-3 max-w-xl text-3xl text-ink md:text-4xl">
+              {t(upcomingEvent.title, locale)}
+            </h2>
+            <p className="mt-3 max-w-lg text-sm text-ink-soft md:text-base">
+              {t(upcomingEvent.description, locale)}
+            </p>
+            <p className="mt-4 text-sm font-medium text-ink">
+              {upcomingEvent.dateUncertain
+                ? trSeminars("dateLaterThisYear")
+                : upcomingEvent.date}
+              {upcomingEvent.time ? ` · ${upcomingEvent.time}` : ""}
+              {upcomingEvent.location ? ` · ${upcomingEvent.location}` : ""}
+            </p>
+            <span className="mt-6 inline-flex rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition group-hover:bg-accent-soft">
+              {tr("viewLiveSeminar")} →
+            </span>
+          </Link>
+        </section>
+      ) : null}
 
       <section className="reveal reveal-delay-2">
         <div className="flex items-end justify-between gap-4">

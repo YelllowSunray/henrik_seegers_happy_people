@@ -9,11 +9,8 @@ import { MembershipPlans } from "@/components/membership-plans";
 import {
   hasMembershipAccess,
   hasStripeSubscription,
-  isAppTrialActive,
-  isAppTrialExpired,
   isActiveSubscription,
   membershipPlanLabel,
-  trialDaysLeft,
 } from "@/lib/membership";
 import { signInHref } from "@/lib/auth-href";
 
@@ -31,9 +28,6 @@ export function SubscriptionPanel() {
   const status = profile?.subscriptionStatus ?? "none";
   const plan = membershipPlanLabel(profile);
   const stripeSub = hasStripeSubscription(profile);
-  const appTrial = isAppTrialActive(profile);
-  const trialExpired = isAppTrialExpired(profile);
-  const daysLeft = trialDaysLeft(profile);
   const paidActive = stripeSub && isActiveSubscription(status);
   const clubAccess = hasMembershipAccess(profile);
 
@@ -129,19 +123,15 @@ export function SubscriptionPanel() {
   }
 
   const statusLabel =
-    appTrial && !stripeSub
-      ? tr("statusAppTrial", { days: daysLeft ?? 0 })
-      : trialExpired
-        ? tr("statusTrialEnded")
-        : status === "trialing"
-          ? tr("statusTrialing")
-          : status === "active"
-            ? tr("statusActive")
-            : status === "past_due"
-              ? tr("statusPastDue")
-              : status === "canceled"
-                ? tr("statusCanceled")
-                : tr("statusNone");
+    status === "trialing"
+      ? tr("statusTrialing")
+      : status === "active"
+        ? tr("statusActive")
+        : status === "past_due"
+          ? tr("statusPastDue")
+          : status === "canceled"
+            ? tr("statusCanceled")
+            : tr("statusNone");
 
   const planLabel =
     plan === "yearly"
@@ -156,13 +146,7 @@ export function SubscriptionPanel() {
         {tr("eyebrow")}
       </p>
       <h1 className="font-display mt-2 text-4xl md:text-5xl">{tr("title")}</h1>
-      <p className="mt-3 max-w-xl text-ink-soft">
-        {appTrial && !stripeSub
-          ? tr("leadTrial")
-          : trialExpired
-            ? tr("leadTrialEnded")
-            : tr("lead")}
-      </p>
+      <p className="mt-3 max-w-xl text-ink-soft">{tr("lead")}</p>
 
       {notice && (
         <p className="mt-6 border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-ink">
@@ -221,11 +205,8 @@ export function SubscriptionPanel() {
       {!stripeSub && (
         <div className="mt-12">
           <h2 className="font-display text-3xl">{tr("choosePlan")}</h2>
-          {appTrial && (
-            <p className="mt-2 text-ink-soft">{tr("choosePlanTrialHint")}</p>
-          )}
-          {trialExpired && (
-            <p className="mt-2 text-ink-soft">{tr("choosePlanExpiredHint")}</p>
+          {!clubAccess && (
+            <p className="mt-2 text-ink-soft">{tr("choosePlanHint")}</p>
           )}
           <MembershipPlans className="mt-6" />
         </div>

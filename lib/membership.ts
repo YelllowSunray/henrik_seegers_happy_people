@@ -76,20 +76,18 @@ export function membershipPlanLabel(
   return plan === "monthly" || plan === "yearly" ? plan : null;
 }
 
-/** When Stripe publishable key is missing, any signed-in user can preview the club UI. */
+/** Paid club access requires an active Stripe subscription. */
 export function hasMembershipAccess(
   profile: MemberProfile | null | undefined,
 ): boolean {
   if (!profile) return false;
   if (profile.isAdmin) return true;
-  if (profile.subscriptionStatus === "active" && profile.stripeSubscriptionId) {
-    return true;
+  if (!profile.stripeSubscriptionId) {
+    if (!stripeReadyForClient()) return true;
+    return false;
   }
-  if (profile.subscriptionStatus === "trialing") {
-    if (profile.stripeSubscriptionId) return true;
-    return isAppTrialActive(profile);
-  }
-  if (isAppTrialActive(profile)) return true;
-  if (!stripeReadyForClient()) return true;
-  return false;
+  return (
+    profile.subscriptionStatus === "active" ||
+    profile.subscriptionStatus === "trialing"
+  );
 }

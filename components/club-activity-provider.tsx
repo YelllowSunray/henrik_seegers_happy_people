@@ -21,6 +21,7 @@ import { usePathname } from "@/i18n/navigation";
 import { useAuth } from "@/components/auth-provider";
 import { markChatRead, timestampToMs } from "@/lib/chat";
 import { getClientDb, isFirebaseConfigured } from "@/lib/firebase/client";
+import { isVideoPublished } from "@/lib/video-visibility";
 import type { ClubActivity, ClubSection, MemberProfile } from "@/lib/types";
 
 const empty: ClubActivity = {
@@ -76,8 +77,29 @@ export function ClubActivityProvider({
         snap.docs.forEach((d) => {
           const data = d.data();
           const publishedAt = String(data.publishedAt ?? "");
-          if (data.kind === "seminar") seminars.push(publishedAt);
-          if (data.kind === "vlog") vlogs.push(publishedAt);
+          const kind = String(data.kind ?? "");
+          const videoUrl =
+            typeof data.videoUrl === "string" ? data.videoUrl : undefined;
+          const audioUrl =
+            typeof data.audioUrl === "string" ? data.audioUrl : undefined;
+          const mediaType =
+            data.mediaType === "audio" || data.mediaType === "video"
+              ? data.mediaType
+              : audioUrl
+                ? "audio"
+                : "video";
+          const item = {
+            publishedAt,
+            kind,
+            videoUrl,
+            audioUrl,
+            mediaType,
+          } as const;
+          if (!isVideoPublished(item)) return;
+          if (kind === "seminar" && !videoUrl?.trim()) return;
+          if (kind === "vlog" && !videoUrl?.trim() && !audioUrl?.trim()) return;
+          if (kind === "seminar") seminars.push(publishedAt);
+          if (kind === "vlog") vlogs.push(publishedAt);
         });
         setLatest((prev) => ({ ...prev, seminars, vlogs }));
       }, silent),

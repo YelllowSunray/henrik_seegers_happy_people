@@ -21,6 +21,7 @@ import type {
 } from "@/lib/types";
 import type { BillingState } from "@/lib/billing";
 import { DEFAULT_BILLING_STATE, parseBillingDoc } from "@/lib/billing";
+import { isMemberVisibleVideo } from "@/lib/video-visibility";
 
 function asLocalized(value: unknown, fallback = ""): LocalizedString {
   if (value && typeof value === "object" && !Array.isArray(value)) {
@@ -179,8 +180,12 @@ export async function fetchEvents(): Promise<SeminarEvent[]> {
 
 export async function fetchVideos(): Promise<VideoItem[]> {
   const rows = await loadCollection("videos", mapVideo);
-  if (rows === null || rows.length === 0) return seedVideos;
-  return rows.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  if (rows === null) {
+    return seedVideos.filter((v) => isMemberVisibleVideo(v));
+  }
+  return rows
+    .filter((v) => isMemberVisibleVideo(v))
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 }
 
 export async function fetchVideosByKind(
@@ -192,14 +197,17 @@ export async function fetchVideosByKind(
   if (options?.firestoreOnly) {
     if (!rows) return [];
     return rows
-      .filter((v) => v.kind === kind)
+      .filter((v) => v.kind === kind && isMemberVisibleVideo(v))
       .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
   }
 
-  const all = rows === null || rows.length === 0 ? seedVideos : rows;
-  const filtered = all.filter((v) => v.kind === kind);
-  if (filtered.length === 0) return seedVideosByKind(kind);
-  return filtered;
+  if (rows === null) {
+    return seedVideosByKind(kind).filter((v) => isMemberVisibleVideo(v));
+  }
+
+  return rows
+    .filter((v) => v.kind === kind && isMemberVisibleVideo(v))
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 }
 
 export async function fetchQuotes(): Promise<QuoteItem[]> {

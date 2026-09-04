@@ -10,7 +10,6 @@ import {
   parseMembershipPlan,
   paymentMethodsForLocale,
   stripeCheckoutLocale,
-  TRIAL_DAYS,
   type MembershipPlan,
 } from "@/lib/stripe";
 
@@ -72,12 +71,10 @@ export async function POST(req: Request) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3002";
 
   let customerId: string | undefined;
-  let trialEndsAt: string | undefined;
   if (db) {
     const snap = await db.collection("members").doc(user.uid).get();
     const data = snap.data() ?? {};
     customerId = data.stripeCustomerId as string | undefined;
-    trialEndsAt = data.trialEndsAt as string | undefined;
     const status = data.subscriptionStatus as string | undefined;
     const stripeSubId = data.stripeSubscriptionId as string | undefined;
 
@@ -112,30 +109,16 @@ export async function POST(req: Request) {
     }
   }
 
-  const nowSec = Math.floor(Date.now() / 1000);
-  const appTrialEndSec = trialEndsAt
-    ? Math.floor(new Date(trialEndsAt).getTime() / 1000)
-    : nowSec + TRIAL_DAYS * 24 * 60 * 60;
-  // Stripe requires trial_end at least ~48h ahead; otherwise charge after checkout.
-  const minTrialEnd = nowSec + 48 * 60 * 60;
-  const useTrialEnd = appTrialEndSec >= minTrialEnd;
-
   const session = await stripe.checkout.sessions.create({
     mode: "subscription",
     customer: customerId,
     line_items: [{ price: priceId, quantity: 1 }],
     locale: stripeCheckoutLocale(localeCode),
     payment_method_types: paymentMethodsForLocale(localeCode),
-    // Collect payment details when choosing a paid plan (charged after free days).
     payment_method_collection: "always",
     success_url: `${appUrl}/${localeCode}/members/subscription?checkout=success`,
     cancel_url: `${appUrl}/${localeCode}/members/subscription?checkout=cancel`,
     subscription_data: {
-      ...(useTrialEnd
-        ? { trial_end: appTrialEndSec }
-        : appTrialEndSec > nowSec
-          ? { trial_period_days: 1 }
-          : {}),
       metadata: { firebaseUid: user.uid, plan },
     },
     metadata: { firebaseUid: user.uid, plan },

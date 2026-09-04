@@ -22,7 +22,7 @@ import {
   getClientDb,
   isFirebaseConfigured,
 } from "@/lib/firebase/client";
-import { computeTrialEndsAt, hasMembershipAccess } from "@/lib/membership";
+import { hasMembershipAccess } from "@/lib/membership";
 import type { MemberProfile } from "@/lib/types";
 
 type AuthContextValue = {
@@ -60,21 +60,6 @@ async function loadProfile(user: User): Promise<MemberProfile> {
     if (!next.stripeSubscriptionId && next.membershipPlan) {
       await setDoc(ref, { membershipPlan: deleteField() }, { merge: true });
       delete next.membershipPlan;
-    }
-    // Backfill complimentary week for accounts created before app trials.
-    if (
-      !next.isAdmin &&
-      !next.stripeSubscriptionId &&
-      !next.trialEndsAt &&
-      next.onboardingCompleted
-    ) {
-      const trialEndsAt = computeTrialEndsAt();
-      await setDoc(
-        ref,
-        { subscriptionStatus: "trialing", trialEndsAt },
-        { merge: true },
-      );
-      return { ...next, subscriptionStatus: "trialing", trialEndsAt };
     }
     return next;
   }
@@ -141,8 +126,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await setDoc(doc(getClientDb(), "members", cred.user.uid), {
           uid: cred.user.uid,
           email,
-          subscriptionStatus: "trialing",
-          trialEndsAt: computeTrialEndsAt(),
+          subscriptionStatus: "none",
           isAdmin: false,
         } satisfies MemberProfile);
       },

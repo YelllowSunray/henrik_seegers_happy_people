@@ -10,8 +10,6 @@ import {
   getClientStorage,
   isFirebaseConfigured,
 } from "@/lib/firebase/client";
-import { computeTrialEndsAt } from "@/lib/membership";
-
 type Mode = "onboarding" | "profile";
 
 export function ProfileForm({
@@ -89,14 +87,6 @@ export function ProfileForm({
           phone: trimmedPhone,
           ...(photoURL ? { photoURL } : {}),
           onboardingCompleted: true,
-          ...(mode === "onboarding" &&
-          !profile?.stripeSubscriptionId &&
-          !profile?.trialEndsAt
-            ? {
-                subscriptionStatus: "trialing" as const,
-                trialEndsAt: computeTrialEndsAt(),
-              }
-            : {}),
         },
         { merge: true },
       );

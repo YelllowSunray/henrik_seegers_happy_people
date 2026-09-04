@@ -491,9 +491,6 @@ export function AdminPortal() {
   const editingQuote = quotes.find((q) => q.id === editingId);
   const editingMessage = messages.find((m) => m.id === editingId);
 
-  const trialSubscribers = subscribers.filter(
-    (s) => !s.isAdmin && memberBillingKind(s) === "trial",
-  );
   const paidSubscribers = subscribers.filter(
     (s) => !s.isAdmin && memberBillingKind(s) === "paid",
   );
@@ -613,13 +610,11 @@ export function AdminPortal() {
 
             {tab === "subscribers" ? (
               <SubscribersPanel
-                trial={trialSubscribers}
                 paid={paidSubscribers}
                 other={otherSubscribers}
                 onMessage={writeMessageTo}
                 onChat={openChatWith}
                 labels={{
-                  trial: t("subscribersTrial"),
                   paid: t("subscribersPaid"),
                   other: t("subscribersOther"),
                   empty: t("subscribersEmpty"),
@@ -790,7 +785,7 @@ export function AdminPortal() {
                     .map((v) => ({
                       id: v.id,
                       title: nl(v.title),
-                      meta: `${v.kind}${v.mediaType === "audio" || v.audioUrl ? " · audio" : ""} · ${v.publishedAt}`,
+                      meta: `${v.kind === "seminar" ? t("videoKindSeminarShort") : t("videoKindVlogShort")}${v.mediaType === "audio" || v.audioUrl ? ` · ${t("videoMediaAudio")}` : ""} · ${v.publishedAt}`,
                       audience: "club" as const,
                     }))}
                   onEdit={setEditingId}
@@ -1162,7 +1157,7 @@ function VideoForm({
 }) {
   const t = useTranslations("admin");
   const [kind, setKind] = useState(
-    initial?.kind === "sample" ? "seminar" : initial?.kind || "vlog",
+    initial?.kind === "sample" ? "seminar" : initial?.kind || "seminar",
   );
   const [audioUrl, setAudioUrl] = useState(initial?.audioUrl ?? "");
   const [thumbnail, setThumbnail] = useState(initial?.thumbnail ?? "");
@@ -1248,8 +1243,8 @@ function VideoForm({
           value={kind}
           onChange={(e) => setKind(e.target.value as "seminar" | "vlog")}
         >
-          <option value="vlog">{kindVlog}</option>
           <option value="seminar">{kindSeminar}</option>
+          <option value="vlog">{kindVlog}</option>
         </select>
       </Field>
       <Field label={t("fieldTitle")}>
@@ -1367,6 +1362,9 @@ function VideoForm({
           />
         </Field>
       </div>
+      {kind === "seminar" ? (
+        <p className="text-sm text-ink-soft">{t("videoPublishHint")}</p>
+      ) : null}
       <div className="flex flex-wrap gap-2 pt-1">
         <button type="submit" className={btnClass} disabled={busy}>
           {saveLabel}
@@ -1441,20 +1439,17 @@ function QuoteForm({
 }
 
 function SubscribersPanel({
-  trial,
   paid,
   other,
   onMessage,
   onChat,
   labels,
 }: {
-  trial: Subscriber[];
   paid: Subscriber[];
   other: Subscriber[];
   onMessage: (member: Subscriber) => void;
   onChat: (member: Subscriber) => void;
   labels: {
-    trial: string;
     paid: string;
     other: string;
     empty: string;
@@ -1523,7 +1518,6 @@ function SubscribersPanel({
 
   return (
     <div>
-      <Group title={labels.trial} items={trial} />
       <Group title={labels.paid} items={paid} />
       <Group title={labels.other} items={other} />
     </div>
@@ -1594,8 +1588,6 @@ function MessageForm({
     toUserId && toEmail ? `${toUserId}|${toEmail}` : "";
 
   const optionLabels = {
-    trial: t("subscribersTrialShort"),
-    trialDays: (days: number) => t("badgeTrialDays", { days }),
     paid: t("subscribersPaidShort"),
     paidMonthly: t("badgePaidMonthly"),
     paidYearly: t("badgePaidYearly"),
