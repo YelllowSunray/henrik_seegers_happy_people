@@ -11,15 +11,12 @@ import {
 import {
   collection,
   doc,
-  getDocs,
   onSnapshot,
-  query,
   setDoc,
-  where,
 } from "firebase/firestore";
 import { usePathname } from "@/i18n/navigation";
 import { useAuth } from "@/components/auth-provider";
-import { markChatRead, timestampToMs } from "@/lib/chat";
+import { timestampToMs } from "@/lib/chat";
 import { getClientDb, isFirebaseConfigured } from "@/lib/firebase/client";
 import { isVideoPublished } from "@/lib/video-visibility";
 import type { ClubActivity, ClubSection, MemberProfile } from "@/lib/types";
@@ -59,9 +56,7 @@ export function ClubActivityProvider({
     seminars: [] as string[],
     vlogs: [] as string[],
     quotes: [] as string[],
-    unreadMessages: 0,
     teachings: [] as string[],
-    chatUnread: 0,
   });
 
   useEffect(() => {
@@ -117,35 +112,6 @@ export function ClubActivityProvider({
             .map((d) => String(d.data().publishedAt ?? "")),
         }));
       }, silent),
-      onSnapshot(
-        query(
-          collection(db, "personalMessages"),
-          where("toUserId", "==", user.uid),
-        ),
-        (snap) => {
-          const unread = snap.docs.filter((d) => !d.data().read).length;
-          setLatest((prev) => ({ ...prev, unreadMessages: unread }));
-        },
-        silent,
-      ),
-      onSnapshot(
-        doc(db, "chats", user.uid),
-        (snap) => {
-          if (!snap.exists()) {
-            setLatest((prev) => ({ ...prev, chatUnread: 0 }));
-            return;
-          }
-          const data = snap.data();
-          const lastAt = timestampToMs(data.lastMessageAt);
-          const readAt = timestampToMs(data.memberLastReadAt);
-          const fromHenk = data.lastSenderRole === "admin";
-          setLatest((prev) => ({
-            ...prev,
-            chatUnread: fromHenk && lastAt > readAt ? 1 : 0,
-          }));
-        },
-        silent,
-      ),
     ];
     return () => unsubs.forEach((u) => u());
   }, [user]);
@@ -163,9 +129,7 @@ export function ClubActivityProvider({
           seminars: now,
           vlogs: now,
           quotes: now,
-          messages: now,
           teachings: now,
-          chat: now,
         },
       },
       { merge: true },
@@ -173,30 +137,22 @@ export function ClubActivityProvider({
   }, [user, profile, refreshProfile]);
 
   const activity = useMemo<ClubActivity>(() => {
-    // Until first seed lands, don't flood the UI with "everything is new"
     if (!profile?.activitySeen) {
-      return {
-        ...empty,
-        messages: latest.unreadMessages,
-        chat: latest.chatUnread,
-        total: latest.unreadMessages + latest.chatUnread,
-      };
+      return empty;
     }
     const seen = profile?.activitySeen;
     const seminars = countNewer(latest.seminars, seen?.seminars);
     const vlogs = countNewer(latest.vlogs, seen?.vlogs);
     const quotes = countNewer(latest.quotes, seen?.quotes);
     const teachings = countNewer(latest.teachings, seen?.teachings);
-    const messages = latest.unreadMessages;
-    const chat = latest.chatUnread;
     return {
       seminars,
       vlogs,
       quotes,
-      messages,
+      messages: 0,
       teachings,
-      chat,
-      total: seminars + vlogs + quotes + messages + teachings + chat,
+      chat: 0,
+      total: seminars + vlogs + quotes + teachings,
     };
   }, [latest, profile?.activitySeen]);
 
@@ -211,50 +167,6 @@ export function ClubActivityProvider({
       };
 
       try {
-        if (section === "chat") {
-          await markChatRead(db, user.uid, "member");
-        }
-
-        if (section === "messages") {
-          const email = (user.email ?? "").toLowerCase();
-          const byUid = await getDocs(
-            query(
-              collection(db, "personalMessages"),
-              where("toUserId", "==", user.uid),
-            ),
-          );
-          const byEmail = user.email
-            ? await getDocs(
-                query(
-                  collection(db, "personalMessages"),
-                  where("toEmail", "==", user.email),
-                ),
-              )
-            : null;
-          const seenIds = new Set<string>();
-          const unread = [...byUid.docs, ...(byEmail?.docs ?? [])].filter(
-            (d) => {
-              if (seenIds.has(d.id)) return false;
-              seenIds.add(d.id);
-              const data = d.data();
-              return (
-                !data.read &&
-                (data.toUserId === user.uid ||
-                  String(data.toEmail ?? "").toLowerCase() === email)
-              );
-            },
-          );
-          await Promise.all(
-            unread.map((d) =>
-              setDoc(
-                doc(db, "personalMessages", d.id),
-                { read: true },
-                { merge: true },
-              ),
-            ),
-          );
-        }
-
         await setDoc(
           doc(db, "members", user.uid),
           { activitySeen: nextSeen },
@@ -271,11 +183,9 @@ export function ClubActivityProvider({
   useEffect(() => {
     if (!user) return;
     const map: { match: string; section: ClubSection }[] = [
-      { match: "/members/chat", section: "chat" },
       { match: "/members/vlogs", section: "vlogs" },
       { match: "/members/seminars", section: "seminars" },
       { match: "/members/quotes", section: "quotes" },
-      { match: "/members/messages", section: "messages" },
       { match: "/members/teachings", section: "teachings" },
     ];
     const hit = map.find((m) => pathname.startsWith(m.match));

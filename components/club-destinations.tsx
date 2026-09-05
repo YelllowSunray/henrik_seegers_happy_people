@@ -53,9 +53,7 @@ export function ClubDestinations({ items }: { items: Destination[] }) {
               </p>
               {fresh > 0 && (
                 <p className="mt-3 text-xs font-semibold text-accent">
-                  {d.section === "chat"
-                    ? tr("newChatHint")
-                    : tr("newCountHint", { count: fresh })}
+                  {tr("newCountHint", { count: fresh })}
                 </p>
               )}
             </div>

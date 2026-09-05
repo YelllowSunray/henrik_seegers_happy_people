@@ -60,19 +60,6 @@ export function MembersAccountBar() {
         </Link>
 
         <div className="flex flex-wrap items-center gap-2">
-          {isMember ? (
-            <Link
-              href="/members/chat"
-              className="relative rounded-full bg-ink px-3.5 py-2 text-sm font-semibold text-white hover:bg-accent"
-            >
-              {t("chat")}
-              {activity.chat > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-bold">
-                  {activity.chat}
-                </span>
-              )}
-            </Link>
-          ) : null}
           <Link
             href="/members/profile"
             className={`rounded-full px-3.5 py-2 text-sm ${

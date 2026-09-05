@@ -50,9 +50,6 @@ export default async function MembersLayout({
               {tr("pillLive")}
             </span>
             <span className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-white/90 uppercase backdrop-blur">
-              {tr("pillChat")}
-            </span>
-            <span className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-white/90 uppercase backdrop-blur">
               {tr("pillNew")}
             </span>
           </div>

@@ -10,8 +10,6 @@ const links = [
   ["/seminars", "seminars", "seminars"],
   ["/vlogs", "vlogs", "vlogs"],
   ["/quotes", "quotes", "quotes"],
-  ["/messages", "messages", "messages"],
-  ["/chat", "chat", "chat"],
   ["/teachings", "teachings", "teachings"],
 ] as const satisfies ReadonlyArray<
   readonly [string, string, ClubSection | null]

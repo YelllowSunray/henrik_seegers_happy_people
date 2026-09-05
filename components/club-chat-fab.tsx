@@ -185,7 +185,7 @@ export function ClubChatFab() {
   const titleId = useId();
 
   const hideOnPage =
-    pathname.startsWith("/members/ask") ||
+    pathname.startsWith("/members") ||
     pathname.startsWith("/admin") ||
     pathname.startsWith("/auth");
 

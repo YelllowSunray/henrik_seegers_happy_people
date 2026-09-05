@@ -11,13 +11,6 @@ const items: {
   labelKey: string;
   tone: "accent" | "gold";
 }[] = [
-  { section: "chat", href: "/members/chat", labelKey: "chat", tone: "accent" },
-  {
-    section: "messages",
-    href: "/members/messages",
-    labelKey: "messages",
-    tone: "gold",
-  },
   { section: "vlogs", href: "/members/vlogs", labelKey: "vlogs", tone: "accent" },
   {
     section: "seminars",
@@ -74,9 +67,7 @@ export function WhatsNewStrip() {
                   {t(item.labelKey)}
                 </span>
                 <span className="mt-0.5 block text-xs text-ink-soft">
-                  {item.section === "chat"
-                    ? t("newChatHint")
-                    : t("newCountHint", { count: item.count })}
+                  {t("newCountHint", { count: item.count })}
                 </span>
               </span>
               <span

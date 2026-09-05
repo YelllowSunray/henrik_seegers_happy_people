@@ -17,10 +17,8 @@ import {
   useBillingOverBudget,
 } from "@/components/billing-banner";
 import { useAuth } from "@/components/auth-provider";
-import { AdminChatPanel } from "@/components/admin-chat-panel";
 import {
   MemberIdentity,
-  memberOptionLabel,
 } from "@/components/member-status-badge";
 import { getClientDb, getClientStorage, isFirebaseConfigured } from "@/lib/firebase/client";
 import { memberBillingKind } from "@/lib/member-status";
@@ -28,7 +26,6 @@ import { Link } from "@/i18n/navigation";
 import type {
   BlogPost,
   MemberProfile,
-  PersonalMessage,
   QuoteItem,
   SeminarEvent,
   VideoItem,
@@ -40,26 +37,9 @@ type Tab =
   | "events"
   | "videos"
   | "quotes"
-  | "messages"
-  | "subscribers"
-  | "chat";
+  | "subscribers";
 
 type Subscriber = MemberProfile & { id: string };
-
-function formatCreatedAt(value: unknown): string {
-  if (
-    value &&
-    typeof value === "object" &&
-    "toDate" in value &&
-    typeof (value as { toDate: () => Date }).toDate === "function"
-  ) {
-    return (value as { toDate: () => Date })
-      .toDate()
-      .toISOString()
-      .slice(0, 10);
-  }
-  return String(value ?? "");
-}
 
 const fieldClass =
   "mt-1.5 w-full border border-line bg-white px-3 py-2.5 text-base text-ink outline-none focus:border-accent";
@@ -114,14 +94,7 @@ export function AdminPortal() {
   const [events, setEvents] = useState<SeminarEvent[]>([]);
   const [videos, setVideos] = useState<VideoItem[]>([]);
   const [quotes, setQuotes] = useState<QuoteItem[]>([]);
-  const [messages, setMessages] = useState<PersonalMessage[]>([]);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
-  const [messageTarget, setMessageTarget] = useState<{
-    toUserId: string;
-    toEmail: string;
-  } | null>(null);
-
-  const [chatFocusUid, setChatFocusUid] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isFirebaseConfigured || !isAdmin) return;
@@ -219,26 +192,6 @@ export function AdminPortal() {
                 } as QuoteItem;
               })
               .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt)),
-          );
-        },
-        ignore,
-      ),
-      onSnapshot(
-        collection(db, "personalMessages"),
-        (snap) => {
-          setMessages(
-            snap.docs.map((d) => {
-              const data = d.data();
-              return {
-                id: d.id,
-                toUserId: String(data.toUserId ?? ""),
-                toEmail: data.toEmail,
-                subject: data.subject ?? { nl: "" },
-                body: data.body ?? { nl: "" },
-                createdAt: formatCreatedAt(data.createdAt),
-                read: Boolean(data.read),
-              } as PersonalMessage;
-            }),
           );
         },
         ignore,
@@ -403,21 +356,6 @@ export function AdminPortal() {
       });
       return;
     }
-    if (col === "personalMessages") {
-      setMessages((prev) => {
-        const next = {
-          id,
-          toUserId: String(data.toUserId ?? ""),
-          toEmail: data.toEmail as string | undefined,
-          subject: (data.subject as PersonalMessage["subject"]) ?? { nl: "" },
-          body: (data.body as PersonalMessage["body"]) ?? { nl: "" },
-          createdAt: new Date().toISOString().slice(0, 10),
-          read: Boolean(data.read),
-        } as PersonalMessage;
-        const without = prev.filter((m) => m.id !== id);
-        return [next, ...without];
-      });
-    }
   }
 
   function dropLocalItem(col: string, id: string) {
@@ -428,8 +366,6 @@ export function AdminPortal() {
       setVideos((prev) => prev.filter((v) => v.id !== id));
     else if (col === "quotes")
       setQuotes((prev) => prev.filter((q) => q.id !== id));
-    else if (col === "personalMessages")
-      setMessages((prev) => prev.filter((m) => m.id !== id));
   }
 
   async function remove(col: string, id: string) {
@@ -483,13 +419,12 @@ export function AdminPortal() {
 
   const navSections: { audience: "public" | "club"; tabs: Tab[] }[] = [
     { audience: "public", tabs: ["events", "posts"] },
-    { audience: "club", tabs: ["subscribers", "chat", "videos", "quotes", "messages"] },
+    { audience: "club", tabs: ["subscribers", "videos", "quotes"] },
   ];
   const editingPost = posts.find((p) => p.id === editingId);
   const editingEvent = events.find((e) => e.id === editingId);
   const editingVideo = videos.find((v) => v.id === editingId);
   const editingQuote = quotes.find((q) => q.id === editingId);
-  const editingMessage = messages.find((m) => m.id === editingId);
 
   const paidSubscribers = subscribers.filter(
     (s) => !s.isAdmin && memberBillingKind(s) === "paid",
@@ -497,7 +432,6 @@ export function AdminPortal() {
   const otherSubscribers = subscribers.filter(
     (s) => !s.isAdmin && memberBillingKind(s) === "other",
   );
-  const messageRecipients = subscribers.filter((s) => !s.isAdmin && s.email);
 
   const tabHint =
     tab === "posts"
@@ -508,11 +442,7 @@ export function AdminPortal() {
           ? t("tabHintVideos")
           : tab === "quotes"
             ? t("tabHintQuotes")
-            : tab === "subscribers"
-              ? t("tabHintSubscribers")
-              : tab === "chat"
-                ? t("tabHintChat")
-                : t("tabHintMessages");
+            : t("tabHintSubscribers");
 
   const tabAudience: "public" | "club" =
     tab === "events" || tab === "posts" ? "public" : "club";
@@ -521,24 +451,6 @@ export function AdminPortal() {
     setTab(next);
     setEditingId(null);
     setStatus(null);
-    if (next !== "messages") setMessageTarget(null);
-  }
-
-  function writeMessageTo(member: Subscriber) {
-    setMessageTarget({
-      toUserId: member.uid,
-      toEmail: member.email,
-    });
-    setEditingId(null);
-    setStatus(null);
-    setTab("messages");
-  }
-
-  function openChatWith(member: Subscriber) {
-    setEditingId(null);
-    setStatus(null);
-    setChatFocusUid(member.uid);
-    setTab("chat");
   }
 
   return (
@@ -612,25 +524,16 @@ export function AdminPortal() {
               <SubscribersPanel
                 paid={paidSubscribers}
                 other={otherSubscribers}
-                onMessage={writeMessageTo}
-                onChat={openChatWith}
                 labels={{
                   paid: t("subscribersPaid"),
                   other: t("subscribersOther"),
                   empty: t("subscribersEmpty"),
-                  write: t("writeMessage"),
-                  chat: t("openChat"),
                   planMonthly: t("planMonthly"),
                   planYearly: t("planYearly"),
                   statusNone: t("statusNone"),
                   statusPastDue: t("statusPastDue"),
                   statusCanceled: t("statusCanceled"),
                 }}
-              />
-            ) : tab === "chat" ? (
-              <AdminChatPanel
-                focusMemberUid={chatFocusUid}
-                subscribers={subscribers}
               />
             ) : (
               <>
@@ -643,10 +546,7 @@ export function AdminPortal() {
                   <button
                     type="button"
                     className="text-sm text-ink-soft underline-offset-2 hover:underline"
-                    onClick={() => {
-                      setEditingId(null);
-                      setMessageTarget(null);
-                    }}
+                    onClick={() => setEditingId(null)}
                   >
                     {t("newItem")}
                   </button>
@@ -705,31 +605,6 @@ export function AdminPortal() {
                   onCancel={() => setEditingId(null)}
                   onSubmit={(data) =>
                     void upsert("quotes", editingQuote?.id ?? null, data)
-                  }
-                />
-              )}
-              {tab === "messages" && (
-                <MessageForm
-                  key={
-                    editingMessage?.id ??
-                    messageTarget?.toUserId ??
-                    "new-message"
-                  }
-                  initial={editingMessage}
-                  prefill={messageTarget}
-                  recipients={messageRecipients}
-                  disabled={overBudget}
-                  saveLabel={t("save")}
-                  onCancel={() => {
-                    setEditingId(null);
-                    setMessageTarget(null);
-                  }}
-                  onSubmit={(data) =>
-                    void upsert(
-                      "personalMessages",
-                      editingMessage?.id ?? null,
-                      data,
-                    ).then(() => setMessageTarget(null))
                   }
                 />
               )}
@@ -809,25 +684,6 @@ export function AdminPortal() {
                   }))}
                   onEdit={setEditingId}
                   onDelete={(id) => void remove("quotes", id)}
-                  labels={{
-                    edit: t("edit"),
-                    delete: t("delete"),
-                    public: t("badgePublic"),
-                    club: t("badgeClub"),
-                  }}
-                />
-              )}
-              {tab === "messages" && (
-                <ItemList
-                  empty={t("empty")}
-                  items={messages.map((m) => ({
-                    id: m.id,
-                    title: nl(m.subject),
-                    meta: m.toEmail ?? m.createdAt,
-                    audience: "club" as const,
-                  }))}
-                  onEdit={setEditingId}
-                  onDelete={(id) => void remove("personalMessages", id)}
                   labels={{
                     edit: t("edit"),
                     delete: t("delete"),
@@ -1441,20 +1297,14 @@ function QuoteForm({
 function SubscribersPanel({
   paid,
   other,
-  onMessage,
-  onChat,
   labels,
 }: {
   paid: Subscriber[];
   other: Subscriber[];
-  onMessage: (member: Subscriber) => void;
-  onChat: (member: Subscriber) => void;
   labels: {
     paid: string;
     other: string;
     empty: string;
-    write: string;
-    chat: string;
     planMonthly: string;
     planYearly: string;
     statusNone: string;
@@ -1492,22 +1342,6 @@ function SubscribersPanel({
                     <p className="mt-1 pl-14 text-xs text-ink-soft">{s.phone}</p>
                   )}
                 </div>
-                <div className="flex shrink-0 flex-wrap gap-2">
-                  <button
-                    type="button"
-                    className={btnGhost}
-                    onClick={() => onChat(s)}
-                  >
-                    {labels.chat}
-                  </button>
-                  <button
-                    type="button"
-                    className={btnGhost}
-                    onClick={() => onMessage(s)}
-                  >
-                    {labels.write}
-                  </button>
-                </div>
               </li>
             ))}
           </ul>
@@ -1521,158 +1355,5 @@ function SubscribersPanel({
       <Group title={labels.paid} items={paid} />
       <Group title={labels.other} items={other} />
     </div>
-  );
-}
-
-function MessageForm({
-  initial,
-  prefill,
-  recipients,
-  disabled,
-  saveLabel,
-  onCancel,
-  onSubmit,
-}: {
-  initial?: PersonalMessage;
-  prefill?: { toUserId: string; toEmail: string } | null;
-  recipients: Subscriber[];
-  disabled: boolean;
-  saveLabel: string;
-  onCancel: () => void;
-  onSubmit: (data: Record<string, unknown>) => void;
-}) {
-  const t = useTranslations("admin");
-  const defaultEmail = initial?.toEmail || prefill?.toEmail || "";
-  const defaultUid = initial?.toUserId || prefill?.toUserId || "";
-  const [toUserId, setToUserId] = useState(defaultUid);
-  const [toEmail, setToEmail] = useState(defaultEmail);
-
-  const selected = recipients.find(
-    (r) =>
-      r.uid === toUserId ||
-      (toEmail && r.email.toLowerCase() === toEmail.toLowerCase()),
-  );
-
-  function selectRecipient(value: string) {
-    if (!value) {
-      setToUserId("");
-      setToEmail("");
-      return;
-    }
-    const [uid, ...rest] = value.split("|");
-    setToUserId(uid);
-    setToEmail(rest.join("|"));
-  }
-
-  function handle(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const email = String(fd.get("toEmail") || toEmail)
-      .trim()
-      .toLowerCase();
-    const uid = String(fd.get("toUserId") || toUserId).trim();
-    const matched = recipients.find(
-      (r) => r.uid === uid || r.email.toLowerCase() === email,
-    );
-    onSubmit({
-      toEmail: email,
-      toUserId: matched?.uid || uid,
-      subject: { nl: String(fd.get("subject")) },
-      body: { nl: String(fd.get("body")) },
-      read: false,
-      createdAt: initial?.createdAt || new Date().toISOString().slice(0, 10),
-    });
-  }
-
-  const selectValue =
-    toUserId && toEmail ? `${toUserId}|${toEmail}` : "";
-
-  const optionLabels = {
-    paid: t("subscribersPaidShort"),
-    paidMonthly: t("badgePaidMonthly"),
-    paidYearly: t("badgePaidYearly"),
-    other: t("badgeOther"),
-  };
-
-  return (
-    <form onSubmit={handle} className="grid max-w-xl gap-4">
-      {recipients.length > 0 && (
-        <Field label={t("fieldMember")}>
-          <select
-            className={fieldClass}
-            value={selectValue}
-            onChange={(e) => selectRecipient(e.target.value)}
-            required={!initial}
-          >
-            <option value="">{t("pickMember")}</option>
-            {recipients.map((r) => (
-              <option key={r.id} value={`${r.uid}|${r.email}`}>
-                {memberOptionLabel(r, optionLabels)}
-              </option>
-            ))}
-          </select>
-        </Field>
-      )}
-
-      {selected && (
-        <div className="border border-line bg-bg-deep/40 px-4 py-3">
-          <p className="mb-2 text-[11px] font-semibold tracking-wide text-ink-soft uppercase">
-            {t("selectedMember")}
-          </p>
-          <MemberIdentity profile={selected} />
-          {selected.phone && (
-            <p className="mt-2 text-xs text-ink-soft">{selected.phone}</p>
-          )}
-        </div>
-      )}
-
-      {!selected && (
-        <Field label={t("fieldEmail")}>
-          <input
-            name="toEmail"
-            type="email"
-            required
-            value={toEmail}
-            onChange={(e) => {
-              setToEmail(e.target.value);
-              setToUserId("");
-            }}
-            className={fieldClass}
-            placeholder={t("fieldEmailHint")}
-          />
-        </Field>
-      )}
-      {selected && (
-        <input type="hidden" name="toEmail" value={selected.email} />
-      )}
-      <input type="hidden" name="toUserId" value={toUserId || selected?.uid || ""} />
-      <Field label={t("fieldSubject")}>
-        <input
-          name="subject"
-          required
-          defaultValue={nl(initial?.subject)}
-          className={fieldClass}
-        />
-      </Field>
-      <Field label={t("fieldBody")}>
-        <textarea
-          name="body"
-          required
-          rows={5}
-          defaultValue={nl(initial?.body)}
-          className={fieldClass}
-        />
-      </Field>
-      <div className="flex flex-wrap gap-2 pt-1">
-        <button type="submit" className={btnClass} disabled={disabled}>
-          {saveLabel}
-        </button>
-        {(initial || prefill) && (
-          <button type="button" className={btnGhost} onClick={onCancel}>
-            {t("cancel")}
-          </button>
-        )}
-      </div>
-    </form>
   );
 }

@@ -8,7 +8,6 @@ import { DonateThanksBanner } from "@/components/donate-thanks-banner";
 import {
   fetchEvents,
   fetchMemberPosts,
-  fetchPersonalMessages,
   fetchQuotes,
   fetchVideosByKind,
 } from "@/lib/content-firestore";
@@ -26,13 +25,11 @@ export default async function MembersHomePage({
   const tr = await getTranslations("members");
   const trSeminars = await getTranslations("seminars");
   const today = new Date().toISOString().slice(0, 10);
-  const [seminars, vlogs, quotes, teachings, messages, events] =
-    await Promise.all([
+  const [seminars, vlogs, quotes, teachings, events] = await Promise.all([
     fetchVideosByKind("seminar"),
     fetchVideosByKind("vlog"),
     fetchQuotes(),
     fetchMemberPosts(),
-    fetchPersonalMessages(),
     fetchEvents(),
   ]);
   const latestSeminar = seminars[0];
@@ -64,22 +61,6 @@ export default async function MembersHomePage({
       count: quotes.length,
       tone: "accent" as const,
       section: "quotes" as const,
-    },
-    {
-      href: "/members/messages",
-      label: tr("messages"),
-      desc: tr("descMessages"),
-      count: messages.length,
-      tone: "gold" as const,
-      section: "messages" as const,
-    },
-    {
-      href: "/members/chat",
-      label: tr("chat"),
-      desc: tr("descChat"),
-      count: null as number | null,
-      tone: "accent" as const,
-      section: "chat" as const,
     },
     {
       href: "/members/teachings",
