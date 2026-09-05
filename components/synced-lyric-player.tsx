@@ -260,6 +260,43 @@ async function playSrc(
     }
   }
 
+  // iOS Safari: play() must run in the same user-gesture turn — never wait on
+  // canplay first when the visitor tapped play.
+  if (opts?.fromUser) {
+    let ok =
+      (await playWithUnlock(audio)) || (await playWithUnlock(audio, true));
+    if (!ok) {
+      await waitForCanPlay(audio);
+      if (generation !== playGeneration) return false;
+      ok =
+        (await playWithUnlock(audio)) || (await playWithUnlock(audio, true));
+    }
+    if (generation !== playGeneration) return false;
+    if (ok) {
+      clearInitialAutoplayTimers();
+      activePlayerId = playerId;
+      routePersistPlaying = true;
+      scrollHandoffEnabled = true;
+      holdHandoffUntilScroll = true;
+    }
+    return ok;
+  }
+
+  if (
+    opts?.autoplay &&
+    audio.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA
+  ) {
+    const quick = await playWithUnlock(audio, true);
+    if (generation !== playGeneration) return false;
+    if (quick) {
+      clearInitialAutoplayTimers();
+      activePlayerId = playerId;
+      routePersistPlaying = true;
+      scrollHandoffEnabled = true;
+      return true;
+    }
+  }
+
   await waitForCanPlay(audio);
   if (generation !== playGeneration) return false;
 
@@ -271,9 +308,6 @@ async function playSrc(
     activePlayerId = playerId;
     routePersistPlaying = true;
     scrollHandoffEnabled = true;
-    if (opts?.fromUser) {
-      holdHandoffUntilScroll = true;
-    }
   }
   return ok;
 }
@@ -347,10 +381,10 @@ async function runHandoff() {
   }
 
   const ok = await playSrc(focus.src, focus.id, {
-    autoplay: !mediaUnlocked && !playing,
+    autoplay: !anyPlaying(),
   });
   if (runId !== handoffRunId || holdHandoffUntilScroll) return;
-  if (!ok && !mediaUnlocked) {
+  if (!ok) {
     ensureUnlockListener();
   }
 }
@@ -366,22 +400,43 @@ function ensureScrollListening() {
   };
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
+  ensureGestureListening();
   scheduleInitialAutoplayBurst();
 }
 
 function ensureUnlockListener() {
   if (unlockListening || typeof window === "undefined") return;
   unlockListening = true;
-  const unlock = (e: Event) => {
+
+  const onGesture = () => {
     mediaUnlocked = true;
-    const target = e.target;
-    if (target instanceof Element && target.closest("[data-lyric-player]")) {
-      return;
+    if (shouldAttemptResume() && !anyPlaying()) {
+      void tryResumeAfterReturn();
+    } else if (!anyPlaying()) {
+      scheduleHandoff();
     }
-    if (!anyPlaying()) scheduleHandoff();
+    if (anyPlaying()) {
+      document.removeEventListener("touchstart", onGesture, true);
+      document.removeEventListener("pointerdown", onGesture, true);
+      unlockListening = false;
+    }
   };
-  document.addEventListener("pointerdown", unlock, { once: true, passive: true });
-  document.addEventListener("keydown", unlock, { once: true });
+
+  document.addEventListener("touchstart", onGesture, {
+    capture: true,
+    passive: true,
+  });
+  document.addEventListener("pointerdown", onGesture, {
+    capture: true,
+    passive: true,
+  });
+  document.addEventListener("keydown", onGesture, { once: true });
+}
+
+// Always listen for the first mobile touch so scroll-handoff can start.
+function ensureGestureListening() {
+  if (typeof window === "undefined") return;
+  ensureUnlockListener();
 }
 
 function captureResumeCandidate() {
@@ -470,7 +525,13 @@ function applyResumeSnapshot(audio: HTMLAudioElement) {
 }
 
 function shouldAttemptResume(): boolean {
-  return resumeAfterBackground || routePersistPlaying || Boolean(readResumeSnapshot());
+  if (resumeAfterBackground) return true;
+  const snap = readResumeSnapshot();
+  if (snap) return true;
+  const audio = sharedAudio;
+  return Boolean(
+    routePersistPlaying && audio?.src && !audio.ended && audio.paused,
+  );
 }
 
 function notifyPlayState(playing: boolean) {
@@ -507,8 +568,12 @@ async function tryResumeAfterReturn(): Promise<boolean> {
 function ensureReturnResumeListening() {
   if (returnResumeListening || typeof window === "undefined") return;
   returnResumeListening = true;
+  ensureGestureListening();
 
-  if (applyResumeSnapshot(getSharedAudio())) {
+  const snap = readResumeSnapshot();
+  if (snap) {
+    routePersistPlaying = true;
+    resumeAfterBackground = true;
     void tryResumeAfterReturn();
   }
 
@@ -516,7 +581,7 @@ function ensureReturnResumeListening() {
     if (document.visibilityState === "hidden") {
       snapshotForResume();
     } else {
-      resumeMusicAfterNavigation();
+      resumeMusicIfNeeded();
     }
   });
 
@@ -525,29 +590,15 @@ function ensureReturnResumeListening() {
   });
 
   window.addEventListener("focus", () => {
-    resumeMusicAfterNavigation();
+    resumeMusicIfNeeded();
   });
 
   window.addEventListener("pageshow", () => {
-    resumeMusicAfterNavigation();
+    resumeMusicIfNeeded();
   });
 
   window.addEventListener("pagehide", () => {
     snapshotForResume();
-  });
-
-  // iOS Safari often blocks programmatic play on return — first tap resumes.
-  const resumeOnGesture = () => {
-    if (!shouldAttemptResume() || anyPlaying()) return;
-    void tryResumeAfterReturn();
-  };
-  document.addEventListener("touchstart", resumeOnGesture, {
-    capture: true,
-    passive: true,
-  });
-  document.addEventListener("pointerdown", resumeOnGesture, {
-    capture: true,
-    passive: true,
   });
 }
 
@@ -559,6 +610,12 @@ export function resumeMusicAfterNavigation() {
   for (const ms of [50, 150, 350, 700, 1200, 2000, 3500, 5000]) {
     window.setTimeout(() => void tryResumeAfterReturn(), ms);
   }
+}
+
+/** Only resume when we actually left with music playing. */
+export function resumeMusicIfNeeded() {
+  if (!shouldAttemptResume()) return;
+  resumeMusicAfterNavigation();
 }
 
 /** Call before navigating away (e.g. YouTube) so playback resumes on return. */

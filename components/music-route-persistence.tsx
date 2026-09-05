@@ -5,6 +5,7 @@ import { usePathname } from "@/i18n/navigation";
 import {
   markAudioForResumeOnReturn,
   resumeMusicAfterNavigation,
+  resumeMusicIfNeeded,
 } from "@/components/synced-lyric-player";
 
 function isInternalLink(anchor: HTMLAnchorElement): boolean {
@@ -41,7 +42,7 @@ export function MusicRoutePersistence() {
   const pathname = usePathname();
 
   useEffect(() => {
-    resumeMusicAfterNavigation();
+    resumeMusicIfNeeded();
   }, []);
 
   useEffect(() => {
@@ -79,7 +80,7 @@ export function MusicRoutePersistence() {
   }, []);
 
   useEffect(() => {
-    resumeMusicAfterNavigation();
+    resumeMusicIfNeeded();
   }, [pathname]);
 
   return null;
