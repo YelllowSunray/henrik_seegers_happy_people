@@ -15,6 +15,8 @@ export function MeetingYoutubeLink({
       target="_blank"
       rel="noopener noreferrer"
       className="inline-flex items-baseline gap-2 text-accent underline decoration-accent/70 underline-offset-4 transition hover:decoration-accent"
+      onPointerDown={() => markAudioForResumeOnReturn()}
+      onTouchStart={() => markAudioForResumeOnReturn()}
       onClick={() => markAudioForResumeOnReturn()}
     >
       <span>{song}</span>

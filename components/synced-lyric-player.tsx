@@ -39,6 +39,10 @@ let handoffRunId = 0;
 let playGeneration = 0;
 /** True after user leaves while music was playing — keep going until they pause. */
 let routePersistPlaying = false;
+/** Set when page/app backgrounds while music should resume on return. */
+let resumeAfterBackground = false;
+const RESUME_STORAGE_KEY = "hssc-audio-resume";
+const RESUME_MAX_AGE_MS = 30 * 60 * 1000;
 /** One burst of handoff retries after first widget mounts (page-load autoplay). */
 let initialAutoplayBurst = false;
 let initialAutoplayTimers: number[] = [];
@@ -58,6 +62,8 @@ function getSharedAudio(): HTMLAudioElement {
     });
     sharedAudio.addEventListener("play", () => {
       mediaUnlocked = true;
+      routePersistPlaying = true;
+      writeResumeSnapshot();
       for (const fn of playListeners) fn(true);
     });
     sharedAudio.addEventListener("pause", () => {
@@ -65,6 +71,8 @@ function getSharedAudio(): HTMLAudioElement {
     });
     sharedAudio.addEventListener("ended", () => {
       routePersistPlaying = false;
+      resumeAfterBackground = false;
+      clearResumeSnapshot();
       activePlayerId = null;
       for (const fn of playListeners) fn(false);
       for (const fn of timeListeners) fn(0);
@@ -377,63 +385,185 @@ function ensureUnlockListener() {
 }
 
 function captureResumeCandidate() {
-  if (!scrollHandoffEnabled) return;
-  if (anyPlaying()) {
-    routePersistPlaying = true;
+  snapshotForResume();
+}
+
+type ResumeSnapshot = {
+  src: string;
+  time: number;
+  at: number;
+};
+
+function writeResumeSnapshot() {
+  if (typeof window === "undefined") return;
+  const audio = getSharedAudio();
+  if (!audio.src || audio.ended) return;
+  const snap: ResumeSnapshot = {
+    src: audio.src,
+    time: audio.currentTime,
+    at: Date.now(),
+  };
+  try {
+    sessionStorage.setItem(RESUME_STORAGE_KEY, JSON.stringify(snap));
+  } catch {
+    /* ignore quota / private mode */
   }
 }
 
-async function tryResumeAfterReturn() {
-  if (!scrollHandoffEnabled || !routePersistPlaying) return;
-  const audio = getSharedAudio();
-  if (audio.paused && !audio.ended && audio.src) {
-    await playWithUnlock(audio);
+function readResumeSnapshot(): ResumeSnapshot | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = sessionStorage.getItem(RESUME_STORAGE_KEY);
+    if (!raw) return null;
+    const snap = JSON.parse(raw) as ResumeSnapshot;
+    if (!snap.src || Date.now() - snap.at > RESUME_MAX_AGE_MS) return null;
+    return snap;
+  } catch {
+    return null;
   }
+}
+
+function clearResumeSnapshot() {
+  if (typeof window === "undefined") return;
+  try {
+    sessionStorage.removeItem(RESUME_STORAGE_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
+/** Remember playback before iOS pauses audio or Safari evicts the page. */
+function snapshotForResume() {
+  const audio = getSharedAudio();
+  if (audio.ended || !audio.src) return;
+  if (!anyPlaying() && !routePersistPlaying) return;
+
+  routePersistPlaying = true;
+  resumeAfterBackground = true;
+  writeResumeSnapshot();
+}
+
+function applyResumeSnapshot(audio: HTMLAudioElement) {
+  const snap = readResumeSnapshot();
+  if (!snap) return false;
+  if (!audio.src || audio.ended) {
+    audio.src = snap.src;
+    try {
+      audio.load();
+    } catch {
+      /* ignore */
+    }
+  }
+  if (sameSrc(audio.src || "", snap.src)) {
+    try {
+      if (Math.abs(audio.currentTime - snap.time) > 0.25) {
+        audio.currentTime = snap.time;
+      }
+    } catch {
+      /* ignore seek errors */
+    }
+    routePersistPlaying = true;
+    resumeAfterBackground = true;
+    return true;
+  }
+  return false;
+}
+
+function shouldAttemptResume(): boolean {
+  return resumeAfterBackground || routePersistPlaying || Boolean(readResumeSnapshot());
+}
+
+function notifyPlayState(playing: boolean) {
+  for (const fn of playListeners) fn(playing);
+}
+
+async function tryResumeAfterReturn(): Promise<boolean> {
+  if (!shouldAttemptResume()) return false;
+
+  const audio = getSharedAudio();
+  applyResumeSnapshot(audio);
+
+  if (!audio.src || audio.ended) return false;
+  if (!audio.paused) {
+    resumeAfterBackground = false;
+    clearResumeSnapshot();
+    notifyPlayState(true);
+    return true;
+  }
+
+  const ok =
+    (await playWithUnlock(audio)) || (await playWithUnlock(audio, true));
+  if (ok) {
+    resumeAfterBackground = false;
+    routePersistPlaying = true;
+    clearResumeSnapshot();
+    notifyPlayState(true);
+    for (const fn of timeListeners) fn(audio.currentTime);
+    return true;
+  }
+  return false;
 }
 
 function ensureReturnResumeListening() {
   if (returnResumeListening || typeof window === "undefined") return;
   returnResumeListening = true;
 
+  if (applyResumeSnapshot(getSharedAudio())) {
+    void tryResumeAfterReturn();
+  }
+
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") {
-      captureResumeCandidate();
+      snapshotForResume();
     } else {
-      void tryResumeAfterReturn();
+      resumeMusicAfterNavigation();
     }
   });
 
   window.addEventListener("blur", () => {
-    captureResumeCandidate();
+    snapshotForResume();
   });
 
   window.addEventListener("focus", () => {
-    void tryResumeAfterReturn();
+    resumeMusicAfterNavigation();
   });
 
-  window.addEventListener("pageshow", (event) => {
-    if (event.persisted) void tryResumeAfterReturn();
+  window.addEventListener("pageshow", () => {
+    resumeMusicAfterNavigation();
   });
 
   window.addEventListener("pagehide", () => {
-    captureResumeCandidate();
+    snapshotForResume();
+  });
+
+  // iOS Safari often blocks programmatic play on return — first tap resumes.
+  const resumeOnGesture = () => {
+    if (!shouldAttemptResume() || anyPlaying()) return;
+    void tryResumeAfterReturn();
+  };
+  document.addEventListener("touchstart", resumeOnGesture, {
+    capture: true,
+    passive: true,
+  });
+  document.addEventListener("pointerdown", resumeOnGesture, {
+    capture: true,
+    passive: true,
   });
 }
 
-/** Resume with short retries — mobile often pauses audio during in-app navigation. */
+/** Resume with short retries — mobile often pauses audio during backgrounding. */
 export function resumeMusicAfterNavigation() {
   if (typeof window === "undefined") return;
   ensureReturnResumeListening();
   void tryResumeAfterReturn();
-  for (const ms of [80, 250, 600, 1200, 2200]) {
+  for (const ms of [50, 150, 350, 700, 1200, 2000, 3500, 5000]) {
     window.setTimeout(() => void tryResumeAfterReturn(), ms);
   }
 }
 
 /** Call before navigating away (e.g. YouTube) so playback resumes on return. */
 export function markAudioForResumeOnReturn() {
-  captureResumeCandidate();
-  if (anyPlaying()) routePersistPlaying = true;
+  snapshotForResume();
 }
 
 /** Chat overlay paused the shared track — restore when the chat closes. */
@@ -626,6 +756,8 @@ export function SyncedLyricPlayer({
       holdHandoffUntilScroll = false;
       scrollHandoffEnabled = false;
       routePersistPlaying = false;
+      resumeAfterBackground = false;
+      clearResumeSnapshot();
       audio.pause();
       setPlaying(false);
       return;

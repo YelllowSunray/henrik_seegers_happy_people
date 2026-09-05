@@ -19,9 +19,30 @@ function isInternalLink(anchor: HTMLAnchorElement): boolean {
   }
 }
 
+function isLeavingSiteLink(anchor: HTMLAnchorElement): boolean {
+  if (anchor.target === "_blank") return true;
+  const href = anchor.getAttribute("href");
+  if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:")) {
+    return false;
+  }
+  try {
+    return new URL(href, window.location.href).origin !== window.location.origin;
+  } catch {
+    return false;
+  }
+}
+
+function shouldMarkResumeForLink(anchor: HTMLAnchorElement): boolean {
+  return isInternalLink(anchor) || isLeavingSiteLink(anchor);
+}
+
 /** Keep shared music playing across in-app navigation (mobile + desktop). */
 export function MusicRoutePersistence() {
   const pathname = usePathname();
+
+  useEffect(() => {
+    resumeMusicAfterNavigation();
+  }, []);
 
   useEffect(() => {
     const onNavigateIntent = (event: Event) => {
@@ -29,11 +50,15 @@ export function MusicRoutePersistence() {
       if (!(target instanceof Element)) return;
       const anchor = target.closest("a[href]");
       if (!(anchor instanceof HTMLAnchorElement)) return;
-      if (!isInternalLink(anchor)) return;
+      if (!shouldMarkResumeForLink(anchor)) return;
       markAudioForResumeOnReturn();
     };
 
     document.addEventListener("click", onNavigateIntent, true);
+    document.addEventListener("pointerdown", onNavigateIntent, {
+      capture: true,
+      passive: true,
+    });
     document.addEventListener("touchstart", onNavigateIntent, {
       capture: true,
       passive: true,
@@ -47,6 +72,7 @@ export function MusicRoutePersistence() {
 
     return () => {
       document.removeEventListener("click", onNavigateIntent, true);
+      document.removeEventListener("pointerdown", onNavigateIntent, true);
       document.removeEventListener("touchstart", onNavigateIntent, true);
       window.removeEventListener("popstate", onPopState);
     };
