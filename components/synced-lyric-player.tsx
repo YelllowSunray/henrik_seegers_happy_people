@@ -414,6 +414,20 @@ function ensureReturnResumeListening() {
   window.addEventListener("pageshow", (event) => {
     if (event.persisted) void tryResumeAfterReturn();
   });
+
+  window.addEventListener("pagehide", () => {
+    captureResumeCandidate();
+  });
+}
+
+/** Resume with short retries — mobile often pauses audio during in-app navigation. */
+export function resumeMusicAfterNavigation() {
+  if (typeof window === "undefined") return;
+  ensureReturnResumeListening();
+  void tryResumeAfterReturn();
+  for (const ms of [80, 250, 600, 1200, 2200]) {
+    window.setTimeout(() => void tryResumeAfterReturn(), ms);
+  }
 }
 
 /** Call before navigating away (e.g. YouTube) so playback resumes on return. */

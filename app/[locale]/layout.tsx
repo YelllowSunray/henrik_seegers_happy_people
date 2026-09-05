@@ -6,6 +6,7 @@ import { AuthProvider } from "@/components/auth-provider";
 import { BillingBanner } from "@/components/billing-banner";
 import { LocaleHtmlAttrs } from "@/components/locale-html-attrs";
 import { NavigationMemory } from "@/components/navigation-memory";
+import { MusicRoutePersistence } from "@/components/music-route-persistence";
 import { SmartBackButton } from "@/components/smart-back-button";
 import { SiteFooter } from "@/components/site-footer";
 import { ClubChatFab } from "@/components/club-chat-fab";
@@ -36,6 +37,7 @@ export default async function LocaleLayout({
       <LocaleHtmlAttrs locale={locale} />
       <AuthProvider>
         <NavigationMemory>
+          <MusicRoutePersistence />
           <div className="flex min-h-full flex-col" dir={dir} lang={locale}>
             <BillingBanner />
             <div className="flex-1">{children}</div>
