@@ -5,17 +5,21 @@ import { useLocale, useTranslations } from "next-intl";
 import { useAuth } from "@/components/auth-provider";
 import { useBillingOverBudget } from "@/components/billing-banner";
 import { billingContactMessage } from "@/lib/billing";
-import { Link } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { hasStripeSubscription } from "@/lib/membership";
 import type { MembershipPlan } from "@/lib/stripe";
 
 export function MembershipPlans({
   className = "",
+  cancelPath,
 }: {
   className?: string;
+  /** Stripe cancel return — defaults to current page or subscription. */
+  cancelPath?: string;
 }) {
   const t = useTranslations("membership");
   const locale = useLocale();
+  const pathname = usePathname();
   const { user, profile } = useAuth();
   const overBudget = useBillingOverBudget();
   const [busy, setBusy] = useState<MembershipPlan | null>(null);
@@ -42,6 +46,7 @@ export function MembershipPlans({
     }
     setBusy(plan);
     setError(null);
+    const returnPath = cancelPath ?? pathname ?? "/members/subscription";
     try {
       const token = await user.getIdToken();
       const res = await fetch("/api/stripe/checkout", {
@@ -50,7 +55,7 @@ export function MembershipPlans({
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ plan, locale }),
+        body: JSON.stringify({ plan, locale, cancelPath: returnPath }),
       });
       const data = (await res.json()) as { url?: string; error?: string };
       if (!res.ok || !data.url) {

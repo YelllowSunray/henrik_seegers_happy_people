@@ -88,7 +88,6 @@ export const PUBLIC_ROUTES = [
   "/boodschap",
   "/seminars",
   "/blog",
-  "/contact",
   "/happy-people",
   "/join",
 ] as const;

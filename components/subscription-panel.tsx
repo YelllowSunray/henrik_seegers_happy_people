@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
-import { Link } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { MembershipPlans } from "@/components/membership-plans";
 import {
   hasMembershipAccess,
@@ -18,18 +18,29 @@ export function SubscriptionPanel() {
   const tr = useTranslations("subscription");
   const tMem = useTranslations("membership");
   const locale = useLocale();
+  const pathname = usePathname();
+  const router = useRouter();
   const search = useSearchParams();
+  const plansRef = useRef<HTMLDivElement | null>(null);
   const { user, profile, isAdmin, refreshProfile, loading } = useAuth();
   const [busy, setBusy] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [checkoutCancelled, setCheckoutCancelled] = useState(false);
 
   const status = profile?.subscriptionStatus ?? "none";
   const plan = membershipPlanLabel(profile);
   const stripeSub = hasStripeSubscription(profile);
   const paidActive = stripeSub && isActiveSubscription(status);
   const clubAccess = hasMembershipAccess(profile);
+
+  useEffect(() => {
+    if (search.get("checkout") !== "cancel") return;
+    setCheckoutCancelled(true);
+    router.replace(pathname, { scroll: false });
+    plansRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [search, pathname, router]);
 
   useEffect(() => {
     if (!user || search.get("checkout") !== "success") return;
@@ -140,6 +151,39 @@ export function SubscriptionPanel() {
         ? tMem("monthlyLabel")
         : null;
 
+  if (!stripeSub) {
+    return (
+      <div className="max-w-3xl">
+        <p className="text-xs font-semibold tracking-[0.18em] text-accent uppercase">
+          {tr("eyebrow")}
+        </p>
+        <h1 className="font-display mt-2 text-4xl md:text-5xl">
+          {tr("choosePlan")}
+        </h1>
+        <p className="mt-3 max-w-xl text-ink-soft">{tr("choosePlanHint")}</p>
+
+        {checkoutCancelled && (
+          <p className="mt-6 border border-line bg-bg-deep/50 px-4 py-3 text-sm text-ink-soft">
+            {tr("checkoutCancel")}
+          </p>
+        )}
+
+        {notice && (
+          <p className="mt-6 border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-ink">
+            {syncing ? tr("syncing") : notice}
+          </p>
+        )}
+
+        <div ref={plansRef}>
+          <MembershipPlans
+            className="mt-8"
+            cancelPath="/members/subscription"
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-3xl">
       <p className="text-xs font-semibold tracking-[0.18em] text-accent uppercase">
@@ -202,19 +246,7 @@ export function SubscriptionPanel() {
         {error && <p className="mt-4 text-sm text-red-700">{error}</p>}
       </div>
 
-      {!stripeSub && (
-        <div className="mt-12">
-          <h2 className="font-display text-3xl">{tr("choosePlan")}</h2>
-          {!clubAccess && (
-            <p className="mt-2 text-ink-soft">{tr("choosePlanHint")}</p>
-          )}
-          <MembershipPlans className="mt-6" />
-        </div>
-      )}
-
-      {stripeSub && (
-        <p className="mt-8 text-sm text-ink-soft">{tr("portalHint")}</p>
-      )}
+      <p className="mt-8 text-sm text-ink-soft">{tr("portalHint")}</p>
     </div>
   );
 }

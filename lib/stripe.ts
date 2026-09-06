@@ -129,3 +129,15 @@ export function parseDonationAmountCents(value: unknown): number {
 export function parseMembershipPlan(value: unknown): MembershipPlan {
   return value === "yearly" ? "yearly" : "monthly";
 }
+
+/** Where Stripe sends the member if they cancel checkout (locale-free path). */
+export function sanitizeCheckoutCancelPath(path: unknown): string {
+  const fallback = "/members/subscription";
+  if (typeof path !== "string" || !path.startsWith("/")) return fallback;
+  const base = path.split("?")[0]?.split("#")[0] ?? fallback;
+  const allowed = ["/members", "/happy-people"];
+  if (!allowed.some((prefix) => base === prefix || base.startsWith(`${prefix}/`))) {
+    return fallback;
+  }
+  return base;
+}

@@ -49,6 +49,14 @@ let initialAutoplayTimers: number[] = [];
 const preloadedSrc = new Set<string>();
 let timeListeners = new Set<(t: number) => void>();
 let playListeners = new Set<(playing: boolean) => void>();
+let lastResumeSnapshotAt = 0;
+let resumeGestureListening = false;
+let resumePromptListeners = new Set<(show: boolean) => void>();
+
+function updateResumePrompt() {
+  const show = shouldAttemptResume() && !anyPlaying();
+  for (const fn of resumePromptListeners) fn(show);
+}
 
 function getSharedAudio(): HTMLAudioElement {
   if (!sharedAudio) {
@@ -59,15 +67,28 @@ function getSharedAudio(): HTMLAudioElement {
     sharedAudio.addEventListener("timeupdate", () => {
       const t = sharedAudio?.currentTime ?? 0;
       for (const fn of timeListeners) fn(t);
+      if (sharedAudio && !sharedAudio.paused && routePersistPlaying) {
+        const now = Date.now();
+        if (now - lastResumeSnapshotAt > 2000) {
+          lastResumeSnapshotAt = now;
+          writeResumeSnapshot();
+        }
+      }
     });
     sharedAudio.addEventListener("play", () => {
       mediaUnlocked = true;
       routePersistPlaying = true;
       writeResumeSnapshot();
       for (const fn of playListeners) fn(true);
+      updateResumePrompt();
     });
     sharedAudio.addEventListener("pause", () => {
+      if (routePersistPlaying && sharedAudio?.src && !sharedAudio.ended) {
+        resumeAfterBackground = true;
+        writeResumeSnapshot();
+      }
       for (const fn of playListeners) fn(false);
+      updateResumePrompt();
     });
     sharedAudio.addEventListener("ended", () => {
       routePersistPlaying = false;
@@ -76,6 +97,7 @@ function getSharedAudio(): HTMLAudioElement {
       activePlayerId = null;
       for (const fn of playListeners) fn(false);
       for (const fn of timeListeners) fn(0);
+      updateResumePrompt();
     });
   }
   return sharedAudio;
@@ -96,6 +118,62 @@ function sameSrc(a: string, b: string): boolean {
 
 function anyPlaying(): boolean {
   return Boolean(sharedAudio && !sharedAudio.paused);
+}
+
+function isLyricPlayerTarget(target: EventTarget | null): boolean {
+  return target instanceof Element && Boolean(target.closest("[data-lyric-player]"));
+}
+
+function cancelPendingHandoff() {
+  if (handoffTimer) {
+    clearTimeout(handoffTimer);
+    handoffTimer = null;
+  }
+  handoffRunId += 1;
+}
+
+/** Start playback in the same pointer/click turn — required on iOS. */
+function playFromUserGesture(src: string, playerId: string): void {
+  cancelPendingHandoff();
+  const generation = ++playGeneration;
+  holdHandoffUntilScroll = true;
+  scrollHandoffEnabled = true;
+  mediaUnlocked = true;
+
+  const audio = getSharedAudio();
+  const abs = absoluteSrc(src);
+  if (!sameSrc(audio.src || "", abs)) {
+    audio.src = abs;
+    try {
+      audio.load();
+    } catch {
+      /* ignore */
+    }
+  }
+
+  void audio
+    .play()
+    .then(() => {
+      if (generation !== playGeneration) return;
+      activePlayerId = playerId;
+      routePersistPlaying = true;
+      clearInitialAutoplayTimers();
+    })
+    .catch(() => {
+      if (generation !== playGeneration) return;
+      for (const fn of playListeners) fn(false);
+      void (async () => {
+        await waitForCanPlay(audio);
+        if (generation !== playGeneration) return;
+        const ok =
+          (await playWithUnlock(audio)) || (await playWithUnlock(audio, true));
+        if (ok && generation === playGeneration) {
+          activePlayerId = playerId;
+          routePersistPlaying = true;
+          clearInitialAutoplayTimers();
+        }
+      })();
+    });
 }
 
 /** Line from viewport top where a widget counts as “at the top” (below sticky header). */
@@ -408,10 +486,11 @@ function ensureUnlockListener() {
   if (unlockListening || typeof window === "undefined") return;
   unlockListening = true;
 
-  const onGesture = () => {
+  const onGesture = (e: Event) => {
+    if (isLyricPlayerTarget(e.target)) return;
     mediaUnlocked = true;
     if (shouldAttemptResume() && !anyPlaying()) {
-      void tryResumeAfterReturn();
+      void tryResumeAfterReturn(true);
     } else if (!anyPlaying()) {
       scheduleHandoff();
     }
@@ -460,6 +539,7 @@ function writeResumeSnapshot() {
   };
   try {
     sessionStorage.setItem(RESUME_STORAGE_KEY, JSON.stringify(snap));
+    lastResumeSnapshotAt = snap.at;
   } catch {
     /* ignore quota / private mode */
   }
@@ -491,7 +571,12 @@ function clearResumeSnapshot() {
 function snapshotForResume() {
   const audio = getSharedAudio();
   if (audio.ended || !audio.src) return;
-  if (!anyPlaying() && !routePersistPlaying) return;
+  const shouldRemember =
+    anyPlaying() ||
+    routePersistPlaying ||
+    resumeAfterBackground ||
+    audio.currentTime > 0.25;
+  if (!shouldRemember) return;
 
   routePersistPlaying = true;
   resumeAfterBackground = true;
@@ -538,7 +623,7 @@ function notifyPlayState(playing: boolean) {
   for (const fn of playListeners) fn(playing);
 }
 
-async function tryResumeAfterReturn(): Promise<boolean> {
+async function tryResumeAfterReturn(fromUserGesture = false): Promise<boolean> {
   if (!shouldAttemptResume()) return false;
 
   const audio = getSharedAudio();
@@ -552,6 +637,10 @@ async function tryResumeAfterReturn(): Promise<boolean> {
     return true;
   }
 
+  if (fromUserGesture) {
+    mediaUnlocked = true;
+  }
+
   const ok =
     (await playWithUnlock(audio)) || (await playWithUnlock(audio, true));
   if (ok) {
@@ -560,15 +649,56 @@ async function tryResumeAfterReturn(): Promise<boolean> {
     clearResumeSnapshot();
     notifyPlayState(true);
     for (const fn of timeListeners) fn(audio.currentTime);
+    updateResumePrompt();
     return true;
   }
+  updateResumePrompt();
   return false;
+}
+
+/** Permanent tap-to-resume — unlock listener removes itself while playing. */
+function ensureResumeGestureListening() {
+  if (resumeGestureListening || typeof window === "undefined") return;
+  resumeGestureListening = true;
+
+  const resumeOnGesture = (e: Event) => {
+    if (!shouldAttemptResume() || anyPlaying()) return;
+    if (isLyricPlayerTarget(e.target)) return;
+    void tryResumeAfterReturn(true);
+  };
+
+  document.addEventListener("touchstart", resumeOnGesture, {
+    capture: true,
+    passive: true,
+  });
+  document.addEventListener("pointerdown", resumeOnGesture, {
+    capture: true,
+    passive: true,
+  });
+}
+
+function onPageVisibleAgain() {
+  ensureResumeGestureListening();
+  snapshotForResume();
+  if (!shouldAttemptResume()) return;
+
+  const audio = getSharedAudio();
+  applyResumeSnapshot(audio);
+  if (audio.paused && audio.src && !audio.ended) {
+    void audio.play().catch(() => undefined);
+  }
+
+  unlockListening = false;
+  ensureUnlockListener();
+  resumeMusicAfterNavigation();
+  updateResumePrompt();
 }
 
 function ensureReturnResumeListening() {
   if (returnResumeListening || typeof window === "undefined") return;
   returnResumeListening = true;
   ensureGestureListening();
+  ensureResumeGestureListening();
 
   const snap = readResumeSnapshot();
   if (snap) {
@@ -581,7 +711,7 @@ function ensureReturnResumeListening() {
     if (document.visibilityState === "hidden") {
       snapshotForResume();
     } else {
-      resumeMusicIfNeeded();
+      onPageVisibleAgain();
     }
   });
 
@@ -590,16 +720,33 @@ function ensureReturnResumeListening() {
   });
 
   window.addEventListener("focus", () => {
-    resumeMusicIfNeeded();
+    onPageVisibleAgain();
   });
 
   window.addEventListener("pageshow", () => {
-    resumeMusicIfNeeded();
+    onPageVisibleAgain();
   });
 
   window.addEventListener("pagehide", () => {
     snapshotForResume();
   });
+}
+
+/** Page visible again after YouTube app / app switch — retry resume immediately. */
+export function resumeMusicOnPageVisible() {
+  onPageVisibleAgain();
+}
+
+export function subscribeResumePrompt(listener: (show: boolean) => void) {
+  resumePromptListeners.add(listener);
+  listener(shouldAttemptResume() && !anyPlaying());
+  return () => {
+    resumePromptListeners.delete(listener);
+  };
+}
+
+export function resumeMusicFromUserGesture() {
+  void tryResumeAfterReturn(true);
 }
 
 /** Resume with short retries — mobile often pauses audio during backgrounding. */
@@ -620,7 +767,20 @@ export function resumeMusicIfNeeded() {
 
 /** Call before navigating away (e.g. YouTube) so playback resumes on return. */
 export function markAudioForResumeOnReturn() {
-  snapshotForResume();
+  const audio = getSharedAudio();
+  if (audio.src && !audio.ended) {
+    routePersistPlaying = true;
+    resumeAfterBackground = true;
+    writeResumeSnapshot();
+    updateResumePrompt();
+    return;
+  }
+  const snap = readResumeSnapshot();
+  if (snap) {
+    routePersistPlaying = true;
+    resumeAfterBackground = true;
+    updateResumePrompt();
+  }
 }
 
 /** Chat overlay paused the shared track — restore when the chat closes. */
@@ -718,6 +878,7 @@ export function SyncedLyricPlayer({
   const idRef = useRef(
     `player-${Math.random().toString(36).slice(2, 10)}`,
   );
+  const playStartedViaPointerRef = useRef(false);
   const [lines, setLines] = useState<LyricLine[]>([]);
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState(0);
@@ -801,15 +962,37 @@ export function SyncedLyricPlayer({
       ? lines.slice(0, VISIBLE_LINES)
       : lines.slice(active, active + VISIBLE_LINES);
 
-  async function toggle() {
+  function handlePlayPointerDown() {
+    const audio = getSharedAudio();
+    if (sameSrc(audio.src || "", audioSrc) && !audio.paused) return;
+
+    playStartedViaPointerRef.current = true;
+
+    if (
+      sameSrc(audio.src || "", audioSrc) &&
+      audio.paused &&
+      shouldAttemptResume()
+    ) {
+      setPlaying(true);
+      setTime(audio.currentTime);
+      void tryResumeAfterReturn(true);
+      return;
+    }
+
+    setPlaying(true);
+    setTime(sameSrc(audio.src || "", audioSrc) ? audio.currentTime : 0);
+    playFromUserGesture(audioSrc, idRef.current);
+  }
+
+  function handlePlayClick() {
     const audio = getSharedAudio();
     const isThis =
       sameSrc(audio.src || "", audioSrc) && !audio.paused;
 
     if (isThis) {
-      // Cancel any in-flight handoff/play so it can't restart after pause.
+      playStartedViaPointerRef.current = false;
       playGeneration += 1;
-      handoffRunId += 1;
+      cancelPendingHandoff();
       holdHandoffUntilScroll = false;
       scrollHandoffEnabled = false;
       routePersistPlaying = false;
@@ -820,18 +1003,15 @@ export function SyncedLyricPlayer({
       return;
     }
 
-    // Optimistic UI + claim this gesture before any raced handoff runs.
-    holdHandoffUntilScroll = true;
-    scrollHandoffEnabled = true;
-    setPlaying(true);
-    setTime(sameSrc(audio.src || "", audioSrc) ? audio.currentTime : 0);
-
-    const ok = await playSrc(audioSrc, idRef.current, { fromUser: true });
-    if (!ok) {
-      setPlaying(false);
-      holdHandoffUntilScroll = false;
-      ensureUnlockListener();
+    if (playStartedViaPointerRef.current) {
+      playStartedViaPointerRef.current = false;
+      return;
     }
+
+    // Keyboard / assistive tech — no pointerdown before click.
+    setPlaying(true);
+    setTime(0);
+    playFromUserGesture(audioSrc, idRef.current);
   }
 
   const isHero = tone === "hero";
@@ -865,7 +1045,8 @@ export function SyncedLyricPlayer({
       >
         <button
           type="button"
-          onClick={() => void toggle()}
+          onPointerDown={handlePlayPointerDown}
+          onClick={handlePlayClick}
           aria-label={
             playing
               ? `Pause "${title}"${artist ? ` by ${artist}` : ""}`

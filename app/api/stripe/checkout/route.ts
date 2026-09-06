@@ -8,6 +8,7 @@ import {
   getStripe,
   isStripeConfigured,
   parseMembershipPlan,
+  sanitizeCheckoutCancelPath,
   paymentMethodsForLocale,
   stripeCheckoutLocale,
   type MembershipPlan,
@@ -48,9 +49,15 @@ export async function POST(req: Request) {
 
   let plan: MembershipPlan = "monthly";
   let localeCode = localeFromReferer(req);
+  let cancelPath = "/members/subscription";
   try {
-    const body = (await req.json()) as { plan?: string; locale?: string };
+    const body = (await req.json()) as {
+      plan?: string;
+      locale?: string;
+      cancelPath?: string;
+    };
     plan = parseMembershipPlan(body.plan);
+    cancelPath = sanitizeCheckoutCancelPath(body.cancelPath);
     if (body.locale && /^[a-z]{2}$/.test(body.locale)) {
       localeCode = body.locale;
     }
@@ -117,7 +124,7 @@ export async function POST(req: Request) {
     payment_method_types: paymentMethodsForLocale(localeCode),
     payment_method_collection: "always",
     success_url: `${appUrl}/${localeCode}/members/subscription?checkout=success`,
-    cancel_url: `${appUrl}/${localeCode}/members/subscription?checkout=cancel`,
+    cancel_url: `${appUrl}/${localeCode}${cancelPath}?checkout=cancel`,
     subscription_data: {
       metadata: { firebaseUid: user.uid, plan },
     },

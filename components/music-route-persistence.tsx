@@ -6,6 +6,7 @@ import {
   markAudioForResumeOnReturn,
   resumeMusicAfterNavigation,
   resumeMusicIfNeeded,
+  resumeMusicOnPageVisible,
 } from "@/components/synced-lyric-player";
 
 function isInternalLink(anchor: HTMLAnchorElement): boolean {
@@ -43,6 +44,23 @@ export function MusicRoutePersistence() {
 
   useEffect(() => {
     resumeMusicIfNeeded();
+  }, []);
+
+  useEffect(() => {
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") {
+        resumeMusicOnPageVisible();
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("pageshow", onVisibility);
+    window.addEventListener("focus", onVisibility);
+
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("pageshow", onVisibility);
+      window.removeEventListener("focus", onVisibility);
+    };
   }, []);
 
   useEffect(() => {

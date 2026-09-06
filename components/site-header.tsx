@@ -115,13 +115,6 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                   {t("membership")}
                 </Link>
               )}
-              <Link
-                href="/contact"
-                className="rounded-lg px-3 py-3.5 text-lg font-medium text-white/90 transition hover:bg-white/10 hover:text-white"
-                onClick={() => setMenuOpen(false)}
-              >
-                {t("contact")}
-              </Link>
               {isMember && (
                 <Link
                   href="/members"
@@ -216,9 +209,6 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                 {t("membership")}
               </Link>
             )}
-            <Link href="/contact" className={`transition ${linkTone}`}>
-              {t("contact")}
-            </Link>
           </nav>
 
           <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">

@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
-import { Link, usePathname } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { MembershipPlans } from "@/components/membership-plans";
 import { signInHref } from "@/lib/auth-href";
 import { needsOnboarding } from "@/lib/profile";
@@ -16,11 +18,21 @@ const BILLING_PATHS = new Set([
 export function MembersGate({ children }: { children: React.ReactNode }) {
   const { user, loading, isMember, profile, isAdmin } = useAuth();
   const pathname = usePathname();
+  const router = useRouter();
+  const search = useSearchParams();
   const t = useTranslations("members");
   const tMem = useTranslations("membership");
+  const tSub = useTranslations("subscription");
   const tNav = useTranslations("nav");
+  const [checkoutCancelled, setCheckoutCancelled] = useState(false);
   const onOnboarding = pathname === "/members/onboarding";
   const onBillingPath = BILLING_PATHS.has(pathname);
+
+  useEffect(() => {
+    if (search.get("checkout") !== "cancel") return;
+    setCheckoutCancelled(true);
+    router.replace(pathname, { scroll: false });
+  }, [search, pathname, router]);
 
   if (loading) {
     return <p className="py-20 text-center text-ink-soft">…</p>;
@@ -62,7 +74,12 @@ export function MembersGate({ children }: { children: React.ReactNode }) {
           </p>
           <p className="mt-3 text-ink-soft">{t("locked")}</p>
         </div>
-        <MembershipPlans className="mt-10" />
+        {checkoutCancelled && (
+          <p className="mt-6 border border-line bg-bg-deep/50 px-4 py-3 text-center text-sm text-ink-soft">
+            {tSub("checkoutCancel")}
+          </p>
+        )}
+        <MembershipPlans className="mt-10" cancelPath={pathname} />
       </div>
     );
   }

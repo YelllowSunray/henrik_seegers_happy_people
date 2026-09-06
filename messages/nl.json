@@ -141,7 +141,6 @@
       "volledige toegang tot seminaropnames",
       "nieuwe persoonlijke vlogs van Henk",
       "leden-only blogs en verhalen",
-      "korte, prikkelende berichten en quotes",
       "iedere maand een live online moment met gesprek, vragen en antwoorden",
       "toegang tot de Happy People-community",
       "eerste toegang tot nieuwe seminars en activiteiten",
@@ -428,6 +427,7 @@
     "portalError": "Kon het facturatieportaal niet openen. Heb je al een abonnement gestart?",
     "choosePlan": "Kies je plan",
     "checkoutSuccess": "Welkom in de club — je abonnement wordt bevestigd.",
+    "checkoutCancel": "Betaling geannuleerd — kies opnieuw maandelijks of jaarlijks.",
     "syncing": "Abonnement synchroniseren…",
     "choosePlanHint": "Kies maandelijks of jaarlijks voor clubtoegang."
   },
@@ -630,5 +630,8 @@
       "Welkom bij Happy People. Ik ben Henk. Wat wil je vandaag met me delen?"
     ],
     "convoIntroFallback": "Hoi, ik ben Henk van Happy People. Waar wil je het over hebben?"
+  },
+  "music": {
+    "resumePrompt": "Tik om muziek verder te zetten"
   }
 }

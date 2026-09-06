@@ -141,7 +141,6 @@
       "full access to seminar recordings",
       "new personal vlogs from Henk",
       "members-only blogs and stories",
-      "short, thought-provoking messages and quotes",
       "a monthly live online moment with conversation, questions and answers",
       "access to the Happy People community",
       "first access to new seminars and activities",
@@ -428,6 +427,7 @@
     "portalError": "Couldn’t open the billing portal. Have you started a subscription yet?",
     "choosePlan": "Choose your plan",
     "checkoutSuccess": "Welcome to the club — confirming your subscription.",
+    "checkoutCancel": "Payment cancelled — choose monthly or yearly again.",
     "syncing": "Syncing subscription…",
     "choosePlanHint": "Choose monthly or yearly for club access."
   },
@@ -630,5 +630,8 @@
       "Welcome to Happy People. I’m Henk. What would you like to share today?"
     ],
     "convoIntroFallback": "Hi, I’m Henk from Happy People. What would you like to talk about?"
+  },
+  "music": {
+    "resumePrompt": "Tap to continue music"
   }
 }

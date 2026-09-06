@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { useBillingOverBudget } from "@/components/billing-banner";
 import { billingContactMessage } from "@/lib/billing";
-import { Link } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import type { MembershipPlan } from "@/lib/stripe";
 
 /** Compact CTA — defaults to monthly plan; full picker is MembershipPlans. */
@@ -20,6 +20,7 @@ export function JoinButton({
 }) {
   const t = useTranslations("membership");
   const locale = useLocale();
+  const pathname = usePathname();
   const { user, isMember } = useAuth();
   const overBudget = useBillingOverBudget();
   const [busy, setBusy] = useState(false);
@@ -69,7 +70,11 @@ export function JoinButton({
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ plan, locale }),
+        body: JSON.stringify({
+          plan,
+          locale,
+          cancelPath: pathname || "/members/subscription",
+        }),
       });
       const data = (await res.json()) as { url?: string; error?: string };
       if (!res.ok || !data.url) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useAuth } from "@/components/auth-provider";
 import { MembersGate } from "@/components/members-gate";
@@ -24,7 +24,8 @@ export function MembersShell({ children }: { children: React.ReactNode }) {
   }, [loading, profile, onOnboarding, router]);
 
   return (
-    <MembersGate>
+    <Suspense fallback={<p className="py-20 text-center text-ink-soft">…</p>}>
+      <MembersGate>
       {onOnboarding ? (
         <div>{children}</div>
       ) : needsOnboarding(profile) ? (
@@ -48,5 +49,6 @@ export function MembersShell({ children }: { children: React.ReactNode }) {
         </ClubActivityProvider>
       )}
     </MembersGate>
+    </Suspense>
   );
 }
