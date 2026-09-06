@@ -52,12 +52,6 @@ let timeListeners = new Set<(t: number) => void>();
 let playListeners = new Set<(playing: boolean) => void>();
 let lastResumeSnapshotAt = 0;
 let resumeGestureListening = false;
-let resumePromptListeners = new Set<(show: boolean) => void>();
-
-function updateResumePrompt() {
-  const show = shouldAttemptResume() && !anyPlaying();
-  for (const fn of resumePromptListeners) fn(show);
-}
 
 function getSharedAudio(): HTMLAudioElement {
   if (!sharedAudio) {
@@ -81,7 +75,6 @@ function getSharedAudio(): HTMLAudioElement {
       routePersistPlaying = true;
       writeResumeSnapshot();
       for (const fn of playListeners) fn(true);
-      updateResumePrompt();
     });
     sharedAudio.addEventListener("pause", () => {
       if (routePersistPlaying && sharedAudio?.src && !sharedAudio.ended) {
@@ -89,7 +82,6 @@ function getSharedAudio(): HTMLAudioElement {
         writeResumeSnapshot({ wasPlaying: true });
       }
       for (const fn of playListeners) fn(false);
-      updateResumePrompt();
     });
     sharedAudio.addEventListener("ended", () => {
       routePersistPlaying = false;
@@ -98,7 +90,6 @@ function getSharedAudio(): HTMLAudioElement {
       activePlayerId = null;
       for (const fn of playListeners) fn(false);
       for (const fn of timeListeners) fn(0);
-      updateResumePrompt();
     });
   }
   return sharedAudio;
@@ -741,10 +732,8 @@ async function tryResumeAfterReturn(fromUserGesture = false): Promise<boolean> {
     clearResumeSnapshot();
     notifyPlayState(true);
     for (const fn of timeListeners) fn(audio.currentTime);
-    updateResumePrompt();
     return true;
   }
-  updateResumePrompt();
   return false;
 }
 
@@ -790,7 +779,6 @@ function onPageVisibleAgain() {
 
   unlockListening = false;
   ensureUnlockListener();
-  updateResumePrompt();
 }
 
 function ensureReturnResumeListening() {
@@ -836,18 +824,6 @@ export function resumeMusicOnPageVisible() {
   onPageVisibleAgain();
 }
 
-export function subscribeResumePrompt(listener: (show: boolean) => void) {
-  resumePromptListeners.add(listener);
-  listener(shouldAttemptResume() && !anyPlaying());
-  return () => {
-    resumePromptListeners.delete(listener);
-  };
-}
-
-export function resumeMusicFromUserGesture() {
-  tryPlayFromGesturePreferResume();
-}
-
 /** Resume with short retries — mobile often pauses audio during backgrounding. */
 export function resumeMusicAfterNavigation() {
   if (typeof window === "undefined") return;
@@ -859,7 +835,6 @@ export function resumeMusicAfterNavigation() {
   window.setTimeout(() => {
     if (!anyPlaying() && !holdHandoffUntilScroll) {
       scheduleHandoff();
-      updateResumePrompt();
     }
   }, 5200);
 }
@@ -877,8 +852,6 @@ export function reconcileMusicResumeState() {
   if (!shouldAttemptResume()) {
     resumeAfterBackground = false;
   }
-
-  updateResumePrompt();
 }
 
 /** Only resume when we actually left with music playing. */
@@ -894,7 +867,6 @@ export function markAudioForResumeOnReturn() {
     routePersistPlaying = true;
     resumeAfterBackground = true;
     writeResumeSnapshot({ wasPlaying: true });
-    updateResumePrompt();
     return;
   }
 
@@ -902,7 +874,6 @@ export function markAudioForResumeOnReturn() {
   if (snap?.wasPlaying) {
     routePersistPlaying = true;
     resumeAfterBackground = true;
-    updateResumePrompt();
   }
 }
 

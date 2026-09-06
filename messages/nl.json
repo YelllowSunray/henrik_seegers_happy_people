@@ -630,8 +630,5 @@
       "Welkom bij Happy People. Ik ben Henk. Wat wil je vandaag met me delen?"
     ],
     "convoIntroFallback": "Hoi, ik ben Henk van Happy People. Waar wil je het over hebben?"
-  },
-  "music": {
-    "resumePrompt": "Tik om muziek verder te zetten"
   }
 }

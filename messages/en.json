@@ -630,8 +630,5 @@
       "Welcome to Happy People. I’m Henk. What would you like to share today?"
     ],
     "convoIntroFallback": "Hi, I’m Henk from Happy People. What would you like to talk about?"
-  },
-  "music": {
-    "resumePrompt": "Tap to continue music"
   }
 }
