@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { usePathname } from "@/i18n/navigation";
 import {
+  kickAutoplayForCurrentView,
   markAudioForResumeOnReturn,
   reconcileMusicResumeState,
   resumeMusicAfterNavigation,
@@ -46,6 +47,7 @@ export function MusicRoutePersistence() {
   useEffect(() => {
     reconcileMusicResumeState();
     resumeMusicIfNeeded();
+    kickAutoplayForCurrentView();
   }, []);
 
   useEffect(() => {
@@ -102,6 +104,7 @@ export function MusicRoutePersistence() {
   useEffect(() => {
     reconcileMusicResumeState();
     resumeMusicIfNeeded();
+    kickAutoplayForCurrentView();
   }, [pathname]);
 
   return null;

@@ -46,6 +46,7 @@ const RESUME_MAX_AGE_MS = 30 * 60 * 1000;
 /** One burst of handoff retries after first widget mounts (page-load autoplay). */
 let initialAutoplayBurst = false;
 let initialAutoplayTimers: number[] = [];
+let scrollEndBurstTimers: number[] = [];
 const preloadedSrc = new Set<string>();
 let timeListeners = new Set<(t: number) => void>();
 let playListeners = new Set<(playing: boolean) => void>();
@@ -85,7 +86,7 @@ function getSharedAudio(): HTMLAudioElement {
     sharedAudio.addEventListener("pause", () => {
       if (routePersistPlaying && sharedAudio?.src && !sharedAudio.ended) {
         resumeAfterBackground = true;
-        writeResumeSnapshot();
+        writeResumeSnapshot({ wasPlaying: true });
       }
       for (const fn of playListeners) fn(false);
       updateResumePrompt();
@@ -227,7 +228,9 @@ function pickFocusWidget(): PlayerEntry | null {
     }
   }
 
-  return bestRatio >= 0.15 ? best : null;
+  // Lower bar when switching tracks — fast scroll often skips the handoff line.
+  const threshold = anyPlaying() ? 0.08 : 0.05;
+  return bestRatio >= threshold ? best : null;
 }
 
 function preloadAudio(src: string) {
@@ -245,9 +248,15 @@ function preloadAudio(src: string) {
   }
 }
 
+function clearScrollEndBurstTimers() {
+  for (const id of scrollEndBurstTimers) window.clearTimeout(id);
+  scrollEndBurstTimers = [];
+}
+
 function clearInitialAutoplayTimers() {
   for (const id of initialAutoplayTimers) window.clearTimeout(id);
   initialAutoplayTimers = [];
+  clearScrollEndBurstTimers();
 }
 
 function waitForCanPlay(audio: HTMLAudioElement): Promise<void> {
@@ -393,22 +402,104 @@ async function playSrc(
 function scheduleHandoff() {
   if (holdHandoffUntilScroll) return;
   if (handoffTimer) clearTimeout(handoffTimer);
+
+  if (typeof window !== "undefined") {
+    window.requestAnimationFrame(() => {
+      if (!holdHandoffUntilScroll) void runHandoff();
+    });
+  }
+
   handoffTimer = setTimeout(() => {
     handoffTimer = null;
     void runHandoff();
-  }, 60);
+    scheduleScrollEndBurst();
+  }, 80);
+}
+
+/** Retries after scroll stops — fast flick often skips the handoff line. */
+function scheduleScrollEndBurst() {
+  clearScrollEndBurstTimers();
+  for (const ms of [120, 320, 650, 1100]) {
+    scrollEndBurstTimers.push(
+      window.setTimeout(() => {
+        if (!holdHandoffUntilScroll) void runHandoff();
+      }, ms),
+    );
+  }
+}
+
+function findPlayerForSrc(src: string): PlayerEntry | null {
+  for (const entry of players.values()) {
+    if (sameSrc(entry.src, src)) return entry;
+  }
+  return null;
+}
+
+function pathnameFromAudioSrc(src: string): string {
+  try {
+    return new URL(src, window.location.origin).pathname;
+  } catch {
+    return src;
+  }
+}
+
+/** Start or resume in the same touch/click turn — required on iOS Safari. */
+function tryPlayFromGesturePreferResume(): void {
+  if (anyPlaying()) return;
+
+  mediaUnlocked = true;
+  scrollHandoffEnabled = true;
+
+  if (shouldAttemptResume()) {
+    const audio = getSharedAudio();
+    applyResumeSnapshot(audio);
+    if (audio.src && !audio.ended) {
+      const match = findPlayerForSrc(audio.src);
+      playFromUserGesture(
+        match?.src ?? pathnameFromAudioSrc(audio.src),
+        match?.id ?? activePlayerId ?? `resume-${Date.now()}`,
+      );
+      return;
+    }
+  }
+
+  const focus = pickFocusWidget();
+  if (focus) {
+    playFromUserGesture(focus.src, focus.id);
+    return;
+  }
+
+  scheduleHandoff();
+}
+
+function scheduleReturnAutoplayBurst() {
+  for (const ms of [0, 120, 350, 700, 1200, 2000, 3500, 5500]) {
+    window.setTimeout(() => {
+      if (!anyPlaying() && !holdHandoffUntilScroll) void runHandoff();
+    }, ms);
+  }
+}
+
+/** Re-try autoplay for whatever widget is visible (route change / return from app). */
+export function kickAutoplayForCurrentView() {
+  if (typeof window === "undefined") return;
+  ensureScrollListening();
+  if (anyPlaying()) return;
+  scheduleHandoff();
+  scheduleReturnAutoplayBurst();
 }
 
 function scheduleInitialAutoplayBurst() {
   if (initialAutoplayBurst || typeof window === "undefined") return;
   initialAutoplayBurst = true;
-  const delays = [0, 200, 500, 1000, 1800, 3000, 4500];
+  const delays = [0, 150, 400, 800, 1500, 2500, 4000, 6000, 8500];
   for (const ms of delays) {
     const id = window.setTimeout(() => {
       if (anyPlaying()) {
         clearInitialAutoplayTimers();
         return;
       }
+      void runHandoff();
       scheduleHandoff();
     }, ms);
     initialAutoplayTimers.push(id);
@@ -426,9 +517,7 @@ async function runHandoff() {
   const playing = anyPlaying();
   const focus = pickFocusWidget();
 
-  // Coming back from another page with music still going: don't steal to a
-  // different track via "most visible" fallback — only switch when a widget
-  // is clearly at the scroll handoff line.
+  // Keep cross-route playback, but still hand off when another widget takes focus.
   if (playing && routePersistPlaying && audio.src) {
     const matching = [...players.values()].find((p) =>
       sameSrc(p.src, audio.src),
@@ -436,7 +525,7 @@ async function runHandoff() {
     if (matching) {
       activePlayerId = matching.id;
       const atLine = pickAtHandoffLine();
-      if (!atLine || sameSrc(atLine.src, audio.src)) return;
+      if (atLine && sameSrc(atLine.src, audio.src)) return;
     }
   }
 
@@ -458,11 +547,14 @@ async function runHandoff() {
     return;
   }
 
+  const switchingTrack = !sameSrc(audio.src || "", focus.src);
   const ok = await playSrc(focus.src, focus.id, {
-    autoplay: !anyPlaying(),
+    autoplay: !playing || switchingTrack,
   });
   if (runId !== handoffRunId || holdHandoffUntilScroll) return;
-  if (!ok) {
+  if (ok) {
+    clearScrollEndBurstTimers();
+  } else {
     ensureUnlockListener();
   }
 }
@@ -488,12 +580,7 @@ function ensureUnlockListener() {
 
   const onGesture = (e: Event) => {
     if (isLyricPlayerTarget(e.target)) return;
-    mediaUnlocked = true;
-    if (shouldAttemptResume() && !anyPlaying()) {
-      void tryResumeAfterReturn(true);
-    } else if (!anyPlaying()) {
-      scheduleHandoff();
-    }
+    tryPlayFromGesturePreferResume();
     if (anyPlaying()) {
       document.removeEventListener("touchstart", onGesture, true);
       document.removeEventListener("pointerdown", onGesture, true);
@@ -667,9 +754,9 @@ function ensureResumeGestureListening() {
   resumeGestureListening = true;
 
   const resumeOnGesture = (e: Event) => {
-    if (!shouldAttemptResume() || anyPlaying()) return;
+    if (anyPlaying()) return;
     if (isLyricPlayerTarget(e.target)) return;
-    void tryResumeAfterReturn(true);
+    tryPlayFromGesturePreferResume();
   };
 
   document.addEventListener("touchstart", resumeOnGesture, {
@@ -684,18 +771,25 @@ function ensureResumeGestureListening() {
 
 function onPageVisibleAgain() {
   ensureResumeGestureListening();
+  ensureGestureListening();
   snapshotForResume();
-  if (!shouldAttemptResume()) return;
 
-  const audio = getSharedAudio();
-  applyResumeSnapshot(audio);
-  if (audio.paused && audio.src && !audio.ended) {
-    void audio.play().catch(() => undefined);
+  if (shouldAttemptResume()) {
+    const audio = getSharedAudio();
+    applyResumeSnapshot(audio);
+    if (audio.paused && audio.src && !audio.ended) {
+      void audio.play().catch(() => undefined);
+    }
+    resumeMusicAfterNavigation();
+  }
+
+  if (!anyPlaying()) {
+    scheduleHandoff();
+    scheduleReturnAutoplayBurst();
   }
 
   unlockListening = false;
   ensureUnlockListener();
-  resumeMusicAfterNavigation();
   updateResumePrompt();
 }
 
@@ -751,7 +845,7 @@ export function subscribeResumePrompt(listener: (show: boolean) => void) {
 }
 
 export function resumeMusicFromUserGesture() {
-  void tryResumeAfterReturn(true);
+  tryPlayFromGesturePreferResume();
 }
 
 /** Resume with short retries — mobile often pauses audio during backgrounding. */
@@ -762,7 +856,12 @@ export function resumeMusicAfterNavigation() {
   for (const ms of [50, 150, 350, 700, 1200, 2000, 3500, 5000]) {
     window.setTimeout(() => void tryResumeAfterReturn(), ms);
   }
-  window.setTimeout(() => updateResumePrompt(), 5200);
+  window.setTimeout(() => {
+    if (!anyPlaying() && !holdHandoffUntilScroll) {
+      scheduleHandoff();
+      updateResumePrompt();
+    }
+  }, 5200);
 }
 
 /** Drop stale resume state (e.g. old hooponopono snapshot on a blog page). */
@@ -966,6 +1065,7 @@ export function SyncedLyricPlayer({
     });
     observer.observe(root);
     scheduleHandoff();
+    kickAutoplayForCurrentView();
 
     return () => {
       observer.disconnect();
