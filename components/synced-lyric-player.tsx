@@ -451,55 +451,77 @@ function scheduleScrollEndBurst() {
   }
 }
 
-function findPlayerForSrc(src: string): PlayerEntry | null {
-  for (const entry of players.values()) {
-    if (sameSrc(entry.src, src)) return entry;
-  }
-  return null;
-}
-
-function pathnameFromAudioSrc(src: string): string {
-  try {
-    return new URL(src, window.location.origin).pathname;
-  } catch {
-    return src;
-  }
-}
-
 /** Start or resume in the same touch/click turn — required on iOS Safari. */
 function tryPlayFromGesturePreferResume(): void {
-  if (anyPlaying()) return;
+  void playForCurrentScrollPosition(true);
+}
 
-  mediaUnlocked = true;
-  scrollHandoffEnabled = true;
-
-  if (shouldAttemptResume()) {
-    const audio = getSharedAudio();
-    applyResumeSnapshot(audio);
-    if (audio.src && !audio.ended) {
-      const match = findPlayerForSrc(audio.src);
-      playFromUserGesture(
-        match?.src ?? pathnameFromAudioSrc(audio.src),
-        match?.id ?? activePlayerId ?? `resume-${Date.now()}`,
-      );
-      return;
-    }
-  }
+/**
+ * Play the song for the current scroll position. Resumes position when the
+ * interrupted track matches; otherwise starts the visible widget fresh.
+ */
+async function playForCurrentScrollPosition(
+  fromUserGesture = false,
+): Promise<boolean> {
+  if (typeof window === "undefined") return false;
+  if (anyPlaying() || holdHandoffUntilScroll) return false;
+  if (players.size === 0) return false;
 
   const focus = pickFocusWidget();
-  if (focus) {
+  if (!focus) return false;
+
+  const audio = getSharedAudio();
+  const snap = readResumeSnapshot();
+  const resumeIntent = shouldAttemptResume();
+  const sameInterruptedTrack = Boolean(
+    resumeIntent && snap && sameSrc(snap.src, focus.src),
+  );
+
+  if (fromUserGesture) {
+    mediaUnlocked = true;
+    scrollHandoffEnabled = true;
+    if (sameInterruptedTrack) {
+      applyResumeSnapshot(audio);
+    } else if (resumeIntent) {
+      resumeAfterBackground = false;
+      clearResumeSnapshot();
+    }
     playFromUserGesture(focus.src, focus.id);
-    return;
+    return true;
   }
 
-  scheduleHandoff();
+  if (sameInterruptedTrack) {
+    applyResumeSnapshot(audio);
+    const ok =
+      (await playWithUnlock(audio)) || (await playWithUnlock(audio, true));
+    if (ok) {
+      activePlayerId = focus.id;
+      routePersistPlaying = true;
+      resumeAfterBackground = false;
+      clearResumeSnapshot();
+      notifyPlayState(true);
+      for (const fn of timeListeners) fn(audio.currentTime);
+      return true;
+    }
+  } else if (resumeIntent) {
+    resumeAfterBackground = false;
+    clearResumeSnapshot();
+  }
+
+  scrollHandoffEnabled = true;
+  return playSrc(focus.src, focus.id, { autoplay: true });
 }
 
 function scheduleReturnAutoplayBurst() {
+  clearScrollEndBurstTimers();
   for (const ms of [0, 120, 350, 700, 1200, 2000, 3500, 5500]) {
-    window.setTimeout(() => {
-      if (!anyPlaying() && !holdHandoffUntilScroll) void runHandoff();
-    }, ms);
+    scrollEndBurstTimers.push(
+      window.setTimeout(() => {
+        if (!anyPlaying() && !holdHandoffUntilScroll) {
+          void playForCurrentScrollPosition(false);
+        }
+      }, ms),
+    );
   }
 }
 
@@ -508,7 +530,7 @@ export function kickAutoplayForCurrentView() {
   if (typeof window === "undefined") return;
   ensureScrollListening();
   if (anyPlaying()) return;
-  scheduleHandoff();
+  void playForCurrentScrollPosition(false);
   scheduleReturnAutoplayBurst();
 }
 
@@ -796,17 +818,11 @@ function onPageVisibleAgain() {
   ensureGestureListening();
   snapshotForResume();
 
-  if (shouldAttemptResume()) {
-    const audio = getSharedAudio();
-    applyResumeSnapshot(audio);
-    if (audio.paused && audio.src && !audio.ended) {
-      void audio.play().catch(() => undefined);
-    }
-    resumeMusicAfterNavigation();
-  }
+  scrollHandoffEnabled = true;
+  holdHandoffUntilScroll = false;
 
   if (!anyPlaying()) {
-    scheduleHandoff();
+    void playForCurrentScrollPosition(false);
     scheduleReturnAutoplayBurst();
   }
 
@@ -824,7 +840,7 @@ function ensureReturnResumeListening() {
   if (snap?.wasPlaying) {
     routePersistPlaying = true;
     resumeAfterBackground = true;
-    void tryResumeAfterReturn();
+    void playForCurrentScrollPosition(false);
   }
 
   document.addEventListener("visibilitychange", () => {
@@ -857,19 +873,14 @@ export function resumeMusicOnPageVisible() {
   onPageVisibleAgain();
 }
 
-/** Resume with short retries — mobile often pauses audio during backgrounding. */
+/** Resume / autoplay for current scroll position after backgrounding. */
 export function resumeMusicAfterNavigation() {
   if (typeof window === "undefined") return;
   ensureReturnResumeListening();
-  void tryResumeAfterReturn();
+  void playForCurrentScrollPosition(false);
   for (const ms of [50, 150, 350, 700, 1200, 2000, 3500, 5000]) {
-    window.setTimeout(() => void tryResumeAfterReturn(), ms);
+    window.setTimeout(() => void playForCurrentScrollPosition(false), ms);
   }
-  window.setTimeout(() => {
-    if (!anyPlaying() && !holdHandoffUntilScroll) {
-      scheduleHandoff();
-    }
-  }, 5200);
 }
 
 /** Drop stale resume state (e.g. old hooponopono snapshot on a blog page). */
@@ -887,10 +898,15 @@ export function reconcileMusicResumeState() {
   }
 }
 
-/** Only resume when we actually left with music playing. */
+/** Resume or start music for the current view when returning to the site. */
 export function resumeMusicIfNeeded() {
-  if (!shouldAttemptResume()) return;
-  resumeMusicAfterNavigation();
+  if (typeof window === "undefined") return;
+  if (anyPlaying()) return;
+  if (shouldAttemptResume()) {
+    resumeMusicAfterNavigation();
+    return;
+  }
+  kickAutoplayForCurrentView();
 }
 
 /** Call before navigating away (e.g. YouTube) so playback resumes on return. */
