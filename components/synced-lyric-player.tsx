@@ -13,6 +13,7 @@ type PlayerEntry = {
   id: string;
   root: HTMLElement;
   src: string;
+  hero?: boolean;
 };
 
 /** Mounted lyric widgets — hand off when a widget reaches the top of the viewport. */
@@ -52,6 +53,8 @@ let timeListeners = new Set<(t: number) => void>();
 let playListeners = new Set<(playing: boolean) => void>();
 let lastResumeSnapshotAt = 0;
 let resumeGestureListening = false;
+/** Ignore pause-click right after play pointerdown (iOS fires click when play succeeds). */
+let lastUserPlayAt = 0;
 
 function getSharedAudio(): HTMLAudioElement {
   if (!sharedAudio) {
@@ -77,7 +80,12 @@ function getSharedAudio(): HTMLAudioElement {
       for (const fn of playListeners) fn(true);
     });
     sharedAudio.addEventListener("pause", () => {
-      if (routePersistPlaying && sharedAudio?.src && !sharedAudio.ended) {
+      if (
+        routePersistPlaying &&
+        scrollHandoffEnabled &&
+        sharedAudio?.src &&
+        !sharedAudio.ended
+      ) {
         resumeAfterBackground = true;
         writeResumeSnapshot({ wasPlaying: true });
       }
@@ -128,9 +136,11 @@ function cancelPendingHandoff() {
 function playFromUserGesture(src: string, playerId: string): void {
   cancelPendingHandoff();
   const generation = ++playGeneration;
+  lastUserPlayAt = Date.now();
   holdHandoffUntilScroll = true;
   scrollHandoffEnabled = true;
   mediaUnlocked = true;
+  resumeAfterBackground = false;
 
   const audio = getSharedAudio();
   const abs = absoluteSrc(src);
@@ -207,6 +217,28 @@ function pickAtHandoffLine(): PlayerEntry | null {
 function pickFocusWidget(): PlayerEntry | null {
   const atLine = pickAtHandoffLine();
   if (atLine) return atLine;
+
+  // At the top of the page, start the hero / first visible player without
+  // requiring scroll-to-line (Microchip lives at the bottom of the hero).
+  if (typeof window !== "undefined" && window.scrollY < 150) {
+    for (const entry of players.values()) {
+      if (!entry.hero) continue;
+      const rect = entry.root.getBoundingClientRect();
+      if (rect.bottom > 80 && rect.top < window.innerHeight) return entry;
+    }
+
+    let topMost: PlayerEntry | null = null;
+    let topMostY = Infinity;
+    for (const entry of players.values()) {
+      const rect = entry.root.getBoundingClientRect();
+      if (rect.bottom <= 0 || rect.top >= window.innerHeight) continue;
+      if (rect.top < topMostY) {
+        topMostY = rect.top;
+        topMost = entry;
+      }
+    }
+    if (topMost) return topMost;
+  }
 
   let best: PlayerEntry | null = null;
   let bestRatio = 0;
@@ -571,6 +603,7 @@ function ensureUnlockListener() {
 
   const onGesture = (e: Event) => {
     if (isLyricPlayerTarget(e.target)) return;
+    mediaUnlocked = true;
     tryPlayFromGesturePreferResume();
     if (anyPlaying()) {
       document.removeEventListener("touchstart", onGesture, true);
@@ -997,7 +1030,7 @@ export function SyncedLyricPlayer({
     const id = idRef.current;
     const audio = getSharedAudio();
     preloadAudio(audioSrc);
-    players.set(id, { id, root, src: audioSrc });
+    players.set(id, { id, root, src: audioSrc, hero: tone === "hero" });
     ensureScrollListening();
     ensureReturnResumeListening();
 
@@ -1036,7 +1069,6 @@ export function SyncedLyricPlayer({
     });
     observer.observe(root);
     scheduleHandoff();
-    kickAutoplayForCurrentView();
 
     return () => {
       observer.disconnect();
@@ -1057,35 +1089,42 @@ export function SyncedLyricPlayer({
       ? lines.slice(0, VISIBLE_LINES)
       : lines.slice(active, active + VISIBLE_LINES);
 
-  function handlePlayPointerDown() {
+  function handlePlayPointerDown(e: React.PointerEvent) {
+    e.stopPropagation();
     const audio = getSharedAudio();
     if (sameSrc(audio.src || "", audioSrc) && !audio.paused) return;
 
     playStartedViaPointerRef.current = true;
+    lastUserPlayAt = Date.now();
 
     if (
       sameSrc(audio.src || "", audioSrc) &&
       audio.paused &&
       shouldAttemptResume()
     ) {
-      setPlaying(true);
-      setTime(audio.currentTime);
-      void tryResumeAfterReturn(true);
+      playFromUserGesture(audioSrc, idRef.current);
       return;
     }
 
-    setPlaying(true);
-    setTime(sameSrc(audio.src || "", audioSrc) ? audio.currentTime : 0);
     playFromUserGesture(audioSrc, idRef.current);
   }
 
-  function handlePlayClick() {
+  function handlePlayClick(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (playStartedViaPointerRef.current) {
+      playStartedViaPointerRef.current = false;
+      return;
+    }
+
+    if (Date.now() - lastUserPlayAt < 500) return;
+
     const audio = getSharedAudio();
     const isThis =
       sameSrc(audio.src || "", audioSrc) && !audio.paused;
 
     if (isThis) {
-      playStartedViaPointerRef.current = false;
       playGeneration += 1;
       cancelPendingHandoff();
       holdHandoffUntilScroll = false;
@@ -1098,14 +1137,7 @@ export function SyncedLyricPlayer({
       return;
     }
 
-    if (playStartedViaPointerRef.current) {
-      playStartedViaPointerRef.current = false;
-      return;
-    }
-
     // Keyboard / assistive tech — no pointerdown before click.
-    setPlaying(true);
-    setTime(0);
     playFromUserGesture(audioSrc, idRef.current);
   }
 
