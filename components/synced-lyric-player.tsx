@@ -526,16 +526,22 @@ type ResumeSnapshot = {
   src: string;
   time: number;
   at: number;
+  /** True only when audio was actually playing at snapshot time. */
+  wasPlaying: boolean;
 };
 
-function writeResumeSnapshot() {
+function writeResumeSnapshot(opts?: { wasPlaying?: boolean }) {
   if (typeof window === "undefined") return;
   const audio = getSharedAudio();
   if (!audio.src || audio.ended) return;
+  const wasPlaying = opts?.wasPlaying ?? anyPlaying();
+  if (!wasPlaying) return;
+
   const snap: ResumeSnapshot = {
     src: audio.src,
     time: audio.currentTime,
     at: Date.now(),
+    wasPlaying: true,
   };
   try {
     sessionStorage.setItem(RESUME_STORAGE_KEY, JSON.stringify(snap));
@@ -552,6 +558,7 @@ function readResumeSnapshot(): ResumeSnapshot | null {
     if (!raw) return null;
     const snap = JSON.parse(raw) as ResumeSnapshot;
     if (!snap.src || Date.now() - snap.at > RESUME_MAX_AGE_MS) return null;
+    if (!snap.wasPlaying) return null;
     return snap;
   } catch {
     return null;
@@ -570,17 +577,11 @@ function clearResumeSnapshot() {
 /** Remember playback before iOS pauses audio or Safari evicts the page. */
 function snapshotForResume() {
   const audio = getSharedAudio();
-  if (audio.ended || !audio.src) return;
-  const shouldRemember =
-    anyPlaying() ||
-    routePersistPlaying ||
-    resumeAfterBackground ||
-    audio.currentTime > 0.25;
-  if (!shouldRemember) return;
+  if (audio.ended || !audio.src || !anyPlaying()) return;
 
   routePersistPlaying = true;
   resumeAfterBackground = true;
-  writeResumeSnapshot();
+  writeResumeSnapshot({ wasPlaying: true });
 }
 
 function applyResumeSnapshot(audio: HTMLAudioElement) {
@@ -610,13 +611,17 @@ function applyResumeSnapshot(audio: HTMLAudioElement) {
 }
 
 function shouldAttemptResume(): boolean {
-  if (resumeAfterBackground) return true;
+  if (anyPlaying()) return false;
+
   const snap = readResumeSnapshot();
-  if (snap) return true;
   const audio = sharedAudio;
-  return Boolean(
-    routePersistPlaying && audio?.src && !audio.ended && audio.paused,
-  );
+  const pausedTrack = Boolean(audio?.src && !audio.ended && audio.paused);
+
+  if (resumeAfterBackground && (pausedTrack || snap?.wasPlaying)) return true;
+  if (snap?.wasPlaying && pausedTrack) return true;
+  if (snap?.wasPlaying && !audio?.src) return true;
+
+  return false;
 }
 
 function notifyPlayState(playing: boolean) {
@@ -701,7 +706,7 @@ function ensureReturnResumeListening() {
   ensureResumeGestureListening();
 
   const snap = readResumeSnapshot();
-  if (snap) {
+  if (snap?.wasPlaying) {
     routePersistPlaying = true;
     resumeAfterBackground = true;
     void tryResumeAfterReturn();
@@ -757,6 +762,24 @@ export function resumeMusicAfterNavigation() {
   for (const ms of [50, 150, 350, 700, 1200, 2000, 3500, 5000]) {
     window.setTimeout(() => void tryResumeAfterReturn(), ms);
   }
+  window.setTimeout(() => updateResumePrompt(), 5200);
+}
+
+/** Drop stale resume state (e.g. old hooponopono snapshot on a blog page). */
+export function reconcileMusicResumeState() {
+  if (typeof window === "undefined") return;
+
+  const snap = readResumeSnapshot();
+  if (!snap?.wasPlaying && !resumeAfterBackground) {
+    clearResumeSnapshot();
+    if (!anyPlaying()) routePersistPlaying = false;
+  }
+
+  if (!shouldAttemptResume()) {
+    resumeAfterBackground = false;
+  }
+
+  updateResumePrompt();
 }
 
 /** Only resume when we actually left with music playing. */
@@ -768,15 +791,16 @@ export function resumeMusicIfNeeded() {
 /** Call before navigating away (e.g. YouTube) so playback resumes on return. */
 export function markAudioForResumeOnReturn() {
   const audio = getSharedAudio();
-  if (audio.src && !audio.ended) {
+  if (audio.src && !audio.ended && anyPlaying()) {
     routePersistPlaying = true;
     resumeAfterBackground = true;
-    writeResumeSnapshot();
+    writeResumeSnapshot({ wasPlaying: true });
     updateResumePrompt();
     return;
   }
+
   const snap = readResumeSnapshot();
-  if (snap) {
+  if (snap?.wasPlaying) {
     routePersistPlaying = true;
     resumeAfterBackground = true;
     updateResumePrompt();
@@ -923,7 +947,7 @@ export function SyncedLyricPlayer({
       setTime(audio.currentTime);
       routePersistPlaying = true;
     } else if (
-      routePersistPlaying &&
+      shouldAttemptResume() &&
       sameSrc(audio.src || "", audioSrc) &&
       audio.paused &&
       !audio.ended

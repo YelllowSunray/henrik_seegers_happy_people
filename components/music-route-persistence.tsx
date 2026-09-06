@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { usePathname } from "@/i18n/navigation";
 import {
   markAudioForResumeOnReturn,
+  reconcileMusicResumeState,
   resumeMusicAfterNavigation,
   resumeMusicIfNeeded,
   resumeMusicOnPageVisible,
@@ -43,6 +44,7 @@ export function MusicRoutePersistence() {
   const pathname = usePathname();
 
   useEffect(() => {
+    reconcileMusicResumeState();
     resumeMusicIfNeeded();
   }, []);
 
@@ -98,6 +100,7 @@ export function MusicRoutePersistence() {
   }, []);
 
   useEffect(() => {
+    reconcileMusicResumeState();
     resumeMusicIfNeeded();
   }, [pathname]);
 
