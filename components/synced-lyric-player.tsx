@@ -43,6 +43,7 @@ let routePersistPlaying = false;
 /** Set when page/app backgrounds while music should resume on return. */
 let resumeAfterBackground = false;
 const RESUME_STORAGE_KEY = "hssc-audio-resume";
+const LAST_HANDOFF_KEY = "hssc-last-handoff";
 const RESUME_MAX_AGE_MS = 30 * 60 * 1000;
 /** One burst of handoff retries after first widget mounts (page-load autoplay). */
 let initialAutoplayBurst = false;
@@ -159,6 +160,7 @@ function playFromUserGesture(src: string, playerId: string): void {
       if (generation !== playGeneration) return;
       activePlayerId = playerId;
       routePersistPlaying = true;
+      writeLastHandoff(src, playerId);
       clearInitialAutoplayTimers();
     })
     .catch(() => {
@@ -172,6 +174,7 @@ function playFromUserGesture(src: string, playerId: string): void {
         if (ok && generation === playGeneration) {
           activePlayerId = playerId;
           routePersistPlaying = true;
+          writeLastHandoff(src, playerId);
           clearInitialAutoplayTimers();
         }
       })();
@@ -214,9 +217,33 @@ function pickAtHandoffLine(): PlayerEntry | null {
   return best;
 }
 
+/**
+ * The bottom-most section the user has scrolled past — stays active while
+ * reading deeper (e.g. Ho'oponopono while viewing Ontmoeting links).
+ */
+function pickPassedSectionPlayer(): PlayerEntry | null {
+  if (typeof window === "undefined") return null;
+  const marker = handoffLine();
+  let best: PlayerEntry | null = null;
+  let bestTop = -Infinity;
+
+  for (const entry of players.values()) {
+    const rect = entry.root.getBoundingClientRect();
+    if (rect.top > marker) continue;
+    if (rect.top >= bestTop) {
+      bestTop = rect.top;
+      best = entry;
+    }
+  }
+  return best;
+}
+
 function pickFocusWidget(): PlayerEntry | null {
   const atLine = pickAtHandoffLine();
   if (atLine) return atLine;
+
+  const passed = pickPassedSectionPlayer();
+  if (passed) return passed;
 
   // At the top of the page, start the hero / first visible player without
   // requiring scroll-to-line (Microchip lives at the bottom of the hero).
@@ -388,6 +415,7 @@ async function playSrc(
       routePersistPlaying = true;
       scrollHandoffEnabled = true;
       holdHandoffUntilScroll = true;
+      writeLastHandoff(src, playerId);
     }
     return ok;
   }
@@ -403,6 +431,7 @@ async function playSrc(
       activePlayerId = playerId;
       routePersistPlaying = true;
       scrollHandoffEnabled = true;
+      writeLastHandoff(src, playerId);
       return true;
     }
   }
@@ -418,6 +447,7 @@ async function playSrc(
     activePlayerId = playerId;
     routePersistPlaying = true;
     scrollHandoffEnabled = true;
+    writeLastHandoff(src, playerId);
   }
   return ok;
 }
@@ -451,61 +481,113 @@ function scheduleScrollEndBurst() {
   }
 }
 
+function findPlayerForSrc(src: string): PlayerEntry | null {
+  for (const entry of players.values()) {
+    if (sameSrc(entry.src, src)) return entry;
+  }
+  return null;
+}
+
+function pathnameFromAudioSrc(src: string): string {
+  try {
+    return new URL(src, window.location.origin).pathname;
+  } catch {
+    return src;
+  }
+}
+
+type LastHandoff = {
+  src: string;
+  playerId: string;
+  at: number;
+};
+
+function writeLastHandoff(src: string, playerId: string) {
+  if (typeof window === "undefined") return;
+  try {
+    const payload: LastHandoff = { src: absoluteSrc(src), playerId, at: Date.now() };
+    sessionStorage.setItem(LAST_HANDOFF_KEY, JSON.stringify(payload));
+  } catch {
+    /* ignore */
+  }
+}
+
+function readLastHandoff(): LastHandoff | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = sessionStorage.getItem(LAST_HANDOFF_KEY);
+    if (!raw) return null;
+    const last = JSON.parse(raw) as LastHandoff;
+    if (!last.src || Date.now() - last.at > RESUME_MAX_AGE_MS) return null;
+    return last;
+  } catch {
+    return null;
+  }
+}
+
 /** Start or resume in the same touch/click turn — required on iOS Safari. */
 function tryPlayFromGesturePreferResume(): void {
   void playForCurrentScrollPosition(true);
 }
 
 /**
- * Play the song for the current scroll position. Resumes position when the
- * interrupted track matches; otherwise starts the visible widget fresh.
+ * Play for current scroll position, or resume interrupted playback even when
+ * the widget scrolled off-screen (returning from YouTube while deep on page).
  */
 async function playForCurrentScrollPosition(
   fromUserGesture = false,
 ): Promise<boolean> {
   if (typeof window === "undefined") return false;
   if (anyPlaying() || holdHandoffUntilScroll) return false;
-  if (players.size === 0) return false;
 
-  const focus = pickFocusWidget();
-  if (!focus) return false;
-
-  const audio = getSharedAudio();
   const snap = readResumeSnapshot();
   const resumeIntent = shouldAttemptResume();
-  const sameInterruptedTrack = Boolean(
-    resumeIntent && snap && sameSrc(snap.src, focus.src),
-  );
 
-  if (fromUserGesture) {
-    mediaUnlocked = true;
-    scrollHandoffEnabled = true;
-    if (sameInterruptedTrack) {
-      applyResumeSnapshot(audio);
-    } else if (resumeIntent) {
-      resumeAfterBackground = false;
-      clearResumeSnapshot();
+  if (resumeIntent && snap) {
+    const match = findPlayerForSrc(snap.src);
+    const src = match?.src ?? pathnameFromAudioSrc(snap.src);
+    const playerId = match?.id ?? activePlayerId ?? `resume-${Date.now()}`;
+
+    if (fromUserGesture) {
+      mediaUnlocked = true;
+      scrollHandoffEnabled = true;
+      applyResumeSnapshot(getSharedAudio());
+      playFromUserGesture(src, playerId);
+      return true;
     }
-    playFromUserGesture(focus.src, focus.id);
-    return true;
-  }
 
-  if (sameInterruptedTrack) {
-    applyResumeSnapshot(audio);
+    applyResumeSnapshot(getSharedAudio());
+    const audio = getSharedAudio();
     const ok =
       (await playWithUnlock(audio)) || (await playWithUnlock(audio, true));
     if (ok) {
-      activePlayerId = focus.id;
+      activePlayerId = playerId;
       routePersistPlaying = true;
       resumeAfterBackground = false;
       clearResumeSnapshot();
+      writeLastHandoff(src, playerId);
       notifyPlayState(true);
       for (const fn of timeListeners) fn(audio.currentTime);
       return true;
     }
-  } else if (resumeIntent) {
-    resumeAfterBackground = false;
-    clearResumeSnapshot();
+  }
+
+  if (players.size === 0) return false;
+
+  let focus = pickFocusWidget();
+  if (!focus) {
+    const last = readLastHandoff();
+    if (last) {
+      focus = findPlayerForSrc(last.src);
+    }
+  }
+  if (!focus) return false;
+
+  if (fromUserGesture) {
+    mediaUnlocked = true;
+    scrollHandoffEnabled = true;
+    playFromUserGesture(focus.src, focus.id);
+    return true;
   }
 
   scrollHandoffEnabled = true;
@@ -817,6 +899,12 @@ function onPageVisibleAgain() {
   ensureResumeGestureListening();
   ensureGestureListening();
   snapshotForResume();
+
+  const snap = readResumeSnapshot();
+  if (snap?.wasPlaying) {
+    routePersistPlaying = true;
+    resumeAfterBackground = true;
+  }
 
   scrollHandoffEnabled = true;
   holdHandoffUntilScroll = false;
