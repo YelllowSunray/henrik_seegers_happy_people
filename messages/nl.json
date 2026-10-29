@@ -72,9 +72,9 @@
     "readMore": "Lees verder"
   },
   "seminars": {
-    "eyebrow": "Seminars",
-    "title": "Live seminars",
-    "teaser": "Meer dan alleen luisteren — een middag waarin je meedoet, nieuwsgierig blijft en misschien anders naar je eigen leven kijkt.",
+    "eyebrow": "Seminar",
+    "title": "De reis terug naar één",
+    "teaser": "Een Happy People-seminar is geen middag waarin je achteroverleunt en drie uur probeert wakker te blijven. Je doet mee.",
     "cta": "Bekijk seminars",
     "next": "Volgend seminar",
     "location": "Van der Valk Hotel Amersfoort",
@@ -105,36 +105,24 @@
     "facebook": "Blogberichten op Facebook"
   },
   "membership": {
-    "eyebrow": "Lidmaatschap",
+    "eyebrow": "Happy People",
     "title": "Happy People",
-    "subtitle": "Meer dan alleen luisteren",
+    "subtitle": "Meer dan alleen een bijeenkomst",
     "introParagraphs": [
-      "Happy People gaat over mensen.",
-      "Over wie je bent.",
-      "Over hoe je naar jezelf en anderen kijkt.",
-      "Over verbinding.",
-      "Over keuzes.",
-      "Over de patronen die soms ongemerkt je leven bepalen.",
-      "Geen perfecte mensen.",
-      "Gelukkig maar.",
-      "Gewoon mensen die opnieuw willen leren kijken, voelen, lachen en verbinden."
+      "Met persoonlijke vlogs, verhalen, en elke maand een online moment om vragen te stellen en gesprekken te voeren.",
+      "Je kunt meedenken over onderwerpen, meedoen aan nieuwe seminars, en je staat nergens alleen voor."
     ],
     "bridgeParagraphs": [
-      "Een seminar duurt een middag.",
-      "Maar een goed gesprek of een nieuw inzicht stopt niet zodra je de deur uitloopt.",
-      "Daarom is er Happy People."
+      "Een seminar duurt een middag, maar een goed gesprek of een nieuw inzicht kan veel langer doorwerken.",
+      "Daarom is er Happy People: een plek voor mensen die nieuwsgierig zijn, willen blijven leren en willen verbinden."
     ],
     "price": "€20 / maand",
-    "pitch": "Geen abonnement op ‘meer content’. Maar toegang tot Henk, zijn verhaal, zijn manier van kijken en de Happy People-community.",
+    "pitch": "Een plek voor mensen die nieuwsgierig zijn, willen blijven leren en willen verbinden — maandelijks of jaarlijks, net wat bij je past.",
     "belongingTitle": "Happy People",
     "communityParagraphs": [
-      "Geen cursus.",
-      "Geen instituut.",
-      "Geen groep waarin iedereen het allemaal al begrijpt.",
-      "Gewoon mensen.",
-      "Mensen die nieuwsgierig zijn.",
-      "Mensen die willen ontdekken waarom ze doen wat ze doen.",
-      "Mensen die willen leren kijken, voelen, lachen en verbinden."
+      "Maandelijks of jaarlijks, net wat bij je past.",
+      "Je hoeft niet eerst naar een seminar om lid te mogen worden.",
+      "En je hoeft geen lid te zijn om naar een seminar te komen."
     ],
     "monthlyPlanTitle": "Happy People — €20 per maand",
     "monthlyBenefits": [
@@ -284,14 +272,14 @@
     "rights": "© {year} Hendrik Seegers — Happy People"
   },
   "donate": {
-    "eyebrow": "Steun",
+    "eyebrow": "Donatie",
     "title": "Een gift met een glimlach",
-    "lead": "Lidmaatschap houdt de club draaiende. Een eenmalige gift helpt Henk's seminars, vlogs en berichten blijven delen — zonder verplichting.",
-    "body": "Geen abonnement, geen druk. Kies een bedrag dat bij je past. Elk bedrag telt.",
+    "lead": "Als je Happy People wilt steunen, kan dat met een eenmalige gift: 5 euro, 10 euro, 25 euro, 50 euro, of iets anders — zonder abonnement en zonder verplichting.",
+    "body": "Je betaalt alleen als je achter het idee staat. De kern van Happy People is dat we mensen samenbrengen vanuit nieuwsgierigheid en verbinding, niet vanuit wat iedereen zou moeten denken. Elk onderdeel heeft zijn eigen functie. Je kiest wat bij jou past. En wat je ook kiest, het gaat om ruimte geven om elkaar beter te begrijpen.",
     "chooseAmount": "Kies een bedrag",
     "selected": "Gekozen",
     "secureNote": "Eenmalig · veilig via Stripe · iDEAL of kaart",
-    "asideQuote": "Uit warmte geleerd: zeg wat je voelt. Mijn woord is mijn daad.",
+    "asideQuote": "De kern van Happy People is dat we mensen samenbrengen vanuit nieuwsgierigheid en verbinding, niet vanuit wat iedereen zou moeten denken.",
     "asideCredit": "Happy People",
     "imageAlt": "Happy People moment",
     "cta": "Doneren",
