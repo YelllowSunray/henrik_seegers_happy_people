@@ -50,7 +50,17 @@ function AdminTextArea({
       value={value}
       rows={1}
       placeholder={placeholder}
-      onChange={(e) => onChange(e.target.value)}
+      onCompositionStart={(e) => {
+        e.currentTarget.dataset.composing = "1";
+      }}
+      onCompositionEnd={(e) => {
+        e.currentTarget.dataset.composing = "0";
+        onChange(e.currentTarget.value);
+      }}
+      onChange={(e) => {
+        if (e.target.dataset.composing === "1") return;
+        onChange(e.target.value);
+      }}
       onKeyDown={(e) => {
         if (!multiline && e.key === "Enter") e.preventDefault();
       }}

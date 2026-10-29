@@ -131,7 +131,8 @@ export function CmsField({
   // Local draft so iOS Safari isn't fighting a remote-controlled value mid-keystroke.
   const [draft, setDraft] = useState(text);
   useEffect(() => {
-    setDraft(text);
+    // Only adopt external updates — re-setting the same value resets the iOS caret.
+    setDraft((d) => (d === text ? d : text));
   }, [text]);
 
   // Banner/chips: single visual line with horizontal scroll if needed.
@@ -235,7 +236,7 @@ export function CmsParagraphs({
   const joined = asList ? live.join("\n") : live.join("\n\n");
   const [draft, setDraft] = useState(joined);
   useEffect(() => {
-    setDraft(joined);
+    setDraft((d) => (d === joined ? d : joined));
   }, [joined]);
 
   useAutosizeTextarea(ref, [draft, itemClassName], enabled);
