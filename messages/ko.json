@@ -19,7 +19,10 @@
     "signIn": "로그인",
     "signOut": "로그아웃",
     "admin": "Admin",
-    "back": "뒤로"
+    "back": "뒤로",
+    "webinars": "월간 웨비나",
+    "vlogs": "브이로그",
+    "community": "Happy People 커뮤니티"
   },
   "hero": {
     "brand": "Happy People",
@@ -633,5 +636,20 @@
       "환영해. 나는 Henk야. 지금 마음에 있는 게 뭐야?"
     ],
     "convoIntroFallback": "안녕, 나는 Happy People의 Henk야. 무엇에 대해 이야기하고 싶어?"
+  },
+  "webinars": {
+    "eyebrow": "Webinars",
+    "title": "Monthly webinars",
+    "lead": "Every month an online moment to ask questions, talk, and connect.",
+    "body": "Personal vlogs, stories, and live conversations with Henk — for people who are curious and want to keep learning. Monthly or yearly, whichever fits you.",
+    "cta": "Become Happy People"
+  },
+  "vlogsPage": {
+    "eyebrow": "Vlogs",
+    "title": "Vlogs",
+    "lead": "Personal vlogs from Henk — insights, stories, and moments from the Happy People path.",
+    "body": "Full vlogs are included in your Happy People membership.",
+    "cta": "Become Happy People",
+    "openMembers": "Go to vlogs"
   }
 }

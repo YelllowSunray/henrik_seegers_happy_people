@@ -6,16 +6,16 @@ import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useAuth } from "@/components/auth-provider";
 import { CmsField } from "@/components/cms/cms-field";
-import { useCmsOptional, useCmsValue } from "@/components/cms/cms-provider";
+import { useCmsOptional } from "@/components/cms/cms-provider";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { HeaderBackButton } from "@/components/smart-back-button";
 import { SeminarPromoBar } from "@/components/seminar-promo";
 
 const navKeys = [
-  ["about", "/over-henk", "nav.about"],
-  ["meeting", "/ontmoeting", "nav.meeting"],
-  ["seminars", "/seminars", "nav.seminars"],
+  ["webinars", "/webinars", "nav.webinars"],
   ["blog", "/blog", "nav.blog"],
+  ["vlogs", "/vlogs", "nav.vlogs"],
+  ["community", "/happy-people", "nav.community"],
 ] as const;
 
 export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" }) {
@@ -23,7 +23,6 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
   const { user, isMember, isAdmin, signOut, loading } = useAuth();
   const cms = useCmsOptional();
   const cmsMode = Boolean(cms?.enabled);
-  const membershipLabel = useCmsValue("nav.membership", t("membership"));
   const onHero = variant === "hero";
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -121,25 +120,6 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                   )}
                 </Link>
               ))}
-              {!isMember && (
-                <Link
-                  href="/happy-people"
-                  className="rounded-lg px-3 py-3.5 text-lg font-medium text-white/90 transition hover:bg-white/10 hover:text-white"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {cmsMode ? (
-                    <CmsField
-                      path="nav.membership"
-                      value={membershipLabel}
-                      multiline={false}
-                      inline
-                      className="text-lg font-medium text-white"
-                    />
-                  ) : (
-                    membershipLabel
-                  )}
-                </Link>
-              )}
               {isMember && (
                 <Link
                   href="/members"
@@ -247,23 +227,6 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                 )}
               </Link>
             ))}
-            {!isMember && (
-              <Link href="/happy-people" className={`transition ${linkTone}`}>
-                {cmsMode ? (
-                  <CmsField
-                    path="nav.membership"
-                    value={membershipLabel}
-                    multiline={false}
-                    inline
-                    className={`bg-transparent text-sm font-medium ${
-                      darkChrome ? "text-white" : "text-ink"
-                    }`}
-                  />
-                ) : (
-                  membershipLabel
-                )}
-              </Link>
-            )}
           </nav>
 
           <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">

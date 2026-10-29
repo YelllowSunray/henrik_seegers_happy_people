@@ -32,10 +32,14 @@ export type HomepageContent = {
     banner: string;
   };
   nav: {
+    webinars: string;
+    blog: string;
+    vlogs: string;
+    community: string;
+    /** @deprecated kept for older Firestore docs */
     about: string;
     meeting: string;
     seminars: string;
-    blog: string;
     membership: string;
   };
   hero: {
@@ -160,10 +164,13 @@ export function getDefaultHomepageContent(): HomepageContent {
       banner: nl.site.underConstruction,
     },
     nav: {
+      webinars: nl.nav.webinars,
+      blog: nl.nav.blog,
+      vlogs: nl.nav.vlogs,
+      community: nl.nav.community,
       about: nl.nav.about,
       meeting: nl.nav.meeting,
       seminars: nl.nav.seminars,
-      blog: nl.nav.blog,
       membership: nl.nav.membership,
     },
     hero: {
@@ -292,10 +299,13 @@ export function parseHomepageContent(
       banner: asString(site.banner, defaults.site.banner),
     },
     nav: {
+      webinars: asString(nav.webinars, defaults.nav.webinars),
+      blog: asString(nav.blog, defaults.nav.blog),
+      vlogs: asString(nav.vlogs, defaults.nav.vlogs),
+      community: asString(nav.community, defaults.nav.community),
       about: asString(nav.about, defaults.nav.about),
       meeting: asString(nav.meeting, defaults.nav.meeting),
       seminars: asString(nav.seminars, defaults.nav.seminars),
-      blog: asString(nav.blog, defaults.nav.blog),
       membership: asString(nav.membership, defaults.nav.membership),
     },
     hero: {

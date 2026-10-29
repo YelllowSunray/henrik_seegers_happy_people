@@ -11,7 +11,7 @@
     "about": "About Henk",
     "meeting": "The meeting",
     "seminars": "Seminars",
-    "blog": "Blog",
+    "blog": "Blogs",
     "membership": "Happy People",
     "contact": "Contact",
     "members": "Members",
@@ -19,7 +19,10 @@
     "signIn": "Sign in",
     "signOut": "Sign out",
     "admin": "Admin",
-    "back": "Back"
+    "back": "Back",
+    "webinars": "Monthly webinars",
+    "vlogs": "Vlogs",
+    "community": "Happy People community"
   },
   "hero": {
     "brand": "Happy People",
@@ -635,5 +638,20 @@
       "Welcome to Happy People. I’m Henk. What would you like to share today?"
     ],
     "convoIntroFallback": "Hi, I’m Henk from Happy People. What would you like to talk about?"
+  },
+  "webinars": {
+    "eyebrow": "Webinars",
+    "title": "Monthly webinars",
+    "lead": "Every month an online moment to ask questions, talk, and connect.",
+    "body": "Personal vlogs, stories, and live conversations with Henk — for people who are curious and want to keep learning. Monthly or yearly, whichever fits you.",
+    "cta": "Become Happy People"
+  },
+  "vlogsPage": {
+    "eyebrow": "Vlogs",
+    "title": "Vlogs",
+    "lead": "Personal vlogs from Henk — insights, stories, and moments from the Happy People path.",
+    "body": "Full vlogs are included in your Happy People membership.",
+    "cta": "Become Happy People",
+    "openMembers": "Go to vlogs"
   }
 }
