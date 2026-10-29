@@ -1,6 +1,12 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import {
+  FormEvent,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { useTranslations } from "next-intl";
 import { SiteHeader } from "@/components/site-header";
 import { useAuth } from "@/components/auth-provider";
@@ -12,6 +18,12 @@ export default function AdminPage() {
   const router = useRouter();
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const hydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   useEffect(() => {
     if (!loading && isAdmin) {
@@ -22,7 +34,9 @@ export default function AdminPage() {
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
-    if (!unlockAdmin(password)) {
+    // Read the DOM value: browser autofill doesn't always fire onChange.
+    const value = inputRef.current?.value ?? password;
+    if (!unlockAdmin(value.trim())) {
       setError(t("wrongPassword"));
       return;
     }
@@ -55,6 +69,7 @@ export default function AdminPage() {
           <label className="block text-sm font-medium text-ink">
             {t("password")}
             <input
+              ref={inputRef}
               type="password"
               required
               autoComplete="current-password"
@@ -66,7 +81,8 @@ export default function AdminPage() {
           {error && <p className="text-sm text-red-700">{error}</p>}
           <button
             type="submit"
-            className="w-full rounded-full bg-accent py-3.5 text-sm font-semibold text-white hover:bg-accent-soft"
+            disabled={!hydrated}
+            className="w-full rounded-full bg-accent py-3.5 text-sm font-semibold text-white hover:bg-accent-soft disabled:opacity-60"
           >
             Start CMS
           </button>
