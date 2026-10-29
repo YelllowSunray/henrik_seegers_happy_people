@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useCmsOptional } from "@/components/cms/cms-provider";
 
 type Props = {
@@ -49,6 +49,10 @@ export function useAutosizeTextarea(
     function fit() {
       const node = ref.current;
       if (!node) return;
+      // Don't fight iOS while the soft keyboard / IME is composing.
+      if (node === document.activeElement && (node as HTMLTextAreaElement).dataset.composing === "1") {
+        return;
+      }
       const cs = getComputedStyle(node);
       const borderX =
         (parseFloat(cs.borderLeftWidth) || 0) +
@@ -66,13 +70,19 @@ export function useAutosizeTextarea(
       node.style.maxWidth = "100%";
       node.style.boxSizing = "border-box";
       if (fitWidth) {
+        // scrollWidth often ignores trailing spaces on iOS — measure them.
+        const trailing = (node.value.match(/ +$/) || [""])[0].length;
+        const spaceW = fontSize * 0.35;
         node.style.width = "0px";
-        node.style.width = `${Math.ceil(node.scrollWidth + borderX + 2)}px`;
+        const base = node.scrollWidth + borderX + 2 + trailing * spaceW;
+        const parentW = node.parentElement?.clientWidth;
+        node.style.width = `${Math.ceil(parentW ? Math.min(base, parentW) : base)}px`;
       } else {
         node.style.width = "100%";
       }
 
-      node.style.height = "0px";
+      // Prefer "auto" over "0" — collapsing to 0 eats keystrokes on iOS Safari.
+      node.style.height = "auto";
       const next = Math.max(
         node.scrollHeight + slack,
         Math.ceil(lineHeight + padY + slack),
@@ -118,13 +128,19 @@ export function CmsField({
   const live = enabled ? readPath(cms!.content, path) : value;
   const text = typeof live === "string" ? live : value;
 
+  // Local draft so iOS Safari isn't fighting a remote-controlled value mid-keystroke.
+  const [draft, setDraft] = useState(text);
+  useEffect(() => {
+    setDraft(text);
+  }, [text]);
+
   // Banner/chips: single visual line with horizontal scroll if needed.
   // Titles/body: wrap so large type never clips the viewport.
   const keepOneLine = nowrap;
 
   useAutosizeTextarea(
     ref,
-    [text, className, multiline, keepOneLine],
+    [draft, className, multiline, keepOneLine],
     enabled,
     keepOneLine && inline,
   );
@@ -155,11 +171,25 @@ export function CmsField({
       <textarea
         ref={ref}
         id={id}
-        value={text}
+        value={draft}
         rows={1}
         placeholder={placeholder}
         wrap={keepOneLine ? "off" : "soft"}
-        onChange={(e) => cms?.setPath(path, e.target.value)}
+        onCompositionStart={(e) => {
+          e.currentTarget.dataset.composing = "1";
+        }}
+        onCompositionEnd={(e) => {
+          e.currentTarget.dataset.composing = "0";
+          const v = e.currentTarget.value;
+          setDraft(v);
+          cms?.setPath(path, v);
+        }}
+        onChange={(e) => {
+          const v = e.target.value;
+          setDraft(v);
+          if (e.target.dataset.composing === "1") return;
+          cms?.setPath(path, v);
+        }}
         onKeyDown={(e) => {
           if (!multiline && e.key === "Enter") e.preventDefault();
         }}
@@ -203,8 +233,12 @@ export function CmsParagraphs({
     : values;
 
   const joined = asList ? live.join("\n") : live.join("\n\n");
+  const [draft, setDraft] = useState(joined);
+  useEffect(() => {
+    setDraft(joined);
+  }, [joined]);
 
-  useAutosizeTextarea(ref, [joined, itemClassName], enabled);
+  useAutosizeTextarea(ref, [draft, itemClassName], enabled);
 
   if (!enabled) {
     if (asList) {
@@ -233,19 +267,25 @@ export function CmsParagraphs({
     <div className={`min-w-0 max-w-full ${className ?? ""}`}>
       <textarea
         ref={ref}
-        value={joined}
+        value={draft}
         rows={1}
+        onCompositionStart={(e) => {
+          e.currentTarget.dataset.composing = "1";
+        }}
+        onCompositionEnd={(e) => {
+          e.currentTarget.dataset.composing = "0";
+          const raw = e.currentTarget.value;
+          setDraft(raw);
+          // Keep spaces while typing — never trim on each keystroke (iPhone bug).
+          const next = asList ? raw.split("\n") : raw.split(/\n\s*\n/);
+          cms?.setPath(path, next);
+        }}
         onChange={(e) => {
           const raw = e.target.value;
-          const next = asList
-            ? raw
-                .split("\n")
-                .map((line) => line.trim())
-                .filter(Boolean)
-            : raw
-                .split(/\n\s*\n/)
-                .map((p) => p.trim())
-                .filter(Boolean);
+          setDraft(raw);
+          if (e.target.dataset.composing === "1") return;
+          // Keep spaces while typing — never trim on each keystroke (iPhone bug).
+          const next = asList ? raw.split("\n") : raw.split(/\n\s*\n/);
           cms?.setPath(path, next);
         }}
         aria-label={path}
