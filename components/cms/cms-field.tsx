@@ -53,7 +53,17 @@ export function useAutosizeTextarea(
       if (node === document.activeElement && (node as HTMLTextAreaElement).dataset.composing === "1") {
         return;
       }
-      const cs = getComputedStyle(node);
+      // iOS Safari zooms inputs under 16px — floor small fields only.
+      node.style.fontSize = "";
+      const coarse =
+        typeof window !== "undefined" &&
+        window.matchMedia("(pointer: coarse)").matches;
+      let cs = getComputedStyle(node);
+      const designed = parseFloat(cs.fontSize) || 16;
+      if (coarse && designed > 0 && designed < 16) {
+        node.style.fontSize = "16px";
+        cs = getComputedStyle(node);
+      }
       const borderX =
         (parseFloat(cs.borderLeftWidth) || 0) +
         (parseFloat(cs.borderRightWidth) || 0);
@@ -289,13 +299,27 @@ export function CmsParagraphs({
           const next = asList ? raw.split("\n") : raw.split(/\n\s*\n/);
           cms?.setPath(path, next);
         }}
+        onKeyDown={(e) => {
+          // Single Enter = new paragraph (double newline). Shift+Enter = soft line break.
+          if (asList || e.key !== "Enter" || e.shiftKey) return;
+          e.preventDefault();
+          const el = e.currentTarget;
+          const start = el.selectionStart;
+          const end = el.selectionEnd;
+          const next = `${draft.slice(0, start)}\n\n${draft.slice(end)}`;
+          setDraft(next);
+          cms?.setPath(path, next.split(/\n\s*\n/));
+          requestAnimationFrame(() => {
+            el.selectionStart = el.selectionEnd = start + 2;
+          });
+        }}
         aria-label={path}
         className={`${CMS_TEXTAREA} block w-full min-w-0 max-w-full !whitespace-pre-wrap overflow-x-hidden ${itemClassName ?? ""}`}
       />
       <p className="mt-1.5 text-[11px] text-ink-soft/80">
         {asList
           ? "Eén voordeel per regel"
-          : "Lege regel tussen alinea’s"}
+          : "Enter = nieuwe alinea · Shift+Enter = nieuwe regel"}
       </p>
     </div>
   );

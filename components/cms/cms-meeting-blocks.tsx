@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CmsField } from "@/components/cms/cms-field";
 import { useCmsOptional } from "@/components/cms/cms-provider";
 import { MeetingYoutubeLink } from "@/components/meeting-youtube-link";
@@ -41,7 +41,7 @@ function DragHandle({
       draggable
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
-      className="inline-flex h-9 w-9 shrink-0 cursor-grab items-center justify-center rounded-full border border-accent/35 bg-white text-accent active:cursor-grabbing"
+      className="hidden h-9 w-9 shrink-0 cursor-grab items-center justify-center rounded-full border border-accent/35 bg-white text-accent active:cursor-grabbing md:inline-flex"
       title={label}
       aria-label={label}
     >
@@ -77,6 +77,15 @@ export function CmsMeetingBlocks({
 
   const dragFrom = useRef<number | null>(null);
   const [overIndex, setOverIndex] = useState<number | null>(null);
+  const [coarse, setCoarse] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(pointer: coarse)");
+    const apply = () => setCoarse(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
 
   function setBlocks(next: MeetingBlockContent[]) {
     cms?.setPath("meeting.blocks", next);
@@ -117,7 +126,9 @@ export function CmsMeetingBlocks({
   return (
     <div className="mt-8 min-w-0 max-w-full space-y-4">
       <p className="text-[11px] leading-snug text-ink-soft">
-        ↑↓ of sleep · liedtitel + link bewerken
+        {coarse
+          ? "↑↓ om te herordenen · liedtitel + link bewerken"
+          : "↑↓ of sleep · liedtitel + link bewerken"}
       </p>
 
       {live.map((block, i) => (
@@ -161,12 +172,12 @@ export function CmsMeetingBlocks({
             <p className="min-w-0 flex-1 truncate text-[10px] font-semibold tracking-wide text-accent uppercase">
               Passage {i + 1}
             </p>
-            <div className="flex shrink-0 items-center gap-1">
+            <div className="flex shrink-0 items-center gap-1.5">
               <button
                 type="button"
                 disabled={i === 0}
                 onClick={() => move(i, i - 1)}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-line text-sm text-ink disabled:opacity-30"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line text-base text-ink disabled:opacity-30 md:h-8 md:w-8 md:text-sm"
                 aria-label="Omhoog"
               >
                 ↑
@@ -175,7 +186,7 @@ export function CmsMeetingBlocks({
                 type="button"
                 disabled={i === live.length - 1}
                 onClick={() => move(i, i + 1)}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-line text-sm text-ink disabled:opacity-30"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line text-base text-ink disabled:opacity-30 md:h-8 md:w-8 md:text-sm"
                 aria-label="Omlaag"
               >
                 ↓
@@ -183,7 +194,7 @@ export function CmsMeetingBlocks({
               {live.length > 1 ? (
                 <button
                   type="button"
-                  className="inline-flex h-8 items-center rounded-full px-2 text-[11px] font-medium text-red-700/90"
+                  className="inline-flex h-10 items-center rounded-full px-3 text-sm font-medium text-red-700/90 md:h-8 md:px-2 md:text-[11px]"
                   onClick={() => {
                     if (
                       !window.confirm(
@@ -231,7 +242,7 @@ export function CmsMeetingBlocks({
                 multiline={false}
                 nowrap
                 placeholder="YouTube-link plakken…"
-                className="w-full text-xs text-ink-soft"
+                className="w-full text-base text-ink-soft md:text-xs"
               />
             </div>
             {block.youtube.trim() ? (
@@ -239,7 +250,7 @@ export function CmsMeetingBlocks({
                 href={block.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-accent hover:bg-accent/10"
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-accent hover:bg-accent/10 md:h-7 md:w-7"
                 title="Link openen"
                 aria-label="Link openen"
               >

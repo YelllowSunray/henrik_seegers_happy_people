@@ -37,6 +37,8 @@ type CmsContextValue = {
   content: HomepageContent;
   saveState: SaveState;
   error: string | null;
+  /** Warning when another CMS tab is open or overwrote content. */
+  tabWarning: string | null;
   setPath: (path: string, value: CmsValue) => void;
   exitCms: () => void;
 };
@@ -44,6 +46,8 @@ type CmsContextValue = {
 const CmsContext = createContext<CmsContextValue | null>(null);
 
 const DEBOUNCE_MS = 900;
+const PRICE_SYNC_MS = 750;
+const CMS_TAB_CHANNEL = "hp-cms-tab";
 
 function getAtPath(obj: HomepageContent, path: string): unknown {
   return path.split(".").reduce<unknown>((acc, key) => {
@@ -109,9 +113,19 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
   const [saveState, setSaveState] = useState<SaveState>("idle");
   const [error, setError] = useState<string | null>(null);
+  const [tabWarning, setTabWarning] = useState<string | null>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const priceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const priceBase = useRef<HomepageContent | null>(null);
+  const pricePath = useRef<string | null>(null);
   const dirty = useRef(false);
   const latest = useRef(content);
+  const lastWrittenMs = useRef(0);
+  const tabId = useRef(
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `tab-${Math.random().toString(36).slice(2)}`,
+  );
 
   const enabled = isAdmin && !loading;
 
@@ -121,6 +135,36 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
     if (locale === "nl") return;
     router.replace(pathname || "/", { locale: "nl" });
   }, [enabled, locale, pathname, router]);
+
+  // Warn when CMS is open in another browser tab.
+  useEffect(() => {
+    if (!enabled || typeof BroadcastChannel === "undefined") return;
+    const bc = new BroadcastChannel(CMS_TAB_CHANNEL);
+    const id = tabId.current;
+    bc.postMessage({ type: "hello", id });
+    bc.onmessage = (ev) => {
+      const data = ev.data as { type?: string; id?: string } | null;
+      if (!data || data.id === id) return;
+      if (data.type === "hello" || data.type === "ping") {
+        setTabWarning(
+          "CMS staat ook open in een ander tabblad — wijzigingen kunnen elkaar overschrijven.",
+        );
+        bc.postMessage({ type: "ack", id });
+      }
+      if (data.type === "ack") {
+        setTabWarning(
+          "CMS staat ook open in een ander tabblad — wijzigingen kunnen elkaar overschrijven.",
+        );
+      }
+    };
+    const ping = window.setInterval(() => {
+      bc.postMessage({ type: "ping", id });
+    }, 15000);
+    return () => {
+      window.clearInterval(ping);
+      bc.close();
+    };
+  }, [enabled]);
 
   useEffect(() => {
     if (!enabled || !isFirebaseConfigured) {
@@ -135,12 +179,30 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
     const unsub = onSnapshot(
       ref,
       (snap) => {
+        const remoteMs = (() => {
+          const raw = snap.data()?.updatedAt as
+            | { toMillis?: () => number }
+            | undefined;
+          return raw?.toMillis?.() ?? 0;
+        })();
+
         // Don't clobber in-progress typing / pending auto-save.
-        if (dirty.current || saveTimer.current) return;
+        if (dirty.current || saveTimer.current) {
+          if (
+            remoteMs > lastWrittenMs.current + 800 &&
+            lastWrittenMs.current > 0
+          ) {
+            setTabWarning(
+              "Een andere tab heeft opgeslagen terwijl jij typt. Vernieuw om die versie te zien, of blijf typen om te overschrijven.",
+            );
+          }
+          return;
+        }
         const next = snap.exists()
           ? parseHomepageContent(snap.data() as Record<string, unknown>)
           : getDefaultHomepageContent();
         latest.current = next;
+        if (remoteMs) lastWrittenMs.current = remoteMs;
         setContent(next);
         setReady(true);
       },
@@ -152,6 +214,7 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
     return () => {
       unsub();
       if (saveTimer.current) clearTimeout(saveTimer.current);
+      if (priceTimer.current) clearTimeout(priceTimer.current);
     };
   }, [enabled]);
 
@@ -173,6 +236,7 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
         { ...next, locale: "nl", updatedAt: serverTimestamp() },
         { merge: true },
       );
+      lastWrittenMs.current = Date.now();
       // If the user kept typing during the save, flush the newer draft.
       if (latest.current !== next) {
         if (saveTimer.current) clearTimeout(saveTimer.current);
@@ -205,9 +269,26 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
   const setPath = useCallback(
     (path: string, value: CmsValue) => {
       setContent((prev) => {
-        let next = setAtPath(prev, path, value);
+        const next = setAtPath(prev, path, value);
+        // Debounce price sync so mid-typing (€2 → €20) doesn't thrash related copy.
         if (path.startsWith("membership.") && typeof value === "string") {
-          next = syncMembershipPrices(prev, next, path);
+          if (!priceBase.current) priceBase.current = prev;
+          pricePath.current = path;
+          if (priceTimer.current) clearTimeout(priceTimer.current);
+          priceTimer.current = setTimeout(() => {
+            const base = priceBase.current;
+            const syncPath = pricePath.current;
+            priceBase.current = null;
+            pricePath.current = null;
+            priceTimer.current = null;
+            if (!base || !syncPath) return;
+            setContent((cur) => {
+              const synced = syncMembershipPrices(base, cur, syncPath);
+              if (synced === cur) return cur;
+              queueSave(synced);
+              return synced;
+            });
+          }, PRICE_SYNC_MS);
         }
         queueSave(next);
         return next;
@@ -230,10 +311,11 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
       content,
       saveState,
       error,
+      tabWarning,
       setPath,
       exitCms,
     }),
-    [enabled, ready, content, saveState, error, setPath, exitCms],
+    [enabled, ready, content, saveState, error, tabWarning, setPath, exitCms],
   );
 
   return (
@@ -255,7 +337,7 @@ export function useCmsOptional() {
 }
 
 function CmsBottomBar() {
-  const { saveState, error, exitCms } = useCms();
+  const { saveState, error, tabWarning, exitCms } = useCms();
 
   const status =
     saveState === "saving"
@@ -310,25 +392,32 @@ function CmsBottomBar() {
         ref={dockRef}
         className="pointer-events-auto mx-auto w-full max-w-md px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
       >
-        <div className="flex min-h-12 w-full items-center gap-2 rounded-full border border-white/10 bg-ink/95 py-1.5 pr-1.5 pl-2 text-white shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md">
-          <span className="shrink-0 rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold tracking-wide uppercase">
-            CMS · NL
-          </span>
-          <span
-            className={`min-w-0 flex-1 truncate text-xs ${statusTone}`}
-            aria-live="polite"
-            title={error ?? undefined}
-          >
-            {status}
-            {error ? ` · ${error}` : null}
-          </span>
-          <button
-            type="button"
-            onClick={exitCms}
-            className="inline-flex h-9 shrink-0 items-center justify-center rounded-full bg-white px-4 text-sm font-semibold text-ink transition hover:bg-white/90 active:bg-white/80"
-          >
-            Uitloggen
-          </button>
+        <div className="space-y-1.5">
+          {tabWarning ? (
+            <p className="rounded-2xl border border-amber-300/40 bg-amber-950/90 px-3 py-2 text-[11px] leading-snug text-amber-100 shadow-lg backdrop-blur-md">
+              {tabWarning}
+            </p>
+          ) : null}
+          <div className="flex min-h-12 w-full items-center gap-2 rounded-full border border-white/10 bg-ink/95 py-1.5 pr-1.5 pl-2 text-white shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md">
+            <span className="shrink-0 rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold tracking-wide uppercase">
+              CMS · NL
+            </span>
+            <span
+              className={`min-w-0 flex-1 truncate text-xs ${statusTone}`}
+              aria-live="polite"
+              title={error ?? undefined}
+            >
+              {status}
+              {error ? ` · ${error}` : null}
+            </span>
+            <button
+              type="button"
+              onClick={exitCms}
+              className="inline-flex h-9 shrink-0 items-center justify-center rounded-full bg-white px-4 text-sm font-semibold text-ink transition hover:bg-white/90 active:bg-white/80"
+            >
+              Uitloggen
+            </button>
+          </div>
         </div>
       </div>
     </div>
