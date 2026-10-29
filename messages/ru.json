@@ -311,7 +311,7 @@
     "events": "Живые семинары",
     "denied": "Доступ запрещён",
     "subtitle": "Управление публичным контентом и клубом",
-    "signInHint": "Войдите с учётной записью администратора, чтобы продолжить.",
+    "signInHint": "Введите пароль администратора, чтобы продолжить.",
     "newItem": "Новое",
     "edit": "Изменить",
     "delete": "Удалить",
@@ -389,7 +389,10 @@
     "videoKindSeminarShort": "Запись семинара",
     "videoKindVlogShort": "Влог",
     "videoMediaAudio": "аудио",
-    "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set."
+    "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set.",
+    "password": "Пароль",
+    "wrongPassword": "Неверный пароль.",
+    "unlock": "Разблокировать"
   },
   "adminAccounts": {
     "eyebrow": "Разработчик",

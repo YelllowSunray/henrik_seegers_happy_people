@@ -309,7 +309,7 @@
     "events": "Live seminars",
     "denied": "Geen toegang",
     "subtitle": "Beheer openbare content en de club",
-    "signInHint": "Log in met het admin-account om verder te gaan.",
+    "signInHint": "Voer het admin-wachtwoord in om verder te gaan.",
     "newItem": "Nieuw",
     "edit": "Bewerken",
     "delete": "Verwijderen",
@@ -387,7 +387,10 @@
     "videoKindSeminarShort": "Seminaropname",
     "videoKindVlogShort": "Vlog",
     "videoMediaAudio": "audio",
-    "videoPublishHint": "Leden zien een seminaropname pas vanaf de publicatiedatum én als er een video-URL is ingevuld. Zet de datum op of na de live seminar-dag."
+    "videoPublishHint": "Leden zien een seminaropname pas vanaf de publicatiedatum én als er een video-URL is ingevuld. Zet de datum op of na de live seminar-dag.",
+    "password": "Wachtwoord",
+    "wrongPassword": "Onjuist wachtwoord.",
+    "unlock": "Ontgrendelen"
   },
   "adminAccounts": {
     "eyebrow": "Developer",

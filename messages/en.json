@@ -309,7 +309,7 @@
     "events": "Live seminars",
     "denied": "Access denied",
     "subtitle": "Manage public content and the club",
-    "signInHint": "Sign in with the admin account to continue.",
+    "signInHint": "Enter the admin password to continue.",
     "newItem": "New",
     "edit": "Edit",
     "delete": "Delete",
@@ -387,7 +387,10 @@
     "videoKindSeminarShort": "Seminar recording",
     "videoKindVlogShort": "Vlog",
     "videoMediaAudio": "audio",
-    "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set. Use the live seminar date or later."
+    "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set. Use the live seminar date or later.",
+    "password": "Password",
+    "wrongPassword": "Incorrect password.",
+    "unlock": "Unlock"
   },
   "adminAccounts": {
     "eyebrow": "Developer",

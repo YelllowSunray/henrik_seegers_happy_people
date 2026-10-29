@@ -311,7 +311,7 @@
     "events": "Live-Seminare",
     "denied": "Kein Zugang",
     "subtitle": "Beheer blog, seminars en ledencontent",
-    "signInHint": "Log in met het admin-account om verder te gaan.",
+    "signInHint": "Gib das Admin-Passwort ein, um fortzufahren.",
     "newItem": "Nieuw",
     "edit": "Bewerken",
     "delete": "Verwijderen",
@@ -389,7 +389,10 @@
     "videoKindSeminarShort": "Seminaraufzeichnung",
     "videoKindVlogShort": "Vlog",
     "videoMediaAudio": "Audio",
-    "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set."
+    "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set.",
+    "password": "Passwort",
+    "wrongPassword": "Falsches Passwort.",
+    "unlock": "Entsperren"
   },
   "adminAccounts": {
     "eyebrow": "Developer",

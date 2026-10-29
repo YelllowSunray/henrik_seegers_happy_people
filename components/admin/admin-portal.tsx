@@ -12,6 +12,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { SiteHeader } from "@/components/site-header";
+import { AdminLogin } from "@/components/admin/admin-login";
 import {
   AdminBillingUsage,
   useBillingOverBudget,
@@ -390,31 +391,8 @@ export function AdminPortal() {
     );
   }
 
-  if (!user || !isAdmin) {
-    return (
-      <>
-        <SiteHeader variant="solid" />
-        <div className="mx-auto max-w-lg px-5 py-20 text-center">
-          <h1 className="font-display text-3xl">{t("denied")}</h1>
-          <p className="mt-4 text-ink-soft">{t("signInHint")}</p>
-          {user ? (
-            <Link
-              href="/members"
-              className="mt-8 inline-flex rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white"
-            >
-              Leden
-            </Link>
-          ) : (
-            <Link
-              href="/auth"
-              className="mt-8 inline-flex rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white"
-            >
-              Sign in
-            </Link>
-          )}
-        </div>
-      </>
-    );
+  if (!isAdmin) {
+    return <AdminLogin />;
   }
 
   const navSections: { audience: "public" | "club"; tabs: Tab[] }[] = [
@@ -459,7 +437,6 @@ export function AdminPortal() {
       <div className="mx-auto max-w-5xl px-5 py-8 md:px-8">
         <header className="border-b border-line pb-5">
           <h1 className="font-display text-3xl text-ink">{t("title")}</h1>
-          <p className="mt-1 text-sm text-ink-soft">{user.email}</p>
           <AdminBillingUsage />
           <Link
             href="/admin/accounts"

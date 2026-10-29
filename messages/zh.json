@@ -311,7 +311,7 @@
     "events": "现场研讨会",
     "denied": "访问被拒绝",
     "subtitle": "管理公共内容和俱乐部",
-    "signInHint": "使用管理员帐户登录以继续。",
+    "signInHint": "输入管理员密码以继续。",
     "newItem": "新",
     "edit": "编辑",
     "delete": "删除",
@@ -389,7 +389,10 @@
     "videoKindSeminarShort": "研讨会录像",
     "videoKindVlogShort": "Vlog",
     "videoMediaAudio": "音频",
-    "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set."
+    "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set.",
+    "password": "密码",
+    "wrongPassword": "密码不正确。",
+    "unlock": "解锁"
   },
   "adminAccounts": {
     "eyebrow": "开发者",

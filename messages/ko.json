@@ -311,7 +311,7 @@
     "events": "라이브 세미나",
     "denied": "접근 불가",
     "subtitle": "Beheer blog, seminars en ledencontent",
-    "signInHint": "Log in met het admin-account om verder te gaan.",
+    "signInHint": "계속하려면 관리자 비밀번호를 입력하세요.",
     "newItem": "Nieuw",
     "edit": "Bewerken",
     "delete": "Verwijderen",
@@ -389,7 +389,10 @@
     "videoKindSeminarShort": "세미나 녹화",
     "videoKindVlogShort": "브이로그",
     "videoMediaAudio": "오디오",
-    "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set."
+    "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set.",
+    "password": "비밀번호",
+    "wrongPassword": "잘못된 비밀번호입니다.",
+    "unlock": "잠금 해제"
   },
   "adminAccounts": {
     "eyebrow": "Developer",

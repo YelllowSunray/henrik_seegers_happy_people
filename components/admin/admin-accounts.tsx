@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { collection, onSnapshot } from "firebase/firestore";
 import { SiteHeader } from "@/components/site-header";
+import { AdminLogin } from "@/components/admin/admin-login";
 import { useAuth } from "@/components/auth-provider";
 import {
   MemberIdentity,
@@ -97,22 +98,8 @@ export function AdminAccounts() {
     );
   }
 
-  if (!user || !isAdmin) {
-    return (
-      <>
-        <SiteHeader variant="solid" />
-        <div className="mx-auto max-w-lg px-5 py-20 text-center">
-          <h1 className="font-display text-3xl">{ta("denied")}</h1>
-          <p className="mt-4 text-ink-soft">{ta("signInHint")}</p>
-          <Link
-            href={user ? "/members" : "/auth"}
-            className="mt-8 inline-flex rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white"
-          >
-            {user ? t("backMembers") : t("signIn")}
-          </Link>
-        </div>
-      </>
-    );
+  if (!isAdmin) {
+    return <AdminLogin />;
   }
 
   return (

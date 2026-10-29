@@ -25,6 +25,9 @@ import {
 import { hasMembershipAccess } from "@/lib/membership";
 import type { MemberProfile } from "@/lib/types";
 
+const ADMIN_PASSWORD = "admin";
+const ADMIN_SESSION_KEY = "hp_admin_unlocked";
+
 type AuthContextValue = {
   user: User | null;
   profile: MemberProfile | null;
@@ -36,6 +39,7 @@ type AuthContextValue = {
   resetPassword: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
+  unlockAdmin: (password: string) => boolean;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -78,6 +82,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<MemberProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [passwordAdmin, setPasswordAdmin] = useState(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      return sessionStorage.getItem(ADMIN_SESSION_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
 
   const refreshProfile = useCallback(async () => {
     if (!user || !isFirebaseConfigured) return;
@@ -107,13 +119,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => unsub();
   }, []);
 
+  const unlockAdmin = useCallback((password: string) => {
+    if (password !== ADMIN_PASSWORD) return false;
+    try {
+      sessionStorage.setItem(ADMIN_SESSION_KEY, "1");
+    } catch {
+      /* ignore */
+    }
+    setPasswordAdmin(true);
+    return true;
+  }, []);
+
   const value = useMemo<AuthContextValue>(
     () => ({
       user,
       profile,
       loading,
       isMember: hasMembershipAccess(profile),
-      isAdmin: Boolean(profile?.isAdmin),
+      isAdmin: Boolean(profile?.isAdmin) || passwordAdmin,
       signIn: async (email, password) => {
         await signInWithEmailAndPassword(getClientAuth(), email, password);
       },
@@ -134,11 +157,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await sendPasswordResetEmail(getClientAuth(), email.trim());
       },
       signOut: async () => {
+        try {
+          sessionStorage.removeItem(ADMIN_SESSION_KEY);
+        } catch {
+          /* ignore */
+        }
+        setPasswordAdmin(false);
         await firebaseSignOut(getClientAuth());
       },
       refreshProfile,
+      unlockAdmin,
     }),
-    [user, profile, loading, refreshProfile],
+    [user, profile, loading, passwordAdmin, refreshProfile, unlockAdmin],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

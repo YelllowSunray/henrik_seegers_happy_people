@@ -311,7 +311,7 @@
     "events": "الندوات المباشرة",
     "denied": "تم رفض الوصول",
     "subtitle": "إدارة المحتوى العام والنادي",
-    "signInHint": "قم بتسجيل الدخول باستخدام حساب المسؤول للمتابعة.",
+    "signInHint": "أدخل كلمة مرور المسؤول للمتابعة.",
     "newItem": "جديد",
     "edit": "تحرير",
     "delete": "حذف",
@@ -389,7 +389,10 @@
     "videoKindSeminarShort": "تسجيل الندوة",
     "videoKindVlogShort": "مدونة",
     "videoMediaAudio": "صوت",
-    "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set."
+    "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set.",
+    "password": "كلمة المرور",
+    "wrongPassword": "كلمة المرور غير صحيحة.",
+    "unlock": "فتح"
   },
   "adminAccounts": {
     "eyebrow": "المطور",
