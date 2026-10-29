@@ -10,7 +10,7 @@
     "home": "Inicio",
     "about": "Sobre Henk",
     "meeting": "El encuentro",
-    "seminars": "Seminarios",
+    "seminars": "Seminarios mensuales",
     "blog": "Blogs",
     "membership": "Happy People",
     "contact": "Contacto",
@@ -20,7 +20,6 @@
     "signOut": "Cerrar sesión",
     "admin": "Admin",
     "back": "Atrás",
-    "webinars": "Webinarios mensuales",
     "vlogs": "Vlogs",
     "community": "Comunidad Happy People"
   },
@@ -637,13 +636,6 @@
       "Qué bien que estés aquí. Soy Henk de Happy People. ¿Qué miramos juntos?"
     ],
     "convoIntroFallback": "Hola, soy Henk de Happy People. ¿De qué te gustaría hablar?"
-  },
-  "webinars": {
-    "eyebrow": "Webinars",
-    "title": "Monthly webinars",
-    "lead": "Every month an online moment to ask questions, talk, and connect.",
-    "body": "Personal vlogs, stories, and live conversations with Henk — for people who are curious and want to keep learning. Monthly or yearly, whichever fits you.",
-    "cta": "Become Happy People"
   },
   "vlogsPage": {
     "eyebrow": "Vlogs",

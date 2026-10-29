@@ -10,7 +10,7 @@
     "home": "首页",
     "about": "关于Henk",
     "meeting": "相遇",
-    "seminars": "研讨会",
+    "seminars": "每月研讨会",
     "blog": "博客",
     "membership": "Happy People",
     "contact": "联系方式",
@@ -20,7 +20,6 @@
     "signOut": "退出",
     "admin": "管理员",
     "back": "返回",
-    "webinars": "每月网络研讨会",
     "vlogs": "视频博客",
     "community": "Happy People 社区"
   },
@@ -636,13 +635,6 @@
       "欢迎。我是 Henk。告诉我——你在想什么？"
     ],
     "convoIntroFallback": "你好，我是 Happy People 的 Henk。你想聊些什么？"
-  },
-  "webinars": {
-    "eyebrow": "Webinars",
-    "title": "Monthly webinars",
-    "lead": "Every month an online moment to ask questions, talk, and connect.",
-    "body": "Personal vlogs, stories, and live conversations with Henk — for people who are curious and want to keep learning. Monthly or yearly, whichever fits you.",
-    "cta": "Become Happy People"
   },
   "vlogsPage": {
     "eyebrow": "Vlogs",

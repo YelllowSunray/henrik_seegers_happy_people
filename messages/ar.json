@@ -10,7 +10,7 @@
     "home": "الصفحة الرئيسية",
     "about": "حول Henk",
     "meeting": "اللقاء",
-    "seminars": "الندوات",
+    "seminars": "ندوات شهرية",
     "blog": "مدونات",
     "membership": "Happy People",
     "contact": "الاتصال",
@@ -20,7 +20,6 @@
     "signOut": "تسجيل الخروج",
     "admin": "المسؤول",
     "back": "العودة",
-    "webinars": "ندوات شهرية",
     "vlogs": "فلوجات",
     "community": "مجتمع Happy People"
   },
@@ -636,13 +635,6 @@
       "أهلًا بك. أنا Henk. أخبرني — ما الذي يشغل بالك؟"
     ],
     "convoIntroFallback": "مرحبًا، أنا Henk من Happy People. عن ماذا تريد أن نتحدث؟"
-  },
-  "webinars": {
-    "eyebrow": "Webinars",
-    "title": "Monthly webinars",
-    "lead": "Every month an online moment to ask questions, talk, and connect.",
-    "body": "Personal vlogs, stories, and live conversations with Henk — for people who are curious and want to keep learning. Monthly or yearly, whichever fits you.",
-    "cta": "Become Happy People"
   },
   "vlogsPage": {
     "eyebrow": "Vlogs",

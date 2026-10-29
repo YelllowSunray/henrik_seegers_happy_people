@@ -10,7 +10,7 @@
     "home": "Главная",
     "about": "О Хенке",
     "meeting": "Встреча",
-    "seminars": "Семинары",
+    "seminars": "Ежемесячные семинары",
     "blog": "Блоги",
     "membership": "Happy People",
     "contact": "Контакты",
@@ -20,7 +20,6 @@
     "signOut": "Выйти",
     "admin": "Админ",
     "back": "Назад",
-    "webinars": "Ежемесячные вебинары",
     "vlogs": "Влоги",
     "community": "Сообщество Happy People"
   },
@@ -636,13 +635,6 @@
       "Добро пожаловать. Я Хенк. Расскажи — что у тебя на уме?"
     ],
     "convoIntroFallback": "Привет, я Хенк из Happy People. О чём хочешь поговорить?"
-  },
-  "webinars": {
-    "eyebrow": "Webinars",
-    "title": "Monthly webinars",
-    "lead": "Every month an online moment to ask questions, talk, and connect.",
-    "body": "Personal vlogs, stories, and live conversations with Henk — for people who are curious and want to keep learning. Monthly or yearly, whichever fits you.",
-    "cta": "Become Happy People"
   },
   "vlogsPage": {
     "eyebrow": "Vlogs",

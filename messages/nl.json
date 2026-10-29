@@ -8,13 +8,12 @@
   },
   "nav": {
     "home": "Home",
-    "webinars": "Maandelijkse webinars",
     "blog": "Blogs",
     "vlogs": "Vlogs",
     "community": "Happy People community",
     "about": "Over Henk",
     "meeting": "De ontmoeting",
-    "seminars": "Seminars",
+    "seminars": "Maandelijkse seminars",
     "membership": "Happy People",
     "contact": "Contact",
     "members": "Leden",
@@ -23,13 +22,6 @@
     "signOut": "Uitloggen",
     "admin": "Admin",
     "back": "Terug"
-  },
-  "webinars": {
-    "eyebrow": "Webinars",
-    "title": "Maandelijkse webinars",
-    "lead": "Elke maand een online moment om vragen te stellen, gesprekken te voeren en met elkaar te verbinden.",
-    "body": "Persoonlijke vlogs, verhalen en live gesprekken met Henk — voor mensen die nieuwsgierig zijn en willen blijven leren. Maandelijks of jaarlijks, net wat bij je past.",
-    "cta": "Word Happy People"
   },
   "vlogsPage": {
     "eyebrow": "Vlogs",

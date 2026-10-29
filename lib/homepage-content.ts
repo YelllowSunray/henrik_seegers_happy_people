@@ -32,7 +32,6 @@ export type HomepageContent = {
     banner: string;
   };
   nav: {
-    webinars: string;
     blog: string;
     vlogs: string;
     community: string;
@@ -164,7 +163,6 @@ export function getDefaultHomepageContent(): HomepageContent {
       banner: nl.site.underConstruction,
     },
     nav: {
-      webinars: nl.nav.webinars,
       blog: nl.nav.blog,
       vlogs: nl.nav.vlogs,
       community: nl.nav.community,
@@ -299,7 +297,6 @@ export function parseHomepageContent(
       banner: asString(site.banner, defaults.site.banner),
     },
     nav: {
-      webinars: asString(nav.webinars, defaults.nav.webinars),
       blog: asString(nav.blog, defaults.nav.blog),
       vlogs: asString(nav.vlogs, defaults.nav.vlogs),
       community: asString(nav.community, defaults.nav.community),

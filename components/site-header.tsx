@@ -12,7 +12,7 @@ import { HeaderBackButton } from "@/components/smart-back-button";
 import { SeminarPromoBar } from "@/components/seminar-promo";
 
 const navKeys = [
-  ["webinars", "/webinars", "nav.webinars"],
+  ["seminars", "/seminars", "nav.seminars"],
   ["blog", "/blog", "nav.blog"],
   ["vlogs", "/vlogs", "nav.vlogs"],
   ["community", "/happy-people", "nav.community"],
