@@ -38,6 +38,8 @@ export function useAutosizeTextarea(
   ref: React.RefObject<HTMLTextAreaElement | null>,
   deps: unknown[],
   enabled: boolean,
+  /** Size width to the text (inline one-line fields), capped by the parent. */
+  fitWidth = false,
 ) {
   useLayoutEffect(() => {
     if (!enabled) return;
@@ -48,6 +50,9 @@ export function useAutosizeTextarea(
       const node = ref.current;
       if (!node) return;
       const cs = getComputedStyle(node);
+      const borderX =
+        (parseFloat(cs.borderLeftWidth) || 0) +
+        (parseFloat(cs.borderRightWidth) || 0);
       const fontSize = parseFloat(cs.fontSize) || 16;
       const lineHeight =
         cs.lineHeight === "normal"
@@ -58,9 +63,14 @@ export function useAutosizeTextarea(
       const slack = Math.max(4, Math.ceil(fontSize * 0.12));
 
       // Always stay within the parent — never grow the page horizontally.
-      node.style.width = "100%";
       node.style.maxWidth = "100%";
       node.style.boxSizing = "border-box";
+      if (fitWidth) {
+        node.style.width = "0px";
+        node.style.width = `${Math.ceil(node.scrollWidth + borderX + 2)}px`;
+      } else {
+        node.style.width = "100%";
+      }
 
       node.style.height = "0px";
       const next = Math.max(
@@ -77,7 +87,7 @@ export function useAutosizeTextarea(
     if (el.parentElement) ro.observe(el.parentElement);
     return () => ro.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps -- explicit deps list
-  }, [enabled, ...deps]);
+  }, [enabled, fitWidth, ...deps]);
 }
 
 /** Shared chrome: live-site look, contained on mobile. */
@@ -112,7 +122,12 @@ export function CmsField({
   // Titles/body: wrap so large type never clips the viewport.
   const keepOneLine = nowrap;
 
-  useAutosizeTextarea(ref, [text, className, multiline, keepOneLine], enabled);
+  useAutosizeTextarea(
+    ref,
+    [text, className, multiline, keepOneLine],
+    enabled,
+    keepOneLine && inline,
+  );
 
   if (!enabled) {
     if (cmsOnly) return null;
@@ -153,7 +168,7 @@ export function CmsField({
           inline ? "inline-block w-full max-w-full align-baseline" : "block w-full"
         } ${className ?? ""} ${
           keepOneLine
-            ? "!whitespace-nowrap overflow-x-auto overflow-y-hidden"
+            ? "cms-nowrap-field !whitespace-nowrap overflow-x-auto overflow-y-hidden"
             : "!whitespace-pre-wrap overflow-x-hidden"
         }`}
       />

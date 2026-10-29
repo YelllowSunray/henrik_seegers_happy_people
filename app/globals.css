@@ -36,11 +36,19 @@ html {
   scroll-padding-top: calc(5.5rem + env(safe-area-inset-top) + var(--seminar-promo-h, 0px));
 }
 
-/* CMS edit mode: stop long URLs / wide fields from blowing out mobile width */
-html.cms-editing,
-html.cms-editing body {
+/* Wide content must never widen the mobile layout viewport (zoom-out + empty strip). */
+html,
+body {
   overflow-x: clip;
   max-width: 100%;
+}
+
+/* Single-line CMS fields scroll sideways without a visible scrollbar. */
+.cms-nowrap-field {
+  scrollbar-width: none;
+}
+.cms-nowrap-field::-webkit-scrollbar {
+  display: none;
 }
 
 html.cms-editing {
