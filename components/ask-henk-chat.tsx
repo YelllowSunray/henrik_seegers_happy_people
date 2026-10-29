@@ -6,6 +6,7 @@ import { useAuth } from "@/components/auth-provider";
 import {
   canSpeak,
   clearSpeechPrefetchCache,
+  firstSpeakableSentence,
   holdSpeechAudioSession,
   pauseSilentKeepAlive,
   prefetchDutchSpeech,
@@ -569,11 +570,16 @@ export function AskHenkChat({
       const decoder = new TextDecoder();
       let full = "";
 
-      // ── Gespreksmodus: stream text, prefetch first Maarten sentence early ──
+      // ── Gespreksmodus: speak first sentence ASAP, then the rest ──
       if (shouldSpeak) {
         setHenkTyping(true);
         let assistantStarted = false;
         let speakIdx = 0;
+        let firstSentence = "";
+        let resolveFirstDone: (() => void) | null = null;
+        const firstDone = new Promise<void>((r) => {
+          resolveFirstDone = r;
+        });
 
         const ensureAssistant = (content: string) => {
           if (!assistantStarted) {
@@ -601,6 +607,19 @@ export function AskHenkChat({
           const live = full.trimEnd();
           if (live) {
             ensureAssistant(live);
+            if (!firstSentence) {
+              const first = firstSpeakableSentence(live);
+              if (first) {
+                firstSentence = first;
+                setBusy(false);
+                prefetchDutchSpeech(first);
+                readAloud(first, speakIdx, {
+                  key: `auto-first:${first}`,
+                  afterSpeak: () => resolveFirstDone?.(),
+                  onSpeakFailed: () => resolveFirstDone?.(),
+                });
+              }
+            }
           }
         }
         full += decoder.decode();
@@ -614,13 +633,35 @@ export function AskHenkChat({
         ensureAssistant(finalAssistant);
         if (!aliveRef.current || ac.signal.aborted) return;
 
-        // One Maarten request for the full reply (sentence-split broke mobile audio)
-        prefetchDutchSpeech(finalAssistant);
         setBusy(false);
 
-        readAloud(finalAssistant, speakIdx, {
-          key: `auto:${finalAssistant.length}:${finalAssistant.slice(0, 48)}`,
+        const rest = firstSentence
+          ? finalAssistant.slice(firstSentence.length).trim()
+          : finalAssistant;
+
+        if (!firstSentence) {
+          readAloud(finalAssistant, speakIdx, {
+            key: `auto:${finalAssistant.length}:${finalAssistant.slice(0, 48)}`,
+            afterSpeak: afterHenkSpoke,
+          });
+          return;
+        }
+
+        if (!rest) {
+          await firstDone;
+          if (aliveRef.current && !ac.signal.aborted) afterHenkSpoke();
+          return;
+        }
+
+        prefetchDutchSpeech(rest);
+        await firstDone;
+        if (!aliveRef.current || ac.signal.aborted) return;
+
+        lastSpokenKeyRef.current = null;
+        readAloud(rest, speakIdx, {
+          key: `auto-rest:${rest.length}:${rest.slice(0, 48)}`,
           afterSpeak: afterHenkSpoke,
+          onSpeakFailed: afterHenkSpoke,
         });
         return;
       }

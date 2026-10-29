@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
-import { EdgeTTS } from "edge-tts-universal";
+import { synthesizeDutchSpeech } from "@/lib/google-tts.server";
 
 export const runtime = "nodejs";
-
-/** Natural Dutch male neural voice (Microsoft Edge TTS). */
-const DUTCH_MALE_VOICE = "nl-NL-MaartenNeural";
 
 export async function POST(req: Request) {
   let body: { text?: string };
@@ -23,16 +20,8 @@ export async function POST(req: Request) {
   }
 
   try {
-    const tts = new EdgeTTS(text, DUTCH_MALE_VOICE, {
-      rate: "+0%",
-      pitch: "+0Hz",
-      volume: "+0%",
-    });
-    const result = await tts.synthesize();
-    const audio = result.audio;
-    const buffer = Buffer.from(await audio.arrayBuffer());
-
-    return new NextResponse(buffer, {
+    const buffer = await synthesizeDutchSpeech(text);
+    return new NextResponse(new Uint8Array(buffer), {
       headers: {
         "Content-Type": "audio/mpeg",
         "Cache-Control": "no-store",
