@@ -392,7 +392,9 @@
     "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set.",
     "password": "密码",
     "wrongPassword": "密码不正确。",
-    "unlock": "解锁"
+    "unlock": "解锁",
+    "homepage": "首页",
+    "tabHintHomepage": "编辑荷兰语首页文案 — 手机预览样式。自动保存。"
   },
   "adminAccounts": {
     "eyebrow": "开发者",

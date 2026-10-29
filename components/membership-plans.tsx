@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useAuth } from "@/components/auth-provider";
 import { useBillingOverBudget } from "@/components/billing-banner";
+import { CmsField } from "@/components/cms/cms-field";
+import { useCmsValue } from "@/components/cms/cms-provider";
 import { billingContactMessage } from "@/lib/billing";
 import { Link, usePathname } from "@/i18n/navigation";
 import { hasStripeSubscription } from "@/lib/membership";
@@ -24,6 +26,16 @@ export function MembershipPlans({
   const overBudget = useBillingOverBudget();
   const [busy, setBusy] = useState<MembershipPlan | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const noObligation = useCmsValue("membership.noObligation", t("noObligation"));
+  const monthlyLabel = useCmsValue("membership.monthlyLabel", t("monthlyLabel"));
+  const yearlyLabel = useCmsValue("membership.yearlyLabel", t("yearlyLabel"));
+  const priceMonthly = useCmsValue("membership.priceMonthly", t("priceMonthly"));
+  const priceYearly = useCmsValue("membership.priceYearly", t("priceYearly"));
+  const yearlySave = useCmsValue("membership.yearlySave", t("yearlySave"));
+  const cta = useCmsValue("membership.cta", t("cta"));
+  const ctaMonthly = useCmsValue("membership.ctaMonthly", t("ctaMonthly"));
+  const ctaYearly = useCmsValue("membership.ctaYearly", t("ctaYearly"));
 
   if (hasStripeSubscription(profile)) {
     return (
@@ -72,22 +84,31 @@ export function MembershipPlans({
 
   return (
     <div className={className}>
-      <p className="max-w-xl text-ink-soft">{t("noObligation")}</p>
+      <CmsField
+        path="membership.noObligation"
+        value={noObligation}
+        className="max-w-xl text-ink-soft"
+      />
 
       <div className="mt-8 grid items-stretch gap-4 sm:grid-cols-2">
         <PlanCard
-          eyebrow={t("monthlyLabel")}
-          price={t("priceMonthly")}
-          cta={user ? t("ctaMonthly") : t("cta")}
+          eyebrowPath="membership.monthlyLabel"
+          eyebrow={monthlyLabel}
+          pricePath="membership.priceMonthly"
+          price={priceMonthly}
+          cta={user ? ctaMonthly : cta}
           href={user ? undefined : registerHref}
           busy={busy === "monthly"}
           onClick={user ? () => void startCheckout("monthly") : undefined}
         />
         <PlanCard
-          eyebrow={t("yearlyLabel")}
-          price={t("priceYearly")}
-          badge={t("yearlySave")}
-          cta={user ? t("ctaYearly") : t("cta")}
+          eyebrowPath="membership.yearlyLabel"
+          eyebrow={yearlyLabel}
+          pricePath="membership.priceYearly"
+          price={priceYearly}
+          badgePath="membership.yearlySave"
+          badge={yearlySave}
+          cta={user ? ctaYearly : cta}
           href={user ? undefined : registerHref}
           busy={busy === "yearly"}
           onClick={user ? () => void startCheckout("yearly") : undefined}
@@ -100,16 +121,22 @@ export function MembershipPlans({
 }
 
 function PlanCard({
+  eyebrowPath,
   eyebrow,
+  pricePath,
   price,
+  badgePath,
   badge,
   cta,
   href,
   busy,
   onClick,
 }: {
+  eyebrowPath: string;
   eyebrow: string;
+  pricePath: string;
   price: string;
+  badgePath?: string;
   badge?: string;
   cta: string;
   href?: string;
@@ -119,16 +146,27 @@ function PlanCard({
   return (
     <div className="flex h-full flex-col border border-accent bg-accent/5 p-6 shadow-sm">
       <div className="flex min-h-[1.75rem] flex-wrap items-center gap-2">
-        <p className="text-xs font-semibold tracking-[0.16em] text-accent uppercase">
-          {eyebrow}
-        </p>
-        {badge && (
-          <span className="rounded-full bg-gold/20 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-ink uppercase">
-            {badge}
-          </span>
-        )}
+        <CmsField
+          path={eyebrowPath}
+          value={eyebrow}
+          multiline={false}
+          className="text-xs font-semibold tracking-[0.16em] text-accent uppercase"
+        />
+        {badge != null && badgePath ? (
+          <CmsField
+            path={badgePath}
+            value={badge}
+            multiline={false}
+            className="rounded-full bg-gold/20 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-ink uppercase"
+          />
+        ) : null}
       </div>
-      <p className="font-display mt-3 text-3xl text-ink">{price}</p>
+      <CmsField
+        path={pricePath}
+        value={price}
+        multiline={false}
+        className="font-display mt-3 text-3xl text-ink"
+      />
       <div className="mt-auto pt-8">
         {href ? (
           <Link

@@ -4,13 +4,25 @@ import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/components/auth-provider";
+import { CmsField } from "@/components/cms/cms-field";
 import { LightboxImage } from "@/components/lightbox-image";
 import {
   DONATION_DEFAULT_EUR,
   DONATION_PRESETS_EUR,
 } from "@/lib/stripe-constants";
 
-export function DonateSection() {
+export function DonateSection({
+  copy,
+}: {
+  copy?: {
+    eyebrow?: string;
+    title?: string;
+    lead?: string;
+    body?: string;
+    asideQuote?: string;
+    asideCredit?: string;
+  };
+}) {
   const t = useTranslations("donate");
   const locale = useLocale();
   const searchParams = useSearchParams();
@@ -21,6 +33,13 @@ export function DonateSection() {
   const [thanksVisible, setThanksVisible] = useState(
     searchParams.get("donate") === "success",
   );
+
+  const eyebrow = copy?.eyebrow?.trim() || t("eyebrow");
+  const title = copy?.title?.trim() || t("title");
+  const lead = copy?.lead?.trim() || t("lead");
+  const body = copy?.body?.trim() || t("body");
+  const asideQuote = copy?.asideQuote?.trim() || t("asideQuote");
+  const asideCredit = copy?.asideCredit?.trim() || t("asideCredit");
 
   async function startDonate() {
     setBusy(true);
@@ -69,21 +88,30 @@ export function DonateSection() {
           </div>
         )}
 
-        <p className="text-sm font-semibold tracking-[0.18em] text-gold uppercase md:text-base">
-          {t("eyebrow")}
-        </p>
-        <h2
-          id="donate-title"
+        <CmsField
+          path="donate.eyebrow"
+          value={eyebrow}
+          multiline={false}
+          className="text-sm font-semibold tracking-[0.18em] text-gold uppercase md:text-base"
+        />
+        <CmsField
+          path="donate.title"
+          value={title}
+          as="h2"
           className="font-display mt-3 text-3xl leading-tight text-ink md:text-5xl"
-        >
-          {t("title")}
-        </h2>
-        <p className="mt-5 max-w-xl text-base leading-relaxed text-ink-soft md:text-lg">
-          {t("lead")}
-        </p>
-        <p className="mt-4 max-w-xl text-base leading-relaxed text-ink md:text-lg">
-          {t("body")}
-        </p>
+        />
+        <CmsField
+          path="donate.lead"
+          value={lead}
+          as="p"
+          className="mt-5 max-w-xl text-base leading-relaxed text-ink-soft md:text-lg"
+        />
+        <CmsField
+          path="donate.body"
+          value={body}
+          as="p"
+          className="mt-4 max-w-xl text-base leading-relaxed text-ink md:text-lg"
+        />
 
         <p className="mt-8 text-xs font-semibold tracking-[0.16em] text-ink-soft uppercase">
           {t("chooseAmount")}
@@ -151,12 +179,19 @@ export function DonateSection() {
               "linear-gradient(to top, rgba(15,40,36,0.88) 0%, rgba(15,40,36,0.35) 55%, transparent 100%)",
           }}
         >
-          <p className="font-display text-xl leading-snug text-white md:text-2xl">
-            {t("asideQuote")}
-          </p>
-          <p className="mt-3 text-xs font-semibold tracking-[0.14em] text-gold uppercase">
-            {t("asideCredit")}
-          </p>
+          <div className="pointer-events-auto">
+            <CmsField
+              path="donate.asideQuote"
+              value={asideQuote}
+              className="font-display text-xl leading-snug text-white md:text-2xl"
+            />
+            <CmsField
+              path="donate.asideCredit"
+              value={asideCredit}
+              multiline={false}
+              className="mt-3 text-xs font-semibold tracking-[0.14em] text-gold uppercase"
+            />
+          </div>
         </div>
       </aside>
     </div>

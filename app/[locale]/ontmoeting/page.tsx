@@ -3,8 +3,16 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { MeetingStory } from "@/components/meeting-story";
+import {
+  cmsText,
+} from "@/lib/homepage-content";
+import {
+  fetchHomepageCmsForLocale,
+} from "@/lib/homepage-content.server";
 import { buildPageMetadata } from "@/lib/seo";
 import type { Locale } from "@/lib/types";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -13,12 +21,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meeting" });
-  const blocks = t.raw("blocks") as { text: string }[];
+  const cms = await fetchHomepageCmsForLocale(locale);
+  const blocks = cms?.meeting.blocks?.length
+    ? cms.meeting.blocks
+    : (t.raw("blocks") as { text: string }[]);
   return buildPageMetadata({
     locale: locale as Locale,
     pathname: "/ontmoeting",
-    title: t("title"),
-    description: blocks[0]?.text ?? t("title"),
+    title: cmsText(cms?.meeting.title, t("title")),
+    description: blocks[0]?.text ?? cmsText(cms?.meeting.title, t("title")),
   });
 }
 
@@ -29,12 +40,13 @@ export default async function MeetingPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const cms = await fetchHomepageCmsForLocale(locale);
 
   return (
     <>
       <SiteHeader variant="solid" />
       <Section tone="default">
-        <MeetingStory titleAs="h1" />
+        <MeetingStory titleAs="h1" cms={cms?.meeting} />
       </Section>
     </>
   );

@@ -390,7 +390,9 @@
     "videoPublishHint": "Leden zien een seminaropname pas vanaf de publicatiedatum én als er een video-URL is ingevuld. Zet de datum op of na de live seminar-dag.",
     "password": "Wachtwoord",
     "wrongPassword": "Onjuist wachtwoord.",
-    "unlock": "Ontgrendelen"
+    "unlock": "Ontgrendelen",
+    "homepage": "Homepage",
+    "tabHintHomepage": "Bewerk de Nederlandse homepage-tekst — zoals op je telefoon. Slaat automatisch op."
   },
   "adminAccounts": {
     "eyebrow": "Developer",

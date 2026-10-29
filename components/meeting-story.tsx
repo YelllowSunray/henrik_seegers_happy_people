@@ -1,7 +1,10 @@
 import { getTranslations } from "next-intl/server";
+import { CmsField } from "@/components/cms/cms-field";
+import { CmsMeetingBlocks } from "@/components/cms/cms-meeting-blocks";
 import { MeetingGallery } from "@/components/meeting-gallery";
-import { MeetingYoutubeLink } from "@/components/meeting-youtube-link";
 import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
+import { cmsText } from "@/lib/homepage-content";
+import type { HomepageContent } from "@/lib/homepage-content";
 
 type MeetingBlock = {
   song: string;
@@ -12,63 +15,54 @@ type MeetingBlock = {
 export async function MeetingStory({
   titleAs = "h2",
   titleId,
+  cms,
 }: {
   titleAs?: "h1" | "h2";
   titleId?: string;
+  cms?: HomepageContent["meeting"];
 }) {
   const t = await getTranslations("meeting");
-  const blocks = t.raw("blocks") as MeetingBlock[];
-  const Title = titleAs;
-  const lastIndex = blocks.length - 1;
+  const blocks = (cms?.blocks?.length
+    ? cms.blocks
+    : (t.raw("blocks") as MeetingBlock[])) as MeetingBlock[];
+  const eyebrow = cmsText(cms?.eyebrow, t("eyebrow"));
+  const title = cmsText(cms?.title, t("title"));
+  const bridge = cmsText(cms?.bridge, t("bridge"));
 
   return (
-    <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14">
-      <div>
-        <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
-          {t("eyebrow")}
-        </p>
-        <Title
+    <div className="grid min-w-0 items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14">
+      <div className="min-w-0 max-w-full">
+        <CmsField
+          path="meeting.eyebrow"
+          value={eyebrow}
+          multiline={false}
+          className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base"
+        />
+        <CmsField
+          path="meeting.title"
+          value={title}
+          as={titleAs}
           id={titleId}
           className="font-display mt-3 text-2xl leading-tight text-ink sm:text-3xl md:text-5xl"
-        >
-          {t("title")}
-        </Title>
-        <div className="mt-10 space-y-12">
-          {blocks.map((block, i) => (
-            <article key={`${block.song}-${i}`} className="space-y-4">
-              <h3 className="font-display text-xl md:text-2xl">
-                <MeetingYoutubeLink href={block.youtube} song={block.song} />
-              </h3>
-              <p className="max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg">
-                {block.text}
-              </p>
-              {i === lastIndex - 1 && t("bridge").trim() ? (
-                <p className="font-display pt-2 text-xl leading-snug text-ink md:text-2xl">
-                  {t("bridge")}
-                </p>
-              ) : null}
-              {i === lastIndex ? (
-                <>
-                  <div className="mt-8 w-full max-w-[41rem]">
-                    <SyncedLyricPlayer
-                      audioSrc="/audio/sweet-little-woman.mp3"
-                      lrcSrc="/audio/sweet-little-woman.lrc"
-                      title="Sweet Little Woman"
-                      artist="Joe Cocker"
-                      tone="page"
-                    />
-                  </div>
-                  <div className="mt-8 lg:hidden">
-                    <MeetingGallery alt={t("eyebrow")} />
-                  </div>
-                </>
-              ) : null}
-            </article>
-          ))}
+        />
+        <CmsMeetingBlocks blocks={blocks} bridge={bridge} />
+        {blocks.length > 0 ? (
+          <div className="mt-8 w-full max-w-[41rem]">
+            <SyncedLyricPlayer
+              audioSrc="/audio/sweet-little-woman.mp3"
+              lrcSrc="/audio/sweet-little-woman.lrc"
+              title="Sweet Little Woman"
+              artist="Joe Cocker"
+              tone="page"
+            />
+          </div>
+        ) : null}
+        <div className="mt-8 lg:hidden">
+          <MeetingGallery alt={eyebrow} />
         </div>
       </div>
       <div className="hidden lg:sticky lg:top-28 lg:block">
-        <MeetingGallery alt={t("eyebrow")} />
+        <MeetingGallery alt={eyebrow} />
       </div>
     </div>
   );

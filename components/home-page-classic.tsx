@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { JoinButton } from "@/components/join-button";
@@ -13,10 +12,20 @@ import { MicrochipPlayer } from "@/components/microchip-player";
 import { SeminarStory } from "@/components/seminar-story";
 import { SpiritsPlayer } from "@/components/spirits-player";
 import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
-import { ExpandableParagraphs } from "@/components/expandable-paragraphs";
-import { t } from "@/lib/content";
+import { CmsField, CmsParagraphs } from "@/components/cms/cms-field";
+import { CmsBlogFeed } from "@/components/cms/cms-blog-feed";
+import { CmsHeroCtas } from "@/components/cms/cms-hero-ctas";
+import { CmsOrExpandable } from "@/components/cms/cms-or-static";
 import { FACEBOOK_HREF } from "@/lib/contact";
 import { fetchEvents, fetchPublicPosts } from "@/lib/content-firestore";
+import {
+  cmsParagraphs,
+  cmsText,
+  type HomepageContent,
+} from "@/lib/homepage-content";
+import {
+  fetchHomepageCmsForLocale,
+} from "@/lib/homepage-content.server";
 import type { Locale } from "@/lib/types";
 
 export async function HomePageClassic({ locale }: { locale: Locale }) {
@@ -27,12 +36,53 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
   const tBlog = await getTranslations("blog");
   const tMem = await getTranslations("membership");
 
-  const [events, publicPosts] = await Promise.all([
+  const [events, publicPosts, homepageCms] = await Promise.all([
     fetchEvents(),
     fetchPublicPosts(),
+    fetchHomepageCmsForLocale(locale),
   ]);
+  const cms: HomepageContent | null = homepageCms;
   const nextEvent = events[0];
   const latest = publicPosts.slice(0, 3);
+
+  const hero = {
+    brand: cmsText(cms?.hero.brand, tNav("brand")),
+    headline: cmsText(cms?.hero.headline, tNav("headline")),
+    support: cmsText(cms?.hero.support, tNav("support")),
+    ctaJoin: cmsText(cms?.hero.ctaJoin, tNav("ctaJoin")),
+    ctaSeminar: cmsText(cms?.hero.ctaSeminar, tNav("ctaSeminar")),
+  };
+  const message = {
+    eyebrow: cmsText(cms?.message.eyebrow, tMsg("eyebrow")),
+    title: cmsText(cms?.message.title, tMsg("title")),
+    short: cmsText(cms?.message.short, tMsg("short")),
+    paragraphs: cmsParagraphs(
+      cms?.message.paragraphs,
+      tMsg.raw("paragraphs") as string[],
+    ),
+  };
+  const about = {
+    eyebrow: cmsText(cms?.about.eyebrow, tAbout("eyebrow")),
+    title: cmsText(cms?.about.title, tAbout("title")),
+    teaser: cmsText(cms?.about.teaser, tAbout("teaser")),
+    paragraphs: cmsParagraphs(
+      cms?.about.paragraphs,
+      tAbout.raw("paragraphs") as string[],
+    ),
+    readMore: cmsText(cms?.about.readMore, tAbout("readMore")),
+  };
+  const imageCaption = cmsText(
+    cms?.seminars.imageCaption,
+    tSem("imageCaption"),
+  );
+  const paradisePrompt = cmsText(
+    cms?.membership.paradisePrompt,
+    tMem("paradisePrompt"),
+  );
+  const paradiseNote = cmsText(
+    cms?.membership.paradiseNote,
+    tMem("paradiseNote"),
+  );
 
   return (
     <>
@@ -56,30 +106,26 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
         />
         <div className="relative mx-auto flex min-h-[100svh] w-full flex-col justify-end gap-4 px-5 pb-8 pt-[calc(6rem+env(safe-area-inset-top)+var(--seminar-promo-h,0px))] sm:gap-8 sm:pb-16 sm:pt-[calc(7rem+env(safe-area-inset-top)+var(--seminar-promo-h,0px))] md:px-8 md:pb-24 lg:flex-row lg:items-end lg:justify-between lg:gap-12 lg:px-10 lg:pt-[calc(7rem+env(safe-area-inset-top)+var(--seminar-promo-h,0px))] xl:px-14">
           <div className="min-w-0 max-w-6xl lg:max-w-xl xl:max-w-2xl">
-            <p className="reveal font-display text-4xl leading-tight text-white drop-shadow sm:whitespace-nowrap sm:text-5xl md:text-7xl lg:text-8xl">
-              {tNav("brand")}
-            </p>
-            <h1
-              id="hero-title"
+            <CmsField
+              path="hero.brand"
+              value={hero.brand}
+              as="p"
+              multiline={false}
+              className="reveal font-display text-4xl leading-[1.05] text-white drop-shadow sm:text-5xl md:text-7xl lg:text-8xl"
+            />
+            <CmsField
+              path="hero.headline"
+              value={hero.headline}
+              as="h1"
               className="reveal reveal-delay-1 mt-1 max-w-xl text-balance text-base leading-snug text-white/95 sm:mt-4 sm:text-lg md:text-xl lg:text-2xl"
-            >
-              {tNav("headline")}
-            </h1>
-            <p className="reveal reveal-delay-2 mt-1 max-w-md text-sm leading-snug text-white/80 sm:mt-3 sm:text-base">
-              {tNav("support")}
-            </p>
-            <div className="reveal reveal-delay-3 mt-3 flex flex-wrap gap-2 sm:mt-8 sm:gap-3">
-              <JoinButton
-                label={tNav("ctaJoin")}
-                className="inline-flex rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:bg-accent-soft sm:px-6 sm:py-3"
-              />
-              <Link
-                href="/seminars"
-                className="inline-flex rounded-full border border-white/40 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur hover:bg-white/10 sm:px-6 sm:py-3"
-              >
-                {tNav("ctaSeminar")}
-              </Link>
-            </div>
+            />
+            <CmsField
+              path="hero.support"
+              value={hero.support}
+              as="p"
+              className="reveal reveal-delay-2 mt-1 max-w-md text-sm leading-snug text-white/80 sm:mt-3 sm:text-base"
+            />
+            <CmsHeroCtas ctaJoin={hero.ctaJoin} ctaSeminar={hero.ctaSeminar} />
           </div>
 
           <div className="w-full shrink-0 lg:ml-auto lg:w-auto lg:max-w-[41rem]">
@@ -88,26 +134,33 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <Section tone="default">
+      <Section tone="default" id="message">
         <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14">
           <div>
-            <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
-              {tMsg("eyebrow")}
-            </p>
-            <h2
-              id="message-title"
+            <CmsField
+              path="message.eyebrow"
+              value={message.eyebrow}
+              multiline={false}
+              className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base"
+            />
+            <CmsField
+              path="message.title"
+              value={message.title}
+              as="h2"
               className="font-display mt-3 text-2xl leading-tight text-ink sm:text-3xl md:text-5xl"
-            >
-              {tMsg("title")}
-            </h2>
-            <blockquote className="font-display mt-6 text-xl leading-snug text-ink md:text-3xl">
-              {tMsg("short")}
-            </blockquote>
-            <div className="mt-8 max-w-2xl space-y-5 text-base leading-relaxed text-ink-soft md:text-lg">
-              {(tMsg.raw("paragraphs") as string[]).map((paragraph, i) => (
-                <p key={i}>{paragraph}</p>
-              ))}
-            </div>
+            />
+            <CmsField
+              path="message.short"
+              value={message.short}
+              as="blockquote"
+              className="font-display mt-6 text-xl leading-snug text-ink md:text-3xl"
+            />
+            <CmsParagraphs
+              path="message.paragraphs"
+              values={message.paragraphs}
+              className="mt-8 max-w-2xl space-y-5"
+              itemClassName="text-base leading-relaxed text-ink-soft md:text-lg"
+            />
             <div className="mt-10 w-full max-w-[41rem]">
               <SpiritsPlayer handoffAnchorId="message-title" />
             </div>
@@ -115,32 +168,47 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
           <div className="lg:sticky lg:top-28">
             <LightboxImage
               src="/images/boodschap.jpg"
-              alt={tMsg("title")}
+              alt={message.title}
               className="aspect-[3/4] min-h-[16rem] w-full"
             />
           </div>
         </div>
       </Section>
 
-      <Section tone="deep">
+      <Section tone="deep" id="about">
         <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14">
           <div>
-            <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
-              {tAbout("eyebrow")}
-            </p>
-            <h2
-              id="about-title"
+            <CmsField
+              path="about.eyebrow"
+              value={about.eyebrow}
+              multiline={false}
+              className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base"
+            />
+            <CmsField
+              path="about.title"
+              value={about.title}
+              as="h2"
               className="font-display mt-3 text-2xl leading-tight text-ink sm:text-3xl md:text-5xl"
-            >
-              {tAbout("title")}
-            </h2>
-            <p className="mt-4 max-w-2xl text-base text-ink-soft md:text-lg">
-              {tAbout("teaser")}
-            </p>
-            <ExpandableParagraphs
-              paragraphs={tAbout.raw("paragraphs") as string[]}
-              readMoreLabel={tAbout("readMore")}
+            />
+            <CmsField
+              path="about.teaser"
+              value={about.teaser}
+              as="p"
+              className="mt-4 max-w-2xl text-base text-ink-soft md:text-lg"
+            />
+            <CmsOrExpandable
+              path="about.paragraphs"
+              paragraphs={about.paragraphs}
+              readMoreLabel={about.readMore}
               emphasizeFirst
+            />
+            <CmsField
+              path="about.readMore"
+              value={about.readMore}
+              multiline={false}
+              cmsOnly
+              label="Lees-meer knop"
+              className="mt-3 text-sm font-semibold text-accent"
             />
             <div className="mt-10 w-full max-w-[41rem]">
               <SyncedLyricPlayer
@@ -155,7 +223,7 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
           <div className="lg:sticky lg:top-28">
             <LightboxImage
               src="/images/adhd-pic.jpg"
-              alt={tAbout("title")}
+              alt={about.title}
               className="aspect-[3/4] min-h-[16rem] w-full"
             />
           </div>
@@ -163,10 +231,10 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
       </Section>
 
       <Section tone="deep" id="meeting">
-        <MeetingStory titleId="meeting-title" />
+        <MeetingStory titleId="meeting-title" cms={cms?.meeting} />
       </Section>
 
-      <Section tone="default">
+      <Section tone="default" id="seminars">
         <SeminarStory
           locale={locale}
           titleAs="h2"
@@ -175,15 +243,26 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
           showTicket={false}
           showSoStrongPlayer={Boolean(nextEvent)}
           variant="full"
+          cms={cms?.seminars}
         />
       </Section>
 
-      <Section
-        eyebrow={tBlog("eyebrow")}
-        title={tBlog("title")}
-        titleId="blog-title"
-        tone="deep"
-      >
+      <Section tone="deep" id="blog">
+        <div className="mb-6 sm:mb-8">
+          <CmsField
+            path="blog.eyebrow"
+            value={cmsText(cms?.blog.eyebrow, tBlog("eyebrow"))}
+            multiline={false}
+            className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base"
+          />
+          <CmsField
+            path="blog.title"
+            value={cmsText(cms?.blog.title, tBlog("title"))}
+            as="h2"
+            multiline={false}
+            className="font-display mt-3 max-w-2xl text-2xl leading-tight text-ink sm:text-3xl md:text-5xl"
+          />
+        </div>
         <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.75fr)_minmax(0,1fr)] lg:gap-12">
           <div className="min-w-0">
             <a
@@ -192,42 +271,23 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
               rel="noreferrer"
               className="mb-8 inline-flex text-xs font-medium tracking-wide text-ink-soft underline-offset-4 hover:text-accent hover:underline"
             >
-              {tBlog("facebook")} ↗
+              <CmsField
+                path="blog.facebook"
+                value={cmsText(cms?.blog.facebook, tBlog("facebook"))}
+                multiline={false}
+                className="text-xs font-medium tracking-wide text-ink-soft"
+              />
+              <span className="ml-1">↗</span>
             </a>
-            <ul className="space-y-10">
-              {latest.map((post) => (
-                <li key={post.id} className="min-w-0 max-w-2xl">
-                  <p className="text-xs text-ink-soft">{post.publishedAt}</p>
-                  <h3 className="font-display mt-2 text-2xl text-ink md:text-3xl">
-                    <Link
-                      href={`/blog/${post.slug}`}
-                      className="hover:text-accent"
-                    >
-                      {t(post.title, locale)}
-                    </Link>
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-ink-soft md:text-base">
-                    {t(post.excerpt, locale)}
-                  </p>
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    className="mt-5 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:bg-accent-soft"
-                  >
-                    {tBlog("read")}
-                    <span aria-hidden>→</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-12 max-w-2xl border-t border-line pt-8">
-              <Link
-                href="/blog"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-ink underline-offset-4 hover:text-accent hover:underline"
-              >
-                {tBlog("cta")}
-                <span aria-hidden>→</span>
-              </Link>
-            </div>
+            <CmsBlogFeed
+              posts={latest}
+              locale={locale}
+              readLabel={cmsText(cms?.blog.read, tBlog("read"))}
+              emptyLabel={cmsText(cms?.blog.empty, tBlog("empty"))}
+              ctaLabel={cmsText(cms?.blog.cta, tBlog("cta"))}
+              limit={3}
+              showCta
+            />
             <div className="mt-10 w-full max-w-[41rem]">
               <SyncedLyricPlayer
                 audioSrc="/audio/run-through-walls.mp3"
@@ -245,21 +305,31 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
               alt={tSem("imageAlt")}
               className="aspect-square min-h-[16rem] w-full sm:min-h-[20rem]"
             />
-            <figcaption className="mt-3 text-sm text-ink-soft">
-              {tSem("imageCaption")}
-            </figcaption>
+            <CmsField
+              path="seminars.imageCaption"
+              value={imageCaption}
+              as="figcaption"
+              className="mt-3 text-sm text-ink-soft"
+            />
           </figure>
         </div>
       </Section>
 
-      <Section tone="default">
+      <Section tone="default" id="membership">
         <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14">
           <div>
-            <MembershipStory titleAs="h2" titleId="membership-title" />
+            <MembershipStory
+              titleAs="h2"
+              titleId="membership-title"
+              cms={cms?.membership}
+            />
             <div className="mt-10 w-full max-w-[41rem]">
-              <p className="mb-4 text-base leading-relaxed text-ink md:text-lg">
-                {tMem("paradisePrompt")}
-              </p>
+              <CmsField
+                path="membership.paradisePrompt"
+                value={paradisePrompt}
+                as="p"
+                className="mb-4 text-base leading-relaxed text-ink md:text-lg"
+              />
               <SyncedLyricPlayer
                 audioSrc="/audio/pocketful-of-sunshine.mp3"
                 lrcSrc="/audio/pocketful-of-sunshine.lrc"
@@ -268,9 +338,12 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
                 tone="page"
                 handoffAnchorId="membership-title"
               />
-              <p className="mt-4 text-sm leading-relaxed text-ink-soft italic md:text-base">
-                {tMem("paradiseNote")}
-              </p>
+              <CmsField
+                path="membership.paradiseNote"
+                value={paradiseNote}
+                as="p"
+                className="mt-4 text-sm leading-relaxed text-ink-soft italic md:text-base"
+              />
             </div>
           </div>
           <div className="lg:sticky lg:top-28">
@@ -281,7 +354,7 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
 
       <Section tone="deep">
         <Suspense fallback={null}>
-          <DonateSection />
+          <DonateSection copy={cms?.donate} />
         </Suspense>
       </Section>
     </>

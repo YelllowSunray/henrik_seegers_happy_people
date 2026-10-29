@@ -8,6 +8,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
+import { useCmsOptional } from "@/components/cms/cms-provider";
 import { usePathname } from "@/i18n/navigation";
 import { AskHenkChat } from "@/components/ask-henk-chat";
 import { stopSpeaking } from "@/lib/henk-speech";
@@ -179,12 +180,14 @@ function MobileChatSheet({
 export function ClubChatFab() {
   const t = useTranslations("askHenk");
   const pathname = usePathname();
+  const cms = useCmsOptional();
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const titleId = useId();
 
   const hideOnPage =
+    Boolean(cms?.enabled) ||
     pathname.startsWith("/members") ||
     pathname.startsWith("/admin") ||
     pathname.startsWith("/auth");

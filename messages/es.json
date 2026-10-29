@@ -392,7 +392,9 @@
     "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set.",
     "password": "Contraseña",
     "wrongPassword": "Contraseña incorrecta.",
-    "unlock": "Desbloquear"
+    "unlock": "Desbloquear",
+    "homepage": "Inicio",
+    "tabHintHomepage": "Edita el texto NL de la homepage — como en el móvil. Guarda solo."
   },
   "adminAccounts": {
     "eyebrow": "Developer",

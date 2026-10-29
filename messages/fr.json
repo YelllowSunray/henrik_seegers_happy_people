@@ -392,7 +392,9 @@
     "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set.",
     "password": "Mot de passe",
     "wrongPassword": "Mot de passe incorrect.",
-    "unlock": "Déverrouiller"
+    "unlock": "Déverrouiller",
+    "homepage": "Page d’accueil",
+    "tabHintHomepage": "Modifier le texte NL de la page d’accueil — comme sur téléphone. Sauvegarde auto."
   },
   "adminAccounts": {
     "eyebrow": "Developer",

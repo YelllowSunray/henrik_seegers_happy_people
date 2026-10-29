@@ -1,5 +1,11 @@
 import { getTranslations } from "next-intl/server";
+import { CmsField, CmsParagraphs } from "@/components/cms/cms-field";
 import { MembershipPlans } from "@/components/membership-plans";
+import {
+  cmsParagraphs,
+  cmsText,
+  type HomepageContent,
+} from "@/lib/homepage-content";
 
 function asParagraphs(value: unknown): string[] {
   return Array.isArray(value) ? (value as string[]) : [];
@@ -10,127 +16,176 @@ export async function MembershipStory({
   titleId,
   showPlans = true,
   plansClassName = "mt-10",
+  cms,
 }: {
   titleAs?: "h1" | "h2";
   titleId?: string;
   showPlans?: boolean;
   plansClassName?: string;
+  cms?: HomepageContent["membership"];
 }) {
   const t = await getTranslations("membership");
-  const Title = titleAs;
-  const introParagraphs = asParagraphs(
-    t.has("introParagraphs") ? t.raw("introParagraphs") : [],
+  const eyebrow = cmsText(cms?.eyebrow, t("eyebrow"));
+  const title = cmsText(cms?.title, t("title"));
+  const subtitle = cmsText(
+    cms?.subtitle,
+    t.has("subtitle") ? t("subtitle") : "",
   );
-  const bridgeParagraphs = asParagraphs(
-    t.has("bridgeParagraphs") ? t.raw("bridgeParagraphs") : [],
+  const introParagraphs = cmsParagraphs(
+    cms?.introParagraphs,
+    asParagraphs(t.has("introParagraphs") ? t.raw("introParagraphs") : []),
   );
-  const communityParagraphs = asParagraphs(
-    t.has("communityParagraphs")
-      ? t.raw("communityParagraphs")
-      : t.has("belongingLead")
-        ? [t("belongingLead")]
-        : [],
+  const bridgeParagraphs = cmsParagraphs(
+    cms?.bridgeParagraphs,
+    asParagraphs(t.has("bridgeParagraphs") ? t.raw("bridgeParagraphs") : []),
   );
-  const monthlyBenefits = t.raw("monthlyBenefits") as string[];
-  const yearlyBenefits = t.raw("yearlyBenefits") as string[];
+  const pitch = cmsText(cms?.pitch, t("pitch"));
+  const belongingTitle = cmsText(
+    cms?.belongingTitle,
+    t.has("belongingTitle") ? t("belongingTitle") : "",
+  );
+  const communityParagraphs = cmsParagraphs(
+    cms?.communityParagraphs,
+    asParagraphs(
+      t.has("communityParagraphs")
+        ? t.raw("communityParagraphs")
+        : t.has("belongingLead")
+          ? [t("belongingLead")]
+          : [],
+    ),
+  );
+  const monthlyPlanTitle = cmsText(
+    cms?.monthlyPlanTitle,
+    t("monthlyPlanTitle"),
+  );
+  const monthlyBenefits = cmsParagraphs(
+    cms?.monthlyBenefits,
+    t.raw("monthlyBenefits") as string[],
+  );
+  const yearlyPlanTitle = cmsText(cms?.yearlyPlanTitle, t("yearlyPlanTitle"));
+  const yearlyIntro = cmsText(cms?.yearlyIntro, t("yearlyIntro"));
+  const yearlyBenefits = cmsParagraphs(
+    cms?.yearlyBenefits,
+    t.raw("yearlyBenefits") as string[],
+  );
 
   return (
     <div>
-      <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
-        {t("eyebrow")}
-      </p>
-      <Title
+      <CmsField
+        path="membership.eyebrow"
+        value={eyebrow}
+        multiline={false}
+        className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base"
+      />
+      <CmsField
+        path="membership.title"
+        value={title}
+        as={titleAs}
         id={titleId}
+        multiline={false}
         className="font-display mt-3 text-3xl leading-tight text-ink md:text-5xl"
-      >
-        {t("title")}
-      </Title>
+      />
 
-      {t.has("subtitle") ? (
-        <p className="font-display mt-4 text-xl leading-snug text-ink md:text-2xl">
-          {t("subtitle")}
-        </p>
-      ) : null}
+      <CmsField
+        path="membership.subtitle"
+        value={subtitle}
+        as="p"
+        hideWhenEmpty
+        className="font-display mt-4 text-xl leading-snug text-ink md:text-2xl"
+      />
 
       {introParagraphs.length > 0 ? (
-        <div className="mt-8 max-w-2xl space-y-3 text-base leading-relaxed text-ink-soft md:text-lg">
-          {introParagraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </div>
+        <CmsParagraphs
+          path="membership.introParagraphs"
+          values={introParagraphs}
+          className="mt-8 max-w-2xl space-y-3"
+          itemClassName="text-base leading-relaxed text-ink-soft md:text-lg"
+        />
       ) : (
-        <p className="mt-6 max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg">
-          {t("pitch")}
-        </p>
+        <CmsField
+          path="membership.pitch"
+          value={pitch}
+          className="mt-6 max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg"
+        />
       )}
 
       {bridgeParagraphs.length > 0 ? (
-        <div className="mt-10 max-w-2xl space-y-3 border-l-2 border-accent pl-5 text-base leading-relaxed text-ink-soft md:text-lg">
-          {bridgeParagraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </div>
+        <CmsParagraphs
+          path="membership.bridgeParagraphs"
+          values={bridgeParagraphs}
+          className="mt-10 max-w-2xl space-y-3 border-l-2 border-accent pl-5"
+          itemClassName="text-base leading-relaxed text-ink-soft md:text-lg"
+        />
       ) : null}
 
       {introParagraphs.length > 0 ? (
-        <p className="mt-8 max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg">
-          {t("pitch")}
-        </p>
+        <CmsField
+          path="membership.pitch"
+          value={pitch}
+          className="mt-8 max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg"
+        />
       ) : null}
 
       <div className="mt-8 max-w-2xl border-l-2 border-gold pl-5">
-        {t.has("belongingTitle") ? (
-          <p className="font-display text-xl leading-snug text-ink md:text-2xl">
-            {t("belongingTitle")}
-          </p>
-        ) : null}
-        <div className="mt-3 space-y-3 text-base leading-relaxed text-ink-soft md:text-lg">
-          {communityParagraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </div>
+        <CmsField
+          path="membership.belongingTitle"
+          value={belongingTitle}
+          as="p"
+          hideWhenEmpty
+          className="font-display text-xl leading-snug text-ink md:text-2xl"
+        />
+        <CmsParagraphs
+          path="membership.communityParagraphs"
+          values={communityParagraphs}
+          className="mt-3 space-y-3"
+          itemClassName="text-base leading-relaxed text-ink-soft md:text-lg"
+        />
       </div>
 
       <div className="mt-10 space-y-10">
         <section>
-          <h3 className="font-display text-xl text-ink md:text-2xl">
-            {t("monthlyPlanTitle")}
-          </h3>
-          <ul className="mt-4 max-w-2xl space-y-2.5 text-base text-ink-soft md:text-lg">
-            {monthlyBenefits.map((benefit) => (
-              <li key={benefit} className="flex gap-2">
-                <span aria-hidden className="text-accent">
-                  •
-                </span>
-                <span>{benefit}</span>
-              </li>
-            ))}
-          </ul>
+          <CmsField
+            path="membership.monthlyPlanTitle"
+            value={monthlyPlanTitle}
+            as="h3"
+            multiline={false}
+            className="font-display text-xl text-ink md:text-2xl"
+          />
+          <CmsParagraphs
+            path="membership.monthlyBenefits"
+            values={monthlyBenefits}
+            className="mt-4 max-w-2xl list-disc space-y-2.5 pl-5"
+            itemClassName="text-base text-ink-soft md:text-lg"
+            addLabel="+ Voordeel"
+            asList
+          />
         </section>
 
         <section>
-          <h3 className="font-display text-xl text-ink md:text-2xl">
-            {t("yearlyPlanTitle")}
-          </h3>
-          <p className="mt-3 max-w-2xl text-base text-ink-soft md:text-lg">
-            {t("yearlyIntro")}
-          </p>
-          <ul className="mt-4 max-w-2xl space-y-2.5 text-base text-ink-soft md:text-lg">
-            {yearlyBenefits.map((benefit) => (
-              <li key={benefit} className="flex gap-2">
-                <span aria-hidden className="text-gold">
-                  •
-                </span>
-                <span>{benefit}</span>
-              </li>
-            ))}
-          </ul>
+          <CmsField
+            path="membership.yearlyPlanTitle"
+            value={yearlyPlanTitle}
+            as="h3"
+            multiline={false}
+            className="font-display text-xl text-ink md:text-2xl"
+          />
+          <CmsField
+            path="membership.yearlyIntro"
+            value={yearlyIntro}
+            className="mt-3 max-w-2xl text-base text-ink-soft md:text-lg"
+          />
+          <CmsParagraphs
+            path="membership.yearlyBenefits"
+            values={yearlyBenefits}
+            className="mt-4 max-w-2xl list-disc space-y-2.5 pl-5"
+            itemClassName="text-base text-ink-soft md:text-lg"
+            addLabel="+ Voordeel"
+            asList
+          />
         </section>
       </div>
 
-      {showPlans ? (
-        <MembershipPlans className={plansClassName} />
-      ) : null}
+      {showPlans ? <MembershipPlans className={plansClassName} /> : null}
     </div>
   );
 }

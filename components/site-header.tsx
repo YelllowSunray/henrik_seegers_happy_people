@@ -5,26 +5,31 @@ import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useAuth } from "@/components/auth-provider";
+import { CmsField } from "@/components/cms/cms-field";
+import { useCmsOptional, useCmsValue } from "@/components/cms/cms-provider";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { HeaderBackButton } from "@/components/smart-back-button";
 import { SeminarPromoBar } from "@/components/seminar-promo";
 
 const navKeys = [
-  ["about", "/over-henk"],
-  ["meeting", "/ontmoeting"],
-  ["seminars", "/seminars"],
-  ["blog", "/blog"],
+  ["about", "/over-henk", "nav.about"],
+  ["meeting", "/ontmoeting", "nav.meeting"],
+  ["seminars", "/seminars", "nav.seminars"],
+  ["blog", "/blog", "nav.blog"],
 ] as const;
 
 export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" }) {
   const t = useTranslations("nav");
   const { user, isMember, isAdmin, signOut, loading } = useAuth();
+  const cms = useCmsOptional();
+  const cmsMode = Boolean(cms?.enabled);
+  const membershipLabel = useCmsValue("nav.membership", t("membership"));
   const onHero = variant === "hero";
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const showJoin = !isMember;
+  const showJoin = !isMember && !cmsMode;
 
   // Light-on-dark chrome: hero at top, or after scroll on any page.
   const darkChrome = onHero || scrolled || menuOpen;
@@ -96,14 +101,24 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
             </div>
 
             <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-6">
-              {navKeys.map(([key, href]) => (
+              {navKeys.map(([key, href, path]) => (
                 <Link
                   key={key}
                   href={href}
                   className="rounded-lg px-3 py-3.5 text-lg font-medium text-white/90 transition hover:bg-white/10 hover:text-white"
                   onClick={() => setMenuOpen(false)}
                 >
-                  {t(key)}
+                  {cmsMode ? (
+                    <CmsField
+                      path={path}
+                      value={t(key)}
+                      multiline={false}
+                      inline
+                      className="text-lg font-medium text-white"
+                    />
+                  ) : (
+                    t(key)
+                  )}
                 </Link>
               ))}
               {!isMember && (
@@ -112,7 +127,17 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                   className="rounded-lg px-3 py-3.5 text-lg font-medium text-white/90 transition hover:bg-white/10 hover:text-white"
                   onClick={() => setMenuOpen(false)}
                 >
-                  {t("membership")}
+                  {cmsMode ? (
+                    <CmsField
+                      path="nav.membership"
+                      value={membershipLabel}
+                      multiline={false}
+                      inline
+                      className="text-lg font-medium text-white"
+                    />
+                  ) : (
+                    membershipLabel
+                  )}
                 </Link>
               )}
               {isMember && (
@@ -124,7 +149,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                   {t("members")}
                 </Link>
               )}
-              {isAdmin && (
+              {isAdmin && !cmsMode && (
                 <Link
                   href="/admin"
                   className="rounded-lg px-3 py-3.5 text-lg font-medium text-gold transition hover:bg-white/10"
@@ -133,10 +158,16 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                   {t("admin")}
                 </Link>
               )}
+              {cmsMode && (
+                <p className="rounded-lg px-3 py-3.5 text-lg font-medium text-gold">
+                  CMS · NL
+                </p>
+              )}
             </nav>
 
             <div className="flex flex-col gap-3 border-t border-white/15 px-5 py-5 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
-              {!loading &&
+              {!cmsMode &&
+                !loading &&
                 (user ? (
                   <button
                     type="button"
@@ -199,14 +230,38 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
               darkChrome ? "text-white drop-shadow-sm" : "text-ink"
             }`}
           >
-            {navKeys.map(([key, href]) => (
+            {navKeys.map(([key, href, path]) => (
               <Link key={key} href={href} className={`transition ${linkTone}`}>
-                {t(key)}
+                {cmsMode ? (
+                  <CmsField
+                    path={path}
+                    value={t(key)}
+                    multiline={false}
+                    inline
+                    className={`bg-transparent text-sm font-medium ${
+                      darkChrome ? "text-white" : "text-ink"
+                    }`}
+                  />
+                ) : (
+                  t(key)
+                )}
               </Link>
             ))}
             {!isMember && (
               <Link href="/happy-people" className={`transition ${linkTone}`}>
-                {t("membership")}
+                {cmsMode ? (
+                  <CmsField
+                    path="nav.membership"
+                    value={membershipLabel}
+                    multiline={false}
+                    inline
+                    className={`bg-transparent text-sm font-medium ${
+                      darkChrome ? "text-white" : "text-ink"
+                    }`}
+                  />
+                ) : (
+                  membershipLabel
+                )}
               </Link>
             )}
           </nav>
@@ -220,7 +275,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                 {t("members")}
               </Link>
             )}
-            {isAdmin && (
+            {isAdmin && !cmsMode && (
               <Link
                 href="/admin"
                 className={`hidden text-sm font-semibold transition lg:inline ${
@@ -232,10 +287,22 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                 {t("admin")}
               </Link>
             )}
+            {cmsMode && (
+              <span
+                className={`hidden text-xs font-semibold tracking-wide uppercase lg:inline ${
+                  darkChrome ? "text-gold" : "text-accent"
+                }`}
+              >
+                CMS · NL
+              </span>
+            )}
 
-            <LanguageSwitcher variant={darkChrome ? "hero" : "solid"} />
+            {!cmsMode && (
+              <LanguageSwitcher variant={darkChrome ? "hero" : "solid"} />
+            )}
 
-            {!loading &&
+            {!cmsMode &&
+              !loading &&
               (user ? (
                 <button
                   type="button"

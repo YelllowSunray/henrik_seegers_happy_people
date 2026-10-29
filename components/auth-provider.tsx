@@ -22,11 +22,12 @@ import {
   getClientDb,
   isFirebaseConfigured,
 } from "@/lib/firebase/client";
+import {
+  ADMIN_PASSWORD,
+  ADMIN_SESSION_KEY,
+} from "@/lib/admin-gate";
 import { hasMembershipAccess } from "@/lib/membership";
 import type { MemberProfile } from "@/lib/types";
-
-const ADMIN_PASSWORD = "admin";
-const ADMIN_SESSION_KEY = "hp_admin_unlocked";
 
 type AuthContextValue = {
   user: User | null;
@@ -82,14 +83,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<MemberProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [passwordAdmin, setPasswordAdmin] = useState(() => {
-    if (typeof window === "undefined") return false;
+  // Always start false so SSR + first client paint match (avoids hydration mismatch).
+  const [passwordAdmin, setPasswordAdmin] = useState(false);
+
+  useEffect(() => {
     try {
-      return sessionStorage.getItem(ADMIN_SESSION_KEY) === "1";
+      if (sessionStorage.getItem(ADMIN_SESSION_KEY) === "1") {
+        setPasswordAdmin(true);
+      }
     } catch {
-      return false;
+      /* ignore */
     }
-  });
+  }, []);
 
   const refreshProfile = useCallback(async () => {
     if (!user || !isFirebaseConfigured) return;

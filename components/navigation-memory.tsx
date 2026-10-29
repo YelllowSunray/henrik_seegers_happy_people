@@ -18,7 +18,17 @@ const STACK_KEY = "hp.navStack";
 const RESTORE_FLAG = "hp.restoreScroll";
 const PENDING_RESTORE = "hp.pendingRestore";
 
-type StackEntry = { path: string; scrollY: number };
+type StackEntry = { path: string; scrollY: number; sectionId?: string };
+
+/** Homepage section targets for CMS / content pages (smart Terug). */
+export const HOME_SECTION_BY_PATH: Record<string, string> = {
+  "/boodschap": "message",
+  "/over-henk": "about",
+  "/ontmoeting": "meeting",
+  "/seminars": "seminars",
+  "/blog": "blog",
+  "/happy-people": "membership",
+};
 
 function readMap(): Record<string, number> {
   try {
@@ -88,15 +98,27 @@ function readPendingRestore(): StackEntry | null {
   }
 }
 
+function resolveSectionScrollY(sectionId: string | undefined, fallbackY: number) {
+  if (!sectionId || typeof document === "undefined") return fallbackY;
+  const el = document.getElementById(sectionId);
+  if (!el) return fallbackY;
+  const top = el.getBoundingClientRect().top + window.scrollY;
+  // Leave room for sticky header + promo bar.
+  return Math.max(0, top - 96);
+}
+
 function startScrollRestore(
   targetY: number,
   pageKey: string,
   restoringRef: React.MutableRefObject<boolean>,
   scrollRef: React.MutableRefObject<number>,
+  sectionId?: string,
 ) {
+  const initialY = resolveSectionScrollY(sectionId, targetY);
   restoringRef.current = true;
-  scrollRef.current = targetY;
-  persistKey(pageKey, targetY);
+  scrollRef.current = initialY;
+  persistKey(pageKey, initialY);
+  targetY = initialY;
 
   let cancelled = false;
   let timers: number[] = [];
@@ -140,7 +162,9 @@ function startScrollRestore(
 
   const attempt = () => {
     if (cancelled) return;
-    const desired = clampScrollY(targetY);
+    const desired = clampScrollY(
+      resolveSectionScrollY(sectionId, targetY),
+    );
     const current = window.scrollY;
 
     if (Math.abs(current - desired) <= 64) {
@@ -190,6 +214,8 @@ function startScrollRestore(
 
 type NavMemoryApi = {
   goBack: () => void;
+  /** Snapshot current page before a programmatic navigation (CMS chips, etc.). */
+  rememberHere: (opts?: { returnSectionId?: string }) => void;
 };
 
 const NavMemoryContext = createContext<NavMemoryApi | null>(null);
@@ -257,11 +283,11 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
       sessionStorage.removeItem(PENDING_RESTORE);
 
       const map = readMap();
-      const y = Number(
-        pending?.path === pageKey ? pending.scrollY : (map[pageKey] ?? 0),
-      );
+      const fromPending = pending?.path === pageKey ? pending : null;
+      const y = Number(fromPending ? fromPending.scrollY : (map[pageKey] ?? 0));
+      const sectionId = fromPending?.sectionId;
 
-      if (y <= 0) {
+      if (y <= 0 && !sectionId) {
         restoringRef.current = false;
         scrollRef.current = 0;
         return undefined;
@@ -272,6 +298,7 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
         pageKey,
         restoringRef,
         scrollRef,
+        sectionId,
       );
       return cleanupRestoreRef.current;
     },
@@ -331,6 +358,36 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
     };
   }, [key]);
 
+  const rememberHere = useCallback(
+    (opts?: { returnSectionId?: string }) => {
+      const pageKey = keyRef.current;
+      const y = window.scrollY;
+      scrollRef.current = y;
+      persistKey(pageKey, y);
+      const stack = readStack();
+      const entry: StackEntry = {
+        path: pageKey,
+        scrollY: y,
+        ...(opts?.returnSectionId
+          ? { sectionId: opts.returnSectionId }
+          : {}),
+      };
+      // Prefer the section target when returning to home from a CMS page.
+      if (pageKey === "/" || pageKey.startsWith("/?")) {
+        const section =
+          opts?.returnSectionId ??
+          undefined;
+        if (section) {
+          entry.sectionId = section;
+          entry.scrollY = resolveSectionScrollY(section, y);
+        }
+      }
+      stack.push(entry);
+      writeStack(stack);
+    },
+    [],
+  );
+
   const goBack = useCallback(() => {
     const pageKey = keyRef.current;
     const y = window.scrollY;
@@ -338,11 +395,26 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
     persistKey(pageKey, y);
 
     const stack = readStack();
-    const prev = stack.length > 0 ? stack[stack.length - 1]! : null;
+    let prev = stack.length > 0 ? stack[stack.length - 1]! : null;
+    if (prev) {
+      writeStack(stack.slice(0, -1));
+    }
+
+    // CMS / content pages → home section when the stack is empty or home.
+    const sectionFromPage = HOME_SECTION_BY_PATH[pathname];
+    const prevIsHome =
+      !prev || prev.path === "/" || prev.path.startsWith("/?");
+    if (sectionFromPage && prevIsHome) {
+      prev = {
+        path: "/",
+        scrollY: prev?.scrollY ?? 0,
+        sectionId: prev?.sectionId ?? sectionFromPage,
+      };
+    }
+
     if (prev) {
       persistKey(prev.path, prev.scrollY);
       sessionStorage.setItem(PENDING_RESTORE, JSON.stringify(prev));
-      writeStack(stack.slice(0, -1));
     }
 
     sessionStorage.setItem(RESTORE_FLAG, "1");
@@ -354,9 +426,12 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
 
     const target = (prev?.path ?? "/") as "/";
     router.push(target, { scroll: false });
-  }, [router]);
+  }, [pathname, router]);
 
-  const api = useMemo(() => ({ goBack }), [goBack]);
+  const api = useMemo(
+    () => ({ goBack, rememberHere }),
+    [goBack, rememberHere],
+  );
 
   return (
     <NavMemoryContext.Provider value={api}>{children}</NavMemoryContext.Provider>
@@ -375,6 +450,7 @@ export function NavigationMemory({ children }: { children: React.ReactNode }) {
                 window.history.back();
               }
             },
+            rememberHere: () => {},
           }}
         >
           {children}
@@ -396,6 +472,7 @@ export function useNavigationMemory() {
           window.history.back();
         }
       },
+      rememberHere: () => {},
     };
   }
   return ctx;

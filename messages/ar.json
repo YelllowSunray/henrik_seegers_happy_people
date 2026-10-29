@@ -392,7 +392,9 @@
     "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set.",
     "password": "كلمة المرور",
     "wrongPassword": "كلمة المرور غير صحيحة.",
-    "unlock": "فتح"
+    "unlock": "فتح",
+    "homepage": "الصفحة الرئيسية",
+    "tabHintHomepage": "عدّل نص الصفحة الرئيسية بالهولندية — كما على الهاتف. حفظ تلقائي."
   },
   "adminAccounts": {
     "eyebrow": "المطور",

@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { BlogBody } from "@/components/blog-body";
+import { CmsBlogPostEditor } from "@/components/cms/cms-blog-feed";
 import { buildPageMetadata } from "@/lib/seo";
 import { t } from "@/lib/content";
 import { fetchPostBySlug } from "@/lib/content-firestore";
@@ -56,13 +57,15 @@ export default async function BlogPostPage({
     <>
       <SiteHeader variant="solid" />
       <Section>
-        <p className="text-xs text-ink-soft">{post.publishedAt}</p>
-        <h1 className="font-display mt-3 max-w-3xl text-3xl leading-tight sm:text-4xl md:text-5xl">
-          {t(post.title, locale)}
-        </h1>
-        <div className="mt-8 sm:mt-10">
-          <BlogBody text={t(post.body, locale)} />
-        </div>
+        <CmsBlogPostEditor post={post} locale={locale}>
+          <p className="text-xs text-ink-soft">{post.publishedAt}</p>
+          <h1 className="font-display mt-3 max-w-3xl text-3xl leading-tight sm:text-4xl md:text-5xl">
+            {t(post.title, locale)}
+          </h1>
+          <div className="mt-8 sm:mt-10">
+            <BlogBody text={t(post.body, locale)} />
+          </div>
+        </CmsBlogPostEditor>
         <Link
           href="/blog"
           className="mt-12 inline-flex text-sm font-semibold text-accent"

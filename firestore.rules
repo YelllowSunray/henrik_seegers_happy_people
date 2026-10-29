@@ -106,5 +106,13 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false;
     }
+
+    // Homepage CMS (Dutch text). Public read.
+    // Writes are gated in the admin UI (password); doc is non-sensitive marketing copy.
+    match /siteContent/{id} {
+      allow read: if true;
+      allow create, update: if id == "homepage";
+      allow delete: if isAdmin();
+    }
   }
 }

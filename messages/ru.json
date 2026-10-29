@@ -392,7 +392,9 @@
     "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set.",
     "password": "Пароль",
     "wrongPassword": "Неверный пароль.",
-    "unlock": "Разблокировать"
+    "unlock": "Разблокировать",
+    "homepage": "Главная",
+    "tabHintHomepage": "Редактируйте голландский текст главной — как на телефоне. Автосохранение."
   },
   "adminAccounts": {
     "eyebrow": "Разработчик",

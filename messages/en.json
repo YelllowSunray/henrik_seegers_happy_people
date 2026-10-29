@@ -390,7 +390,9 @@
     "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set. Use the live seminar date or later.",
     "password": "Password",
     "wrongPassword": "Incorrect password.",
-    "unlock": "Unlock"
+    "unlock": "Unlock",
+    "homepage": "Homepage",
+    "tabHintHomepage": "Edit Dutch homepage text — looks like the live page. Auto-saves."
   },
   "adminAccounts": {
     "eyebrow": "Developer",

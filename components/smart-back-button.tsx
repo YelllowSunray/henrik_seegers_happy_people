@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { useCmsOptional } from "@/components/cms/cms-provider";
 import { useNavigationMemory } from "@/components/navigation-memory";
 
 const LABELS: Record<string, string> = {
@@ -29,6 +30,7 @@ export function SmartBackButton() {
   const locale = useLocale();
   const router = useRouter();
   const memory = useNavigationMemory();
+  const cms = useCmsOptional();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -36,6 +38,9 @@ export function SmartBackButton() {
   }, []);
 
   if (isHomePath(pathname)) return null;
+
+  // Header already has Terug; floating FAB fights the CMS dock on phones.
+  if (cms?.enabled) return null;
 
   const label = LABELS[locale] ?? LABELS.en;
 

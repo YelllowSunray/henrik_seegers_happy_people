@@ -392,7 +392,9 @@
     "videoPublishHint": "Members only see a seminar recording from its publish date and when a video URL is set.",
     "password": "비밀번호",
     "wrongPassword": "잘못된 비밀번호입니다.",
-    "unlock": "잠금 해제"
+    "unlock": "잠금 해제",
+    "homepage": "홈페이지",
+    "tabHintHomepage": "네덜란드어 홈페이지 텍스트 편집 — 휴대폰처럼. 자동 저장."
   },
   "adminAccounts": {
     "eyebrow": "Developer",

@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { collection, onSnapshot } from "firebase/firestore";
 import { SiteHeader } from "@/components/site-header";
-import { AdminLogin } from "@/components/admin/admin-login";
 import { useAuth } from "@/components/auth-provider";
 import {
   MemberIdentity,
@@ -12,7 +11,7 @@ import {
 } from "@/components/member-status-badge";
 import { getClientDb, isFirebaseConfigured } from "@/lib/firebase/client";
 import { memberDisplayName } from "@/lib/member-status";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import type { MemberProfile } from "@/lib/types";
 
 type AccountRow = MemberProfile & { id: string };
@@ -21,10 +20,17 @@ export function AdminAccounts() {
   const t = useTranslations("adminAccounts");
   const ta = useTranslations("admin");
   const { user, isAdmin, loading } = useAuth();
+  const router = useRouter();
   const [accounts, setAccounts] = useState<AccountRow[]>([]);
   const [busyUid, setBusyUid] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [confirmUid, setConfirmUid] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!loading && !isAdmin) {
+      router.replace("/admin");
+    }
+  }, [loading, isAdmin, router]);
 
   useEffect(() => {
     if (!isFirebaseConfigured || !user || !isAdmin) return;
@@ -99,7 +105,12 @@ export function AdminAccounts() {
   }
 
   if (!isAdmin) {
-    return <AdminLogin />;
+    return (
+      <>
+        <SiteHeader variant="solid" />
+        <p className="p-16 text-center text-ink-soft">…</p>
+      </>
+    );
   }
 
   return (
@@ -114,10 +125,10 @@ export function AdminAccounts() {
           <p className="mt-2 max-w-xl text-sm text-ink-soft">{t("lead")}</p>
           <p className="mt-2 text-xs text-ink-soft">{t("stripeNote")}</p>
           <Link
-            href="/admin"
+            href="/"
             className="mt-4 inline-flex text-sm font-medium text-accent hover:underline"
           >
-            {t("backAdmin")}
+            ← Terug naar CMS homepage
           </Link>
         </header>
 

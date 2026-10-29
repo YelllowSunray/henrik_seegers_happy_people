@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { CmsField } from "@/components/cms/cms-field";
+import { useCmsOptional, useCmsValue } from "@/components/cms/cms-provider";
 
 function usePromoOffset() {
   useEffect(() => {
@@ -31,6 +33,8 @@ export function SeminarPromoBar({
   scrolled: boolean;
 }) {
   const t = useTranslations("site");
+  const cms = useCmsOptional();
+  const banner = useCmsValue("site.banner", t("underConstruction"));
 
   usePromoOffset();
 
@@ -43,16 +47,40 @@ export function SeminarPromoBar({
       ? "border-t border-white/10 text-white"
       : "border-t border-line text-ink";
 
+  const fieldClass = lightOnDark
+    ? "bg-transparent text-center text-sm font-medium text-white"
+    : "bg-transparent text-center text-sm font-medium text-ink";
+
   return (
     <div className={`bg-transparent ${shellClass}`}>
-      {/* Mobile */}
       <p className="mx-auto flex max-w-7xl items-center justify-center px-5 py-2.5 text-center text-sm font-medium lg:hidden md:px-8">
-        <span className="drop-shadow-sm">{t("underConstruction")}</span>
+        {cms?.enabled ? (
+          <CmsField
+            path="site.banner"
+            value={banner}
+            multiline={false}
+            inline
+            nowrap
+            className={fieldClass}
+          />
+        ) : (
+          <span className="drop-shadow-sm">{banner}</span>
+        )}
       </p>
 
-      {/* Desktop */}
       <p className="mx-auto hidden max-w-5xl items-center justify-center px-8 py-2 text-center text-sm font-medium lg:flex">
-        <span className="drop-shadow-sm">{t("underConstruction")}</span>
+        {cms?.enabled ? (
+          <CmsField
+            path="site.banner"
+            value={banner}
+            multiline={false}
+            inline
+            nowrap
+            className={fieldClass}
+          />
+        ) : (
+          <span className="drop-shadow-sm">{banner}</span>
+        )}
       </p>
     </div>
   );
