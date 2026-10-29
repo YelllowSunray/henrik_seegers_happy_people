@@ -28,22 +28,26 @@ function reorderBlocks(
 
 function DragHandle({
   label,
-  onDragStart,
-  onDragEnd,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp,
 }: {
   label: string;
-  onDragStart: (e: React.DragEvent) => void;
-  onDragEnd: () => void;
+  onPointerDown: (e: React.PointerEvent) => void;
+  onPointerMove: (e: React.PointerEvent) => void;
+  onPointerUp: (e: React.PointerEvent) => void;
 }) {
   return (
     <button
       type="button"
-      draggable
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
-      className="hidden h-9 w-9 shrink-0 cursor-grab items-center justify-center rounded-full border border-accent/35 bg-white text-accent active:cursor-grabbing md:inline-flex"
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-accent/35 bg-white text-accent active:bg-accent/10 md:h-9 md:w-9 md:cursor-grab md:active:cursor-grabbing"
       title={label}
       aria-label={label}
+      style={{ touchAction: "none" }}
     >
       <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
         <circle cx="9" cy="7" r="1.4" />
@@ -75,24 +79,119 @@ export function CmsMeetingBlocks({
   const liveBridge = enabled ? cms!.content.meeting.bridge : bridge;
   const lastIndex = live.length - 1;
 
+  const itemRefs = useRef<(HTMLElement | null)[]>([]);
+  const liveRef = useRef(live);
+  liveRef.current = live;
   const dragFrom = useRef<number | null>(null);
+  const startY = useRef(0);
+  const activated = useRef(false);
+  const overRef = useRef<number | null>(null);
+  const [dragging, setDragging] = useState<number | null>(null);
   const [overIndex, setOverIndex] = useState<number | null>(null);
-  const [coarse, setCoarse] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(pointer: coarse)");
-    const apply = () => setCoarse(mq.matches);
-    apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
-  }, []);
 
   function setBlocks(next: MeetingBlockContent[]) {
     cms?.setPath("meeting.blocks", next);
   }
 
   function move(from: number, to: number) {
-    setBlocks(reorderBlocks(live, from, to));
+    setBlocks(reorderBlocks(liveRef.current, from, to));
+  }
+
+  function indexUnderPointer(clientY: number): number | null {
+    let best: number | null = null;
+    let bestDist = Infinity;
+    itemRefs.current.forEach((el, idx) => {
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const mid = r.top + r.height / 2;
+      const dist = Math.abs(mid - clientY);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = idx;
+      }
+    });
+    return best;
+  }
+
+  function endDrag(commit: boolean) {
+    const from = dragFrom.current;
+    const to = overRef.current;
+    dragFrom.current = null;
+    activated.current = false;
+    overRef.current = null;
+    setDragging(null);
+    setOverIndex(null);
+    if (commit && from != null && to != null && from !== to) {
+      move(from, to);
+    }
+  }
+
+  // Window listeners while dragging — required on iPhone once the finger leaves the handle.
+  useEffect(() => {
+    if (dragging == null) return;
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    function onMove(e: PointerEvent) {
+      e.preventDefault();
+      const nextOver = indexUnderPointer(e.clientY);
+      if (nextOver != null && nextOver !== overRef.current) {
+        overRef.current = nextOver;
+        setOverIndex(nextOver);
+      }
+    }
+
+    function onUp() {
+      endDrag(true);
+    }
+
+    window.addEventListener("pointermove", onMove, { passive: false });
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only rebind when drag starts/ends
+  }, [dragging]);
+
+  function onHandlePointerDown(index: number, e: React.PointerEvent) {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    e.preventDefault();
+    e.currentTarget.setPointerCapture(e.pointerId);
+    dragFrom.current = index;
+    startY.current = e.clientY;
+    activated.current = false;
+    overRef.current = index;
+  }
+
+  function onHandlePointerMove(e: React.PointerEvent) {
+    if (dragFrom.current == null) return;
+    const dy = Math.abs(e.clientY - startY.current);
+    if (!activated.current) {
+      if (dy < 8) return;
+      activated.current = true;
+      setDragging(dragFrom.current);
+      setOverIndex(dragFrom.current);
+    }
+  }
+
+  function onHandlePointerUp(e: React.PointerEvent) {
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      /* already released */
+    }
+    // If we never activated (tiny tap), just cancel.
+    if (!activated.current) {
+      endDrag(false);
+      return;
+    }
+    // Window listener also handles up; this covers capture-release on the button.
+    if (dragging != null) endDrag(true);
   }
 
   if (!enabled) {
@@ -126,51 +225,33 @@ export function CmsMeetingBlocks({
   return (
     <div className="mt-8 min-w-0 max-w-full space-y-4">
       <p className="text-[11px] leading-snug text-ink-soft">
-        {coarse
-          ? "↑↓ om te herordenen · liedtitel + link bewerken"
-          : "↑↓ of sleep · liedtitel + link bewerken"}
+        Sleep ⋮⋮ om te herordenen · of ↑↓ · liedtitel + link bewerken
       </p>
 
       {live.map((block, i) => (
         <article
           key={`meeting-cms-${i}-${block.song.slice(0, 12)}`}
-          onDragOver={(e) => {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = "move";
-            if (overIndex !== i) setOverIndex(i);
-          }}
-          onDragLeave={() => {
-            if (overIndex === i) setOverIndex(null);
-          }}
-          onDrop={(e) => {
-            e.preventDefault();
-            const from =
-              dragFrom.current ?? Number(e.dataTransfer.getData("text/plain"));
-            move(from, i);
-            dragFrom.current = null;
-            setOverIndex(null);
+          ref={(el) => {
+            itemRefs.current[i] = el;
           }}
           className={`min-w-0 max-w-full space-y-3 overflow-hidden rounded-xl border border-dashed p-3 sm:p-4 transition ${
-            overIndex === i
-              ? "border-accent bg-accent/10"
-              : "border-accent/40 bg-accent/[0.04]"
+            dragging === i
+              ? "border-accent bg-accent/15 opacity-80 shadow-md"
+              : overIndex === i && dragging != null
+                ? "border-accent bg-accent/10"
+                : "border-accent/40 bg-accent/[0.04]"
           }`}
         >
           <div className="flex min-w-0 items-center gap-2">
             <DragHandle
               label="Slepen om te herordenen"
-              onDragStart={(e) => {
-                dragFrom.current = i;
-                e.dataTransfer.effectAllowed = "move";
-                e.dataTransfer.setData("text/plain", String(i));
-              }}
-              onDragEnd={() => {
-                dragFrom.current = null;
-                setOverIndex(null);
-              }}
+              onPointerDown={(e) => onHandlePointerDown(i, e)}
+              onPointerMove={onHandlePointerMove}
+              onPointerUp={onHandlePointerUp}
             />
             <p className="min-w-0 flex-1 truncate text-[10px] font-semibold tracking-wide text-accent uppercase">
               Passage {i + 1}
+              {dragging === i ? " · slepen…" : null}
             </p>
             <div className="flex shrink-0 items-center gap-1.5">
               <button
