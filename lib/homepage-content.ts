@@ -91,6 +91,7 @@ export type HomepageContent = {
     belongingTitle: string;
     communityParagraphs: string[];
     monthlyPlanTitle: string;
+    monthlyIntro: string;
     monthlyBenefits: string[];
     yearlyPlanTitle: string;
     yearlyIntro: string;
@@ -234,6 +235,7 @@ export function getDefaultHomepageContent(): HomepageContent {
       belongingTitle: nl.membership.belongingTitle,
       communityParagraphs: [...nl.membership.communityParagraphs],
       monthlyPlanTitle: nl.membership.monthlyPlanTitle,
+      monthlyIntro: nl.membership.monthlyIntro,
       monthlyBenefits: [...nl.membership.monthlyBenefits],
       yearlyPlanTitle: nl.membership.yearlyPlanTitle,
       yearlyIntro: nl.membership.yearlyIntro,
@@ -383,6 +385,10 @@ export function parseHomepageContent(
       monthlyPlanTitle: asString(
         membership.monthlyPlanTitle,
         defaults.membership.monthlyPlanTitle,
+      ),
+      monthlyIntro: asString(
+        membership.monthlyIntro,
+        defaults.membership.monthlyIntro,
       ),
       monthlyBenefits: asStringArray(
         membership.monthlyBenefits,

@@ -141,7 +141,7 @@
     ],
     "monthlyPlanTitle": "Happy People — €20 al mes",
     "monthlyBenefits": [
-      "acceso completo a grabaciones de seminarios",
+      "grabaciones de seminarios",
       "nuevos vlogs personales de Henk",
       "blogs e historias solo para miembros",
       "mensajes personales de Henk",
@@ -180,7 +180,8 @@
     "openClub": "Ir al club",
     "manageSubscription": "Gestionar suscripción",
     "paradisePrompt": "La elección es tuya — ¿será YES o NO?",
-    "paradiseNote": "Con esta canción espero poder sanar el corazón roto de la mujer más hermosa que he visto nunca🙏❤️"
+    "paradiseNote": "Con esta canción espero poder sanar el corazón roto de la mujer más hermosa que he visto nunca🙏❤️",
+    "monthlyIntro": "acceso completo a:"
   },
   "contact": {
     "title": "Contacto",

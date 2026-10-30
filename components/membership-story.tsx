@@ -58,6 +58,10 @@ export async function MembershipStory({
     cms?.monthlyPlanTitle,
     t("monthlyPlanTitle"),
   );
+  const monthlyIntro = cmsText(
+    cms?.monthlyIntro,
+    t.has("monthlyIntro") ? t("monthlyIntro") : "",
+  );
   const monthlyBenefits = cmsParagraphs(
     cms?.monthlyBenefits,
     t.raw("monthlyBenefits") as string[],
@@ -150,6 +154,12 @@ export async function MembershipStory({
             as="h3"
             multiline={false}
             className="font-display text-xl text-ink md:text-2xl"
+          />
+          <CmsField
+            path="membership.monthlyIntro"
+            value={monthlyIntro}
+            hideWhenEmpty
+            className="mt-3 max-w-2xl reading-copy reading-copy-ink"
           />
           <CmsParagraphs
             path="membership.monthlyBenefits"
