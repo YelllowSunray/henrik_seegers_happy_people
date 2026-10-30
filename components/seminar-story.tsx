@@ -102,7 +102,7 @@ export async function SeminarStory({
               {eventDate}
             </p>
             {eventTime ? (
-              <p className="mt-1 text-base text-ink-soft md:text-lg">
+              <p className="mt-1 reading-copy">
                 {eventTime}
               </p>
             ) : null}
@@ -169,7 +169,7 @@ export async function SeminarStory({
               path="seminars.storyParagraphs"
               values={storyParagraphs}
               className="max-w-2xl space-y-4"
-              itemClassName="text-base leading-relaxed text-ink-soft md:text-lg"
+              itemClassName="reading-copy"
             />
           ) : (
             <SeminarStoryBlocks blocks={content.storyBlocks} />
@@ -184,7 +184,7 @@ export async function SeminarStory({
                   path="seminars.eventParagraphs"
                   values={eventParagraphs}
                   className="max-w-2xl space-y-4"
-                  itemClassName="text-base leading-relaxed text-ink-soft md:text-lg"
+                  itemClassName="reading-copy"
                 />
               ) : (
                 <SeminarStoryBlocks blocks={content.eventBlocks} />

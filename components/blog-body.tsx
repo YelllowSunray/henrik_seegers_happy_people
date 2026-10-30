@@ -140,7 +140,7 @@ export function BlogBody({
 
   return (
     <div
-      className={`max-w-2xl space-y-5 text-base leading-relaxed text-ink-soft sm:text-lg ${className}`}
+      className={`max-w-2xl space-y-6 reading-copy ${className}`}
     >
       {paragraphs.flatMap((paragraph, i) =>
         renderParagraph(paragraph, `p-${i}`),

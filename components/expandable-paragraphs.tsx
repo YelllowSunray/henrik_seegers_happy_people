@@ -16,9 +16,14 @@ export function ExpandableParagraphs({
   const canExpand = !expanded && paragraphs.length > 2;
 
   return (
-    <div className="mt-8 max-w-2xl space-y-5 text-base leading-relaxed text-ink-soft md:text-lg">
+    <div className="mt-8 max-w-2xl space-y-6">
       {visible.map((paragraph, i) => (
-        <p key={i} className={emphasizeFirst && i === 0 ? "text-ink" : undefined}>
+        <p
+          key={i}
+          className={`reading-copy ${
+            emphasizeFirst && i === 0 ? "reading-copy-ink" : ""
+          }`}
+        >
           {paragraph}
         </p>
       ))}
@@ -26,7 +31,7 @@ export function ExpandableParagraphs({
         <button
           type="button"
           onClick={() => setExpanded(true)}
-          className="inline-flex rounded-full border border-line bg-bg-deep px-5 py-2.5 text-sm font-semibold text-ink transition hover:border-accent hover:text-accent"
+          className="inline-flex rounded-full border border-line bg-bg-deep px-5 py-2.5 text-base font-semibold text-ink transition hover:border-accent hover:text-accent"
         >
           {readMoreLabel}
         </button>

@@ -77,7 +77,7 @@ function AuthForm() {
       <h1 className="font-display mt-3 text-3xl text-ink sm:text-4xl">
         {t("returnTitle")}
       </h1>
-      <p className="mt-3 text-base leading-relaxed text-ink-soft">
+      <p className="reading-copy mt-3">
         {t("returnLead")}
       </p>
 

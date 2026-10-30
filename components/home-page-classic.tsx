@@ -117,13 +117,13 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
               path="hero.headline"
               value={hero.headline}
               as="h1"
-              className="reveal reveal-delay-1 mt-1 max-w-xl text-balance text-base leading-snug text-white/95 sm:mt-4 sm:text-lg md:text-xl lg:text-2xl"
+              className="reveal reveal-delay-1 mt-1 max-w-xl text-balance text-lg leading-snug text-white sm:mt-4 sm:text-xl md:text-2xl lg:text-[1.65rem]"
             />
             <CmsField
               path="hero.support"
               value={hero.support}
               as="p"
-              className="reveal reveal-delay-2 mt-1 max-w-md text-sm leading-snug text-white/80 sm:mt-3 sm:text-base"
+              className="reveal reveal-delay-2 mt-1 max-w-md text-base leading-snug text-white/90 sm:mt-3 sm:text-lg"
             />
             <CmsHeroCtas ctaJoin={hero.ctaJoin} ctaSeminar={hero.ctaSeminar} />
           </div>
@@ -158,8 +158,8 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
             <CmsParagraphs
               path="message.paragraphs"
               values={message.paragraphs}
-              className="mt-8 max-w-2xl space-y-5"
-              itemClassName="text-base leading-relaxed text-ink-soft md:text-lg"
+              className="mt-8 max-w-2xl space-y-6"
+              itemClassName="reading-copy"
             />
             <div className="mt-10 w-full max-w-[41rem]">
               <SpiritsPlayer handoffAnchorId="message-title" />
@@ -194,7 +194,7 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
               path="about.teaser"
               value={about.teaser}
               as="p"
-              className="mt-4 max-w-2xl text-base text-ink-soft md:text-lg"
+              className="mt-4 max-w-2xl reading-copy"
             />
             <CmsOrExpandable
               path="about.paragraphs"
@@ -328,7 +328,7 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
                 path="membership.paradisePrompt"
                 value={paradisePrompt}
                 as="p"
-                className="mb-4 text-base leading-relaxed text-ink md:text-lg"
+                className="reading-copy reading-copy-ink mb-4"
               />
               <SyncedLyricPlayer
                 audioSrc="/audio/pocketful-of-sunshine.mp3"
@@ -342,7 +342,7 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
                 path="membership.paradiseNote"
                 value={paradiseNote}
                 as="p"
-                className="mt-4 text-sm leading-relaxed text-ink-soft italic md:text-base"
+                className="reading-copy mt-4 italic"
               />
             </div>
           </div>

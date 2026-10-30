@@ -79,7 +79,7 @@ export default async function MessagePage({
               path="message.paragraphs"
               values={paragraphs}
               className="mt-8 max-w-2xl space-y-5"
-              itemClassName="text-base leading-relaxed text-ink-soft md:text-lg"
+              itemClassName="reading-copy"
             />
             <div className="mt-10 w-full max-w-[41rem]">
               <SpiritsPlayer />

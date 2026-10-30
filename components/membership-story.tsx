@@ -98,14 +98,14 @@ export async function MembershipStory({
         <CmsParagraphs
           path="membership.introParagraphs"
           values={introParagraphs}
-          className="mt-8 max-w-2xl space-y-3"
-          itemClassName="text-base leading-relaxed text-ink-soft md:text-lg"
+          className="mt-8 max-w-2xl space-y-5"
+          itemClassName="reading-copy"
         />
       ) : (
         <CmsField
           path="membership.pitch"
           value={pitch}
-          className="mt-6 max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg"
+          className="mt-6 max-w-2xl reading-copy"
         />
       )}
 
@@ -114,7 +114,7 @@ export async function MembershipStory({
           path="membership.bridgeParagraphs"
           values={bridgeParagraphs}
           className="mt-10 max-w-2xl space-y-3 border-l-2 border-accent pl-5"
-          itemClassName="text-base leading-relaxed text-ink-soft md:text-lg"
+          itemClassName="reading-copy"
         />
       ) : null}
 
@@ -122,7 +122,7 @@ export async function MembershipStory({
         <CmsField
           path="membership.pitch"
           value={pitch}
-          className="mt-8 max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg"
+          className="mt-8 max-w-2xl reading-copy"
         />
       ) : null}
 
@@ -138,7 +138,7 @@ export async function MembershipStory({
           path="membership.communityParagraphs"
           values={communityParagraphs}
           className="mt-3 space-y-3"
-          itemClassName="text-base leading-relaxed text-ink-soft md:text-lg"
+          itemClassName="reading-copy"
         />
       </div>
 
@@ -155,7 +155,7 @@ export async function MembershipStory({
             path="membership.monthlyBenefits"
             values={monthlyBenefits}
             className="mt-4 max-w-2xl list-disc space-y-2.5 pl-5"
-            itemClassName="text-base text-ink-soft md:text-lg"
+            itemClassName="reading-copy"
             addLabel="+ Voordeel"
             asList
           />
@@ -172,13 +172,13 @@ export async function MembershipStory({
           <CmsField
             path="membership.yearlyIntro"
             value={yearlyIntro}
-            className="mt-3 max-w-2xl text-base text-ink-soft md:text-lg"
+            className="mt-3 max-w-2xl reading-copy"
           />
           <CmsParagraphs
             path="membership.yearlyBenefits"
             values={yearlyBenefits}
             className="mt-4 max-w-2xl list-disc space-y-2.5 pl-5"
-            itemClassName="text-base text-ink-soft md:text-lg"
+            itemClassName="reading-copy"
             addLabel="+ Voordeel"
             asList
           />

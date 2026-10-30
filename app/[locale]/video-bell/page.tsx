@@ -42,10 +42,10 @@ export default async function VideoBellPage({
         <h1 className="font-display mt-3 text-3xl leading-tight text-ink md:text-5xl">
           {t("title")}
         </h1>
-        <p className="mt-5 max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg">
+        <p className="mt-5 max-w-2xl reading-copy">
           {t("lead")}
         </p>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink md:text-lg">
+        <p className="mt-4 max-w-2xl reading-copy reading-copy-ink">
           {t("body")}
         </p>
         <div className="mt-10">

@@ -146,7 +146,7 @@ export function CommunityForum() {
       <h1 className="font-display mt-3 text-3xl leading-tight text-ink md:text-5xl">
         {t("title")}
       </h1>
-      <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg">
+      <p className="mt-4 max-w-2xl reading-copy">
         {t("lead")}
       </p>
 
@@ -340,7 +340,7 @@ function PostDetail({
         <p className="mt-3 text-xs text-ink-soft">
           {t("by")} {post.authorName} · {formatForumTime(post.createdAt, locale)}
         </p>
-        <p className="mt-6 whitespace-pre-wrap text-base leading-relaxed text-ink md:text-lg">
+        <p className="reading-copy reading-copy-ink mt-6 whitespace-pre-wrap">
           {post.body}
         </p>
         {canDelete ? (

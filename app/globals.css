@@ -3,12 +3,13 @@
 :root {
   --bg: #f3efe6;
   --bg-deep: #e7e0d2;
-  --ink: #1a2421;
-  --ink-soft: #3d4a45;
+  /* Slightly deeper ink for sharper headlines and body contrast. */
+  --ink: #121a18;
+  --ink-soft: #2a3531;
   --accent: #0f6b5c;
   --accent-soft: #1a8f7a;
   --gold: #c4a35a;
-  --line: rgba(26, 36, 33, 0.12);
+  --line: rgba(26, 36, 33, 0.14);
   --hero-overlay: linear-gradient(
     120deg,
     rgba(15, 40, 36, 0.78) 0%,
@@ -31,6 +32,8 @@
 }
 
 html {
+  /* ~17px root — easier reading with/without glasses; rem utilities scale with it. */
+  font-size: 106.25%;
   scroll-behavior: smooth;
   /* Clear sticky header when jumping to in-page CMS sections */
   scroll-padding-top: calc(5.5rem + env(safe-area-inset-top) + var(--seminar-promo-h, 0px));
@@ -59,8 +62,50 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body), system-ui, sans-serif;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+}
+
+/*
+ * Long-form story / page copy — larger type, open leading, comfortable measure.
+ * Use on paragraphs and CMS body fields across homepage + inner pages.
+ */
+.reading-copy {
+  font-size: 1.125rem;
+  line-height: 1.75;
+  letter-spacing: 0.012em;
+  color: var(--ink-soft);
+  max-width: 40rem;
+}
+
+@media (min-width: 640px) {
+  .reading-copy {
+    font-size: 1.1875rem;
+    line-height: 1.72;
+  }
+}
+
+@media (min-width: 768px) {
+  .reading-copy {
+    font-size: 1.25rem;
+    line-height: 1.7;
+  }
+}
+
+.reading-copy-ink {
+  color: var(--ink);
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --ink: #0a100f;
+    --ink-soft: #1c2724;
+    --line: rgba(10, 16, 15, 0.22);
+  }
 }
 
 ::selection {

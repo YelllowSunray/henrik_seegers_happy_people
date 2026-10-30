@@ -206,7 +206,7 @@ export function CmsMeetingBlocks({
               path={`meeting.blocks.${i}.text`}
               value={block.text}
               as="p"
-              className="max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg"
+              className="reading-copy"
             />
             {i === lastIndex - 1 ? (
               <CmsField
@@ -345,7 +345,7 @@ export function CmsMeetingBlocks({
             value={block.text}
             as="p"
             placeholder="Tekst bij deze passage…"
-            className="w-full text-base leading-relaxed text-ink-soft md:text-lg"
+            className="reading-copy w-full max-w-none"
           />
 
           {i === lastIndex - 1 ? (

@@ -104,13 +104,13 @@ export function DonateSection({
           path="donate.lead"
           value={lead}
           as="p"
-          className="mt-5 max-w-xl text-base leading-relaxed text-ink-soft md:text-lg"
+          className="mt-5 max-w-xl reading-copy"
         />
         <CmsField
           path="donate.body"
           value={body}
           as="p"
-          className="mt-4 max-w-xl text-base leading-relaxed text-ink md:text-lg"
+          className="mt-4 max-w-xl reading-copy reading-copy-ink"
         />
 
         <p className="mt-8 text-xs font-semibold tracking-[0.16em] text-ink-soft uppercase">

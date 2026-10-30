@@ -74,7 +74,7 @@ export default async function AboutPage({
             <CmsField
               path="about.teaser"
               value={teaser}
-              className="mt-4 max-w-2xl text-base text-ink-soft md:text-lg"
+              className="mt-4 max-w-2xl reading-copy"
             />
             <CmsOrExpandable
               path="about.paragraphs"

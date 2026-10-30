@@ -44,7 +44,7 @@ export default async function VlogsPage({
         <h1 className="font-display mt-3 text-3xl leading-tight text-ink md:text-5xl">
           {t("title")}
         </h1>
-        <p className="mt-5 max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg">
+        <p className="mt-5 max-w-2xl reading-copy">
           {t("lead")}
         </p>
         <div className="mt-10">

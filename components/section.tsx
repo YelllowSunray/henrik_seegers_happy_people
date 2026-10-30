@@ -28,19 +28,19 @@ export function Section({
     <section id={id} className={`${toneClass} ${className}`}>
       <div className="mx-auto max-w-6xl px-5 py-12 sm:py-16 md:px-8 md:py-24">
         {eyebrow && (
-          <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base">
+          <p className="text-sm font-semibold tracking-[0.16em] text-accent uppercase md:text-base">
             {eyebrow}
           </p>
         )}
         {title && (
           <h2
             id={titleId}
-            className="font-display mt-3 max-w-2xl text-2xl leading-tight text-ink sm:text-3xl md:text-5xl"
+            className="font-display mt-3 max-w-2xl text-3xl leading-snug text-ink sm:text-4xl md:text-5xl"
           >
             {title}
           </h2>
         )}
-        <div className={title || eyebrow ? "mt-6 sm:mt-8" : undefined}>{children}</div>
+        <div className={title || eyebrow ? "mt-7 sm:mt-9" : undefined}>{children}</div>
       </div>
     </section>
   );

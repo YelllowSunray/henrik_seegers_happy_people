@@ -190,14 +190,14 @@ function CmsBlogRow({
         value={excerpt}
         onChange={setExcerpt}
         placeholder="Korte intro"
-        className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-soft md:text-base"
+        className="mt-3 max-w-2xl reading-copy"
       />
       {expandBody ? (
         <AdminTextArea
           value={body}
           onChange={setBody}
           placeholder="Volle tekst (lege regel = nieuwe alinea)"
-          className="mt-4 max-w-2xl text-base leading-relaxed text-ink md:text-lg"
+          className="mt-4 max-w-2xl reading-copy reading-copy-ink"
         />
       ) : null}
       <div className="mt-4 flex flex-wrap items-center gap-2">
@@ -303,13 +303,13 @@ function CmsNewPost({
         value={draft.excerpt}
         onChange={(excerpt) => setDraft((d) => ({ ...d, excerpt }))}
         placeholder="Korte intro"
-        className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-soft md:text-base"
+        className="mt-3 max-w-2xl reading-copy"
       />
       <AdminTextArea
         value={draft.body}
         onChange={(body) => setDraft((d) => ({ ...d, body }))}
         placeholder="Volle tekst (lege regel = nieuwe alinea)"
-        className="mt-4 max-w-2xl text-base leading-relaxed text-ink md:text-lg"
+        className="mt-4 max-w-2xl reading-copy reading-copy-ink"
       />
       <div className="mt-5 flex flex-wrap items-center gap-3">
         <button
@@ -562,7 +562,7 @@ export function CmsBlogPostEditor({
         onChange={setBody}
         placeholder="Volle tekst"
         rows={12}
-        className="mt-8 max-w-3xl text-base leading-relaxed text-ink md:text-lg"
+        className="mt-8 max-w-3xl reading-copy reading-copy-ink"
       />
       {msg ? <p className="mt-3 text-sm text-red-700">{msg}</p> : null}
     </div>

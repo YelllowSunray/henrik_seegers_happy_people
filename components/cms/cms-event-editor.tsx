@@ -258,7 +258,7 @@ export function CmsNextEventCard({
           value={draft.time}
           onChange={(time) => updateDraft({ time })}
           placeholder="Tijd, bijv. 14:00–17:00"
-          className="mt-1 text-base text-ink-soft md:text-lg"
+          className="mt-1 reading-copy"
         />
         <label className="mt-2 flex items-center gap-2 text-sm text-ink">
           <input

@@ -66,7 +66,7 @@ export default async function MembershipPage({
               <CmsField
                 path="membership.paradisePrompt"
                 value={paradisePrompt}
-                className="mb-4 text-base leading-relaxed text-ink md:text-lg"
+                className="reading-copy reading-copy-ink mb-4"
               />
               <SyncedLyricPlayer
                 audioSrc="/audio/pocketful-of-sunshine.mp3"
@@ -78,7 +78,7 @@ export default async function MembershipPage({
               <CmsField
                 path="membership.paradiseNote"
                 value={paradiseNote}
-                className="mt-4 text-sm leading-relaxed text-ink-soft italic md:text-base"
+                className="reading-copy mt-4 italic"
               />
             </div>
           </div>
