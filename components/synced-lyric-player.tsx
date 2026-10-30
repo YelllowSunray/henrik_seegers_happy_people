@@ -32,6 +32,12 @@ let scrollHandoffEnabled = true;
  * Prevents a raced handoff (or unlock listener) from stealing the first click.
  */
 let holdHandoffUntilScroll = false;
+/**
+ * User tapped Play on a specific track — keep that track playing while they scroll.
+ * Scroll handoff must not swap/restart audio (iOS hears that as off→on).
+ * Cleared on pause, track end, or when autoplay starts a non-user session.
+ */
+let userPinnedPlayback = false;
 let scrollListening = false;
 let returnResumeListening = false;
 let unlockListening = false;
@@ -95,6 +101,7 @@ function getSharedAudio(): HTMLAudioElement {
     sharedAudio.addEventListener("ended", () => {
       routePersistPlaying = false;
       resumeAfterBackground = false;
+      userPinnedPlayback = false;
       clearResumeSnapshot();
       activePlayerId = null;
       for (const fn of playListeners) fn(false);
@@ -139,6 +146,7 @@ function playFromUserGesture(src: string, playerId: string): void {
   const generation = ++playGeneration;
   lastUserPlayAt = Date.now();
   holdHandoffUntilScroll = true;
+  userPinnedPlayback = true;
   scrollHandoffEnabled = true;
   mediaUnlocked = true;
   resumeAfterBackground = false;
@@ -340,8 +348,15 @@ async function playWithUnlock(
   audio: HTMLAudioElement,
   autoplay = false,
 ): Promise<boolean> {
-  // Muted-first is more reliable for page-load autoplay (Chrome, Vercel CDN lag).
-  if (autoplay) {
+  // Already audible — never mute/unmute (that glitches as off→on on iPhone).
+  if (!audio.paused && audio.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+    mediaUnlocked = true;
+    return true;
+  }
+
+  // Muted-first only for cold autoplay before the user has unlocked media.
+  // Once unlocked, a mute flip still interrupts continuous playback on iOS.
+  if (autoplay && !mediaUnlocked) {
     try {
       audio.muted = true;
       await audio.play();
@@ -362,20 +377,22 @@ async function playWithUnlock(
     mediaUnlocked = true;
     return true;
   } catch {
-    try {
-      audio.muted = true;
-      await audio.play();
-      audio.muted = false;
-      mediaUnlocked = true;
-      return true;
-    } catch {
+    if (!mediaUnlocked) {
       try {
+        audio.muted = true;
+        await audio.play();
         audio.muted = false;
+        mediaUnlocked = true;
+        return true;
       } catch {
-        /* ignore */
+        try {
+          audio.muted = false;
+        } catch {
+          /* ignore */
+        }
       }
-      return false;
     }
+    return false;
   }
 }
 
@@ -387,6 +404,16 @@ async function playSrc(
   const generation = ++playGeneration;
   const audio = getSharedAudio();
   const abs = absoluteSrc(src);
+
+  // Don't let a scroll-handoff race steal a track the user just chose.
+  if (
+    !opts?.fromUser &&
+    userPinnedPlayback &&
+    audio.src &&
+    !sameSrc(audio.src, abs)
+  ) {
+    return false;
+  }
 
   if (!sameSrc(audio.src || "", abs)) {
     audio.src = abs;
@@ -415,6 +442,7 @@ async function playSrc(
       routePersistPlaying = true;
       scrollHandoffEnabled = true;
       holdHandoffUntilScroll = true;
+      userPinnedPlayback = true;
       writeLastHandoff(src, playerId);
     }
     return ok;
@@ -639,9 +667,21 @@ async function runHandoff() {
   // No lyric widgets on this page (e.g. blog post) — keep whatever is playing.
   if (players.size === 0) return;
 
-  const runId = ++handoffRunId;
   const audio = getSharedAudio();
   const playing = anyPlaying();
+
+  // User chose a track — never swap/restart it while scrolling (iPhone glitch).
+  if (userPinnedPlayback) {
+    if (playing && audio.src) {
+      const matching = [...players.values()].find((p) =>
+        sameSrc(p.src, audio.src),
+      );
+      if (matching) activePlayerId = matching.id;
+    }
+    return;
+  }
+
+  const runId = ++handoffRunId;
   const focus = pickFocusWidget();
 
   // Keep cross-route playback, but still hand off when another widget takes focus.
@@ -678,7 +718,9 @@ async function runHandoff() {
   const ok = await playSrc(focus.src, focus.id, {
     autoplay: !playing || switchingTrack,
   });
-  if (runId !== handoffRunId || holdHandoffUntilScroll) return;
+  if (runId !== handoffRunId || holdHandoffUntilScroll || userPinnedPlayback) {
+    return;
+  }
   if (ok) {
     clearScrollEndBurstTimers();
   } else {
@@ -1232,6 +1274,7 @@ export function SyncedLyricPlayer({
       playGeneration += 1;
       cancelPendingHandoff();
       holdHandoffUntilScroll = false;
+      userPinnedPlayback = false;
       scrollHandoffEnabled = false;
       routePersistPlaying = false;
       resumeAfterBackground = false;
