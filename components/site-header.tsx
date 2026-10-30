@@ -12,10 +12,11 @@ import { HeaderBackButton } from "@/components/smart-back-button";
 import { SeminarPromoBar } from "@/components/seminar-promo";
 
 const navKeys = [
+  ["videoBell", "/video-bell", "nav.videoBell"],
   ["seminars", "/seminars", "nav.seminars"],
-  ["blog", "/blog", "nav.blog"],
   ["vlogs", "/vlogs", "nav.vlogs"],
-  ["community", "/happy-people", "nav.community"],
+  ["blog", "/blog", "nav.blog"],
+  ["community", "/community", "nav.community"],
 ] as const;
 
 export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" }) {

@@ -10,7 +10,7 @@
     "home": "Inicio",
     "about": "Sobre Henk",
     "meeting": "El encuentro",
-    "seminars": "Seminarios mensuales",
+    "seminars": "Seminarios",
     "blog": "Blogs",
     "membership": "Happy People",
     "contact": "Contacto",
@@ -21,7 +21,8 @@
     "admin": "Admin",
     "back": "Atrás",
     "vlogs": "Vlogs",
-    "community": "Comunidad Happy People"
+    "community": "Comunidad Happy People",
+    "videoBell": "Community Video Bell"
   },
   "hero": {
     "brand": "Happy People",
@@ -644,5 +645,33 @@
     "body": "Full vlogs are included in your Happy People membership.",
     "cta": "Become Happy People",
     "openMembers": "Go to vlogs"
+  },
+  "videoBell": {
+    "eyebrow": "Live",
+    "title": "Community Video Bell",
+    "lead": "Join via Zoom and meet other Happy People — live talks, questions, and connection.",
+    "body": "Open the Zoom call when the bell rings. Come as you are.",
+    "join": "Open Zoom",
+    "missing": "The Zoom link is coming soon. Keep an eye on Happy People."
+  },
+  "communityForum": {
+    "eyebrow": "Community",
+    "title": "Happy People community",
+    "lead": "A forum for Happy People — share stories, ask questions, and reply to each other.",
+    "empty": "No posts yet. Be the first.",
+    "newPost": "New post",
+    "titleLabel": "Title",
+    "bodyLabel": "Text",
+    "publish": "Post",
+    "publishing": "Posting…",
+    "loginToPost": "Sign in to post",
+    "loginCta": "Sign in",
+    "comments": "{count} comments",
+    "comment": "Reply",
+    "commentPlaceholder": "Write a comment…",
+    "back": "Back to community",
+    "delete": "Delete",
+    "by": "by",
+    "failed": "Could not save. Please try again."
   }
 }
