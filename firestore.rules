@@ -39,7 +39,10 @@ service cloud.firestore {
     }
 
     match /videos/{id} {
-      allow read: if resource.data.kind == 'sample' || signedIn();
+      // Vlogs + samples are public; seminars stay members-only.
+      allow read: if resource.data.kind == 'sample'
+        || resource.data.kind == 'vlog'
+        || signedIn();
       allow create, update, delete: if isAdmin() && billingOk();
     }
 

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
-import { JoinButton } from "@/components/join-button";
-import { Link } from "@/i18n/navigation";
+import { VideoList } from "@/components/video-list";
+import { fetchVideosByKind } from "@/lib/content-firestore";
 import { buildPageMetadata } from "@/lib/seo";
 import type { Locale } from "@/lib/types";
 
@@ -32,6 +32,7 @@ export default async function VlogsPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("vlogsPage");
+  const items = await fetchVideosByKind("vlog");
 
   return (
     <>
@@ -46,20 +47,8 @@ export default async function VlogsPage({
         <p className="mt-5 max-w-2xl text-base leading-relaxed text-ink-soft md:text-lg">
           {t("lead")}
         </p>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink md:text-lg">
-          {t("body")}
-        </p>
-        <div className="mt-10 flex flex-wrap items-center gap-4">
-          <JoinButton
-            label={t("cta")}
-            className="inline-flex rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white hover:bg-accent-soft"
-          />
-          <Link
-            href="/members/vlogs"
-            className="text-sm font-semibold text-ink underline-offset-4 hover:text-accent hover:underline"
-          >
-            {t("openMembers")}
-          </Link>
+        <div className="mt-10">
+          <VideoList items={items} />
         </div>
       </Section>
     </>

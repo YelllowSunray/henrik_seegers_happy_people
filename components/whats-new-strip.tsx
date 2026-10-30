@@ -11,7 +11,7 @@ const items: {
   labelKey: string;
   tone: "accent" | "gold";
 }[] = [
-  { section: "vlogs", href: "/members/vlogs", labelKey: "vlogs", tone: "accent" },
+  { section: "vlogs", href: "/vlogs", labelKey: "vlogs", tone: "accent" },
   {
     section: "seminars",
     href: "/members/seminars",

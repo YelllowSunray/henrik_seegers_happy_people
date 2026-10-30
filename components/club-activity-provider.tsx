@@ -183,6 +183,7 @@ export function ClubActivityProvider({
   useEffect(() => {
     if (!user) return;
     const map: { match: string; section: ClubSection }[] = [
+      { match: "/vlogs", section: "vlogs" },
       { match: "/members/vlogs", section: "vlogs" },
       { match: "/members/seminars", section: "seminars" },
       { match: "/members/quotes", section: "quotes" },

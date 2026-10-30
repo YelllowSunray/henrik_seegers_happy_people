@@ -6,13 +6,13 @@ import { useClubActivity } from "@/components/club-activity-provider";
 import type { ClubSection } from "@/lib/types";
 
 const links = [
-  ["", "hub", null],
-  ["/seminars", "seminars", "seminars"],
-  ["/vlogs", "vlogs", "vlogs"],
-  ["/quotes", "quotes", "quotes"],
-  ["/teachings", "teachings", "teachings"],
+  ["", "hub", null, "/members"],
+  ["/seminars", "seminars", "seminars", "/members/seminars"],
+  ["/vlogs", "vlogs", "vlogs", "/vlogs"],
+  ["/quotes", "quotes", "quotes", "/members/quotes"],
+  ["/teachings", "teachings", "teachings", "/members/teachings"],
 ] as const satisfies ReadonlyArray<
-  readonly [string, string, ClubSection | null]
+  readonly [string, string, ClubSection | null, string]
 >;
 
 function Badge({ count }: { count: number }) {
@@ -32,12 +32,11 @@ export function MembersNav() {
   return (
     <nav className="-mx-1 overflow-x-auto">
       <div className="flex w-max min-w-full gap-1 border-b border-line px-1 sm:w-auto sm:flex-wrap">
-        {links.map(([suffix, key, section]) => {
-          const href = `/members${suffix}`;
+        {links.map(([suffix, key, section, href]) => {
           const active =
             suffix === ""
               ? pathname === "/members"
-              : pathname.startsWith(href);
+              : pathname === href || pathname.startsWith(`${href}/`);
           const count = section ? activity[section] : 0;
           return (
             <Link

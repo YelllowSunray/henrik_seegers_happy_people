@@ -47,7 +47,7 @@ export default async function MembersHomePage({
       section: "seminars" as const,
     },
     {
-      href: "/members/vlogs",
+      href: "/vlogs",
       label: tr("vlogs"),
       desc: tr("descVlogs"),
       count: vlogs.length,
@@ -191,7 +191,7 @@ export default async function MembersHomePage({
           )}
           {latestVlog && (
             <Link
-              href="/members/vlogs"
+              href="/vlogs"
               className="group relative flex min-h-[16rem] flex-col justify-end overflow-hidden lg:col-span-2"
             >
               <div

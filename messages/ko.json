@@ -640,10 +640,7 @@
   "vlogsPage": {
     "eyebrow": "Vlogs",
     "title": "Vlogs",
-    "lead": "Personal vlogs from Henk — insights, stories, and moments from the Happy People path.",
-    "body": "Full vlogs are included in your Happy People membership.",
-    "cta": "Become Happy People",
-    "openMembers": "Go to vlogs"
+    "lead": "Personal vlogs from Henk — insights, stories, and moments from the Happy People path."
   },
   "videoBell": {
     "eyebrow": "Live",
