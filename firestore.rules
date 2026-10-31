@@ -11,7 +11,8 @@ service cloud.firestore {
           'henk.seegers1965@gmail.com',
           'hendrik.seegers1991@icloud.com',
           'henkseegers196565@hotmail.com',
-          'seegershenk79@gmail.com'
+          'seegershenk79@gmail.com',
+          'iyersamir@gmail.com'
         ];
     }
 
