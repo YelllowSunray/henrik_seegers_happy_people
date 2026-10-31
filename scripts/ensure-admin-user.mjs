@@ -18,6 +18,10 @@ const ADMINS = [
     displayName: "Hendrik Seegers",
   },
   {
+    email: "hendrik.seegers@icloud.com",
+    displayName: "Hendrik Seegers",
+  },
+  {
     email: "henkseegers196565@hotmail.com",
     displayName: "Hendrik Seegers",
   },

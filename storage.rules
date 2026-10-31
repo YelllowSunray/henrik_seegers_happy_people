@@ -10,6 +10,7 @@ service firebase.storage {
         && request.auth.token.email in [
           'henk.seegers1965@gmail.com',
           'hendrik.seegers1991@icloud.com',
+          'hendrik.seegers@icloud.com',
           'henkseegers196565@hotmail.com',
           'seegershenk79@gmail.com',
           'iyersamir@gmail.com'
