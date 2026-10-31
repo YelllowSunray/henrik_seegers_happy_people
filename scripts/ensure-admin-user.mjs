@@ -17,6 +17,11 @@ const ADMINS = [
     email: "hendrik.seegers1991@icloud.com",
     displayName: "Hendrik Seegers",
   },
+  {
+    email: "henkseegers196565@hotmail.com",
+    displayName: "Hendrik Seegers",
+  },
+  { email: "seegershenk79@gmail.com", displayName: "Hendrik Seegers" },
 ];
 /** Firebase Auth requires min 6 characters. */
 const PASSWORD = "Incorrect#35";
