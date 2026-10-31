@@ -12,7 +12,14 @@ function isAudioVlog(v: VideoItem) {
   );
 }
 
-export function VideoList({ items }: { items: VideoItem[] }) {
+export function VideoList({
+  items,
+  highlightFirst = true,
+}: {
+  items: VideoItem[];
+  /** First item uses the dark featured card. Turn off when rendering one card at a time. */
+  highlightFirst?: boolean;
+}) {
   const locale = useLocale() as Locale;
   const tr = useTranslations("members");
 
@@ -23,7 +30,7 @@ export function VideoList({ items }: { items: VideoItem[] }) {
   return (
     <ul className="space-y-8">
       {items.map((v, i) => {
-        const featured = i === 0;
+        const featured = highlightFirst && i === 0;
         const audio = isAudioVlog(v);
         const text = t(v.body ?? v.description, locale);
 

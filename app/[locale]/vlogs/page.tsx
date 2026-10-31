@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { SubscriberGate } from "@/components/subscriber-gate";
-import { VideoList } from "@/components/video-list";
+import { CmsVlogList } from "@/components/cms/cms-vlog-list";
 import { fetchVideosByKind } from "@/lib/content-firestore";
 import { buildPageMetadata } from "@/lib/seo";
 import type { Locale } from "@/lib/types";
@@ -50,7 +50,7 @@ export default async function VlogsPage({
           {t("lead")}
         </p>
         <div className="mt-10">
-          <VideoList items={items} />
+          <CmsVlogList items={items} />
         </div>
       </Section>
       </SubscriberGate>
