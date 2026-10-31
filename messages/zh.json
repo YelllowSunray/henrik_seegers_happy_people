@@ -22,7 +22,7 @@
     "back": "返回",
     "vlogs": "视频博客",
     "community": "Happy People 社区",
-    "videoBell": "Community Video Bell"
+    "videoBell": "Zoom meeting"
   },
   "hero": {
     "brand": "Happy People",
@@ -110,56 +110,33 @@
   "membership": {
     "eyebrow": "会员资格",
     "title": "Happy People",
-    "subtitle": "不仅仅是聆听",
+    "subtitle": "不只是一场聚会",
     "introParagraphs": [
-      "Happy People是关于人的。",
-      "关于你是谁。",
-      "关于你如何看待自己和他人。",
-      "关于连接。",
-      "关于选择。",
-      "关于有时悄悄塑造你生活的模式。",
-      "不完美的人。",
-      "但很快乐。",
-      "只是那些想要再次学习如何观察、感觉、欢笑和交流的人。"
+      "一个分享故事、获得新看法，并继续彼此交谈的地方。",
+      "Happy People 包括个人博客、视频博客，以及每月一次的线上聚会。这些聚会留有提问、交谈和交流想法的空间。",
+      "每次线上聚会最多 100 人，好让彼此仍有足够的个人接触。"
     ],
-    "bridgeParagraphs": [
-      "研讨会持续一个下午。",
-      "但是，一次愉快的谈话或新的见解并不会在你走出门的那一刻就停止。",
-      "这就是Happy People存在的原因。"
-    ],
-    "price": "€20 / 月",
-    "pitch": "不是订阅“更多内容”。但可以访问Henk、他的故事、他的观看方式以及Happy People社区。",
-    "belongingTitle": "Happy People",
+    "bridgeParagraphs": [],
+    "price": "每月 € 1.65",
+    "pitch": "选择适合你的",
+    "belongingTitle": "Happy People 社区呢？",
     "communityParagraphs": [
-      "不是课程。",
-      "不是一个机构。",
-      "不是一个大家都已经明白的团体。",
-      "只是人。",
-      "好奇的人。",
-      "想要发现自己为什么要做这些事情的人。",
-      "想要学习观察、感觉、笑和交流的人。"
+      "它一定会来，但还需要一点时间。等到有足够的兴趣和报名，我们想建立自己的 Happy People 社区：一个人们也能在每月聚会之外相遇、彼此启发的地方。"
     ],
-    "monthlyPlanTitle": "Happy People — 每月 20 欧元",
+    "monthlyPlanTitle": "按月",
     "monthlyBenefits": [
-      "完全访问研讨会录音",
-      "来自Henk的新个人视频博客",
-      "会员专享博客和故事",
-      "来自Henk的个人消息",
-      "每月一次的在线直播时刻，包含对话、问题和答案",
-      "访问Happy People社区",
-      "首次参加新的研讨会和活动",
-      "为未来的现场会议提出主题和问题的机会"
+      "阅读个人博客。",
+      "观看 Henk 的新视频博客。",
+      "参加每月线上聚会。",
+      "每次聚会最多 100 人。"
     ],
-    "yearlyPlanTitle": "Happy People — 每年 200 欧元",
-    "yearlyIntro": "月度计划中的一切，加上：",
+    "yearlyPlanTitle": "按年",
+    "yearlyIntro": "每年 € 16.50",
     "yearlyBenefits": [
-      "与每月支付相比，可享受两个月的福利",
-      "与Henk的独家年度在线会议",
-      "研讨会优先报名",
-      "个人欢迎信息",
-      "年度特殊的Happy People时刻"
+      "与月度订阅相同的内容。",
+      "一次支付一整年。"
     ],
-    "teaser": "访问Henk、他的故事、他的观看方式以及Happy People社区。",
+    "teaser": "个人博客、视频博客和每月线上聚会。社区以后才会开放。",
     "cta": "立即加入",
     "benefitSeminars": "完整研讨会录音",
     "benefitVlogs": "来自Henk的个人视频博客",
@@ -167,21 +144,21 @@
     "benefitTeachings": "会员专享博客和故事",
     "benefitMessages": "来自Henk的个人留言",
     "wordBond": "无义务。没有精美的印刷品。选择权在你：是或否。",
-    "priceMonthly": "€20 / 月",
-    "priceYearly": "€200 / 年",
-    "noObligation": "每月 20 欧元或每年 200 欧元。不用大惊小怪。没有义务。没有压力。看看Happy People是否适合你。是还是不是。选择权在你。",
+    "priceMonthly": "每月 € 1.65",
+    "priceYearly": "每年 € 16.50",
+    "noObligation": "选择权在你\n\n不复杂。没有义务。没有压力。\n\n看看 Happy People 是否适合你。\n\nYES or NO。选择权在你！",
     "ctaMonthly": "选择每月",
     "ctaYearly": "每年选择",
     "monthlyLabel": "每月",
     "yearlyLabel": "每年",
-    "monthlyDetail": "每月 €20。",
-    "yearlyDetail": "每年 €200。",
-    "yearlySave": "2个月免费",
+    "monthlyDetail": "每月 € 1.65。",
+    "yearlyDetail": "每年 € 16.50。",
+    "yearlySave": "",
     "openClub": "进入俱乐部",
     "manageSubscription": "管理订阅",
     "paradisePrompt": "选择权在你 — 会是 YES 还是 NO？",
     "paradiseNote": "用这首歌，我希望能修补我见过的最美丽的女人那颗破碎的心🙏❤️",
-    "monthlyIntro": "完整访问："
+    "monthlyIntro": "每月 € 1.65"
   },
   "contact": {
     "title": "联系方式",
@@ -645,7 +622,7 @@
   },
   "videoBell": {
     "eyebrow": "Live",
-    "title": "Community Video Bell",
+    "title": "Zoom meeting",
     "lead": "Join via Zoom and meet other Happy People — live talks, questions, and connection.",
     "body": "Open the Zoom call when the bell rings. Come as you are.",
     "join": "Open Zoom",

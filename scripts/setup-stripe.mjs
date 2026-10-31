@@ -27,7 +27,7 @@ async function findOrCreateProduct() {
   return stripe.products.create({
     name: "Happy People Membership",
     description:
-      "Club access: seminar recordings, vlogs, quotes, and messages from Henk. 1 week free trial.",
+      "Blogs, vlogs, and monthly online meetups. Both plans include the same access.",
     metadata: { app: "happy-people" },
   });
 }
@@ -97,12 +97,12 @@ async function ensurePortal(productId, monthlyPriceId, yearlyPriceId) {
 const product = await findOrCreateProduct();
 const monthly = await findOrCreatePrice(product.id, {
   nickname: "Happy People monthly",
-  unitAmount: 2000,
+  unitAmount: 165,
   interval: "month",
 });
 const yearly = await findOrCreatePrice(product.id, {
   nickname: "Happy People yearly",
-  unitAmount: 20000,
+  unitAmount: 1650,
   interval: "year",
 });
 await ensurePortal(product.id, monthly.id, yearly.id);

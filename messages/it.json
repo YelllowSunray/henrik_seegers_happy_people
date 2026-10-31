@@ -22,7 +22,7 @@
     "back": "Indietro",
     "vlogs": "Vlog",
     "community": "Community Happy People",
-    "videoBell": "Community Video Bell"
+    "videoBell": "Zoom meeting"
   },
   "hero": {
     "brand": "Happy People",
@@ -110,55 +110,33 @@
   "membership": {
     "eyebrow": "Abbonamento",
     "title": "Happy People",
-    "subtitle": "Molto più che ascoltare",
+    "subtitle": "Più di un incontro",
     "introParagraphs": [
-      "Happy People parla di persone.",
-      "Di chi sei.",
-      "Di come guardi te stesso e gli altri.",
-      "Di connessione.",
-      "Di scelte.",
-      "Dei modelli che a volte plasmano la tua vita senza che te ne accorga.",
-      "Non persone perfette.",
-      "Felici, però.",
-      "Solo persone che vogliono imparare di nuovo a guardare, sentire, ridere e connettersi."
+      "Un posto per condividere storie, trovare nuovi spunti e continuare a parlare insieme.",
+      "Happy People è fatto di blog personali, vlog e meetup online mensili. In questi incontri c’è spazio per domande, conversazioni e lo scambio di pensieri.",
+      "Un meetup online ha al massimo 100 partecipanti, così resta abbastanza spazio per il contatto personale."
     ],
-    "bridgeParagraphs": [
-      "Un seminario dura un pomeriggio.",
-      "Ma una buona conversazione o una nuova intuizione non si ferma nel momento in cui esci dalla porta.",
-      "Per questo esiste Happy People."
-    ],
-    "price": "€20 / mese",
-    "pitch": "Non un abbonamento a «più contenuti». Ma accesso a Henk, la sua storia, il suo modo di guardare e la community Happy People.",
-    "belongingTitle": "Happy People",
+    "bridgeParagraphs": [],
+    "price": "1,65 € al mese",
+    "pitch": "Scegli quello che fa per te",
+    "belongingTitle": "E la community Happy People?",
     "communityParagraphs": [
-      "Non un corso.",
-      "Non un’istituzione.",
-      "Non un gruppo in cui tutti capiscono già tutto.",
-      "Solo persone.",
-      "Persone curiose.",
-      "Persone che vogliono scoprire perché fanno ciò che fanno.",
-      "Persone che vogliono imparare a guardare, sentire, ridere e connettersi."
+      "Arriverà di sicuro, ma ha ancora bisogno di un po’ di tempo. Quando ci sarà abbastanza interesse e abbastanza iscrizioni, vogliamo costruire una community Happy People tutta nostra: un posto dove le persone possano incontrarsi e ispirarsi anche fuori dagli incontri mensili."
     ],
-    "monthlyPlanTitle": "Happy People — €20 al mese",
+    "monthlyPlanTitle": "Mensile",
     "monthlyBenefits": [
-      "nuovi vlog personali di Henk",
-      "blog e storie riservati ai membri",
-      "messaggi personali di Henk",
-      "un momento live online mensile con conversazione, domande e risposte",
-      "accesso alla community Happy People",
-      "primo accesso a nuovi seminari e attività",
-      "possibilità di suggerire argomenti e domande per future sessioni live"
+      "Accesso ai blog personali.",
+      "Accesso ai nuovi vlog di Henk.",
+      "Partecipazione al meetup online mensile.",
+      "Massimo 100 partecipanti per meetup."
     ],
-    "yearlyPlanTitle": "Happy People — €200 all’anno",
-    "yearlyIntro": "Tutto ciò che è incluso nel piano mensile, più:",
+    "yearlyPlanTitle": "Annuale",
+    "yearlyIntro": "16,50 € all’anno",
     "yearlyBenefits": [
-      "due mesi di vantaggio rispetto al pagamento mensile",
-      "una sessione online esclusiva annuale con Henk",
-      "preiscrizione ai seminari",
-      "un messaggio di benvenuto personale",
-      "un momento annuale speciale Happy People"
+      "Le stesse possibilità dell’abbonamento mensile.",
+      "Pagamento per un anno intero."
     ],
-    "teaser": "Accesso a Henk, la sua storia, il suo modo di guardare e la community Happy People.",
+    "teaser": "Blog personali, vlog e meetup online mensili. La community arriverà più avanti.",
     "cta": "Unisciti ora",
     "benefitSeminars": "Registrazioni complete dei seminari",
     "benefitVlogs": "Vlog personali di Henk",
@@ -166,21 +144,21 @@
     "benefitTeachings": "Blog e storie riservati ai membri",
     "benefitMessages": "Messaggi personali di Henk",
     "wordBond": "Nessun obbligo. Nessuna scritta piccola. La scelta è tua: YES or NO.",
-    "priceMonthly": "€20 / mese",
-    "priceYearly": "€200 / anno",
-    "noObligation": "€20 al mese o €200 all’anno. Nessuna complicazione. Nessun obbligo. Nessuna pressione. Scopri semplicemente se Happy People fa per te. YES o NO. La scelta è tua.",
+    "priceMonthly": "1,65 € al mese",
+    "priceYearly": "16,50 € all’anno",
+    "noObligation": "La scelta è tua\n\nNiente complicazioni. Nessun obbligo. Nessuna pressione.\n\nScopri semplicemente se Happy People fa per te.\n\nYES or NO. La scelta è tua!",
     "ctaMonthly": "Scegli mensile",
     "ctaYearly": "Scegli annuale",
     "monthlyLabel": "Mensile",
     "yearlyLabel": "Annuale",
-    "monthlyDetail": "€20 al mese.",
-    "yearlyDetail": "€200 all'anno.",
-    "yearlySave": "2 mesi di vantaggio",
+    "monthlyDetail": "1,65 € al mese.",
+    "yearlyDetail": "16,50 € all’anno.",
+    "yearlySave": "",
     "openClub": "Vai al club",
     "manageSubscription": "Gestisci abbonamento",
     "paradisePrompt": "La scelta è tua — sarà YES o NO?",
     "paradiseNote": "Con questa canzone spero di poter riparare il cuore spezzato della donna più bella che abbia mai visto🙏❤️",
-    "monthlyIntro": "accesso completo a:"
+    "monthlyIntro": "1,65 € al mese"
   },
   "contact": {
     "title": "Contatto",
@@ -645,7 +623,7 @@
   },
   "videoBell": {
     "eyebrow": "Live",
-    "title": "Community Video Bell",
+    "title": "Zoom meeting",
     "lead": "Join via Zoom and meet other Happy People — live talks, questions, and connection.",
     "body": "Open the Zoom call when the bell rings. Come as you are.",
     "join": "Open Zoom",

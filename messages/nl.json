@@ -8,7 +8,7 @@
   },
   "nav": {
     "home": "Home",
-    "videoBell": "Community Video Bell",
+    "videoBell": "Zoom meeting",
     "seminars": "Seminars",
     "vlogs": "Vlogs",
     "blog": "Blogs",
@@ -31,7 +31,7 @@
   },
   "videoBell": {
     "eyebrow": "Live",
-    "title": "Community Video Bell",
+    "title": "Zoom meeting",
     "lead": "Bel in via Zoom en ontmoet andere Happy People — live gesprekken, vragen en verbinding.",
     "body": "Open de Zoom-call wanneer de bel gaat. Kom zoals je bent.",
     "join": "Open Zoom",
@@ -145,40 +145,32 @@
     "title": "Happy People",
     "subtitle": "Meer dan alleen een bijeenkomst",
     "introParagraphs": [
-      "Met persoonlijke vlogs, verhalen, en elke maand een online moment om vragen te stellen en gesprekken te voeren.",
-      "Je kunt meedenken over onderwerpen, meedoen aan nieuwe seminars, en je staat nergens alleen voor."
+      "Een plek om verhalen te delen, nieuwe inzichten op te doen en met elkaar in gesprek te blijven.",
+      "Happy People bestaat uit persoonlijke blogs, vlogs en maandelijkse online meetups. Tijdens deze bijeenkomsten is er ruimte voor vragen, gesprekken en het uitwisselen van gedachten.",
+      "Een online meetup heeft maximaal 100 deelnemers, zodat er voldoende ruimte blijft voor persoonlijk contact."
     ],
-    "bridgeParagraphs": [
-      "Een seminar duurt een middag, maar een goed gesprek of een nieuw inzicht kan veel langer doorwerken.",
-      "Daarom is er Happy People: een plek voor mensen die nieuwsgierig zijn, willen blijven leren en willen verbinden."
-    ],
-    "price": "€20 / maand",
-    "pitch": "Een plek voor mensen die nieuwsgierig zijn, willen blijven leren en willen verbinden — maandelijks of jaarlijks, net wat bij je past.",
-    "belongingTitle": "Happy People",
+    "bridgeParagraphs": [],
+    "price": "€ 1,65 per maand",
+    "pitch": "Kies wat bij je past",
+    "belongingTitle": "En de Happy People-community?",
     "communityParagraphs": [
-      "Maandelijks of jaarlijks, net wat bij je past.",
-      "Je hoeft niet eerst naar een seminar om lid te mogen worden.",
-      "En je hoeft geen lid te zijn om naar een seminar te komen."
+      "Die komt er zeker, maar heeft nog even tijd nodig. Zodra er voldoende belangstelling en aanmeldingen zijn, willen we een eigen Happy People-community opbouwen: een plek waar mensen elkaar ook buiten de maandelijkse bijeenkomsten kunnen ontmoeten en inspireren."
     ],
-    "monthlyPlanTitle": "Happy People — €20 per maand",
-    "monthlyIntro": "volledige toegang tot:",
+    "monthlyPlanTitle": "Maandelijks",
+    "monthlyIntro": "€ 1,65 per maand",
     "monthlyBenefits": [
-      "nieuwe persoonlijke vlogs van Henk",
-      "leden-only blogs en verhalen",
-      "iedere maand een live online moment met gesprek, vragen en antwoorden",
-      "toegang tot de Happy People-community",
-      "eerste toegang tot nieuwe seminars en activiteiten",
-      "mogelijkheid om onderwerpen en vragen aan te dragen voor toekomstige livesessies"
+      "Toegang tot persoonlijke blogs.",
+      "Toegang tot nieuwe vlogs van Henk.",
+      "Deelname aan de maandelijkse online meetup.",
+      "Maximaal 100 deelnemers per meetup."
     ],
-    "yearlyPlanTitle": "Happy People — €200 per jaar",
-    "yearlyIntro": "Alles van het maandabonnement, plus:",
+    "yearlyPlanTitle": "Jaarlijks",
+    "yearlyIntro": "€ 16,50 per jaar",
     "yearlyBenefits": [
-      "twee maanden voordeel ten opzichte van maandelijks betalen",
-      "jaarlijks een exclusieve online sessie met Henk",
-      "voorinschrijving voor seminars",
-      "een speciaal jaarlijks Happy People-moment"
+      "Dezelfde mogelijkheden als het maandabonnement.",
+      "Betaling voor een heel jaar."
     ],
-    "teaser": "Toegang tot Henk, zijn verhaal, zijn manier van kijken en de Happy People-community.",
+    "teaser": "Persoonlijke blogs, vlogs en maandelijkse online meetups. De community volgt later.",
     "cta": "Word lid",
     "benefitSeminars": "Volledige seminaropnames",
     "benefitVlogs": "Persoonlijke vlogs van Henk",
@@ -186,16 +178,16 @@
     "benefitTeachings": "Leden-only blogs en verhalen",
     "benefitMessages": "Persoonlijke berichten van Henk",
     "wordBond": "Geen verplichtingen. Geen kleine lettertjes. De keuze is aan jou: YES or NO.",
-    "priceMonthly": "€20 / maand",
-    "priceYearly": "€200 / jaar",
-    "noObligation": "€20 per maand of €200 per jaar. Geen ingewikkeld gedoe. Geen verplichting. Geen druk. Gewoon ontdekken of Happy People bij jou past. YES or NO. De keuze is aan jou.",
+    "priceMonthly": "€ 1,65 per maand",
+    "priceYearly": "€ 16,50 per jaar",
+    "noObligation": "De keuze is aan jou\n\nGeen ingewikkeld gedoe. Geen verplichtingen. Geen druk.\n\nGewoon ontdekken of Happy People bij jou past.\n\nYES or NO. De keuze is aan jou!",
     "ctaMonthly": "Kies maandelijks",
     "ctaYearly": "Kies jaarlijks",
     "monthlyLabel": "Maandelijks",
     "yearlyLabel": "Jaarlijks",
-    "monthlyDetail": "€20 per maand.",
-    "yearlyDetail": "€200 per jaar.",
-    "yearlySave": "2 maanden voordeel",
+    "monthlyDetail": "€ 1,65 per maand.",
+    "yearlyDetail": "€ 16,50 per jaar.",
+    "yearlySave": "",
     "openClub": "Naar de club",
     "manageSubscription": "Abonnement beheren",
     "paradisePrompt": "De keuze is aan jou — wordt het YES of NO?",

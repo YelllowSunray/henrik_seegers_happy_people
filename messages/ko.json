@@ -22,7 +22,7 @@
     "back": "뒤로",
     "vlogs": "브이로그",
     "community": "Happy People 커뮤니티",
-    "videoBell": "Community Video Bell"
+    "videoBell": "Zoom meeting"
   },
   "hero": {
     "brand": "Happy People",
@@ -110,56 +110,33 @@
   "membership": {
     "eyebrow": "멤버십",
     "title": "Happy People",
-    "subtitle": "듣기만 하는 것 이상",
+    "subtitle": "모임 그 이상",
     "introParagraphs": [
-      "Happy People는 사람에 관한 것입니다.",
-      "당신이 누구인지에 관한 것.",
-      "자신과 다른 사람을 어떻게 바라보는지에 관한 것.",
-      "연결에 관한 것.",
-      "선택에 관한 것.",
-      "때로는 눈치채지 못한 채 삶을 좌우하는 패턴에 관한 것.",
-      "완벽한 사람들이 아닙니다.",
-      "행복한 사람들이지만.",
-      "다시 보고, 느끼고, 웃고, 연결하는 법을 배우고 싶은 사람들입니다."
+      "이야기를 나누고, 새로운 생각을 얻고, 서로 대화를 이어 가는 자리입니다.",
+      "Happy People은 개인 블로그, 브이로그, 그리고 매달 온라인 밋업으로 이루어집니다. 이 모임에는 질문과 대화, 생각을 나눌 자리가 있습니다.",
+      "온라인 밋업은 참가자가 최대 100명입니다. 서로 충분히 만날 수 있는 자리를 남기기 위해서입니다."
     ],
-    "bridgeParagraphs": [
-      "세미나는 오후 한 번입니다.",
-      "하지만 좋은 대화나 새로운 깨달음은 문을 나서는 순간 끝나지 않습니다.",
-      "그래서 Happy People가 있습니다."
-    ],
-    "price": "월 €20",
-    "pitch": "‘더 많은 콘텐츠’ 구독이 아닙니다. Henk, 그의 이야기, 그의 시선, Happy People 커뮤니티에 대한 접근입니다.",
-    "belongingTitle": "Happy People",
+    "bridgeParagraphs": [],
+    "price": "월 € 1.65",
+    "pitch": "맞는 것을 고르세요",
+    "belongingTitle": "Happy People 커뮤니티는요?",
     "communityParagraphs": [
-      "강의가 아닙니다.",
-      "기관이 아닙니다.",
-      "모두가 이미 다 이해하는 그룹이 아닙니다.",
-      "그냥 사람들입니다.",
-      "호기심 있는 사람들.",
-      "왜 자신이 하는 일을 하는지 알고 싶은 사람들.",
-      "보고, 느끼고, 웃고, 연결하는 법을 배우고 싶은 사람들."
+      "반드시 생기지만, 아직 조금 시간이 필요합니다. 관심과 신청이 충분히 모이면 우리만의 Happy People 커뮤니티를 만들려고 합니다. 매달 모임 밖에서도 사람들이 만나고 서로에게 영감을 주는 자리입니다."
     ],
-    "monthlyPlanTitle": "Happy People — 월 €20",
+    "monthlyPlanTitle": "월간",
     "monthlyBenefits": [
-      "세미나 녹화본 전체 이용",
-      "Henk의 새로운 개인 브이로그",
-      "회원 전용 블로그와 이야기",
-      "Henk의 개인 메시지",
-      "매월 대화, 질문, 답변이 있는 라이브 온라인 시간",
-      "Happy People 커뮤니티 이용",
-      "새 세미나와 활동에 대한 우선 접근",
-      "향후 라이브 세션을 위한 주제와 질문 제안 가능"
+      "개인 블로그 이용.",
+      "Henk의 새 브이로그 이용.",
+      "매달 온라인 밋업 참여.",
+      "밋업당 최대 100명."
     ],
-    "yearlyPlanTitle": "Happy People — 연 €200",
-    "yearlyIntro": "월간 플랜의 모든 것, 그리고:",
+    "yearlyPlanTitle": "연간",
+    "yearlyIntro": "연 € 16.50",
     "yearlyBenefits": [
-      "월간 결제 대비 2개월 혜택",
-      "Henk와의 연간 독점 온라인 세션",
-      "세미나 사전 등록",
-      "개인 환영 메시지",
-      "특별한 연간 Happy People 순간"
+      "월간 구독과 같은 내용.",
+      "1년치 결제."
     ],
-    "teaser": "Henk, 그의 이야기, 그의 시선, Happy People 커뮤니티에 대한 접근.",
+    "teaser": "개인 블로그, 브이로그, 매달 온라인 밋업. 커뮤니티는 나중에 열립니다.",
     "cta": "지금 가입",
     "benefitSeminars": "세미나 녹화본 전체",
     "benefitVlogs": "Henk의 개인 브이로그",
@@ -167,21 +144,21 @@
     "benefitTeachings": "회원 전용 블로그와 이야기",
     "benefitMessages": "Henk의 개인 메시지",
     "wordBond": "의무 없음. 작은 글씨 없음. 선택은 당신의 몫입니다: YES or NO.",
-    "priceMonthly": "월 €20",
-    "priceYearly": "연 €200",
-    "noObligation": "월 €20 또는 연 €200. 번거로움 없음. 의무 없음. 부담 없음. Happy People가 당신에게 맞는지 그냥 알아보세요. YES 또는 NO. 선택은 당신의 몫입니다.",
+    "priceMonthly": "월 € 1.65",
+    "priceYearly": "연 € 16.50",
+    "noObligation": "선택은 당신의 몫입니다\n\n복잡한 절차 없음. 의무 없음. 부담 없음.\n\nHappy People이 당신에게 맞는지 그냥 알아보세요.\n\nYES or NO. 선택은 당신의 몫입니다!",
     "ctaMonthly": "월간 선택",
     "ctaYearly": "연간 선택",
     "monthlyLabel": "월간",
     "yearlyLabel": "연간",
-    "monthlyDetail": "월 €20.",
-    "yearlyDetail": "연 €200.",
-    "yearlySave": "2개월 혜택",
+    "monthlyDetail": "월 € 1.65.",
+    "yearlyDetail": "연 € 16.50.",
+    "yearlySave": "",
     "openClub": "클럽으로",
     "manageSubscription": "구독 관리",
     "paradisePrompt": "선택은 당신의 몫입니다 — YES 또는 NO?",
     "paradiseNote": "이 노래로 내가 본 가장 아름다운 여인의 상처 난 마음을 다시 붙일 수 있기를 바랍니다🙏❤️",
-    "monthlyIntro": "전체 이용:"
+    "monthlyIntro": "월 € 1.65"
   },
   "contact": {
     "title": "문의",
@@ -645,7 +622,7 @@
   },
   "videoBell": {
     "eyebrow": "Live",
-    "title": "Community Video Bell",
+    "title": "Zoom meeting",
     "lead": "Join via Zoom and meet other Happy People — live talks, questions, and connection.",
     "body": "Open the Zoom call when the bell rings. Come as you are.",
     "join": "Open Zoom",

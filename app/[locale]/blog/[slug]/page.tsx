@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
+import { SubscriberGate } from "@/components/subscriber-gate";
 import { Section } from "@/components/section";
 import { BlogBody } from "@/components/blog-body";
 import { CmsBlogPostEditor } from "@/components/cms/cms-blog-feed";
@@ -56,6 +57,7 @@ export default async function BlogPostPage({
   return (
     <>
       <SiteHeader variant="solid" />
+      <SubscriberGate>
       <Section>
         <CmsBlogPostEditor post={post} locale={locale}>
           <p className="text-xs text-ink-soft">{post.publishedAt}</p>
@@ -73,6 +75,7 @@ export default async function BlogPostPage({
           ← {tr("cta")}
         </Link>
       </Section>
+      </SubscriberGate>
     </>
   );
 }

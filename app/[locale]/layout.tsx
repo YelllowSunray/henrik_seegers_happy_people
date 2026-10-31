@@ -46,7 +46,7 @@ export default async function LocaleLayout({
               lang={locale}
             >
               <BillingBanner />
-              <div className="min-w-0 flex-1 pb-[max(8rem,var(--cms-dock-h,7rem))] md:pb-28">
+              <div className="min-w-0 flex-1 pb-[var(--cms-dock-h,0px)]">
                 {children}
               </div>
               <SiteFooter locale={locale} />

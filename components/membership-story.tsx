@@ -122,14 +122,6 @@ export async function MembershipStory({
         />
       ) : null}
 
-      {introParagraphs.length > 0 ? (
-        <CmsField
-          path="membership.pitch"
-          value={pitch}
-          className="mt-8 max-w-2xl reading-copy"
-        />
-      ) : null}
-
       <div className="mt-8 max-w-2xl border-l-2 border-gold pl-5">
         <CmsField
           path="membership.belongingTitle"
@@ -145,6 +137,14 @@ export async function MembershipStory({
           itemClassName="reading-copy"
         />
       </div>
+
+      {introParagraphs.length > 0 ? (
+        <CmsField
+          path="membership.pitch"
+          value={pitch}
+          className="mt-8 max-w-2xl font-display text-xl leading-snug text-ink md:text-2xl"
+        />
+      ) : null}
 
       <div className="mt-10 space-y-10">
         <section>

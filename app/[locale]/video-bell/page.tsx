@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
+import { SubscriberGate } from "@/components/subscriber-gate";
 import { buildPageMetadata } from "@/lib/seo";
 import type { Locale } from "@/lib/types";
 
@@ -35,6 +36,7 @@ export default async function VideoBellPage({
   return (
     <>
       <SiteHeader variant="solid" />
+      <SubscriberGate>
       <Section>
         <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase">
           {t("eyebrow")}
@@ -65,6 +67,7 @@ export default async function VideoBellPage({
           )}
         </div>
       </Section>
+      </SubscriberGate>
     </>
   );
 }

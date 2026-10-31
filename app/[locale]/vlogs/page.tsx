@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
+import { SubscriberGate } from "@/components/subscriber-gate";
 import { VideoList } from "@/components/video-list";
 import { fetchVideosByKind } from "@/lib/content-firestore";
 import { buildPageMetadata } from "@/lib/seo";
@@ -37,6 +38,7 @@ export default async function VlogsPage({
   return (
     <>
       <SiteHeader variant="solid" />
+      <SubscriberGate>
       <Section>
         <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase">
           {t("eyebrow")}
@@ -51,6 +53,7 @@ export default async function VlogsPage({
           <VideoList items={items} />
         </div>
       </Section>
+      </SubscriberGate>
     </>
   );
 }

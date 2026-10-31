@@ -87,7 +87,7 @@ export function MembershipPlans({
       <CmsField
         path="membership.noObligation"
         value={noObligation}
-        className="max-w-xl text-ink-soft"
+        className="max-w-xl whitespace-pre-line text-ink-soft"
       />
 
       <div className="mt-8 grid items-stretch gap-4 sm:grid-cols-2">
@@ -152,7 +152,7 @@ function PlanCard({
           multiline={false}
           className="text-xs font-semibold tracking-[0.16em] text-accent uppercase"
         />
-        {badge != null && badgePath ? (
+        {badge && badgePath ? (
           <CmsField
             path={badgePath}
             value={badge}

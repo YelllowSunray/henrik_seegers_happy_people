@@ -13,11 +13,9 @@ import { SeminarStory } from "@/components/seminar-story";
 import { SpiritsPlayer } from "@/components/spirits-player";
 import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
 import { CmsField, CmsParagraphs } from "@/components/cms/cms-field";
-import { CmsBlogFeed } from "@/components/cms/cms-blog-feed";
 import { CmsHeroCtas } from "@/components/cms/cms-hero-ctas";
 import { CmsOrExpandable } from "@/components/cms/cms-or-static";
-import { FACEBOOK_HREF } from "@/lib/contact";
-import { fetchEvents, fetchPublicPosts } from "@/lib/content-firestore";
+import { fetchEvents } from "@/lib/content-firestore";
 import {
   cmsParagraphs,
   cmsText,
@@ -32,18 +30,14 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
   const tNav = await getTranslations("hero");
   const tMsg = await getTranslations("message");
   const tAbout = await getTranslations("about");
-  const tSem = await getTranslations("seminars");
-  const tBlog = await getTranslations("blog");
   const tMem = await getTranslations("membership");
 
-  const [events, publicPosts, homepageCms] = await Promise.all([
+  const [events, homepageCms] = await Promise.all([
     fetchEvents(),
-    fetchPublicPosts(),
     fetchHomepageCmsForLocale(locale),
   ]);
   const cms: HomepageContent | null = homepageCms;
   const nextEvent = events[0];
-  const latest = publicPosts.slice(0, 3);
 
   const hero = {
     brand: cmsText(cms?.hero.brand, tNav("brand")),
@@ -71,10 +65,6 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
     ),
     readMore: cmsText(cms?.about.readMore, tAbout("readMore")),
   };
-  const imageCaption = cmsText(
-    cms?.seminars.imageCaption,
-    tSem("imageCaption"),
-  );
   const paradisePrompt = cmsText(
     cms?.membership.paradisePrompt,
     tMem("paradisePrompt"),
@@ -245,74 +235,6 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
           variant="full"
           cms={cms?.seminars}
         />
-      </Section>
-
-      <Section tone="deep" id="blog">
-        <div className="mb-6 sm:mb-8">
-          <CmsField
-            path="blog.eyebrow"
-            value={cmsText(cms?.blog.eyebrow, tBlog("eyebrow"))}
-            multiline={false}
-            className="text-sm font-semibold tracking-[0.18em] text-accent uppercase md:text-base"
-          />
-          <CmsField
-            path="blog.title"
-            value={cmsText(cms?.blog.title, tBlog("title"))}
-            as="h2"
-            multiline={false}
-            className="font-display mt-3 max-w-2xl text-2xl leading-tight text-ink sm:text-3xl md:text-5xl"
-          />
-        </div>
-        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.75fr)_minmax(0,1fr)] lg:gap-12">
-          <div className="min-w-0">
-            <a
-              href={FACEBOOK_HREF}
-              target="_blank"
-              rel="noreferrer"
-              className="mb-8 inline-flex text-xs font-medium tracking-wide text-ink-soft underline-offset-4 hover:text-accent hover:underline"
-            >
-              <CmsField
-                path="blog.facebook"
-                value={cmsText(cms?.blog.facebook, tBlog("facebook"))}
-                multiline={false}
-                className="text-xs font-medium tracking-wide text-ink-soft"
-              />
-              <span className="ml-1">↗</span>
-            </a>
-            <CmsBlogFeed
-              posts={latest}
-              locale={locale}
-              readLabel={cmsText(cms?.blog.read, tBlog("read"))}
-              emptyLabel={cmsText(cms?.blog.empty, tBlog("empty"))}
-              ctaLabel={cmsText(cms?.blog.cta, tBlog("cta"))}
-              limit={3}
-              showCta
-            />
-            <div className="mt-10 w-full max-w-[41rem]">
-              <SyncedLyricPlayer
-                audioSrc="/audio/run-through-walls.mp3"
-                lrcSrc="/audio/run-through-walls.lrc"
-                title="Run Through Walls"
-                artist="The Script"
-                tone="page"
-                handoffAnchorId="blog-title"
-              />
-            </div>
-          </div>
-          <figure className="min-w-0 lg:max-w-md lg:justify-self-end">
-            <LightboxImage
-              src="/images/blog.png"
-              alt={tSem("imageAlt")}
-              className="aspect-square min-h-[16rem] w-full sm:min-h-[20rem]"
-            />
-            <CmsField
-              path="seminars.imageCaption"
-              value={imageCaption}
-              as="figcaption"
-              className="mt-3 text-sm text-ink-soft"
-            />
-          </figure>
-        </div>
       </Section>
 
       <Section tone="default" id="membership">

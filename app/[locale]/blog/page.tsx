@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
+import { SubscriberGate } from "@/components/subscriber-gate";
 import { Section } from "@/components/section";
 import { LightboxImage } from "@/components/lightbox-image";
 import { CmsBlogFeed } from "@/components/cms/cms-blog-feed";
@@ -58,6 +59,7 @@ export default async function BlogPage({
   return (
     <>
       <SiteHeader variant="solid" />
+      <SubscriberGate>
       <Section>
         <div className="mb-6 sm:mb-8">
           <CmsField
@@ -115,6 +117,7 @@ export default async function BlogPage({
           </div>
         </div>
       </Section>
+      </SubscriberGate>
     </>
   );
 }
