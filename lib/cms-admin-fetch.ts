@@ -1,5 +1,12 @@
 import { ADMIN_PASSWORD, ADMIN_PASSWORD_HEADER } from "@/lib/admin-gate";
 
+export {
+  adminSaveError,
+  isAdminCreateSuccess,
+  readAdminJson,
+  type AdminJson,
+} from "@/lib/admin-save";
+
 /** Client helper: CMS password gate → admin API. */
 export async function cmsAdminFetch(
   input: string,

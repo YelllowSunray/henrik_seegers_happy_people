@@ -2,7 +2,7 @@
 
 import { useRef, useState, type DragEvent } from "react";
 import { useAuth } from "@/components/auth-provider";
-import { AdminGhostButton, AdminInput } from "@/components/cms/admin-ui";
+import { AdminGhostButton } from "@/components/cms/admin-ui";
 import { uploadBlogImage, type BlogImageKind } from "@/lib/blog-image-upload";
 
 function ProgressBar({ value }: { value: number }) {
@@ -44,7 +44,7 @@ function useImageUpload(kind: BlogImageKind) {
     }
   }
 
-  return { upload, busy, progress, error, setError };
+  return { upload, busy, progress, error };
 }
 
 function DropZone({
@@ -93,6 +93,7 @@ function DropZone({
         ref={inputRef}
         type="file"
         accept="image/*"
+        required={false}
         className="sr-only"
         disabled={busy}
         onChange={(event) => {
@@ -151,6 +152,7 @@ export function BlogCoverField({
             <input
               type="file"
               accept="image/*"
+              required={false}
               className="sr-only"
               disabled={busy}
               onChange={(event) => {
@@ -183,85 +185,6 @@ export function BlogCoverField({
         </div>
       ) : null}
       {error ? <p className="text-base text-red-700">{error}</p> : null}
-    </div>
-  );
-}
-
-export function BlogInlineImageButton({
-  onInsert,
-}: {
-  onInsert: (markdown: string) => void;
-}) {
-  const { upload, busy, progress, error, setError } = useImageUpload("inline");
-  const [pendingUrl, setPendingUrl] = useState<string | null>(null);
-  const [caption, setCaption] = useState("");
-
-  async function onFile(file: File) {
-    const url = await upload(file);
-    if (url) {
-      setPendingUrl(url);
-      setCaption("");
-    }
-  }
-
-  function insert() {
-    if (!pendingUrl) return;
-    const alt = caption.trim().replace(/]/g, "");
-    onInsert(`\n\n![${alt}](${pendingUrl})\n\n`);
-    setPendingUrl(null);
-    setCaption("");
-    setError(null);
-  }
-
-  return (
-    <div className="space-y-3">
-      <DropZone
-        label="Afbeelding in de tekst"
-        hint="Wordt geplaatst waar de cursor staat. Bijschrift mag leeg."
-        busy={busy}
-        onFile={(file) => void onFile(file)}
-      />
-      {busy ? (
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-ink">Uploaden… {progress}%</p>
-          <ProgressBar value={progress} />
-        </div>
-      ) : null}
-      {error ? <p className="text-base text-red-700">{error}</p> : null}
-      {pendingUrl ? (
-        <div className="rounded-2xl border border-line bg-white p-4">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={pendingUrl}
-            alt=""
-            className="max-h-48 w-full rounded-xl object-contain"
-          />
-          <div className="mt-3">
-            <AdminInput
-              value={caption}
-              onChange={setCaption}
-              placeholder="Bijschrift (mag leeg)"
-            />
-          </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={insert}
-              className="inline-flex min-h-11 items-center justify-center rounded-full bg-accent px-5 text-sm font-semibold text-white"
-            >
-              Invoegen in tekst
-            </button>
-            <AdminGhostButton
-              onClick={() => {
-                setPendingUrl(null);
-                setCaption("");
-              }}
-            >
-              Annuleren
-            </AdminGhostButton>
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 }

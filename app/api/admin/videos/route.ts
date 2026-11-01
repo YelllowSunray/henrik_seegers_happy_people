@@ -9,10 +9,13 @@ import {
   youtubeIdFromUrl,
   youtubeThumbSrc,
   youtubeWatchUrl,
-} from "@/components/youtube-embed";
+} from "@/lib/youtube";
 
 function unauthorized() {
-  return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  return NextResponse.json(
+    { error: "Niet gemachtigd. De vlog is niet opgeslagen." },
+    { status: 401 },
+  );
 }
 
 function requireAdmin(req: Request) {
@@ -33,7 +36,7 @@ export async function POST(req: Request) {
   const db = getAdminDb();
   if (!db) {
     return NextResponse.json(
-      { error: "Firebase admin is not configured." },
+      { error: "De database is niet bereikbaar. De vlog is niet opgeslagen." },
       { status: 503 },
     );
   }
@@ -48,7 +51,10 @@ export async function POST(req: Request) {
   try {
     body = (await req.json()) as typeof body;
   } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Ongeldige gegevens. De vlog is niet opgeslagen." },
+      { status: 400 },
+    );
   }
 
   const title = String(body.title ?? "").trim();
@@ -101,7 +107,7 @@ export async function POST(req: Request) {
   } catch (err) {
     console.error("[api/admin/videos] create failed:", err);
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Create failed" },
+      { error: "Opslaan mislukt. De vlog is niet opgeslagen." },
       { status: 500 },
     );
   }
