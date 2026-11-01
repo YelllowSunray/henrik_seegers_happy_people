@@ -1,8 +1,12 @@
 /** Extract a YouTube id from watch, shorts, live, embed, youtu.be, and m.youtube.com. */
 export function youtubeIdFromUrl(url: string): string | null {
   if (!url?.trim()) return null;
+  const trimmed = url.trim();
+  const withProtocol = /^https?:\/\//i.test(trimmed)
+    ? trimmed
+    : `https://${trimmed}`;
   try {
-    const parsed = new URL(url.trim());
+    const parsed = new URL(withProtocol);
     const host = parsed.hostname.replace(/^(www|m)\./, "").toLowerCase();
     if (host === "youtu.be") {
       const id = parsed.pathname.split("/").filter(Boolean)[0] ?? "";
@@ -24,8 +28,8 @@ export function youtubeIdFromUrl(url: string): string | null {
   } catch {
     /* fall through to regex */
   }
-  const match = url.match(
-    /(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:[^#]*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/i,
+  const match = trimmed.match(
+    /(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:[^#]*&)?v=|embed\/|shorts\/|live\/|v\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/i,
   );
   return match?.[1] && isYoutubeId(match[1]) ? match[1] : null;
 }
@@ -37,6 +41,19 @@ function isYoutubeId(value: string): boolean {
 /** iPhone Safari needs playsinline=1 or the embed stays black / opens the app. */
 export function youtubeEmbedSrc(id: string): string {
   return `https://www.youtube-nocookie.com/embed/${id}?playsinline=1&rel=0`;
+}
+
+export function youtubeWatchUrl(id: string): string {
+  return `https://www.youtube.com/watch?v=${id}`;
+}
+
+export function youtubeThumbSrc(id: string): string {
+  return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+}
+
+export function youtubeThumbnailFromUrl(url: string): string | null {
+  const id = youtubeIdFromUrl(url);
+  return id ? youtubeThumbSrc(id) : null;
 }
 
 export function YoutubeEmbed({

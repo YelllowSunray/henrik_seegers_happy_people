@@ -102,9 +102,14 @@
   "blog": {
     "eyebrow": "Blog",
     "title": "Neueste Beiträge",
+    "lead": "Kurze Texte über Erinnern, Lächeln und den Weg der Happy People.",
     "cta": "Alle Beiträge",
     "read": "Weiterlesen",
+    "featured": "Neueste",
+    "minutes": "{count} Min. Lesezeit",
     "empty": "Noch keine Beiträge.",
+    "emptyTitle": "Noch keine Beiträge",
+    "emptyHint": "Sobald Henk schreibt, erscheinen die Geschichten hier.",
     "facebook": "Blogbeiträge auf Facebook"
   },
   "membership": {
@@ -634,7 +639,10 @@
   "vlogsPage": {
     "eyebrow": "Vlogs",
     "title": "Vlogs",
-    "lead": "Persönliche Vlogs von Henk — Einblicke, Geschichten und Momente."
+    "lead": "Persönliche Vlogs von Henk — Einblicke, Geschichten und Momente.",
+    "featured": "Neueste",
+    "emptyTitle": "Noch keine Vlogs",
+    "emptyHint": "Sobald Henk filmt, erscheinen die Vlogs hier."
   },
   "videoBell": {
     "eyebrow": "Live",

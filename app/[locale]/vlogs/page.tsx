@@ -39,16 +39,18 @@ export default async function VlogsPage({
     <>
       <SiteHeader variant="solid" />
       <Section>
-        <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase">
-          {t("eyebrow")}
-        </p>
-        <h1 className="font-display mt-3 text-3xl leading-tight text-ink sm:text-4xl md:text-5xl">
-          {t("title")}
-        </h1>
-        <p className="mt-5 max-w-2xl text-base leading-relaxed text-ink-soft sm:text-lg">
-          {t("lead")}
-        </p>
-        <div className="mt-10 max-w-3xl">
+        <div className="max-w-2xl">
+          <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase">
+            {t("eyebrow")}
+          </p>
+          <h1 className="font-display mt-3 text-3xl leading-tight text-ink sm:text-4xl md:text-5xl">
+            {t("title")}
+          </h1>
+          <p className="mt-4 text-base leading-relaxed text-ink-soft sm:text-lg">
+            {t("lead")}
+          </p>
+        </div>
+        <div className="mt-10">
           <CmsVlogList items={items} locale={locale} />
         </div>
       </Section>

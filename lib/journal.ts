@@ -96,3 +96,29 @@ export function usedBlogCategories(posts: BlogPost[]): BlogCategoryId[] {
 export function publishedDateLabel(publishedAt: string): string {
   return asDateString(publishedAt) || publishedAt;
 }
+
+export function formatPostDate(publishedAt: string, locale: string): string {
+  const iso = asDateString(publishedAt);
+  if (!iso) return publishedAt;
+  const date = new Date(`${iso}T12:00:00`);
+  if (Number.isNaN(date.getTime())) return publishedAt;
+  try {
+    return new Intl.DateTimeFormat(locale, {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(date);
+  } catch {
+    return iso;
+  }
+}
+
+/** Rough reading time from title + excerpt + body. Always at least 1 minute. */
+export function readingMinutes(...parts: Array<string | undefined>): number {
+  const words = parts
+    .join(" ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200));
+}

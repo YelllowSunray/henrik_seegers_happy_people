@@ -2,13 +2,22 @@
 
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import {
+  youtubeIdFromUrl,
+  youtubeThumbSrc,
+  youtubeWatchUrl,
+} from "@/components/youtube-embed";
+import {
   MAX_RECORD_MS,
   MAX_VLOG_BYTES,
   canUseMediaRecorder,
   pickRecorderFormat,
 } from "@/lib/media-record";
 
-type Phase = "choose" | "live" | "recording";
+type Phase = "choose" | "live" | "recording" | "youtube";
+
+export type VlogMediaSource =
+  | { type: "file"; blob: Blob }
+  | { type: "youtube"; url: string; id: string };
 
 function formatTime(ms: number) {
   const total = Math.max(0, Math.floor(ms / 1000));
@@ -27,15 +36,41 @@ function rejectIfTooBig(file: Blob): string | null {
   return null;
 }
 
+function useYoutubeThumb(id: string | null) {
+  const [status, setStatus] = useState<"idle" | "loading" | "ok" | "bad">(
+    "idle",
+  );
+
+  useEffect(() => {
+    if (!id) {
+      setStatus("idle");
+      return;
+    }
+    setStatus("loading");
+    const img = new window.Image();
+    img.onload = () => {
+      // Invalid ids come back as a 120×90 grey placeholder.
+      setStatus(img.naturalWidth > 120 ? "ok" : "bad");
+    };
+    img.onerror = () => setStatus("bad");
+    img.src = youtubeThumbSrc(id);
+    return () => {
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [id]);
+
+  return status;
+}
+
 /**
- * Two big choices for Henk: pick a file (iPhone camera roll) or record now.
- * Returns a local blob — the parent shows preview / title / publish.
+ * Three choices for Henk: pick a file, record now, or paste a YouTube link.
  */
 export function VlogMediaPick({
   onReady,
   onCancel,
 }: {
-  onReady: (blob: Blob) => void;
+  onReady: (source: VlogMediaSource) => void;
   onCancel?: () => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -48,6 +83,9 @@ export function VlogMediaPick({
   const [phase, setPhase] = useState<Phase>("choose");
   const [error, setError] = useState<string | null>(null);
   const [elapsed, setElapsed] = useState(0);
+  const [youtubeInput, setYoutubeInput] = useState("");
+  const youtubeId = youtubeIdFromUrl(youtubeInput);
+  const thumbStatus = useYoutubeThumb(youtubeId);
 
   function stopTracks() {
     streamRef.current?.getTracks().forEach((track) => track.stop());
@@ -105,7 +143,7 @@ export function VlogMediaPick({
       setError(tooBig);
       return;
     }
-    onReady(file);
+    onReady({ type: "file", blob: file });
   }
 
   async function startCamera() {
@@ -182,7 +220,7 @@ export function VlogMediaPick({
           setPhase("choose");
           return;
         }
-        onReady(recorded);
+        onReady({ type: "file", blob: recorded });
       };
       recorder.start(250);
       setElapsed(0);
@@ -213,6 +251,19 @@ export function VlogMediaPick({
     setError(null);
   }
 
+  function confirmYoutube() {
+    if (!youtubeId || thumbStatus !== "ok") {
+      setError("Plak een geldige YouTube-link en wacht op de preview.");
+      return;
+    }
+    setError(null);
+    onReady({
+      type: "youtube",
+      id: youtubeId,
+      url: youtubeWatchUrl(youtubeId),
+    });
+  }
+
   return (
     <div>
       <input
@@ -224,7 +275,7 @@ export function VlogMediaPick({
       />
 
       {phase === "choose" ? (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-3">
           <button
             type="button"
             onClick={pickFile}
@@ -249,6 +300,98 @@ export function VlogMediaPick({
               Neem nu op met camera en microfoon, hier in de browser.
             </span>
           </button>
+          <button
+            type="button"
+            onClick={() => {
+              setError(null);
+              setPhase("youtube");
+            }}
+            className="flex min-h-28 flex-col items-start justify-center rounded-2xl border-2 border-accent/25 bg-white px-5 py-5 text-left text-ink shadow-sm transition hover:border-accent/50"
+          >
+            <span className="font-display text-2xl leading-tight">
+              YouTube-link
+            </span>
+            <span className="mt-2 text-sm leading-snug text-ink-soft">
+              Plak een YouTube- of Shorts-link. We tonen een preview.
+            </span>
+          </button>
+        </div>
+      ) : null}
+
+      {phase === "youtube" ? (
+        <div className="space-y-4">
+          <label className="block">
+            <span className="block text-base font-semibold text-ink">
+              YouTube-link
+            </span>
+            <span className="mt-1 block text-sm text-ink-soft">
+              youtube.com, youtu.be of Shorts — plak de hele link.
+            </span>
+            <input
+              type="url"
+              inputMode="url"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
+              value={youtubeInput}
+              onChange={(event) => {
+                setYoutubeInput(event.target.value);
+                setError(null);
+              }}
+              placeholder="https://youtu.be/… of youtube.com/shorts/…"
+              className="mt-2 w-full rounded-2xl border border-line bg-white px-4 py-3.5 text-base text-ink outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+            />
+          </label>
+
+          {youtubeInput.trim() && !youtubeId ? (
+            <p className="text-sm text-red-700">
+              Dat lijkt geen YouTube-link. Probeer youtu.be, youtube.com/watch
+              of youtube.com/shorts.
+            </p>
+          ) : null}
+
+          {youtubeId && thumbStatus === "loading" ? (
+            <p className="text-sm text-ink-soft">Preview laden…</p>
+          ) : null}
+
+          {youtubeId && thumbStatus === "bad" ? (
+            <p className="text-sm text-red-700">
+              Deze video is niet te vinden. Controleer de link.
+            </p>
+          ) : null}
+
+          {youtubeId && thumbStatus === "ok" ? (
+            <div className="overflow-hidden rounded-2xl border border-line bg-ink">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={youtubeThumbSrc(youtubeId)}
+                alt="YouTube-preview"
+                className="aspect-video w-full object-cover"
+              />
+            </div>
+          ) : null}
+
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={confirmYoutube}
+              disabled={!youtubeId || thumbStatus !== "ok"}
+              className="inline-flex min-h-12 items-center rounded-full bg-accent px-6 text-base font-semibold text-white disabled:opacity-50"
+            >
+              Deze video gebruiken
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setPhase("choose");
+                setYoutubeInput("");
+                setError(null);
+              }}
+              className="inline-flex min-h-12 items-center rounded-full border border-line px-5 text-base font-medium text-ink-soft"
+            >
+              Annuleren
+            </button>
+          </div>
         </div>
       ) : null}
 

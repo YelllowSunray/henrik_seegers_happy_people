@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { PostPager } from "@/components/post-pager";
 import { VlogPlayer } from "@/components/vlog-player";
 import { CmsVlogDetailEditor } from "@/components/cms/cms-vlog-list";
+import { Link } from "@/i18n/navigation";
 import { buildPageMetadata } from "@/lib/seo";
 import { t } from "@/lib/content";
 import { fetchVideosByKind, fetchVlogById } from "@/lib/content-firestore";
-import { neighbors, publishedDateLabel } from "@/lib/journal";
+import { formatPostDate, neighbors } from "@/lib/journal";
 import type { Locale } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -41,6 +42,7 @@ export default async function VlogPage({
   const { locale: localeParam, id } = await params;
   setRequestLocale(localeParam);
   const locale = localeParam as Locale;
+  const journal = await getTranslations("journal");
   const [vlog, vlogs] = await Promise.all([
     fetchVlogById(id),
     fetchVideosByKind("vlog"),
@@ -50,40 +52,57 @@ export default async function VlogPage({
 
   const { prev, next } = neighbors(vlogs, vlog.id);
   const audio = vlog.mediaType === "audio" || Boolean(vlog.audioUrl?.trim());
+  const title = t(vlog.title, locale);
+  const description = t(vlog.description, locale);
+  const date = formatPostDate(vlog.publishedAt, locale);
 
   return (
     <>
       <SiteHeader variant="solid" />
       <Section>
-        <div className="max-w-3xl">
-          <p className="text-sm font-semibold tracking-[0.16em] text-accent uppercase">
-            {publishedDateLabel(vlog.publishedAt)}
-            {vlog.durationLabel ? ` · ${vlog.durationLabel}` : ""}
-          </p>
-          <h1 className="font-display mt-3 text-3xl leading-tight sm:text-4xl md:text-5xl">
-            {t(vlog.title, locale)}
-          </h1>
-          {t(vlog.description, locale) ? (
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-soft sm:text-lg">
-              {t(vlog.description, locale)}
+        <div className="mx-auto max-w-3xl">
+          <Link
+            href="/vlogs"
+            className="inline-flex min-h-11 items-center text-sm font-semibold text-accent underline-offset-4 hover:underline"
+          >
+            ← {journal("backToVlogs")}
+          </Link>
+          <article className="mt-6">
+            <div className="overflow-hidden rounded-3xl border border-line bg-ink">
+              {audio && vlog.audioUrl ? (
+                <audio
+                  controls
+                  preload="metadata"
+                  src={vlog.audioUrl}
+                  className="w-full"
+                />
+              ) : (
+                <VlogPlayer
+                  url={vlog.videoUrl}
+                  title={title}
+                  poster={vlog.thumbnail}
+                  eager
+                />
+              )}
+            </div>
+            <p className="mt-6 text-sm font-medium text-ink-soft">
+              <time dateTime={vlog.publishedAt}>{date}</time>
+              {vlog.durationLabel ? (
+                <>
+                  <span aria-hidden> · </span>
+                  <span>{vlog.durationLabel}</span>
+                </>
+              ) : null}
             </p>
-          ) : null}
-          <div className="mt-8 overflow-hidden rounded-2xl border border-line">
-            {audio && vlog.audioUrl ? (
-              <audio
-                controls
-                preload="metadata"
-                src={vlog.audioUrl}
-                className="w-full"
-              />
-            ) : (
-              <VlogPlayer
-                url={vlog.videoUrl}
-                title={t(vlog.title, locale)}
-                poster={vlog.thumbnail}
-              />
-            )}
-          </div>
+            <h1 className="font-display mt-3 text-3xl leading-tight text-ink sm:text-4xl md:text-5xl">
+              {title}
+            </h1>
+            {description ? (
+              <p className="mt-4 max-w-2xl text-lg leading-relaxed text-ink-soft sm:text-xl">
+                {description}
+              </p>
+            ) : null}
+          </article>
           <CmsVlogDetailEditor video={vlog} />
           <PostPager
             kind="vlogs"

@@ -102,9 +102,14 @@
   "blog": {
     "eyebrow": "مدونة",
     "title": "أحدث الرسائل",
+    "lead": "نصوص قصيرة عن التذكّر والابتسام وطريق Happy People.",
     "cta": "جميع المشاركات",
     "read": "إقرأ المزيد",
+    "featured": "الأحدث",
+    "minutes": "{count} د قراءة",
     "empty": "لا توجد مشاركات بعد.",
+    "emptyTitle": "لا توجد مشاركات بعد",
+    "emptyHint": "عندما يكتب هينك، ستظهر القصص هنا.",
     "facebook": "مشاركات المدونة على Facebook"
   },
   "membership": {
@@ -633,7 +638,10 @@
   "vlogsPage": {
     "eyebrow": "Vlogs",
     "title": "Vlogs",
-    "lead": "Personal vlogs from Henk — insights, stories, and moments from the Happy People path."
+    "lead": "Personal vlogs from Henk — insights, stories, and moments from the Happy People path.",
+    "featured": "الأحدث",
+    "emptyTitle": "لا توجد فلوجات بعد",
+    "emptyHint": "عندما يصوّر هينك، ستظهر الفلوجات هنا."
   },
   "videoBell": {
     "eyebrow": "Live",

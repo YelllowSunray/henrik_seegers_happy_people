@@ -7,8 +7,9 @@ import {
   useRef,
   useState,
 } from "react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { CmsField } from "@/components/cms/cms-field";
+import { BlogCover, BlogEmptyState, BlogPostCard } from "@/components/blog-card";
 import {
   AdminDangerButton,
   AdminField,
@@ -25,9 +26,10 @@ import {
   useLeaveGuard,
 } from "@/components/cms/admin-ui";
 import { useCmsOptional } from "@/components/cms/cms-provider";
+import { FACEBOOK_HREF } from "@/lib/contact";
 import { cmsAdminFetch } from "@/lib/cms-admin-fetch";
 import { t } from "@/lib/content";
-import { publishedDateLabel } from "@/lib/journal";
+import { formatPostDate, readingMinutes } from "@/lib/journal";
 import type { BlogPost, Locale } from "@/lib/types";
 
 type Draft = {
@@ -319,10 +321,15 @@ function CmsBlogRow({
   onDeleted: (id: string) => void;
 }) {
   const [editing, setEditing] = useState(false);
+  const title = t(post.title, locale) || "Zonder titel";
+  const excerpt = t(post.excerpt, locale);
+  const tr = useTranslations("blog");
+  const minutes = readingMinutes(title, excerpt, t(post.body, locale));
+  const date = formatPostDate(post.publishedAt, locale) || "Concept";
 
   if (editing) {
     return (
-      <li className="rounded-2xl border border-line bg-white p-5 sm:p-6">
+      <li className="rounded-3xl border border-line bg-white p-5 sm:p-6">
         <BlogEditForm
           post={post}
           locale={locale}
@@ -334,31 +341,42 @@ function CmsBlogRow({
   }
 
   return (
-    <li className="rounded-2xl border border-line bg-white p-5">
-      <p className="text-sm text-ink-soft">
-        {publishedDateLabel(post.publishedAt) || "Concept"}
-      </p>
-      <h3 className="font-display mt-1 text-2xl leading-tight text-ink">
-        {t(post.title, locale) || "Zonder titel"}
-      </h3>
-      {t(post.excerpt, locale) ? (
-        <p className="mt-2 text-base leading-relaxed text-ink-soft">
-          {t(post.excerpt, locale)}
-        </p>
-      ) : null}
-      <div className="mt-4 flex flex-wrap gap-2">
+    <li className="overflow-hidden rounded-3xl border border-line bg-white shadow-[0_8px_28px_rgba(18,26,24,0.05)]">
+      <div className="grid grid-cols-[7.25rem_1fr] sm:grid-cols-[11rem_1fr]">
+        <BlogCover
+          post={post}
+          alt=""
+          className="min-h-[7.25rem] sm:min-h-full"
+        />
+        <div className="flex flex-col justify-center p-5">
+          <p className="text-sm text-ink-soft">
+            <time dateTime={post.publishedAt}>{date}</time>
+            <span aria-hidden> · </span>
+            <span>{tr("minutes", { count: minutes })}</span>
+          </p>
+          <h3 className="font-display mt-1 text-2xl leading-tight text-ink">
+            {title}
+          </h3>
+          {excerpt ? (
+            <p className="mt-2 line-clamp-3 text-base leading-relaxed text-ink-soft">
+              {excerpt}
+            </p>
+          ) : null}
+        </div>
+      </div>
+      <div className="flex flex-col gap-2 border-t border-line p-4 sm:flex-row sm:flex-wrap">
         <AdminPrimaryButton onClick={() => setEditing(true)}>
           Bewerken
         </AdminPrimaryButton>
         <Link
           href={`/blog/${post.slug}`}
-          className="inline-flex min-h-12 items-center rounded-full border border-line px-5 text-base font-medium text-ink-soft"
+          className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-line px-5 text-base font-medium text-ink-soft sm:w-auto"
         >
           Openen
         </Link>
         <AdminDangerButton
           onClick={() => {
-            if (!confirmDelete(t(post.title, locale))) return;
+            if (!confirmDelete(title)) return;
             void (async () => {
               const res = await cmsAdminFetch(`/api/admin/posts/${post.id}`, {
                 method: "DELETE",
@@ -392,7 +410,11 @@ export function CmsBlogFeed({
   showCta?: boolean;
 }) {
   const cms = useCmsOptional();
+  const tr = useTranslations("blog");
   const [posts, setPosts] = useState(initialPosts);
+  const emptyTitle = tr("emptyTitle");
+  const emptyHint = tr("emptyHint");
+  const facebookLabel = tr("facebook");
 
   useEffect(() => {
     setPosts(initialPosts);
@@ -410,49 +432,48 @@ export function CmsBlogFeed({
 
   if (!cms?.enabled) {
     if (posts.length === 0) {
-      return <CmsField path="blog.empty" value={emptyLabel} />;
+      return (
+        <BlogEmptyState
+          title={emptyTitle}
+          hint={emptyHint}
+          facebookLabel={facebookLabel}
+          facebookHref={FACEBOOK_HREF}
+        />
+      );
     }
+
+    const [featured, ...rest] = visible;
+    const useFeatured = !limit && Boolean(featured);
+
     return (
       <>
-        <ul className={limit ? "space-y-10" : "divide-y divide-line"}>
-          {visible.map((post) => (
-            <li
-              key={post.id}
-              className={limit ? "min-w-0 max-w-2xl" : "py-8"}
-            >
-              <p className="text-sm text-ink-soft">
-                {publishedDateLabel(post.publishedAt)}
-              </p>
-              <h3
-                className={`font-display mt-2 text-ink ${
-                  limit ? "text-2xl md:text-3xl" : "text-3xl"
-                }`}
-              >
-                <Link href={`/blog/${post.slug}`} className="hover:text-accent">
-                  {t(post.title, locale)}
-                </Link>
-              </h3>
-              <p
-                className={`mt-3 text-ink-soft ${
-                  limit
-                    ? "text-sm leading-relaxed md:text-base"
-                    : "max-w-2xl text-base leading-relaxed"
-                }`}
-              >
-                {t(post.excerpt, locale)}
-              </p>
-              <Link
-                href={`/blog/${post.slug}`}
-                className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-full bg-accent px-6 text-base font-semibold text-white hover:bg-accent-soft"
-              >
-                {readLabel}
-                <span aria-hidden>→</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {useFeatured && featured ? (
+          <BlogPostCard
+            post={featured}
+            locale={locale}
+            readLabel={readLabel}
+            featured
+          />
+        ) : null}
+        {(useFeatured ? rest : visible).length > 0 ? (
+          <ul
+            className={`grid gap-5 sm:grid-cols-2 sm:gap-6 ${
+              useFeatured ? "mt-6" : ""
+            }`}
+          >
+            {(useFeatured ? rest : visible).map((post) => (
+              <li key={post.id} className="min-w-0">
+                <BlogPostCard
+                  post={post}
+                  locale={locale}
+                  readLabel={readLabel}
+                />
+              </li>
+            ))}
+          </ul>
+        ) : null}
         {showCta && ctaLabel ? (
-          <div className="mt-12 max-w-2xl border-t border-line pt-8">
+          <div className="mt-10 border-t border-line pt-8">
             <Link
               href="/blog"
               className="inline-flex min-h-11 items-center gap-2 text-base font-semibold text-ink underline-offset-4 hover:text-accent hover:underline"

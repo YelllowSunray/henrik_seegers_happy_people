@@ -20,11 +20,13 @@ import {
 } from "@/components/cms/admin-ui";
 import { useCmsOptional } from "@/components/cms/cms-provider";
 import { useAuth } from "@/components/auth-provider";
-import { VlogMediaPick } from "@/components/vlog-media-pick";
+import { VlogCover, VlogEmptyState, VlogPostCard } from "@/components/vlog-card";
+import { VlogMediaPick, type VlogMediaSource } from "@/components/vlog-media-pick";
 import { VlogPlayer } from "@/components/vlog-player";
+import { youtubeThumbSrc } from "@/components/youtube-embed";
 import { cmsAdminFetch } from "@/lib/cms-admin-fetch";
 import { t } from "@/lib/content";
-import { publishedDateLabel } from "@/lib/journal";
+import { formatPostDate } from "@/lib/journal";
 import { uploadVlogBlob } from "@/lib/vlog-upload";
 import type { Locale, VideoItem } from "@/lib/types";
 
@@ -33,6 +35,9 @@ function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
   const [open, setOpen] = useState(false);
   const [blob, setBlob] = useState<Blob | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [youtube, setYoutube] = useState<{ url: string; id: string } | null>(
+    null,
+  );
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [busy, setBusy] = useState(false);
@@ -40,7 +45,8 @@ function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
   const [error, setError] = useState<string | null>(null);
   const [published, setPublished] = useState<VideoItem | null>(null);
   const previewRef = useRef<string | null>(null);
-  const dirty = Boolean(blob || title.trim() || description.trim());
+  const hasMedia = Boolean(blob || youtube);
+  const dirty = Boolean(hasMedia || title.trim() || description.trim());
   useLeaveGuard(open && dirty);
 
   function revokePreview() {
@@ -56,6 +62,7 @@ function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
     revokePreview();
     setBlob(null);
     setPreviewUrl(null);
+    setYoutube(null);
     setTitle("");
     setDescription("");
     setError(null);
@@ -63,11 +70,19 @@ function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
     if (close) setOpen(false);
   }
 
-  function onPicked(next: Blob) {
+  function onPicked(source: VlogMediaSource) {
     revokePreview();
-    const url = URL.createObjectURL(next);
+    if (source.type === "youtube") {
+      setBlob(null);
+      setPreviewUrl(null);
+      setYoutube({ url: source.url, id: source.id });
+      setError(null);
+      return;
+    }
+    const url = URL.createObjectURL(source.blob);
     previewRef.current = url;
-    setBlob(next);
+    setYoutube(null);
+    setBlob(source.blob);
     setPreviewUrl(url);
     setError(null);
   }
@@ -80,15 +95,15 @@ function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
   }
 
   async function publish() {
-    if (!blob) {
-      setError("Kies of neem eerst een video op.");
+    if (!hasMedia) {
+      setError("Kies, neem of plak eerst een video.");
       return;
     }
     if (!title.trim()) {
       setError("Vul een titel in.");
       return;
     }
-    if (!user) {
+    if (blob && !user) {
       setError(
         "Log in met je Happy People-e-mail (Henk) om de video op de site te zetten.",
       );
@@ -98,13 +113,17 @@ function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
     setError(null);
     setProgress(0);
     try {
-      const videoUrl = await uploadVlogBlob(user.uid, blob, setProgress);
+      const videoUrl = youtube
+        ? youtube.url
+        : await uploadVlogBlob(user!.uid, blob!, setProgress);
+      const thumbnail = youtube ? youtubeThumbSrc(youtube.id) : undefined;
       const res = await cmsAdminFetch("/api/admin/videos", {
         method: "POST",
         body: JSON.stringify({
           title: title.trim(),
           description: description.trim(),
           videoUrl,
+          thumbnail,
         }),
       });
       const data = (await res.json()) as { video?: VideoItem; error?: string };
@@ -148,7 +167,8 @@ function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
                 Nieuwe vlog
               </p>
               <p className="mt-1 text-base text-ink-soft">
-                Eerst een video, daarna titel en tekst, en dan Publiceren.
+                Eerst een video of YouTube-link, daarna titel en tekst, en dan
+                Publiceren.
               </p>
             </div>
             <AdminGhostButton onClick={close}>Annuleren</AdminGhostButton>
@@ -158,10 +178,24 @@ function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
             <div>
               <p className="text-base font-semibold text-ink">1. Kies je video</p>
               <p className="mt-1 text-sm text-ink-soft">
-                Twee keuzes: een bestand van je telefoon, of nu opnemen.
+                Drie keuzes: een bestand, nu opnemen, of een YouTube-link.
               </p>
               <div className="mt-3">
-                {blob && previewUrl ? (
+                {youtube ? (
+                  <div className="space-y-3">
+                    <div className="overflow-hidden rounded-2xl">
+                      <VlogPlayer
+                        url={youtube.url}
+                        title={title.trim() || "YouTube"}
+                        poster={youtubeThumbSrc(youtube.id)}
+                        eager
+                      />
+                    </div>
+                    <AdminGhostButton onClick={() => reset(false)}>
+                      Andere video
+                    </AdminGhostButton>
+                  </div>
+                ) : blob && previewUrl ? (
                   <div className="space-y-3">
                     <div className="overflow-hidden rounded-2xl bg-ink">
                       <video
@@ -181,7 +215,7 @@ function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
               </div>
             </div>
 
-            {blob ? (
+            {hasMedia ? (
               <>
                 <AdminField
                   label="2. Titel"
@@ -250,6 +284,9 @@ function VlogEditForm({
   const [description, setDescription] = useState(t(video.description, "nl"));
   const [blob, setBlob] = useState<Blob | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [youtube, setYoutube] = useState<{ url: string; id: string } | null>(
+    null,
+  );
   const [replacing, setReplacing] = useState(false);
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -261,11 +298,21 @@ function VlogEditForm({
     if (previewRef.current) URL.revokeObjectURL(previewRef.current);
   }, []);
 
-  function onPicked(next: Blob) {
+  function onPicked(source: VlogMediaSource) {
     if (previewRef.current) URL.revokeObjectURL(previewRef.current);
-    const url = URL.createObjectURL(next);
+    previewRef.current = null;
+    if (source.type === "youtube") {
+      setBlob(null);
+      setPreviewUrl(null);
+      setYoutube({ url: source.url, id: source.id });
+      setReplacing(false);
+      setError(null);
+      return;
+    }
+    const url = URL.createObjectURL(source.blob);
     previewRef.current = url;
-    setBlob(next);
+    setYoutube(null);
+    setBlob(source.blob);
     setPreviewUrl(url);
     setReplacing(false);
     setError(null);
@@ -280,7 +327,8 @@ function VlogEditForm({
     setError(null);
     setStatus("Opslaan…");
     try {
-      let videoUrl = video.videoUrl;
+      let videoUrl = youtube?.url ?? video.videoUrl;
+      let thumbnail = youtube ? youtubeThumbSrc(youtube.id) : video.thumbnail;
       if (blob) {
         if (!user) {
           throw new Error(
@@ -288,6 +336,7 @@ function VlogEditForm({
           );
         }
         videoUrl = await uploadVlogBlob(user.uid, blob, setProgress);
+        thumbnail = undefined;
       }
       const res = await cmsAdminFetch(`/api/admin/videos/${video.id}`, {
         method: "PATCH",
@@ -295,6 +344,7 @@ function VlogEditForm({
           title: title.trim(),
           description: description.trim(),
           videoUrl,
+          thumbnail: thumbnail ?? "",
         }),
       });
       const data = (await res.json()) as { videoUrl?: string; error?: string };
@@ -305,10 +355,12 @@ function VlogEditForm({
         title: { ...video.title, nl: title.trim() },
         description: { ...video.description, nl: description.trim() },
         videoUrl: nextUrl,
+        thumbnail,
         mediaType: "video",
       });
       setStatus("Opgeslagen — zichtbaar op de site");
       setBlob(null);
+      setYoutube(null);
     } catch (err) {
       setStatus(null);
       setError(err instanceof Error ? err.message : "Opslaan mislukt");
@@ -358,11 +410,19 @@ function VlogEditForm({
             playsInline
             className="aspect-video w-full rounded-xl bg-black object-contain"
           />
+        ) : youtube ? (
+          <VlogPlayer
+            url={youtube.url}
+            title={title}
+            poster={youtubeThumbSrc(youtube.id)}
+            eager
+          />
         ) : (
           <VlogPlayer
             url={video.videoUrl}
             title={title}
             poster={video.thumbnail}
+            eager
           />
         )}
       </AdminPreview>
@@ -400,48 +460,6 @@ function VlogEditForm({
   );
 }
 
-function VlogCard({
-  video,
-  locale,
-}: {
-  video: VideoItem;
-  locale: Locale;
-}) {
-  const tr = useTranslations("journal");
-
-  return (
-    <article className="overflow-hidden rounded-2xl border border-line bg-white">
-      <VlogPlayer
-        url={video.videoUrl}
-        title={t(video.title, locale)}
-        poster={video.thumbnail}
-      />
-      <div className="p-5 sm:p-6">
-        <p className="text-sm text-ink-soft">
-          {publishedDateLabel(video.publishedAt)}
-          {video.durationLabel ? ` · ${video.durationLabel}` : ""}
-        </p>
-        <h2 className="font-display mt-2 text-2xl leading-tight text-ink sm:text-3xl">
-          <Link href={`/vlogs/${video.id}`} className="hover:text-accent">
-            {t(video.title, locale)}
-          </Link>
-        </h2>
-        {t(video.description, locale) ? (
-          <p className="mt-3 text-base leading-relaxed text-ink-soft">
-            {t(video.description, locale)}
-          </p>
-        ) : null}
-        <Link
-          href={`/vlogs/${video.id}`}
-          className="mt-5 inline-flex min-h-12 items-center rounded-full bg-accent px-6 text-base font-semibold text-white hover:bg-accent-soft"
-        >
-          {tr("watch")} →
-        </Link>
-      </div>
-    </article>
-  );
-}
-
 function CmsVlogRow({
   video,
   locale,
@@ -454,10 +472,13 @@ function CmsVlogRow({
   onDeleted: (id: string) => void;
 }) {
   const [editing, setEditing] = useState(false);
+  const title = t(video.title, locale) || "Zonder titel";
+  const excerpt = t(video.description, locale);
+  const date = formatPostDate(video.publishedAt, locale) || "Concept";
 
   if (editing) {
     return (
-      <li className="rounded-2xl border border-line bg-white p-5 sm:p-6">
+      <li className="rounded-3xl border border-line bg-white p-5 sm:p-6">
         <VlogEditForm
           video={video}
           onChange={(next) => {
@@ -472,31 +493,47 @@ function CmsVlogRow({
   }
 
   return (
-    <li className="rounded-2xl border border-line bg-white p-5">
-      <p className="text-sm text-ink-soft">
-        {publishedDateLabel(video.publishedAt)}
-      </p>
-      <h3 className="font-display mt-1 text-2xl leading-tight text-ink">
-        {t(video.title, locale) || "Zonder titel"}
-      </h3>
-      {t(video.description, locale) ? (
-        <p className="mt-2 text-base leading-relaxed text-ink-soft">
-          {t(video.description, locale)}
-        </p>
-      ) : null}
-      <div className="mt-4 flex flex-wrap gap-2">
+    <li className="overflow-hidden rounded-3xl border border-line bg-white shadow-[0_8px_28px_rgba(18,26,24,0.05)]">
+      <div className="grid grid-cols-[7.25rem_1fr] sm:grid-cols-[11rem_1fr]">
+        <VlogCover
+          video={video}
+          alt=""
+          showPlay={false}
+          className="min-h-[7.25rem] sm:min-h-full"
+        />
+        <div className="flex flex-col justify-center p-5">
+          <p className="text-sm text-ink-soft">
+            <time dateTime={video.publishedAt}>{date}</time>
+            {video.durationLabel ? (
+              <>
+                <span aria-hidden> · </span>
+                <span>{video.durationLabel}</span>
+              </>
+            ) : null}
+          </p>
+          <h3 className="font-display mt-1 text-2xl leading-tight text-ink">
+            {title}
+          </h3>
+          {excerpt ? (
+            <p className="mt-2 line-clamp-3 text-base leading-relaxed text-ink-soft">
+              {excerpt}
+            </p>
+          ) : null}
+        </div>
+      </div>
+      <div className="flex flex-col gap-2 border-t border-line p-4 sm:flex-row sm:flex-wrap">
         <AdminPrimaryButton onClick={() => setEditing(true)}>
           Bewerken
         </AdminPrimaryButton>
         <Link
           href={`/vlogs/${video.id}`}
-          className="inline-flex min-h-12 items-center rounded-full border border-line px-5 text-base font-medium text-ink-soft"
+          className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-line px-5 text-base font-medium text-ink-soft sm:w-auto"
         >
           Openen
         </Link>
         <AdminDangerButton
           onClick={() => {
-            if (!confirmDelete(t(video.title, locale))) return;
+            if (!confirmDelete(title)) return;
             void (async () => {
               const res = await cmsAdminFetch(`/api/admin/videos/${video.id}`, {
                 method: "DELETE",
@@ -522,11 +559,19 @@ export function CmsVlogDetailEditor({
   if (!cms?.enabled) return null;
   if (gone) {
     return (
-      <p className="mt-8 text-base text-ink-soft">Vlog verwijderd.</p>
+      <div className="py-16 text-center">
+        <p className="text-ink-soft">Vlog verwijderd.</p>
+        <Link
+          href="/vlogs"
+          className="mt-4 inline-flex min-h-12 items-center text-base font-semibold text-accent"
+        >
+          ← Terug naar vlogs
+        </Link>
+      </div>
     );
   }
   return (
-    <div className="mt-8 rounded-2xl border border-line bg-white p-5 sm:p-6">
+    <div className="mt-8 rounded-3xl border border-line bg-white p-5 sm:p-6">
       <VlogEditForm
         video={video}
         onChange={() => {}}
@@ -544,7 +589,7 @@ export function CmsVlogList({
   locale?: Locale;
 }) {
   const cms = useCmsOptional();
-  const tr = useTranslations("journal");
+  const page = useTranslations("vlogsPage");
   const fallbackLocale = useLocale() as Locale;
   const loc = locale ?? fallbackLocale;
   const [videos, setVideos] = useState(items);
@@ -572,7 +617,7 @@ export function CmsVlogList({
       <div className="space-y-6">
         <NewVlog onCreated={onCreated} />
         {videos.length === 0 ? (
-          <p className="text-base text-ink-soft">{tr("emptyVlogs")}</p>
+          <p className="text-base text-ink-soft">{page("emptyHint")}</p>
         ) : (
           <ul className="space-y-4">
             {videos.map((video) => (
@@ -591,14 +636,27 @@ export function CmsVlogList({
   }
 
   if (videos.length === 0) {
-    return <p className="text-base text-ink-soft">{tr("emptyVlogs")}</p>;
+    return (
+      <VlogEmptyState title={page("emptyTitle")} hint={page("emptyHint")} />
+    );
   }
 
+  const [featured, ...rest] = videos;
+
   return (
-    <div className="space-y-8">
-      {videos.map((video) => (
-        <VlogCard key={video.id} video={video} locale={loc} />
-      ))}
-    </div>
+    <>
+      {featured ? (
+        <VlogPostCard video={featured} locale={loc} featured />
+      ) : null}
+      {rest.length > 0 ? (
+        <ul className="mt-6 grid gap-5 sm:grid-cols-2 sm:gap-6">
+          {rest.map((video) => (
+            <li key={video.id} className="min-w-0">
+              <VlogPostCard video={video} locale={loc} />
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </>
   );
 }

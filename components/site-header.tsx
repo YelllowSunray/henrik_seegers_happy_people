@@ -31,8 +31,9 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
   const headerRef = useRef<HTMLElement>(null);
   const showJoin = !isMember && !cmsMode;
 
-  // Light-on-dark chrome: hero at top, after scroll, or while Henk edits.
-  const darkChrome = onHero || scrolled || menuOpen || cmsMode;
+  // Same chrome for visitors and admin. Desktop: translucent at the top of
+  // a hero, solid black after scroll. Mobile already uses this pattern.
+  const darkChrome = onHero || scrolled || menuOpen;
 
   useEffect(() => {
     setMounted(true);
@@ -201,7 +202,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
       <header
         ref={headerRef}
         className={`fixed inset-x-0 top-0 z-40 pt-[env(safe-area-inset-top)] transition-[background-color,border-color,backdrop-filter] duration-300 ${
-          scrolled || menuOpen || cmsMode
+          scrolled || menuOpen
             ? "border-b border-white/10 bg-black/95 backdrop-blur-md"
             : onHero
               ? "border-b border-transparent bg-transparent"
@@ -336,11 +337,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
             </button>
           </div>
         </div>
-        <SeminarPromoBar
-          onHero={onHero}
-          scrolled={scrolled || menuOpen}
-          cmsMode={cmsMode}
-        />
+        <SeminarPromoBar onHero={onHero} scrolled={scrolled || menuOpen} />
       </header>
 
       {mobileMenu}

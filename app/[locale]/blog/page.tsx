@@ -52,22 +52,27 @@ export default async function BlogPage({
     <>
       <SiteHeader variant="solid" />
       <Section>
-        <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase">
-          {eyebrow}
-        </p>
-        <h1 className="font-display mt-3 max-w-3xl text-3xl leading-tight text-ink sm:text-4xl md:text-5xl">
-          {title}
-        </h1>
-        <a
-          href={FACEBOOK_HREF}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-5 inline-flex min-h-11 items-center text-sm text-ink-soft underline-offset-4 hover:text-accent hover:underline"
-        >
-          {facebook}
-          <span className="ml-1">↗</span>
-        </a>
-        <div className="mt-10 max-w-3xl">
+        <div className="max-w-2xl">
+          <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase">
+            {eyebrow}
+          </p>
+          <h1 className="font-display mt-3 text-3xl leading-tight text-ink sm:text-4xl md:text-5xl">
+            {title}
+          </h1>
+          <p className="mt-4 text-base leading-relaxed text-ink-soft sm:text-lg">
+            {tr("lead")}
+          </p>
+          <a
+            href={FACEBOOK_HREF}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-4 inline-flex min-h-11 items-center text-sm font-medium text-ink-soft underline-offset-4 hover:text-accent hover:underline"
+          >
+            {facebook}
+            <span className="ml-1">↗</span>
+          </a>
+        </div>
+        <div className="mt-10">
           <CmsBlogFeed
             posts={posts}
             locale={locale}

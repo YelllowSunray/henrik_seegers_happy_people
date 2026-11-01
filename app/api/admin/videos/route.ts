@@ -5,7 +5,11 @@ import {
   isValidAdminPassword,
 } from "@/lib/admin-gate";
 import { getAdminDb } from "@/lib/firebase/admin";
-import { youtubeIdFromUrl } from "@/components/youtube-embed";
+import {
+  youtubeIdFromUrl,
+  youtubeThumbSrc,
+  youtubeWatchUrl,
+} from "@/components/youtube-embed";
 
 function unauthorized() {
   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -18,7 +22,7 @@ function requireAdmin(req: Request) {
 function toPlayableUrl(raw: string) {
   const trimmed = raw.trim();
   const id = youtubeIdFromUrl(trimmed);
-  if (id) return `https://www.youtube.com/embed/${id}`;
+  if (id) return youtubeWatchUrl(id);
   return trimmed;
 }
 
@@ -38,6 +42,7 @@ export async function POST(req: Request) {
     title?: string;
     description?: string;
     videoUrl?: string;
+    thumbnail?: string;
     category?: string;
   };
   try {
@@ -49,6 +54,10 @@ export async function POST(req: Request) {
   const title = String(body.title ?? "").trim();
   const description = String(body.description ?? "").trim();
   const videoUrl = toPlayableUrl(String(body.videoUrl ?? ""));
+  const youtubeId = youtubeIdFromUrl(videoUrl);
+  const thumbnail =
+    String(body.thumbnail ?? "").trim() ||
+    (youtubeId ? youtubeThumbSrc(youtubeId) : "");
   const category = String(body.category ?? "").trim();
   if (!title) {
     return NextResponse.json({ error: "Titel is verplicht." }, { status: 400 });
@@ -69,6 +78,7 @@ export async function POST(req: Request) {
       title: { nl: title },
       description: { nl: description },
       videoUrl,
+      ...(thumbnail ? { thumbnail } : {}),
       publishedAt,
       ...(category ? { category } : {}),
       createdAt: FieldValue.serverTimestamp(),
@@ -83,6 +93,7 @@ export async function POST(req: Request) {
         title: { nl: title },
         description: { nl: description },
         videoUrl,
+        ...(thumbnail ? { thumbnail } : {}),
         publishedAt,
         ...(category ? { category } : {}),
       },

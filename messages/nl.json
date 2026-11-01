@@ -27,7 +27,10 @@
   "vlogsPage": {
     "eyebrow": "Vlogs",
     "title": "Vlogs",
-    "lead": "Persoonlijke vlogs van Henk — inzichten, verhalen en momenten uit het Happy People-pad."
+    "lead": "Persoonlijke vlogs van Henk — inzichten, verhalen en momenten uit het Happy People-pad.",
+    "featured": "Nieuwste",
+    "emptyTitle": "Nog geen vlogs",
+    "emptyHint": "Zodra Henk filmt, verschijnen de vlogs hier."
   },
   "videoBell": {
     "eyebrow": "Live",
@@ -135,9 +138,14 @@
   "blog": {
     "eyebrow": "Blog",
     "title": "Laatste berichten",
+    "lead": "Korte teksten over herinneren, glimlachen en de weg van de Happy People.",
     "cta": "Alle berichten",
     "read": "Lees verder",
+    "featured": "Nieuwste",
+    "minutes": "{count} min lezen",
     "empty": "Nog geen berichten.",
+    "emptyTitle": "Nog geen berichten",
+    "emptyHint": "Zodra Henk schrijft, verschijnen de verhalen hier.",
     "facebook": "Blogberichten op Facebook"
   },
   "membership": {

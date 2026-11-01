@@ -102,9 +102,14 @@
   "blog": {
     "eyebrow": "Blog",
     "title": "Derniers messages",
+    "lead": "De courts textes sur se souvenir, sourire et le chemin des Happy People.",
     "cta": "Tous les articles",
     "read": "Lire la suite",
+    "featured": "Récent",
+    "minutes": "{count} min de lecture",
     "empty": "Pas encore d’articles.",
+    "emptyTitle": "Pas encore d’articles",
+    "emptyHint": "Quand Henk écrit, les récits apparaissent ici.",
     "facebook": "Articles de blog sur Facebook"
   },
   "membership": {
@@ -634,7 +639,10 @@
   "vlogsPage": {
     "eyebrow": "Vlogs",
     "title": "Vlogs",
-    "lead": "Personal vlogs from Henk — insights, stories, and moments from the Happy People path."
+    "lead": "Personal vlogs from Henk — insights, stories, and moments from the Happy People path.",
+    "featured": "Récent",
+    "emptyTitle": "Pas encore de vlogs",
+    "emptyHint": "Quand Henk filme, les vlogs apparaissent ici."
   },
   "videoBell": {
     "eyebrow": "Live",

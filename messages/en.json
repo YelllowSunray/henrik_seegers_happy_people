@@ -102,9 +102,14 @@
   "blog": {
     "eyebrow": "Blog",
     "title": "Latest messages",
+    "lead": "Short notes on remembering, smiling, and the path of Happy People.",
     "cta": "All posts",
     "read": "Read more",
+    "featured": "Latest",
+    "minutes": "{count} min read",
     "empty": "No posts yet.",
+    "emptyTitle": "No posts yet",
+    "emptyHint": "When Henk writes, the stories will appear here.",
     "facebook": "Blog posts on Facebook"
   },
   "membership": {
@@ -637,7 +642,10 @@
   "vlogsPage": {
     "eyebrow": "Vlogs",
     "title": "Vlogs",
-    "lead": "Personal vlogs from Henk — insights, stories, and moments from the Happy People path."
+    "lead": "Personal vlogs from Henk — insights, stories, and moments from the Happy People path.",
+    "featured": "Latest",
+    "emptyTitle": "No vlogs yet",
+    "emptyHint": "When Henk films, the vlogs will appear here."
   },
   "videoBell": {
     "eyebrow": "Live",

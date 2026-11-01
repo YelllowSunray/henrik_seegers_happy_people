@@ -102,9 +102,14 @@
   "blog": {
     "eyebrow": "博客",
     "title": "最新消息",
+    "lead": "关于记得、微笑，以及 Happy People 之路的短文。",
     "cta": "所有帖子",
     "read": "了解更多",
+    "featured": "最新",
+    "minutes": "{count} 分钟阅读",
     "empty": "还没有帖子。",
+    "emptyTitle": "还没有帖子",
+    "emptyHint": "亨克动笔后，故事会出现在这里。",
     "facebook": "关于Facebook的博客文章"
   },
   "membership": {
@@ -633,7 +638,10 @@
   "vlogsPage": {
     "eyebrow": "Vlogs",
     "title": "Vlogs",
-    "lead": "Personal vlogs from Henk — insights, stories, and moments from the Happy People path."
+    "lead": "Personal vlogs from Henk — insights, stories, and moments from the Happy People path.",
+    "featured": "最新",
+    "emptyTitle": "还没有视频博客",
+    "emptyHint": "亨克拍摄后，视频会出现在这里。"
   },
   "videoBell": {
     "eyebrow": "Live",
