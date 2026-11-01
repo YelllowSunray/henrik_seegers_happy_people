@@ -60,16 +60,19 @@ export function AdminInput({
   value,
   onChange,
   placeholder,
+  required = false,
 }: {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  required?: boolean;
 }) {
   return (
     <input
       value={value}
       onChange={(event) => onChange(event.target.value)}
       placeholder={placeholder}
+      required={required}
       className={`${FIELD} min-h-12 font-display text-xl sm:text-2xl`}
     />
   );
@@ -115,21 +118,6 @@ export const AdminTextarea = forwardRef<
     />
   );
 });
-
-export function insertAtCursor(
-  el: HTMLTextAreaElement | null,
-  snippet: string,
-): string | null {
-  if (!el) return null;
-  const start = el.selectionStart ?? el.value.length;
-  const end = el.selectionEnd ?? start;
-  const next = `${el.value.slice(0, start)}${snippet}${el.value.slice(end)}`;
-  const caret = start + snippet.length;
-  el.focus();
-  el.value = next;
-  el.setSelectionRange(caret, caret);
-  return next;
-}
 
 export function AdminSuccess({
   href,

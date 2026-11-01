@@ -26,7 +26,13 @@ import { VlogCover, VlogEmptyState, VlogPostCard } from "@/components/vlog-card"
 import { VlogMediaPick, type VlogMediaSource } from "@/components/vlog-media-pick";
 import { VlogPlayer } from "@/components/vlog-player";
 import { youtubeThumbSrc } from "@/components/youtube-embed";
-import { cmsAdminFetch } from "@/lib/cms-admin-fetch";
+import {
+  adminSaveError,
+  cmsAdminFetch,
+  isAdminCreateSuccess,
+  readAdminJson,
+  type AdminJson,
+} from "@/lib/cms-admin-fetch";
 import { t } from "@/lib/content";
 import { formatPostDate } from "@/lib/journal";
 import { uploadVlogBlob } from "@/lib/vlog-upload";
@@ -128,15 +134,19 @@ function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
           thumbnail,
         }),
       });
-      const data = (await res.json()) as { video?: VideoItem; error?: string };
-      if (!res.ok || !data.video) {
-        throw new Error(data.error || "Publiceren mislukt");
+      const data = await readAdminJson<AdminJson & { video?: VideoItem }>(res);
+      if (!isAdminCreateSuccess(res, data, "vlog") || !data.video) {
+        throw new Error(adminSaveError(res, data, "vlog"));
       }
       onCreated(data.video);
       setPublished(data.video);
       reset(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Publiceren mislukt");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Publiceren mislukt. De vlog is niet opgeslagen.",
+      );
     } finally {
       setBusy(false);
     }
@@ -349,8 +359,10 @@ function VlogEditForm({
           thumbnail: thumbnail ?? "",
         }),
       });
-      const data = (await res.json()) as { videoUrl?: string; error?: string };
-      if (!res.ok) throw new Error(data.error || "Opslaan mislukt");
+      const data = await readAdminJson<AdminJson & { videoUrl?: string }>(res);
+      if (!res.ok || !data.ok) {
+        throw new Error(adminSaveError(res, data, "vlog"));
+      }
       const nextUrl = data.videoUrl || videoUrl;
       onChange({
         ...video,
@@ -365,7 +377,11 @@ function VlogEditForm({
       setYoutube(null);
     } catch (err) {
       setStatus(null);
-      setError(err instanceof Error ? err.message : "Opslaan mislukt");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Opslaan mislukt. De vlog is niet opgeslagen.",
+      );
     } finally {
       setBusy(false);
     }

@@ -9,10 +9,13 @@ import {
   youtubeIdFromUrl,
   youtubeThumbSrc,
   youtubeWatchUrl,
-} from "@/components/youtube-embed";
+} from "@/lib/youtube";
 
 function unauthorized() {
-  return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  return NextResponse.json(
+    { error: "Niet gemachtigd. De vlog is niet opgeslagen." },
+    { status: 401 },
+  );
 }
 
 function requireAdmin(req: Request) {
@@ -41,13 +44,13 @@ export async function PATCH(
   if (!requireAdmin(req)) return unauthorized();
   const { id } = await params;
   if (!id) {
-    return NextResponse.json({ error: "Missing id" }, { status: 400 });
+    return NextResponse.json({ error: "Ontbrekende vlog." }, { status: 400 });
   }
 
   const db = getAdminDb();
   if (!db) {
     return NextResponse.json(
-      { error: "Firebase admin is not configured." },
+      { error: "De database is niet bereikbaar. De vlog is niet opgeslagen." },
       { status: 503 },
     );
   }
@@ -56,7 +59,10 @@ export async function PATCH(
   try {
     body = (await req.json()) as PatchBody;
   } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Ongeldige gegevens. De vlog is niet opgeslagen." },
+      { status: 400 },
+    );
   }
 
   const patch: Record<string, unknown> = {
@@ -98,7 +104,7 @@ export async function PATCH(
   } catch (err) {
     console.error("[api/admin/videos] update failed:", err);
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Update failed" },
+      { error: "Opslaan mislukt. De vlog is niet opgeslagen." },
       { status: 500 },
     );
   }
@@ -111,13 +117,13 @@ export async function DELETE(
   if (!requireAdmin(req)) return unauthorized();
   const { id } = await params;
   if (!id) {
-    return NextResponse.json({ error: "Missing id" }, { status: 400 });
+    return NextResponse.json({ error: "Ontbrekende vlog." }, { status: 400 });
   }
 
   const db = getAdminDb();
   if (!db) {
     return NextResponse.json(
-      { error: "Firebase admin is not configured." },
+      { error: "De database is niet bereikbaar. De vlog is niet opgeslagen." },
       { status: 503 },
     );
   }
@@ -128,7 +134,7 @@ export async function DELETE(
   } catch (err) {
     console.error("[api/admin/videos] delete failed:", err);
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Delete failed" },
+      { error: "Verwijderen mislukt. De vlog is niet verwijderd." },
       { status: 500 },
     );
   }

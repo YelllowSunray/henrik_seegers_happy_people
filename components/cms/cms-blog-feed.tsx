@@ -26,16 +26,18 @@ import {
   AdminTextarea,
   confirmDelete,
   confirmLeave,
-  insertAtCursor,
   useLeaveGuard,
 } from "@/components/cms/admin-ui";
-import {
-  BlogCoverField,
-  BlogInlineImageButton,
-} from "@/components/cms/blog-image-pick";
+import { BlogCoverField } from "@/components/cms/blog-image-pick";
 import { useCmsOptional } from "@/components/cms/cms-provider";
 import { FACEBOOK_HREF } from "@/lib/contact";
-import { cmsAdminFetch } from "@/lib/cms-admin-fetch";
+import {
+  adminSaveError,
+  cmsAdminFetch,
+  isAdminCreateSuccess,
+  readAdminJson,
+  type AdminJson,
+} from "@/lib/cms-admin-fetch";
 import { t } from "@/lib/content";
 import { formatPostDate, readingMinutes } from "@/lib/journal";
 import type { BlogPost, Locale } from "@/lib/types";
@@ -111,8 +113,6 @@ function BlogFormFields({
   draft: Draft;
   onChange: (next: Draft) => void;
 }) {
-  const bodyRef = useRef<HTMLTextAreaElement>(null);
-
   return (
     <div className="space-y-6">
       <AdminField
@@ -147,23 +147,14 @@ function BlogFormFields({
       </AdminField>
       <AdminField
         label="4. Het verhaal"
-        hint="Lege regel = nieuwe alinea. Foto’s komen waar de cursor staat."
+        hint="Lege regel = nieuwe alinea."
       >
         <AdminTextarea
-          ref={bodyRef}
           value={draft.body}
           onChange={(body) => onChange({ ...draft, body })}
           placeholder="Schrijf hier je blog."
           minRows={8}
         />
-        <div className="mt-3">
-          <BlogInlineImageButton
-            onInsert={(snippet) => {
-              const next = insertAtCursor(bodyRef.current, snippet);
-              onChange({ ...draft, body: next ?? `${draft.body}${snippet}` });
-            }}
-          />
-        </div>
       </AdminField>
     </div>
   );
@@ -235,19 +226,20 @@ function NewBlog({ onCreated }: { onCreated: (post: BlogPost) => void }) {
         method: "POST",
         body: JSON.stringify(draft),
       });
-      const data = (await res.json()) as {
-        post?: BlogPost;
-        error?: string;
-      };
-      if (!res.ok || !data.post) {
-        throw new Error(data.error || "Publiceren mislukt");
+      const data = await readAdminJson<AdminJson & { post?: BlogPost }>(res);
+      if (!isAdminCreateSuccess(res, data, "blog") || !data.post) {
+        throw new Error(adminSaveError(res, data, "blog"));
       }
       onCreated(data.post);
       setPublished(data.post);
       setDraft(emptyDraft());
       setOpen(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Publiceren mislukt");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Publiceren mislukt. Het bericht is niet opgeslagen.",
+      );
     } finally {
       setBusy(false);
     }
