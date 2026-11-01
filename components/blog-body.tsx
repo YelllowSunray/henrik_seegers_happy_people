@@ -191,7 +191,7 @@ export function BlogBody({
     >
       {paragraphs.flatMap((paragraph, i) => {
         const chunks = splitMarkdownImages(paragraph);
-        return chunks.flatMap((chunk, j) => {
+        return chunks.flatMap((chunk, j): ReactNode[] => {
           if (chunk.type === "image") {
             return [
               <BlogFigure
