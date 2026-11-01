@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, type ComponentProps, type ReactNode } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useRef,
+  type ComponentProps,
+  type ReactNode,
+} from "react";
 import { Link } from "@/i18n/navigation";
 import { useAutosizeTextarea } from "@/components/cms/cms-field";
 
@@ -69,23 +75,28 @@ export function AdminInput({
   );
 }
 
-export function AdminTextarea({
-  value,
-  onChange,
-  placeholder,
-  minRows = 4,
-}: {
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  minRows?: number;
-}) {
-  const ref = useRef<HTMLTextAreaElement>(null);
-  useAutosizeTextarea(ref, [value], true);
+export const AdminTextarea = forwardRef<
+  HTMLTextAreaElement,
+  {
+    value: string;
+    onChange: (value: string) => void;
+    placeholder?: string;
+    minRows?: number;
+  }
+>(function AdminTextarea(
+  { value, onChange, placeholder, minRows = 4 },
+  forwardedRef,
+) {
+  const innerRef = useRef<HTMLTextAreaElement>(null);
+  useAutosizeTextarea(innerRef, [value], true);
 
   return (
     <textarea
-      ref={ref}
+      ref={(node) => {
+        innerRef.current = node;
+        if (typeof forwardedRef === "function") forwardedRef(node);
+        else if (forwardedRef) forwardedRef.current = node;
+      }}
       value={value}
       rows={minRows}
       placeholder={placeholder}
@@ -103,6 +114,21 @@ export function AdminTextarea({
       className={`${FIELD} min-h-32 resize-none !whitespace-pre-wrap`}
     />
   );
+});
+
+export function insertAtCursor(
+  el: HTMLTextAreaElement | null,
+  snippet: string,
+): string | null {
+  if (!el) return null;
+  const start = el.selectionStart ?? el.value.length;
+  const end = el.selectionEnd ?? start;
+  const next = `${el.value.slice(0, start)}${snippet}${el.value.slice(end)}`;
+  const caret = start + snippet.length;
+  el.focus();
+  el.value = next;
+  el.setSelectionRange(caret, caret);
+  return next;
 }
 
 export function AdminSuccess({

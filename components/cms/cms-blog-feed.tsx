@@ -9,6 +9,7 @@ import {
 } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { BlogBody } from "@/components/blog-body";
 import { BlogCover, BlogEmptyState, BlogPostCard } from "@/components/blog-card";
 import {
   AdminCardActions,
@@ -25,8 +26,13 @@ import {
   AdminTextarea,
   confirmDelete,
   confirmLeave,
+  insertAtCursor,
   useLeaveGuard,
 } from "@/components/cms/admin-ui";
+import {
+  BlogCoverField,
+  BlogInlineImageButton,
+} from "@/components/cms/blog-image-pick";
 import { useCmsOptional } from "@/components/cms/cms-provider";
 import { FACEBOOK_HREF } from "@/lib/contact";
 import { cmsAdminFetch } from "@/lib/cms-admin-fetch";
@@ -38,12 +44,14 @@ type Draft = {
   title: string;
   excerpt: string;
   body: string;
+  coverImage: string;
 };
 
 const emptyDraft = (): Draft => ({
   title: "",
   excerpt: "",
   body: "",
+  coverImage: "",
 });
 
 function useDebouncedSave(
@@ -84,7 +92,14 @@ function useDebouncedSave(
     return () => {
       if (timer.current) clearTimeout(timer.current);
     };
-  }, [enabled, postId, payload.title, payload.excerpt, payload.body]);
+  }, [
+    enabled,
+    postId,
+    payload.title,
+    payload.excerpt,
+    payload.body,
+    payload.coverImage,
+  ]);
 
   return status;
 }
@@ -96,6 +111,8 @@ function BlogFormFields({
   draft: Draft;
   onChange: (next: Draft) => void;
 }) {
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
+
   return (
     <div className="space-y-6">
       <AdminField
@@ -120,15 +137,33 @@ function BlogFormFields({
         />
       </AdminField>
       <AdminField
-        label="3. Het verhaal"
-        hint="Lege regel = nieuwe alinea."
+        label="3. Omslagfoto"
+        hint="Deze foto komt op de kaart en bovenaan het bericht."
+      >
+        <BlogCoverField
+          value={draft.coverImage}
+          onChange={(coverImage) => onChange({ ...draft, coverImage })}
+        />
+      </AdminField>
+      <AdminField
+        label="4. Het verhaal"
+        hint="Lege regel = nieuwe alinea. Foto’s komen waar de cursor staat."
       >
         <AdminTextarea
+          ref={bodyRef}
           value={draft.body}
           onChange={(body) => onChange({ ...draft, body })}
           placeholder="Schrijf hier je blog."
           minRows={8}
         />
+        <div className="mt-3">
+          <BlogInlineImageButton
+            onInsert={(snippet) => {
+              const next = insertAtCursor(bodyRef.current, snippet);
+              onChange({ ...draft, body: next ?? `${draft.body}${snippet}` });
+            }}
+          />
+        </div>
       </AdminField>
     </div>
   );
@@ -137,6 +172,16 @@ function BlogFormFields({
 function BlogPreview({ draft }: { draft: Draft }) {
   return (
     <AdminPreview label="Zo ziet het eruit">
+      {draft.coverImage ? (
+        <div className="mb-5 overflow-hidden rounded-2xl border border-line">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={draft.coverImage}
+            alt=""
+            className="aspect-[16/10] w-full object-cover"
+          />
+        </div>
+      ) : null}
       <p className="text-sm text-ink-soft">Vandaag</p>
       <h2 className="font-display mt-2 text-2xl leading-tight text-ink sm:text-3xl">
         {draft.title.trim() || "Titel"}
@@ -147,8 +192,8 @@ function BlogPreview({ draft }: { draft: Draft }) {
         </p>
       ) : null}
       {draft.body.trim() ? (
-        <div className="mt-5 whitespace-pre-wrap text-base leading-relaxed text-ink">
-          {draft.body}
+        <div className="mt-5">
+          <BlogBody text={draft.body} />
         </div>
       ) : (
         <p className="mt-5 text-sm text-ink-soft">Nog geen tekst.</p>
@@ -164,7 +209,10 @@ function NewBlog({ onCreated }: { onCreated: (post: BlogPost) => void }) {
   const [error, setError] = useState<string | null>(null);
   const [published, setPublished] = useState<BlogPost | null>(null);
   const dirty = Boolean(
-    draft.title.trim() || draft.excerpt.trim() || draft.body.trim(),
+    draft.title.trim() ||
+      draft.excerpt.trim() ||
+      draft.body.trim() ||
+      draft.coverImage.trim(),
   );
   useLeaveGuard(open && dirty);
 
@@ -232,7 +280,7 @@ function NewBlog({ onCreated }: { onCreated: (post: BlogPost) => void }) {
                 Nieuwe blog
               </p>
               <p className="mt-1 text-base text-ink-soft">
-                Vul de drie velden in, controleer de preview, en tik op Publiceren.
+                Titel, intro, eventueel een foto, dan het verhaal — en Publiceren.
               </p>
             </div>
             <AdminGhostButton onClick={close}>Annuleren</AdminGhostButton>
@@ -255,21 +303,35 @@ function BlogEditForm({
   post,
   locale,
   onDeleted,
+  onUpdated,
   onClose,
 }: {
   post: BlogPost;
   locale: Locale;
   onDeleted: (id: string) => void;
+  onUpdated?: (next: BlogPost) => void;
   onClose?: () => void;
 }) {
   const [draft, setDraft] = useState<Draft>({
     title: t(post.title, locale),
     excerpt: t(post.excerpt, locale),
     body: t(post.body, locale),
+    coverImage: post.coverImage ?? "",
   });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const status = useDebouncedSave(post.id, draft, true);
+
+  function updateDraft(next: Draft) {
+    setDraft(next);
+    onUpdated?.({
+      ...post,
+      title: { ...post.title, nl: next.title },
+      excerpt: { ...post.excerpt, nl: next.excerpt },
+      body: { ...post.body, nl: next.body },
+      coverImage: next.coverImage.trim() || undefined,
+    });
+  }
 
   async function onDelete() {
     if (!confirmDelete(draft.title)) return;
@@ -306,7 +368,7 @@ function BlogEditForm({
       <p className="text-sm text-ink-soft">
         Wijzigingen worden automatisch opgeslagen.
       </p>
-      <BlogFormFields draft={draft} onChange={setDraft} />
+      <BlogFormFields draft={draft} onChange={updateDraft} />
       <BlogPreview draft={draft} />
       {error ? <p className="text-base text-red-700">{error}</p> : null}
     </div>
@@ -317,10 +379,12 @@ function CmsBlogRow({
   post,
   locale,
   onDeleted,
+  onUpdated,
 }: {
   post: BlogPost;
   locale: Locale;
   onDeleted: (id: string) => void;
+  onUpdated: (next: BlogPost) => void;
 }) {
   const [editing, setEditing] = useState(false);
   const title = t(post.title, locale) || "Zonder titel";
@@ -336,6 +400,7 @@ function CmsBlogRow({
           post={post}
           locale={locale}
           onDeleted={onDeleted}
+          onUpdated={onUpdated}
           onClose={() => setEditing(false)}
         />
       </li>
@@ -428,6 +493,10 @@ export function CmsBlogFeed({
     setPosts((prev) => [post, ...prev]);
   }, []);
 
+  const onUpdated = useCallback((next: BlogPost) => {
+    setPosts((prev) => prev.map((post) => (post.id === next.id ? next : post)));
+  }, []);
+
   const visible = typeof limit === "number" ? posts.slice(0, limit) : posts;
 
   if (!cms?.enabled) {
@@ -505,6 +574,7 @@ export function CmsBlogFeed({
               post={post}
               locale={locale}
               onDeleted={onDeleted}
+              onUpdated={onUpdated}
             />
           ))}
         </ul>

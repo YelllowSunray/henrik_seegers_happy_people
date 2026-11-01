@@ -3,12 +3,29 @@ import type { ReactNode } from "react";
 const URL_RE =
   /https?:\/\/[^\s<]+[^\s<.,;:!?)\]>'"]/gi;
 
+const MD_IMG_RE = /!\[([^\]]*)\]\((https?:\/\/[^)\s]+|\/[^)\s]+)\)/g;
+
 const YT_RE =
   /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/i;
 
 function youtubeId(url: string): string | null {
   const match = url.match(YT_RE);
   return match?.[1] ?? null;
+}
+
+function BlogFigure({ src, caption }: { src: string; caption: string }) {
+  return (
+    <figure className="overflow-hidden rounded-2xl border border-line bg-bg-deep/40">
+      {/* Remote CMS photos can come from Storage — keep unoptimized. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={caption} className="w-full object-cover" />
+      {caption ? (
+        <figcaption className="px-4 py-3 text-sm leading-relaxed text-ink-soft">
+          {caption}
+        </figcaption>
+      ) : null}
+    </figure>
+  );
 }
 
 function YoutubeEmbed({ id }: { id: string }) {
@@ -33,7 +50,37 @@ function splitParagraphs(text: string): string[] {
   return text.replace(/\r\n/g, "\n").split(/\n{2,}/);
 }
 
-/** Turn a paragraph into text + inline links + YouTube embeds. */
+function splitMarkdownImages(
+  paragraph: string,
+): Array<{ type: "text"; value: string } | { type: "image"; src: string; caption: string }> {
+  const parts: Array<
+    | { type: "text"; value: string }
+    | { type: "image"; src: string; caption: string }
+  > = [];
+  const re = new RegExp(MD_IMG_RE.source, "g");
+  let last = 0;
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(paragraph)) !== null) {
+    if (match.index > last) {
+      parts.push({ type: "text", value: paragraph.slice(last, match.index) });
+    }
+    parts.push({
+      type: "image",
+      caption: match[1] ?? "",
+      src: match[2] ?? "",
+    });
+    last = match.index + match[0].length;
+  }
+  if (last < paragraph.length) {
+    parts.push({ type: "text", value: paragraph.slice(last) });
+  }
+  if (parts.length === 0) {
+    parts.push({ type: "text", value: paragraph });
+  }
+  return parts;
+}
+
+/** Turn a paragraph into text + images + inline links + YouTube embeds. */
 function renderParagraph(paragraph: string, keyPrefix: string): ReactNode[] {
   const nodes: ReactNode[] = [];
   let last = 0;
@@ -142,9 +189,22 @@ export function BlogBody({
     <div
       className={`max-w-2xl space-y-6 reading-copy ${className}`}
     >
-      {paragraphs.flatMap((paragraph, i) =>
-        renderParagraph(paragraph, `p-${i}`),
-      )}
+      {paragraphs.flatMap((paragraph, i) => {
+        const chunks = splitMarkdownImages(paragraph);
+        return chunks.flatMap((chunk, j) => {
+          if (chunk.type === "image") {
+            return [
+              <BlogFigure
+                key={`p-${i}-img-${j}`}
+                src={chunk.src}
+                caption={chunk.caption}
+              />,
+            ];
+          }
+          if (!chunk.value.trim()) return [];
+          return renderParagraph(chunk.value, `p-${i}-${j}`);
+        });
+      })}
     </div>
   );
 }

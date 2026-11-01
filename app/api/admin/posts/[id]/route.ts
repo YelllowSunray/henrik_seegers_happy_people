@@ -21,6 +21,7 @@ type PatchBody = {
   publishedAt?: string;
   slug?: string;
   category?: string;
+  coverImage?: string;
 };
 
 export async function PATCH(
@@ -62,6 +63,9 @@ export async function PATCH(
   }
   if (typeof body.category === "string") {
     patch.category = body.category.trim();
+  }
+  if (typeof body.coverImage === "string") {
+    patch.coverImage = body.coverImage.trim();
   }
 
   try {

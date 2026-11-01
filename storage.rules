@@ -25,6 +25,14 @@ service firebase.storage {
         && request.resource.contentType.matches('image/.*');
     }
 
+    // Public blog covers and inline photos (visitor cards + post page)
+    match /club-media/blog/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdminEmail()
+        && request.resource.size < 12 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
     // Public vlog recordings (page is public; iPhone must be able to play without login)
     match /club-media/vlogs/{allPaths=**} {
       allow read: if true;
