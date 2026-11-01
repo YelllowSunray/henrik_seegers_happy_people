@@ -1,27 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useAuth } from "@/components/auth-provider";
-import { CmsField } from "@/components/cms/cms-field";
 import { useCmsOptional } from "@/components/cms/cms-provider";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { HeaderBackButton } from "@/components/smart-back-button";
 import { SeminarPromoBar } from "@/components/seminar-promo";
 
 const navKeys = [
-  ["videoBell", "/video-bell", "nav.videoBell"],
-  ["seminars", "/seminars", "nav.seminars"],
-  ["vlogs", "/vlogs", "nav.vlogs"],
-  ["blog", "/blog", "nav.blog"],
-  ["community", "/community", "nav.community"],
+  ["videoBell", "/video-bell"],
+  ["seminars", "/seminars"],
+  ["vlogs", "/vlogs"],
+  ["blog", "/blog"],
+  ["community", "/community"],
 ] as const;
 
 export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" }) {
   const t = useTranslations("nav");
-  const { user, isMember, isAdmin, signOut, loading } = useAuth();
+  const { user, isMember, isAdmin, previewMode, signOut, loading } = useAuth();
   const cms = useCmsOptional();
   const cmsMode = Boolean(cms?.enabled);
   const onHero = variant === "hero";
@@ -29,14 +28,38 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
   const showJoin = !isMember && !cmsMode;
 
-  // Light-on-dark chrome: hero at top, or after scroll on any page.
+  // Same chrome for visitors and admin. Desktop: translucent at the top of
+  // a hero, solid black after scroll. Mobile already uses this pattern.
   const darkChrome = onHero || scrolled || menuOpen;
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    function apply() {
+      const node = headerRef.current;
+      if (!node) return;
+      const height = node.getBoundingClientRect().height;
+      document.documentElement.style.setProperty(
+        "--site-header-h",
+        `${Math.ceil(height)}px`,
+      );
+    }
+    apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(el);
+    window.addEventListener("resize", apply);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", apply);
+    };
+  }, [cmsMode, onHero, menuOpen]);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -101,24 +124,14 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
             </div>
 
             <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-6">
-              {navKeys.map(([key, href, path]) => (
+              {navKeys.map(([key, href]) => (
                 <Link
                   key={key}
                   href={href}
                   className="rounded-lg px-3 py-3.5 text-lg font-medium text-white/90 transition hover:bg-white/10 hover:text-white"
                   onClick={() => setMenuOpen(false)}
                 >
-                  {cmsMode ? (
-                    <CmsField
-                      path={path}
-                      value={t(key)}
-                      multiline={false}
-                      inline
-                      className="text-lg font-medium text-white"
-                    />
-                  ) : (
-                    t(key)
-                  )}
+                  {t(key)}
                 </Link>
               ))}
               {isMember && (
@@ -160,7 +173,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                   >
                     {t("signOut")}
                   </button>
-                ) : (
+                ) : previewMode === "member" ? null : (
                   <Link
                     href="/auth"
                     className="rounded-full border border-white/35 px-4 py-3 text-center text-base font-medium text-white"
@@ -187,6 +200,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
   return (
     <>
       <header
+        ref={headerRef}
         className={`fixed inset-x-0 top-0 z-40 pt-[env(safe-area-inset-top)] transition-[background-color,border-color,backdrop-filter] duration-300 ${
           scrolled || menuOpen
             ? "border-b border-white/10 bg-black/95 backdrop-blur-md"
@@ -211,21 +225,13 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
               darkChrome ? "text-white drop-shadow-sm" : "text-ink"
             }`}
           >
-            {navKeys.map(([key, href, path]) => (
-              <Link key={key} href={href} className={`transition ${linkTone}`}>
-                {cmsMode ? (
-                  <CmsField
-                    path={path}
-                    value={t(key)}
-                    multiline={false}
-                    inline
-                    className={`bg-transparent text-sm font-medium ${
-                      darkChrome ? "text-white" : "text-ink"
-                    }`}
-                  />
-                ) : (
-                  t(key)
-                )}
+            {navKeys.map(([key, href]) => (
+              <Link
+                key={key}
+                href={href}
+                className={`inline-flex min-h-11 items-center transition ${linkTone}`}
+              >
+                {t(key)}
               </Link>
             ))}
           </nav>
@@ -275,7 +281,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                 >
                   {t("signOut")}
                 </button>
-              ) : (
+              ) : previewMode === "member" ? null : (
                 <Link
                   href="/auth"
                   className={`hidden text-sm font-medium transition lg:inline ${linkTone}`}
@@ -337,11 +343,8 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
       {mobileMenu}
 
       {!onHero && (
-        <div
-          className="shrink-0 pt-[env(safe-area-inset-top)]"
-          aria-hidden
-        >
-          <div className="h-[calc(4.25rem+var(--seminar-promo-h,0px))]" />
+        <div className="shrink-0" aria-hidden>
+          <div className="h-[var(--site-header-h,5.5rem)]" />
         </div>
       )}
     </>

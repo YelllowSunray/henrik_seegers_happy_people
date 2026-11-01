@@ -7,7 +7,7 @@ service firebase.storage {
 
     function isAdminEmail() {
       return signedIn()
-        && request.auth.token.email in [
+        && request.auth.token.email.lower() in [
           'henk.seegers1965@gmail.com',
           'hendrik.seegers1991@icloud.com',
           'hendrik.seegers@icloud.com',
@@ -25,7 +25,26 @@ service firebase.storage {
         && request.resource.contentType.matches('image/.*');
     }
 
-    // Club media for admin CMS (vlog audio, images, seminar files)
+    // Public blog covers and inline photos (visitor cards + post page)
+    match /club-media/blog/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdminEmail()
+        && request.resource.size < 12 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // Public vlog recordings (page is public; iPhone must be able to play without login)
+    match /club-media/vlogs/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdminEmail()
+        && request.resource.size < 80 * 1024 * 1024
+        && (
+          request.resource.contentType.matches('video/.*')
+          || request.resource.contentType.matches('audio/.*')
+        );
+    }
+
+    // Club media for admin CMS (images, seminar files)
     match /club-media/{allPaths=**} {
       allow read: if signedIn();
       allow write: if isAdminEmail()

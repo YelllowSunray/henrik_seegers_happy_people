@@ -41,14 +41,12 @@ export default async function LocaleLayout({
           <CmsProvider>
             <MusicRoutePersistence />
             <div
-              className="flex min-h-full min-w-0 max-w-[100vw] flex-col overflow-x-clip"
+              className="flex min-h-full min-w-0 max-w-[100vw] flex-col overflow-x-clip pb-[max(var(--cms-dock-h,0px),var(--chat-fab-clearance,0px))]"
               dir={dir}
               lang={locale}
             >
               <BillingBanner />
-              <div className="min-w-0 flex-1 pb-[var(--cms-dock-h,0px)]">
-                {children}
-              </div>
+              <div className="min-w-0 flex-1">{children}</div>
               <SiteFooter locale={locale} />
             </div>
             <SmartBackButton />

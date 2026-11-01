@@ -26,6 +26,7 @@ export function MembershipPlans({
   const overBudget = useBillingOverBudget();
   const [busy, setBusy] = useState<MembershipPlan | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [digitalConsent, setDigitalConsent] = useState(false);
 
   const noObligation = useCmsValue("membership.noObligation", t("noObligation"));
   const monthlyLabel = useCmsValue("membership.monthlyLabel", t("monthlyLabel"));
@@ -52,6 +53,10 @@ export function MembershipPlans({
 
   async function startCheckout(plan: MembershipPlan) {
     if (!user) return;
+    if (!digitalConsent) {
+      setError(t("digitalConsentRequired"));
+      return;
+    }
     if (overBudget) {
       setError(billingContactMessage());
       return;
@@ -67,7 +72,12 @@ export function MembershipPlans({
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ plan, locale, cancelPath: returnPath }),
+        body: JSON.stringify({
+          plan,
+          locale,
+          cancelPath: returnPath,
+          digitalConsent: true,
+        }),
       });
       const data = (await res.json()) as { url?: string; error?: string };
       if (!res.ok || !data.url) {
@@ -114,6 +124,25 @@ export function MembershipPlans({
           onClick={user ? () => void startCheckout("yearly") : undefined}
         />
       </div>
+
+      {user ? (
+        <label className="mt-6 flex items-start gap-3 text-sm text-ink">
+          <input
+            type="checkbox"
+            checked={digitalConsent}
+            onChange={(e) => setDigitalConsent(e.target.checked)}
+            className="mt-1 h-4 w-4 shrink-0 accent-[var(--accent)]"
+            required
+          />
+          <span>
+            {t("digitalConsent")}{" "}
+            <Link href="/algemene-voorwaarden" className="font-semibold text-accent underline-offset-2 hover:underline">
+              {t("digitalConsentTerms")}
+            </Link>
+            .
+          </span>
+        </label>
+      ) : null}
 
       {error && <p className="mt-4 text-sm text-red-700">{error}</p>}
     </div>

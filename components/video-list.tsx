@@ -1,6 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+import { VlogPlayer } from "@/components/vlog-player";
 import { t } from "@/lib/content";
 import type { Locale, VideoItem } from "@/lib/types";
 
@@ -145,27 +146,11 @@ export function VideoList({
                 </p>
               </div>
               <div className="order-1 md:order-2">
-                {v.videoUrl ? (
-                  <div className="aspect-video bg-ink/20">
-                    <iframe
-                      src={v.videoUrl}
-                      title={t(v.title, locale)}
-                      className="h-full w-full"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  </div>
-                ) : (
-                  <div
-                    className={`flex aspect-video items-center justify-center text-sm ${
-                      featured
-                        ? "bg-white/10 text-white/60"
-                        : "bg-ink/5 text-ink-soft"
-                    }`}
-                  >
-                    {tr("videoSoon")}
-                  </div>
-                )}
+                <VlogPlayer
+                  url={v.videoUrl}
+                  title={t(v.title, locale)}
+                  poster={v.thumbnail}
+                />
               </div>
             </div>
           </li>

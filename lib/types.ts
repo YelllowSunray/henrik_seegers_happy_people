@@ -15,6 +15,8 @@ export type BlogPost = {
   publishedAt: string;
   membersOnly: boolean;
   coverImage?: string;
+  /** Optional grouping for the public blog index (e.g. inzichten). */
+  category?: string;
 };
 
 export type SeminarEvent = {
@@ -47,6 +49,8 @@ export type VideoItem = {
   thumbnail?: string;
   publishedAt: string;
   durationLabel?: string;
+  /** Optional grouping for the public vlog index. */
+  category?: string;
 };
 
 export type QuoteItem = {
@@ -79,6 +83,10 @@ export type MemberProfile = {
   trialEndsAt?: string;
   membershipPlan?: "monthly" | "yearly";
   isAdmin?: boolean;
+  /** Immediate digital access + waiver of 14-day withdrawal (NL/EU consumer law). */
+  digitalAccessConsent?: boolean;
+  digitalAccessConsentAt?: string;
+  digitalAccessConsentVersion?: string;
   /** ISO timestamps of last visit per club section */
   activitySeen?: {
     seminars?: string;

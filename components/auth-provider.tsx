@@ -7,6 +7,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useSyncExternalStore,
 } from "react";
 import {
   User,
@@ -26,6 +27,16 @@ import {
   ADMIN_PASSWORD,
   ADMIN_SESSION_KEY,
 } from "@/lib/admin-gate";
+import {
+  isAllowlistedAdminEmail,
+  normalizeEmail,
+} from "@/lib/admin-emails";
+import {
+  readAdminPreview,
+  subscribeAdminPreview,
+  writeAdminPreview,
+  type AdminPreviewMode,
+} from "@/lib/admin-preview";
 import { hasMembershipAccess } from "@/lib/membership";
 import type { MemberProfile } from "@/lib/types";
 
@@ -35,6 +46,10 @@ type AuthContextValue = {
   loading: boolean;
   isMember: boolean;
   isAdmin: boolean;
+  /** True admin identity — ignores the view-only preview switch. */
+  isRealAdmin: boolean;
+  previewMode: AdminPreviewMode;
+  setPreviewMode: (mode: AdminPreviewMode) => void;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
@@ -49,11 +64,7 @@ async function loadProfile(user: User): Promise<MemberProfile> {
   const db = getClientDb();
   const ref = doc(db, "members", user.uid);
   const snap = await getDoc(ref);
-  const adminEmails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? "")
-    .split(",")
-    .map((e) => e.trim().toLowerCase())
-    .filter(Boolean);
-  const emailAdmin = adminEmails.includes((user.email ?? "").toLowerCase());
+  const emailAdmin = isAllowlistedAdminEmail(user.email);
 
   if (snap.exists()) {
     const data = snap.data() as MemberProfile;
@@ -124,6 +135,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => unsub();
   }, []);
 
+  const previewMode = useSyncExternalStore(
+    subscribeAdminPreview,
+    readAdminPreview,
+    () => "off" as const,
+  );
+
+  const setPreviewMode = useCallback((mode: AdminPreviewMode) => {
+    writeAdminPreview(mode);
+  }, []);
+
   const unlockAdmin = useCallback((password: string) => {
     if (password !== ADMIN_PASSWORD) return false;
     try {
@@ -132,34 +153,75 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       /* ignore */
     }
     setPasswordAdmin(true);
+    writeAdminPreview("off");
     return true;
   }, []);
 
+  const isRealAdmin = Boolean(profile?.isAdmin) || passwordAdmin;
+  const viewingAs = isRealAdmin ? previewMode : "off";
+  const previewProfile: MemberProfile | null =
+    viewingAs === "visitor"
+      ? null
+      : viewingAs === "member"
+        ? {
+            uid: user?.uid || profile?.uid || "preview-lid",
+            email: user?.email || profile?.email || "lid@happypeople",
+            displayName: profile?.displayName || "Happy People",
+            subscriptionStatus: "active",
+            stripeSubscriptionId: profile?.stripeSubscriptionId || "preview-lid",
+            membershipPlan: profile?.membershipPlan || "monthly",
+            onboardingCompleted: true,
+            isAdmin: false,
+          }
+        : profile;
+
   const value = useMemo<AuthContextValue>(
     () => ({
-      user,
-      profile,
+      user: viewingAs === "visitor" ? null : user,
+      profile: previewProfile,
       loading,
-      isMember: hasMembershipAccess(profile),
-      isAdmin: Boolean(profile?.isAdmin) || passwordAdmin,
+      isMember:
+        viewingAs === "member"
+          ? true
+          : viewingAs === "visitor"
+            ? false
+            : hasMembershipAccess(profile),
+      isAdmin: viewingAs === "off" && isRealAdmin,
+      isRealAdmin,
+      previewMode: viewingAs,
+      setPreviewMode,
       signIn: async (email, password) => {
-        await signInWithEmailAndPassword(getClientAuth(), email, password);
+        await signInWithEmailAndPassword(
+          getClientAuth(),
+          normalizeEmail(email),
+          password,
+        );
       },
       signUp: async (email, password) => {
+        const normalized = normalizeEmail(email);
         const cred = await createUserWithEmailAndPassword(
           getClientAuth(),
-          email,
+          normalized,
           password,
         );
         await setDoc(doc(getClientDb(), "members", cred.user.uid), {
           uid: cred.user.uid,
-          email,
+          email: normalized,
           subscriptionStatus: "none",
-          isAdmin: false,
+          isAdmin: isAllowlistedAdminEmail(normalized),
         } satisfies MemberProfile);
       },
       resetPassword: async (email) => {
-        await sendPasswordResetEmail(getClientAuth(), email.trim());
+        const auth = getClientAuth();
+        const normalized = normalizeEmail(email);
+        if (typeof window !== "undefined") {
+          await sendPasswordResetEmail(auth, normalized, {
+            url: `${window.location.origin}/nl/auth`,
+            handleCodeInApp: false,
+          });
+          return;
+        }
+        await sendPasswordResetEmail(auth, normalized);
       },
       signOut: async () => {
         try {
@@ -167,13 +229,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } catch {
           /* ignore */
         }
+        writeAdminPreview("off");
         setPasswordAdmin(false);
-        await firebaseSignOut(getClientAuth());
+        if (user) await firebaseSignOut(getClientAuth());
       },
       refreshProfile,
       unlockAdmin,
     }),
-    [user, profile, loading, passwordAdmin, refreshProfile, unlockAdmin],
+    [
+      user,
+      profile,
+      previewProfile,
+      loading,
+      isRealAdmin,
+      viewingAs,
+      setPreviewMode,
+      refreshProfile,
+      unlockAdmin,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -194,6 +194,18 @@ export function ClubChatFab() {
 
   useEffect(() => setMounted(true), []);
 
+  useEffect(() => {
+    if (hideOnPage) return;
+    const root = document.documentElement;
+    root.style.setProperty(
+      "--chat-fab-clearance",
+      "calc(5.75rem + env(safe-area-inset-bottom, 0px))",
+    );
+    return () => {
+      root.style.removeProperty("--chat-fab-clearance");
+    };
+  }, [hideOnPage]);
+
   function closeChat() {
     stopSpeaking();
     resumeMusicAfterChat();

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
-import { SubscriberGate } from "@/components/subscriber-gate";
 import { CmsVlogList } from "@/components/cms/cms-vlog-list";
 import { fetchVideosByKind } from "@/lib/content-firestore";
 import { buildPageMetadata } from "@/lib/seo";
@@ -30,30 +29,31 @@ export default async function VlogsPage({
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  const { locale: localeParam } = await params;
+  setRequestLocale(localeParam);
+  const locale = localeParam as Locale;
   const t = await getTranslations("vlogsPage");
   const items = await fetchVideosByKind("vlog");
 
   return (
     <>
       <SiteHeader variant="solid" />
-      <SubscriberGate>
-      <Section>
-        <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase">
-          {t("eyebrow")}
-        </p>
-        <h1 className="font-display mt-3 text-3xl leading-tight text-ink md:text-5xl">
-          {t("title")}
-        </h1>
-        <p className="mt-5 max-w-2xl reading-copy">
-          {t("lead")}
-        </p>
+      <Section compact>
+        <div className="max-w-2xl">
+          <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase">
+            {t("eyebrow")}
+          </p>
+          <h1 className="font-display mt-3 text-3xl leading-tight text-ink sm:text-4xl md:text-5xl">
+            {t("title")}
+          </h1>
+          <p className="mt-4 text-base leading-relaxed text-ink-soft sm:text-lg">
+            {t("lead")}
+          </p>
+        </div>
         <div className="mt-10">
-          <CmsVlogList items={items} />
+          <CmsVlogList items={items} locale={locale} />
         </div>
       </Section>
-      </SubscriberGate>
     </>
   );
 }

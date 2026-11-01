@@ -102,9 +102,14 @@
   "blog": {
     "eyebrow": "مدونة",
     "title": "أحدث الرسائل",
+    "lead": "نصوص قصيرة عن التذكّر والابتسام وطريق Happy People.",
     "cta": "جميع المشاركات",
     "read": "إقرأ المزيد",
+    "featured": "الأحدث",
+    "minutes": "{count} د قراءة",
     "empty": "لا توجد مشاركات بعد.",
+    "emptyTitle": "لا توجد مشاركات بعد",
+    "emptyHint": "عندما يكتب هينك، ستظهر القصص هنا.",
     "facebook": "مشاركات المدونة على Facebook"
   },
   "membership": {
@@ -158,7 +163,10 @@
     "manageSubscription": "إدارة الاشتراك",
     "paradisePrompt": "الاختيار لك — هل سيكون YES أم NO؟",
     "paradiseNote": "بهذه الأغنية آمل أن أستطيع رأب القلب المكسور لأجمل امرأة رأيتها على الإطلاق🙏❤️",
-    "monthlyIntro": "1.65 يورو شهريًا"
+    "monthlyIntro": "1.65 يورو شهريًا",
+    "digitalConsent": "I want immediate access to the digital content and waive my 14-day right of withdrawal.",
+    "digitalConsentTerms": "Terms and conditions",
+    "digitalConsentRequired": "Tick the box to agree to immediate access."
   },
   "contact": {
     "title": "الاتصال",
@@ -259,7 +267,18 @@
     "forgotPassword": "هل نسيت كلمة المرور؟",
     "forgotNeedEmail": "أدخل بريدك الإلكتروني أعلاه أولاً.",
     "forgotSent": "تحقق من بريدك الإلكتروني للحصول على رابط إعادة التعيين.",
-    "forgotFailed": "تعذر إرسال بريد إلكتروني لإعادة التعيين."
+    "forgotFailed": "تعذر إرسال بريد إلكتروني لإعادة التعيين.",
+    "errorWeakPassword": "Your password is too short. Use at least 6 characters.",
+    "errorEmailInUse": "This email already has an account. Sign in or reset your password.",
+    "errorInvalidEmail": "That email does not look right. Check the spelling.",
+    "errorUserNotFound": "We do not know this email yet. Please join first.",
+    "errorWrongPassword": "That password is not correct. Try again or reset your password.",
+    "errorInvalidCredential": "Email or password is not correct. Check it, or reset your password.",
+    "errorTooMany": "Too many attempts. Wait a moment and try again.",
+    "errorNetwork": "No connection. Check your internet and try again.",
+    "errorDisabled": "This account is disabled. Email us if that is unexpected.",
+    "errorResetLink": "This reset link no longer works. Request a new one.",
+    "errorGeneric": "Sign-in failed. Please try again."
   },
   "footer": {
     "tagline": "مسار Happy People",
@@ -613,12 +632,16 @@
       "مرحبًا، أنا Henk من Happy People. عن ماذا تريد أن نتحدث؟",
       "أهلًا بك. أنا Henk. أخبرني — ما الذي يشغل بالك؟"
     ],
-    "convoIntroFallback": "مرحبًا، أنا Henk من Happy People. عن ماذا تريد أن نتحدث؟"
+    "convoIntroFallback": "مرحبًا، أنا Henk من Happy People. عن ماذا تريد أن نتحدث؟",
+    "aiNotice": "This is an AI chat in Henk’s style. Answers are generated automatically and not personally checked by him."
   },
   "vlogsPage": {
     "eyebrow": "Vlogs",
     "title": "Vlogs",
-    "lead": "Personal vlogs from Henk — insights, stories, and moments from the Happy People path."
+    "lead": "Personal vlogs from Henk — insights, stories, and moments from the Happy People path.",
+    "featured": "الأحدث",
+    "emptyTitle": "لا توجد فلوجات بعد",
+    "emptyHint": "عندما يصوّر هينك، ستظهر الفلوجات هنا."
   },
   "videoBell": {
     "eyebrow": "Live",
@@ -647,5 +670,50 @@
     "delete": "Delete",
     "by": "by",
     "failed": "Could not save. Please try again."
+  },
+  "journal": {
+    "sections": "Blog and vlogs",
+    "blog": "Blog",
+    "vlogs": "Vlogs",
+    "latest": "Latest blogs",
+    "latestVlogs": "Latest vlogs",
+    "all": "All",
+    "newest": "Newest",
+    "categories": "Categories",
+    "archive": "Archive",
+    "index": "Index",
+    "prev": "Previous",
+    "next": "Next",
+    "pager": "Previous or next post",
+    "backToBlog": "All blogs",
+    "backToVlogs": "All vlogs",
+    "watch": "Watch",
+    "read": "Read",
+    "video": "Video",
+    "audio": "Audio",
+    "emptyCategory": "Nothing in this category.",
+    "emptyVlogs": "No vlogs yet.",
+    "morePosts": "More blogs",
+    "moreVlogs": "More vlogs",
+    "comingSoon": "Video coming soon.",
+    "videoUnsupported": "Your browser cannot play this video.",
+    "newBlog": "New blog",
+    "newVlog": "New vlog",
+    "catInzichten": "Insights",
+    "catVerhalen": "Stories",
+    "catPraktijk": "Practice",
+    "catHappyPeople": "Happy People"
+  },
+  "legal": {
+    "nav": "Legal",
+    "disclaimer": "Disclaimer",
+    "terms": "Terms and conditions",
+    "privacy": "Privacy policy",
+    "cookies": "Cookie policy",
+    "disclaimerLead": "Happy People disclaimer.",
+    "termsLead": "Happy People terms and conditions.",
+    "privacyLead": "Happy People privacy policy.",
+    "cookiesLead": "Happy People cookie policy.",
+    "draftNote": "Draft text — fields in [square brackets] will be filled in later."
   }
 }

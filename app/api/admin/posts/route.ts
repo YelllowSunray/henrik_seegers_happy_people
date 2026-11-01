@@ -43,6 +43,8 @@ export async function POST(req: Request) {
     excerpt?: string;
     body?: string;
     publishedAt?: string;
+    category?: string;
+    coverImage?: string;
   };
   try {
     body = (await req.json()) as typeof body;
@@ -61,6 +63,8 @@ export async function POST(req: Request) {
   const publishedAt =
     String(body.publishedAt ?? "").trim() ||
     new Date().toISOString().slice(0, 10);
+  const category = String(body.category ?? "").trim();
+  const coverImage = String(body.coverImage ?? "").trim();
 
   try {
     const ref = await db.collection("posts").add({
@@ -70,6 +74,8 @@ export async function POST(req: Request) {
       body: { nl: text },
       membersOnly: false,
       publishedAt,
+      ...(category ? { category } : {}),
+      ...(coverImage ? { coverImage } : {}),
       createdAt: FieldValue.serverTimestamp(),
       updatedAt: FieldValue.serverTimestamp(),
     });
@@ -83,6 +89,8 @@ export async function POST(req: Request) {
         body: { nl: text },
         publishedAt,
         membersOnly: false,
+        ...(category ? { category } : {}),
+        ...(coverImage ? { coverImage } : {}),
       },
     });
   } catch (err) {

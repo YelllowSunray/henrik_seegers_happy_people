@@ -103,7 +103,7 @@ function setAtPath(
 }
 
 export function CmsProvider({ children }: { children: React.ReactNode }) {
-  const { isAdmin, signOut, loading } = useAuth();
+  const { isAdmin, isRealAdmin, previewMode, signOut, loading } = useAuth();
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
@@ -322,6 +322,7 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
     <CmsContext.Provider value={value}>
       {children}
       {enabled ? <CmsBottomBar /> : null}
+      {isRealAdmin && previewMode !== "off" ? <AdminPreviewBar /> : null}
     </CmsContext.Provider>
   );
 }
@@ -334,6 +335,58 @@ export function useCms() {
 
 export function useCmsOptional() {
   return useContext(CmsContext);
+}
+
+function PreviewButtons() {
+  const { setPreviewMode } = useAuth();
+  const btn =
+    "inline-flex min-h-10 flex-1 items-center justify-center rounded-full bg-white/12 px-3 text-xs font-semibold text-white transition hover:bg-white/20 sm:text-sm";
+  return (
+    <div className="grid grid-cols-2 gap-1.5">
+      <button
+        type="button"
+        className={btn}
+        onClick={() => setPreviewMode("visitor")}
+      >
+        Bekijk als bezoeker
+      </button>
+      <button
+        type="button"
+        className={btn}
+        onClick={() => setPreviewMode("member")}
+      >
+        Bekijk als lid
+      </button>
+    </div>
+  );
+}
+
+function useDockHeight() {
+  const dockRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.add("cms-editing");
+    root.style.setProperty("--cms-dock-h", "4.5rem");
+
+    const el = dockRef.current;
+    function measure() {
+      if (!el) return;
+      root.style.setProperty("--cms-dock-h", `${el.offsetHeight}px`);
+    }
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (el) ro.observe(el);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+      root.classList.remove("cms-editing");
+      root.style.removeProperty("--cms-dock-h");
+    };
+  }, []);
+
+  return dockRef;
 }
 
 function CmsBottomBar() {
@@ -357,30 +410,7 @@ function CmsBottomBar() {
           ? "text-amber-200"
           : "text-white/65";
 
-  const dockRef = useRef<HTMLDivElement>(null);
-
-  // Measure dock + lock horizontal overflow while CMS is open (mobile).
-  useEffect(() => {
-    const root = document.documentElement;
-    root.classList.add("cms-editing");
-    root.style.setProperty("--cms-dock-h", "4.5rem");
-
-    const el = dockRef.current;
-    function measure() {
-      if (!el) return;
-      root.style.setProperty("--cms-dock-h", `${el.offsetHeight}px`);
-    }
-    measure();
-    const ro = new ResizeObserver(measure);
-    if (el) ro.observe(el);
-    window.addEventListener("resize", measure);
-    return () => {
-      ro.disconnect();
-      window.removeEventListener("resize", measure);
-      root.classList.remove("cms-editing");
-      root.style.removeProperty("--cms-dock-h");
-    };
-  }, []);
+  const dockRef = useDockHeight();
 
   return (
     <div
@@ -390,7 +420,7 @@ function CmsBottomBar() {
     >
       <div
         ref={dockRef}
-        className="pointer-events-auto mx-auto w-full max-w-md px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+        className="pointer-events-auto mx-auto w-full max-w-lg px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
       >
         <div className="space-y-1.5">
           {tabWarning ? (
@@ -398,24 +428,75 @@ function CmsBottomBar() {
               {tabWarning}
             </p>
           ) : null}
-          <div className="flex min-h-12 w-full items-center gap-2 rounded-full border border-white/10 bg-ink/95 py-1.5 pr-1.5 pl-2 text-white shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md">
-            <span className="shrink-0 rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold tracking-wide uppercase">
-              CMS · NL
-            </span>
-            <span
-              className={`min-w-0 flex-1 truncate text-xs ${statusTone}`}
-              aria-live="polite"
-              title={error ?? undefined}
-            >
-              {status}
-              {error ? ` · ${error}` : null}
-            </span>
+          <div className="rounded-2xl border border-white/10 bg-ink/95 p-2 text-white shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md">
+            <div className="flex min-h-11 items-center gap-2 px-1">
+              <span className="shrink-0 rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold tracking-wide uppercase">
+                CMS · NL
+              </span>
+              <span
+                className={`min-w-0 flex-1 truncate text-xs ${statusTone}`}
+                aria-live="polite"
+                title={error ?? undefined}
+              >
+                {status}
+                {error ? ` · ${error}` : null}
+              </span>
+              <button
+                type="button"
+                onClick={exitCms}
+                className="inline-flex h-10 shrink-0 items-center justify-center rounded-full bg-white px-4 text-sm font-semibold text-ink transition hover:bg-white/90 active:bg-white/80"
+              >
+                Uitloggen
+              </button>
+            </div>
+            <div className="mt-1.5">
+              <PreviewButtons />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AdminPreviewBar() {
+  const { previewMode, setPreviewMode } = useAuth();
+  const dockRef = useDockHeight();
+  const asMember = previewMode === "member";
+
+  return (
+    <div
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-[90]"
+      role="toolbar"
+      aria-label="Voorvertoning"
+    >
+      <div
+        ref={dockRef}
+        className="pointer-events-auto mx-auto w-full max-w-lg px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+      >
+        <div className="rounded-2xl border border-white/10 bg-ink/95 p-2 text-white shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md">
+          <p className="px-2 pt-1 text-sm font-medium">
+            {asMember
+              ? "Je kijkt zoals een lid (Happy People)."
+              : "Je kijkt zoals een bezoeker."}
+          </p>
+          <p className="px-2 pb-2 text-xs text-white/65">
+            Alleen kijken — je account verandert niet.
+          </p>
+          <div className="grid grid-cols-2 gap-1.5">
             <button
               type="button"
-              onClick={exitCms}
-              className="inline-flex h-9 shrink-0 items-center justify-center rounded-full bg-white px-4 text-sm font-semibold text-ink transition hover:bg-white/90 active:bg-white/80"
+              onClick={() => setPreviewMode(asMember ? "visitor" : "member")}
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-white/12 px-3 text-sm font-semibold text-white hover:bg-white/20"
             >
-              Uitloggen
+              {asMember ? "Bekijk als bezoeker" : "Bekijk als lid"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setPreviewMode("off")}
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-white px-3 text-sm font-semibold text-ink hover:bg-white/90"
+            >
+              Terug naar beheer
             </button>
           </div>
         </div>

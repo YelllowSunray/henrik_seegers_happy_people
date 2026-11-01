@@ -44,7 +44,7 @@ export function buildPageMetadata({
   pathname = "/",
   title,
   description,
-  noIndex = false,
+  noIndex = true,
   ogImage = DEFAULT_OG_IMAGE,
   type = "website",
 }: PageSeoOptions): Metadata {
@@ -76,7 +76,7 @@ export function buildPageMetadata({
       images: [imageUrl],
     },
     robots: noIndex
-      ? { index: false, follow: false }
+      ? { index: false, follow: false, nocache: true }
       : { index: true, follow: true },
   };
 }

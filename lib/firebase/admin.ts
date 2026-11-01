@@ -1,6 +1,7 @@
 import { cert, getApps, initializeApp, type App } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
+import { isAllowlistedAdminEmail } from "@/lib/admin-emails";
 
 function initAdmin(): App | null {
   if (getApps().length) return getApps()[0]!;
@@ -46,10 +47,5 @@ export function getAdminDb() {
 }
 
 export function isAdminEmail(email: string | null | undefined) {
-  if (!email) return false;
-  const list = (process.env.ADMIN_EMAILS ?? "")
-    .split(",")
-    .map((e) => e.trim().toLowerCase())
-    .filter(Boolean);
-  return list.includes(email.toLowerCase());
+  return isAllowlistedAdminEmail(email);
 }

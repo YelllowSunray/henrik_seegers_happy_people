@@ -94,7 +94,7 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
           className="absolute inset-0"
           style={{ background: "var(--hero-overlay)" }}
         />
-        <div className="relative mx-auto flex min-h-[100svh] w-full flex-col justify-end gap-4 px-5 pb-8 pt-[calc(6rem+env(safe-area-inset-top)+var(--seminar-promo-h,0px))] sm:gap-8 sm:pb-16 sm:pt-[calc(7rem+env(safe-area-inset-top)+var(--seminar-promo-h,0px))] md:px-8 md:pb-24 lg:flex-row lg:items-end lg:justify-between lg:gap-12 lg:px-10 lg:pt-[calc(7rem+env(safe-area-inset-top)+var(--seminar-promo-h,0px))] xl:px-14">
+        <div className="relative mx-auto flex min-h-[100svh] w-full flex-col justify-end gap-4 px-5 pb-8 pt-[calc(var(--site-header-h,6.5rem)+0.75rem)] sm:gap-8 sm:pb-16 md:px-8 md:pb-24 lg:flex-row lg:items-end lg:justify-between lg:gap-12 lg:px-10 xl:px-14">
           <div className="min-w-0 max-w-6xl lg:max-w-xl xl:max-w-2xl">
             <CmsField
               path="hero.brand"

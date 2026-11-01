@@ -1,87 +1,62 @@
 "use client";
 
-import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { CmsField } from "@/components/cms/cms-field";
 import { useCmsOptional, useCmsValue } from "@/components/cms/cms-provider";
 
-function usePromoOffset() {
-  useEffect(() => {
-    const mobile = window.matchMedia("(max-width: 1023px)");
-
-    function apply() {
-      document.documentElement.style.setProperty(
-        "--seminar-promo-h",
-        mobile.matches ? "2.75rem" : "2.375rem",
-      );
-    }
-
-    apply();
-    mobile.addEventListener("change", apply);
-    return () => {
-      mobile.removeEventListener("change", apply);
-      document.documentElement.style.setProperty("--seminar-promo-h", "0px");
-    };
-  }, []);
-}
-
+/**
+ * Slim site notice, same for visitors and admin.
+ * On a hero: no fill of its own — it rides the header chrome
+ * (translucent at top, solid after scroll on desktop).
+ * On inner pages: a warm green tint until the header goes dark.
+ */
 export function SeminarPromoBar({
   onHero,
-  scrolled,
+  scrolled = false,
 }: {
   onHero: boolean;
-  scrolled: boolean;
+  scrolled?: boolean;
 }) {
   const t = useTranslations("site");
   const cms = useCmsOptional();
   const banner = useCmsValue("site.banner", t("underConstruction"));
-
-  usePromoOffset();
-
-  const heroAtTop = onHero && !scrolled;
-  const lightOnDark = onHero || scrolled;
-
-  const shellClass = heroAtTop
-    ? "border-y border-white/40 text-white"
-    : lightOnDark
-      ? "border-t border-white/10 text-white"
-      : "border-t border-line text-ink";
-
-  const fieldClass = lightOnDark
-    ? "bg-transparent text-center text-sm font-medium text-white"
-    : "bg-transparent text-center text-sm font-medium text-ink";
+  const editing = Boolean(cms?.enabled);
+  const onDark = onHero || scrolled;
 
   return (
-    <div className={`bg-transparent ${shellClass}`}>
-      <p className="mx-auto flex max-w-7xl items-center justify-center px-5 py-2.5 text-center text-sm font-medium lg:hidden md:px-8">
-        {cms?.enabled ? (
+    <div
+      className={
+        onDark
+          ? "border-t border-white/15"
+          : "border-t border-[color-mix(in_srgb,var(--accent)_18%,var(--line))] bg-[color-mix(in_srgb,var(--accent)_8%,var(--bg))]"
+      }
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-center gap-2 px-5 py-1.5 md:px-8">
+        <span
+          aria-hidden
+          className={`h-1.5 w-1.5 shrink-0 animate-pulse rounded-full ${
+            onDark ? "bg-gold" : "bg-accent"
+          }`}
+        />
+        {editing ? (
           <CmsField
             path="site.banner"
             value={banner}
             multiline={false}
-            inline
-            nowrap
-            className={fieldClass}
+            className={`w-full bg-transparent text-center text-xs font-medium tracking-wide sm:text-sm ${
+              onDark ? "text-white" : "text-accent"
+            }`}
           />
         ) : (
-          <span className="drop-shadow-sm">{banner}</span>
+          <p
+            className={`truncate text-center text-xs font-medium tracking-wide sm:text-sm ${
+              onDark ? "text-white/95" : "text-accent"
+            }`}
+          >
+            {banner}
+          </p>
         )}
-      </p>
-
-      <p className="mx-auto hidden max-w-5xl items-center justify-center px-8 py-2 text-center text-sm font-medium lg:flex">
-        {cms?.enabled ? (
-          <CmsField
-            path="site.banner"
-            value={banner}
-            multiline={false}
-            inline
-            nowrap
-            className={fieldClass}
-          />
-        ) : (
-          <span className="drop-shadow-sm">{banner}</span>
-        )}
-      </p>
+      </div>
     </div>
   );
 }

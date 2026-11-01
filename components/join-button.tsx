@@ -25,6 +25,7 @@ export function JoinButton({
   const overBudget = useBillingOverBudget();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [digitalConsent, setDigitalConsent] = useState(false);
   const cta = label || t("cta");
 
   if (isMember) {
@@ -56,6 +57,10 @@ export function JoinButton({
   }
 
   async function startCheckout() {
+    if (!digitalConsent) {
+      setError(t("digitalConsentRequired"));
+      return;
+    }
     if (overBudget) {
       setError(billingContactMessage());
       return;
@@ -74,6 +79,7 @@ export function JoinButton({
           plan,
           locale,
           cancelPath: pathname || "/members/subscription",
+          digitalConsent,
         }),
       });
       const data = (await res.json()) as { url?: string; error?: string };
@@ -88,7 +94,16 @@ export function JoinButton({
   }
 
   return (
-    <div className="inline-flex flex-col gap-2">
+    <div className="inline-flex flex-col gap-3">
+      <label className="flex max-w-sm items-start gap-2 text-xs text-ink">
+        <input
+          type="checkbox"
+          checked={digitalConsent}
+          onChange={(e) => setDigitalConsent(e.target.checked)}
+          className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--accent)]"
+        />
+        <span>{t("digitalConsent")}</span>
+      </label>
       <button
         type="button"
         disabled={busy}

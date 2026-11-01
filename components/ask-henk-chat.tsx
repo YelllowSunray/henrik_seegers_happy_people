@@ -865,6 +865,9 @@ export function AskHenkChat({
             : "overflow-hidden rounded-2xl border border-line"
       }`}
     >
+      <p className="shrink-0 border-b border-line bg-bg-deep/60 px-3 py-2 text-[11px] leading-snug text-ink-soft">
+        {t("aiNotice")}
+      </p>
       {(speechSupported || micSupported) && (
         <div
           className={`shrink-0 border-b border-line px-3 py-3 ${

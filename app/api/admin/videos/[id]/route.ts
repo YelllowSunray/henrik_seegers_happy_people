@@ -5,7 +5,11 @@ import {
   isValidAdminPassword,
 } from "@/lib/admin-gate";
 import { getAdminDb } from "@/lib/firebase/admin";
-import { youtubeIdFromUrl } from "@/components/youtube-embed";
+import {
+  youtubeIdFromUrl,
+  youtubeThumbSrc,
+  youtubeWatchUrl,
+} from "@/components/youtube-embed";
 
 function unauthorized() {
   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -18,7 +22,7 @@ function requireAdmin(req: Request) {
 function toPlayableUrl(raw: string) {
   const trimmed = raw.trim();
   const id = youtubeIdFromUrl(trimmed);
-  if (id) return `https://www.youtube.com/embed/${id}`;
+  if (id) return youtubeWatchUrl(id);
   return trimmed;
 }
 
@@ -26,6 +30,8 @@ type PatchBody = {
   title?: string;
   description?: string;
   videoUrl?: string;
+  thumbnail?: string;
+  category?: string;
 };
 
 export async function PATCH(
@@ -64,12 +70,23 @@ export async function PATCH(
     const videoUrl = toPlayableUrl(body.videoUrl);
     if (!videoUrl) {
       return NextResponse.json(
-        { error: "Plak een YouTube-link." },
+        { error: "Voeg een opname toe of plak een YouTube-link." },
         { status: 400 },
       );
     }
     patch.videoUrl = videoUrl;
     patch.mediaType = "video";
+    const youtubeId = youtubeIdFromUrl(videoUrl);
+    if (typeof body.thumbnail === "string") {
+      patch.thumbnail = body.thumbnail.trim();
+    } else if (youtubeId) {
+      patch.thumbnail = youtubeThumbSrc(youtubeId);
+    }
+  } else if (typeof body.thumbnail === "string") {
+    patch.thumbnail = body.thumbnail.trim();
+  }
+  if (typeof body.category === "string") {
+    patch.category = body.category.trim();
   }
 
   try {

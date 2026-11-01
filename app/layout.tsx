@@ -27,6 +27,12 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     images: [{ url: DEFAULT_OG_IMAGE, alt: SITE_NAME }],
   },
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: { index: false, follow: false, noimageindex: true },
+  },
   twitter: {
     card: "summary_large_image",
     images: [DEFAULT_OG_IMAGE],

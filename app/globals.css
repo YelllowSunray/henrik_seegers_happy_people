@@ -36,7 +36,7 @@ html {
   font-size: 106.25%;
   scroll-behavior: smooth;
   /* Clear sticky header when jumping to in-page CMS sections */
-  scroll-padding-top: calc(5.5rem + env(safe-area-inset-top) + var(--seminar-promo-h, 0px));
+  scroll-padding-top: calc(var(--site-header-h, 5.5rem) + 0.5rem);
 }
 
 /* Wide content must never widen the mobile layout viewport (zoom-out + empty strip). */
@@ -56,6 +56,10 @@ body {
 
 html.cms-editing {
   scroll-padding-bottom: calc(var(--cms-dock-h, 7.5rem) + 1rem);
+}
+
+html:not(.cms-editing) {
+  scroll-padding-bottom: calc(var(--chat-fab-clearance, 0px) + 1rem);
 }
 
 body {

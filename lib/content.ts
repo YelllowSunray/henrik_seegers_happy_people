@@ -32,6 +32,8 @@ export const posts: BlogPost[] = [
     },
     publishedAt: "2026-08-01",
     membersOnly: false,
+    category: "inzichten",
+    coverImage: "/images/blog.png",
   },
   {
     id: "2",
@@ -53,6 +55,8 @@ export const posts: BlogPost[] = [
     },
     publishedAt: "2026-07-28",
     membersOnly: false,
+    category: "praktijk",
+    coverImage: "/images/ontmoeting.jpg",
   },
   {
     id: "3",
@@ -74,6 +78,8 @@ export const posts: BlogPost[] = [
     },
     publishedAt: "2026-07-20",
     membersOnly: false,
+    category: "happy-people",
+    coverImage: "/images/boodschap.jpg",
   },
   {
     id: "4",
@@ -95,6 +101,8 @@ export const posts: BlogPost[] = [
     },
     publishedAt: "2026-07-12",
     membersOnly: false,
+    category: "inzichten",
+    coverImage: "/images/seminar.png",
   },
   {
     id: "5",
@@ -116,6 +124,8 @@ export const posts: BlogPost[] = [
     },
     publishedAt: "2026-07-05",
     membersOnly: false,
+    category: "verhalen",
+    coverImage: "/images/ontmoeting-2.jpg",
   },
   {
     id: "6",
@@ -137,6 +147,7 @@ export const posts: BlogPost[] = [
     },
     publishedAt: "2026-08-05",
     membersOnly: true,
+    category: "praktijk",
   },
 ];
 
@@ -202,6 +213,7 @@ export const videos: VideoItem[] = [
     kind: "vlog",
     publishedAt: "2026-08-02",
     durationLabel: "8 min",
+    thumbnail: "/images/ontmoeting-3.jpg",
   },
   {
     id: "v-vlog-2",
@@ -218,6 +230,7 @@ export const videos: VideoItem[] = [
     kind: "vlog",
     publishedAt: "2026-08-06",
     durationLabel: "6 min",
+    thumbnail: "/images/seminar.png",
   },
 ];
 

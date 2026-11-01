@@ -21,7 +21,7 @@ function pageLabel(
 }
 
 function SubscriberGateInner({ children }: { children: React.ReactNode }) {
-  const { user, loading, isMember } = useAuth();
+  const { user, loading, isMember, isAdmin } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
   const search = useSearchParams();
@@ -40,7 +40,7 @@ function SubscriberGateInner({ children }: { children: React.ReactNode }) {
     return <p className="py-20 text-center text-ink-soft">…</p>;
   }
 
-  if (isMember) {
+  if (isMember || isAdmin) {
     return <>{children}</>;
   }
 

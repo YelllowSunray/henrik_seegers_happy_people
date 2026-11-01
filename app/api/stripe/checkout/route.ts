@@ -50,20 +50,37 @@ export async function POST(req: Request) {
   let plan: MembershipPlan = "monthly";
   let localeCode = localeFromReferer(req);
   let cancelPath = "/members/subscription";
+  let digitalConsent = false;
   try {
     const body = (await req.json()) as {
       plan?: string;
       locale?: string;
       cancelPath?: string;
+      digitalConsent?: boolean;
     };
     plan = parseMembershipPlan(body.plan);
     cancelPath = sanitizeCheckoutCancelPath(body.cancelPath);
+    digitalConsent = body.digitalConsent === true;
     if (body.locale && /^[a-z]{2}$/.test(body.locale)) {
       localeCode = body.locale;
     }
   } catch {
     plan = "monthly";
   }
+
+  if (!digitalConsent) {
+    return NextResponse.json(
+      {
+        error:
+          "Vink aan dat je direct toegang wilt en afstand doet van het herroepingsrecht.",
+        code: "digital_consent_required",
+      },
+      { status: 400 },
+    );
+  }
+
+  const consentAt = new Date().toISOString();
+  const consentVersion = "2026-11-01";
 
   const priceId = getPriceIdForPlan(plan);
   if (!priceId) {
@@ -110,6 +127,9 @@ export async function POST(req: Request) {
           uid: user.uid,
           email: user.email,
           stripeCustomerId: customerId,
+          digitalAccessConsent: true,
+          digitalAccessConsentAt: consentAt,
+          digitalAccessConsentVersion: consentVersion,
         },
         { merge: true },
       );
@@ -126,10 +146,32 @@ export async function POST(req: Request) {
     success_url: `${appUrl}/${localeCode}/members/subscription?checkout=success`,
     cancel_url: `${appUrl}/${localeCode}${cancelPath}?checkout=cancel`,
     subscription_data: {
-      metadata: { firebaseUid: user.uid, plan },
+      metadata: {
+        firebaseUid: user.uid,
+        plan,
+        digitalAccessConsent: "true",
+        digitalAccessConsentAt: consentAt,
+      },
     },
-    metadata: { firebaseUid: user.uid, plan },
+    metadata: {
+      firebaseUid: user.uid,
+      plan,
+      digitalAccessConsent: "true",
+      digitalAccessConsentAt: consentAt,
+      digitalAccessConsentVersion: consentVersion,
+    },
   });
+
+  if (db && customerId) {
+    await db.collection("members").doc(user.uid).set(
+      {
+        digitalAccessConsent: true,
+        digitalAccessConsentAt: consentAt,
+        digitalAccessConsentVersion: consentVersion,
+      },
+      { merge: true },
+    );
+  }
 
   // Do not write membershipPlan until Stripe confirms the subscription
   // (webhook / sync). Otherwise abandoned checkouts look like a chosen plan.
