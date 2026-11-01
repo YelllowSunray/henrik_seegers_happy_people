@@ -35,7 +35,7 @@ export function BlogCover({
     variant === "hero"
       ? "aspect-[16/10] sm:aspect-[2/1]"
       : variant === "featured"
-        ? "aspect-[16/10] sm:aspect-[2/1] lg:h-full lg:min-h-[22rem] lg:aspect-auto"
+        ? "aspect-[2/1] sm:aspect-[16/10] lg:h-full lg:min-h-[18rem] lg:aspect-auto"
         : "aspect-[16/10]";
 
   return (
@@ -122,7 +122,7 @@ export function BlogPostCard({
         <p
           className={`mt-3 text-ink-soft ${
             featured
-              ? "text-base leading-relaxed sm:text-lg"
+              ? "line-clamp-2 text-base leading-relaxed sm:line-clamp-3 sm:text-lg"
               : "line-clamp-3 text-sm leading-relaxed sm:text-base"
           }`}
         >
@@ -155,7 +155,7 @@ export function BlogPostCard({
         />
         <div
           className={`flex flex-col justify-center ${
-            featured ? "p-5 sm:p-8 lg:p-10" : "p-5 sm:p-6"
+            featured ? "p-4 sm:p-8 lg:p-10" : "p-5 sm:p-6"
           }`}
         >
           {body}

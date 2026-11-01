@@ -11,6 +11,8 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { BlogCover, BlogEmptyState, BlogPostCard } from "@/components/blog-card";
 import {
+  AdminCardActions,
+  AdminCardOpenLink,
   AdminDangerButton,
   AdminField,
   AdminGhostButton,
@@ -342,39 +344,37 @@ function CmsBlogRow({
 
   return (
     <li className="overflow-hidden rounded-3xl border border-line bg-white shadow-[0_8px_28px_rgba(18,26,24,0.05)]">
-      <div className="grid grid-cols-[7.25rem_1fr] sm:grid-cols-[11rem_1fr]">
+      <div className="grid grid-cols-[6.5rem_1fr] sm:grid-cols-[11rem_1fr]">
         <BlogCover
           post={post}
           alt=""
-          className="min-h-[7.25rem] sm:min-h-full"
+          className="min-h-[6.5rem] sm:min-h-full"
         />
-        <div className="flex flex-col justify-center p-5">
+        <div className="flex min-w-0 flex-col justify-center px-3 py-3 sm:p-5">
           <p className="text-sm text-ink-soft">
             <time dateTime={post.publishedAt}>{date}</time>
             <span aria-hidden> · </span>
             <span>{tr("minutes", { count: minutes })}</span>
           </p>
-          <h3 className="font-display mt-1 text-2xl leading-tight text-ink">
+          <h3 className="font-display mt-1 line-clamp-2 text-lg leading-tight text-ink sm:text-2xl">
             {title}
           </h3>
           {excerpt ? (
-            <p className="mt-2 line-clamp-3 text-base leading-relaxed text-ink-soft">
+            <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-ink-soft sm:text-base">
               {excerpt}
             </p>
           ) : null}
         </div>
       </div>
-      <div className="flex flex-col gap-2 border-t border-line p-4 sm:flex-row sm:flex-wrap">
-        <AdminPrimaryButton onClick={() => setEditing(true)}>
+      <AdminCardActions>
+        <AdminPrimaryButton compact onClick={() => setEditing(true)}>
           Bewerken
         </AdminPrimaryButton>
-        <Link
-          href={`/blog/${post.slug}`}
-          className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-line px-5 text-base font-medium text-ink-soft sm:w-auto"
-        >
+        <AdminCardOpenLink href={`/blog/${post.slug}`}>
           Openen
-        </Link>
+        </AdminCardOpenLink>
         <AdminDangerButton
+          compact
           onClick={() => {
             if (!confirmDelete(title)) return;
             void (async () => {
@@ -387,7 +387,7 @@ function CmsBlogRow({
         >
           Verwijderen
         </AdminDangerButton>
-      </div>
+      </AdminCardActions>
     </li>
   );
 }
@@ -491,7 +491,12 @@ export function CmsBlogFeed({
     <div className="space-y-6">
       <NewBlog onCreated={onCreated} />
       {posts.length === 0 ? (
-        <p className="text-base text-ink-soft">{emptyLabel}</p>
+        <BlogEmptyState
+          title={emptyTitle}
+          hint={emptyHint || emptyLabel}
+          facebookLabel={facebookLabel}
+          facebookHref={FACEBOOK_HREF}
+        />
       ) : (
         <ul className="space-y-4">
           {posts.map((post) => (

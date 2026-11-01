@@ -58,6 +58,10 @@ html.cms-editing {
   scroll-padding-bottom: calc(var(--cms-dock-h, 7.5rem) + 1rem);
 }
 
+html:not(.cms-editing) {
+  scroll-padding-bottom: calc(var(--chat-fab-clearance, 0px) + 1rem);
+}
+
 body {
   background: var(--bg);
   color: var(--ink);

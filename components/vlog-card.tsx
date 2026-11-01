@@ -42,7 +42,7 @@ export function VlogCover({
     variant === "hero"
       ? "aspect-video"
       : variant === "featured"
-        ? "aspect-video lg:h-full lg:min-h-[22rem] lg:aspect-auto"
+        ? "aspect-[2/1] sm:aspect-video lg:h-full lg:min-h-[18rem] lg:aspect-auto"
         : "aspect-video";
 
   return (
@@ -86,6 +86,11 @@ export function VlogCover({
           </span>
         </span>
       ) : null}
+      {showPlay && video.durationLabel ? (
+        <span className="absolute right-2.5 bottom-2.5 rounded-full bg-ink/80 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+          {video.durationLabel}
+        </span>
+      ) : null}
     </div>
   );
 }
@@ -122,7 +127,7 @@ export function VlogPostCard({
         />
         <div
           className={`flex flex-col justify-center ${
-            featured ? "p-5 sm:p-8 lg:p-10" : "p-5 sm:p-6"
+            featured ? "p-4 sm:p-8 lg:p-10" : "p-5 sm:p-6"
           }`}
         >
           {featured ? (
@@ -151,9 +156,9 @@ export function VlogPostCard({
           {excerpt ? (
             <p
               className={`mt-3 text-ink-soft ${
-                featured
-                  ? "text-base leading-relaxed sm:text-lg"
-                  : "line-clamp-3 text-sm leading-relaxed sm:text-base"
+              featured
+                ? "line-clamp-2 text-base leading-relaxed sm:line-clamp-3 sm:text-lg"
+                : "line-clamp-3 text-sm leading-relaxed sm:text-base"
               }`}
             >
               {excerpt}

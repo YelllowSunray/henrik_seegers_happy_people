@@ -8,6 +8,7 @@ export function Section({
   className = "",
   id,
   tone = "default",
+  compact = false,
 }: {
   eyebrow?: string;
   title?: string;
@@ -16,6 +17,7 @@ export function Section({
   className?: string;
   id?: string;
   tone?: Tone;
+  compact?: boolean;
 }) {
   const toneClass =
     tone === "deep"
@@ -23,10 +25,13 @@ export function Section({
       : tone === "transparent"
         ? "bg-transparent"
         : "bg-bg";
+  const padClass = compact
+    ? "mx-auto max-w-6xl px-5 py-8 sm:py-12 md:px-8 md:py-16"
+    : "mx-auto max-w-6xl px-5 py-12 sm:py-16 md:px-8 md:py-24";
 
   return (
     <section id={id} className={`${toneClass} ${className}`}>
-      <div className="mx-auto max-w-6xl px-5 py-12 sm:py-16 md:px-8 md:py-24">
+      <div className={padClass}>
         {eyebrow && (
           <p className="text-sm font-semibold tracking-[0.16em] text-accent uppercase md:text-base">
             {eyebrow}

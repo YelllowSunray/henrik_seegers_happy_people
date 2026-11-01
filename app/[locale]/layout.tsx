@@ -41,7 +41,7 @@ export default async function LocaleLayout({
           <CmsProvider>
             <MusicRoutePersistence />
             <div
-              className="flex min-h-full min-w-0 max-w-[100vw] flex-col overflow-x-clip pb-[var(--cms-dock-h,0px)]"
+              className="flex min-h-full min-w-0 max-w-[100vw] flex-col overflow-x-clip pb-[max(var(--cms-dock-h,0px),var(--chat-fab-clearance,0px))]"
               dir={dir}
               lang={locale}
             >

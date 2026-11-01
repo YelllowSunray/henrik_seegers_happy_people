@@ -38,7 +38,7 @@ export default async function VlogsPage({
   return (
     <>
       <SiteHeader variant="solid" />
-      <Section>
+      <Section compact>
         <div className="max-w-2xl">
           <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase">
             {t("eyebrow")}

@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import {
+  AdminCardActions,
+  AdminCardOpenLink,
   AdminDangerButton,
   AdminField,
   AdminGhostButton,
@@ -494,14 +496,14 @@ function CmsVlogRow({
 
   return (
     <li className="overflow-hidden rounded-3xl border border-line bg-white shadow-[0_8px_28px_rgba(18,26,24,0.05)]">
-      <div className="grid grid-cols-[7.25rem_1fr] sm:grid-cols-[11rem_1fr]">
+      <div className="grid grid-cols-[6.5rem_1fr] sm:grid-cols-[11rem_1fr]">
         <VlogCover
           video={video}
           alt=""
           showPlay={false}
-          className="min-h-[7.25rem] sm:min-h-full"
+          className="min-h-[6.5rem] sm:min-h-full"
         />
-        <div className="flex flex-col justify-center p-5">
+        <div className="flex min-w-0 flex-col justify-center px-3 py-3 sm:p-5">
           <p className="text-sm text-ink-soft">
             <time dateTime={video.publishedAt}>{date}</time>
             {video.durationLabel ? (
@@ -511,27 +513,25 @@ function CmsVlogRow({
               </>
             ) : null}
           </p>
-          <h3 className="font-display mt-1 text-2xl leading-tight text-ink">
+          <h3 className="font-display mt-1 line-clamp-2 text-lg leading-tight text-ink sm:text-2xl">
             {title}
           </h3>
           {excerpt ? (
-            <p className="mt-2 line-clamp-3 text-base leading-relaxed text-ink-soft">
+            <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-ink-soft sm:text-base">
               {excerpt}
             </p>
           ) : null}
         </div>
       </div>
-      <div className="flex flex-col gap-2 border-t border-line p-4 sm:flex-row sm:flex-wrap">
-        <AdminPrimaryButton onClick={() => setEditing(true)}>
+      <AdminCardActions>
+        <AdminPrimaryButton compact onClick={() => setEditing(true)}>
           Bewerken
         </AdminPrimaryButton>
-        <Link
-          href={`/vlogs/${video.id}`}
-          className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-line px-5 text-base font-medium text-ink-soft sm:w-auto"
-        >
+        <AdminCardOpenLink href={`/vlogs/${video.id}`}>
           Openen
-        </Link>
+        </AdminCardOpenLink>
         <AdminDangerButton
+          compact
           onClick={() => {
             if (!confirmDelete(title)) return;
             void (async () => {
@@ -544,7 +544,7 @@ function CmsVlogRow({
         >
           Verwijderen
         </AdminDangerButton>
-      </div>
+      </AdminCardActions>
     </li>
   );
 }
@@ -617,7 +617,7 @@ export function CmsVlogList({
       <div className="space-y-6">
         <NewVlog onCreated={onCreated} />
         {videos.length === 0 ? (
-          <p className="text-base text-ink-soft">{page("emptyHint")}</p>
+          <VlogEmptyState title={page("emptyTitle")} hint={page("emptyHint")} />
         ) : (
           <ul className="space-y-4">
             {videos.map((video) => (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ComponentProps, type ReactNode } from "react";
 import { Link } from "@/i18n/navigation";
 import { useAutosizeTextarea } from "@/components/cms/cms-field";
 
@@ -132,18 +132,24 @@ export function AdminPrimaryButton({
   busy,
   onClick,
   disabled,
+  compact = false,
 }: {
   children: React.ReactNode;
   busy?: boolean;
   onClick: () => void;
   disabled?: boolean;
+  compact?: boolean;
 }) {
   return (
     <button
       type="button"
       disabled={busy || disabled}
       onClick={onClick}
-      className="inline-flex min-h-14 w-full items-center justify-center rounded-full bg-accent px-6 text-lg font-semibold text-white shadow-sm disabled:opacity-60 sm:w-auto"
+      className={
+        compact
+          ? "inline-flex min-h-11 w-full items-center justify-center rounded-full bg-accent px-2 text-sm font-semibold text-white shadow-sm disabled:opacity-60 sm:w-auto sm:px-5"
+          : "inline-flex min-h-14 w-full items-center justify-center rounded-full bg-accent px-6 text-lg font-semibold text-white shadow-sm disabled:opacity-60 sm:w-auto"
+      }
     >
       {children}
     </button>
@@ -175,17 +181,23 @@ export function AdminDangerButton({
   children,
   onClick,
   disabled,
+  compact = false,
 }: {
   children: React.ReactNode;
   onClick: () => void;
   disabled?: boolean;
+  compact?: boolean;
 }) {
   return (
     <button
       type="button"
       disabled={disabled}
       onClick={onClick}
-      className="inline-flex min-h-12 items-center justify-center rounded-full border border-red-200 bg-red-50 px-5 text-base font-semibold text-red-700 disabled:opacity-50"
+      className={
+        compact
+          ? "inline-flex min-h-11 w-full items-center justify-center rounded-full border border-red-200 bg-red-50 px-2 text-sm font-semibold text-red-700 disabled:opacity-50 sm:w-auto sm:px-5"
+          : "inline-flex min-h-12 items-center justify-center rounded-full border border-red-200 bg-red-50 px-5 text-base font-semibold text-red-700 disabled:opacity-50"
+      }
     >
       {children}
     </button>
@@ -203,13 +215,38 @@ export function AdminNewButton({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex min-h-16 w-full items-center justify-center gap-3 rounded-2xl bg-accent px-5 text-xl font-semibold text-white shadow-sm hover:bg-accent-soft"
+      className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-accent px-5 text-base font-semibold text-white shadow-sm hover:bg-accent-soft sm:min-h-14 sm:gap-3 sm:text-lg"
     >
-      <span aria-hidden className="text-2xl leading-none">
+      <span aria-hidden className="text-xl leading-none sm:text-2xl">
         +
       </span>
       {children}
     </button>
+  );
+}
+
+export function AdminCardActions({ children }: { children: ReactNode }) {
+  return (
+    <div className="grid grid-cols-3 gap-2 border-t border-line px-3 py-3 sm:flex sm:flex-row sm:flex-wrap">
+      {children}
+    </div>
+  );
+}
+
+export function AdminCardOpenLink({
+  href,
+  children,
+}: {
+  href: ComponentProps<typeof Link>["href"];
+  children: ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-line px-2 text-sm font-medium text-ink-soft sm:w-auto sm:px-5"
+    >
+      {children}
+    </Link>
   );
 }
 
