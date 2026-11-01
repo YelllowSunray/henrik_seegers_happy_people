@@ -26,6 +26,10 @@ import {
   ADMIN_PASSWORD,
   ADMIN_SESSION_KEY,
 } from "@/lib/admin-gate";
+import {
+  isAllowlistedAdminEmail,
+  normalizeEmail,
+} from "@/lib/admin-emails";
 import { hasMembershipAccess } from "@/lib/membership";
 import type { MemberProfile } from "@/lib/types";
 
@@ -49,11 +53,7 @@ async function loadProfile(user: User): Promise<MemberProfile> {
   const db = getClientDb();
   const ref = doc(db, "members", user.uid);
   const snap = await getDoc(ref);
-  const adminEmails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? "")
-    .split(",")
-    .map((e) => e.trim().toLowerCase())
-    .filter(Boolean);
-  const emailAdmin = adminEmails.includes((user.email ?? "").toLowerCase());
+  const emailAdmin = isAllowlistedAdminEmail(user.email);
 
   if (snap.exists()) {
     const data = snap.data() as MemberProfile;
@@ -143,23 +143,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isMember: hasMembershipAccess(profile),
       isAdmin: Boolean(profile?.isAdmin) || passwordAdmin,
       signIn: async (email, password) => {
-        await signInWithEmailAndPassword(getClientAuth(), email, password);
+        await signInWithEmailAndPassword(
+          getClientAuth(),
+          normalizeEmail(email),
+          password,
+        );
       },
       signUp: async (email, password) => {
+        const normalized = normalizeEmail(email);
         const cred = await createUserWithEmailAndPassword(
           getClientAuth(),
-          email,
+          normalized,
           password,
         );
         await setDoc(doc(getClientDb(), "members", cred.user.uid), {
           uid: cred.user.uid,
-          email,
+          email: normalized,
           subscriptionStatus: "none",
-          isAdmin: false,
+          isAdmin: isAllowlistedAdminEmail(normalized),
         } satisfies MemberProfile);
       },
       resetPassword: async (email) => {
-        await sendPasswordResetEmail(getClientAuth(), email.trim());
+        const auth = getClientAuth();
+        const normalized = normalizeEmail(email);
+        if (typeof window !== "undefined") {
+          await sendPasswordResetEmail(auth, normalized, {
+            url: `${window.location.origin}/nl/auth`,
+            handleCodeInApp: false,
+          });
+          return;
+        }
+        await sendPasswordResetEmail(auth, normalized);
       },
       signOut: async () => {
         try {

@@ -7,6 +7,7 @@ import { SiteHeader } from "@/components/site-header";
 import { useAuth } from "@/components/auth-provider";
 import { Link, useRouter } from "@/i18n/navigation";
 import { joinHref } from "@/lib/auth-href";
+import { MIN_PASSWORD_LENGTH, authErrorKey } from "@/lib/auth-errors";
 
 function postLoginPath(isAdmin: boolean, next: string | null) {
   if (isAdmin) {
@@ -42,10 +43,15 @@ function AuthForm() {
     setBusy(true);
     setError(null);
     setResetInfo(null);
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      setError(t("errorWeakPassword"));
+      setBusy(false);
+      return;
+    }
     try {
       await signIn(email, password);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Auth failed");
+      setError(t(authErrorKey(err)));
       setBusy(false);
     }
   }
@@ -63,7 +69,7 @@ function AuthForm() {
       await resetPassword(trimmed);
       setResetInfo(t("forgotSent"));
     } catch (err) {
-      setError(err instanceof Error ? err.message : t("forgotFailed"));
+      setError(t(authErrorKey(err)));
     } finally {
       setResetBusy(false);
     }
@@ -99,12 +105,15 @@ function AuthForm() {
             <input
               type="password"
               required
-              minLength={6}
+              minLength={MIN_PASSWORD_LENGTH}
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="mt-1.5 w-full border border-line bg-white px-3 py-3 text-base outline-none focus:border-accent"
             />
+            <span className="mt-1.5 block text-xs text-ink-soft">
+              {t("passwordHint")}
+            </span>
           </label>
           <div className="mt-2 flex justify-end">
             <button

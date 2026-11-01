@@ -158,7 +158,10 @@
     "manageSubscription": "Manage subscription",
     "paradisePrompt": "The choice is yours — will it be YES or NO?",
     "paradiseNote": "With this song I hope to mend the broken heart of the most beautiful woman I have ever seen🙏❤️",
-    "monthlyIntro": "€ 1.65 per month"
+    "monthlyIntro": "€ 1.65 per month",
+    "digitalConsent": "I want immediate access to the digital content and waive my 14-day right of withdrawal.",
+    "digitalConsentTerms": "Terms and conditions",
+    "digitalConsentRequired": "Tick the box to agree to immediate access."
   },
   "contact": {
     "title": "Contact",
@@ -259,7 +262,18 @@
     "forgotPassword": "Forgot password?",
     "forgotNeedEmail": "Enter your email above first.",
     "forgotSent": "Check your email for a reset link.",
-    "forgotFailed": "Could not send reset email."
+    "forgotFailed": "Could not send reset email.",
+    "errorWeakPassword": "Your password is too short. Use at least 6 characters.",
+    "errorEmailInUse": "This email already has an account. Sign in or reset your password.",
+    "errorInvalidEmail": "That email does not look right. Check the spelling.",
+    "errorUserNotFound": "We do not know this email yet. Please join first.",
+    "errorWrongPassword": "That password is not correct. Try again or reset your password.",
+    "errorInvalidCredential": "Email or password is not correct. Check it, or reset your password.",
+    "errorTooMany": "Too many attempts. Wait a moment and try again.",
+    "errorNetwork": "No connection. Check your internet and try again.",
+    "errorDisabled": "This account is disabled. Email us if that is unexpected.",
+    "errorResetLink": "This reset link no longer works. Request a new one.",
+    "errorGeneric": "Sign-in failed. Please try again."
   },
   "footer": {
     "tagline": "The path of Happy People",
@@ -617,7 +631,8 @@
       "Hi, I’m Henk. Let’s talk — what are you thinking about?",
       "Welcome to Happy People. I’m Henk. What would you like to share today?"
     ],
-    "convoIntroFallback": "Hi, I’m Henk from Happy People. What would you like to talk about?"
+    "convoIntroFallback": "Hi, I’m Henk from Happy People. What would you like to talk about?",
+    "aiNotice": "This is an AI chat in Henk’s style. Answers are generated automatically and not personally checked by him."
   },
   "vlogsPage": {
     "eyebrow": "Vlogs",
@@ -651,5 +666,50 @@
     "delete": "Delete",
     "by": "by",
     "failed": "Could not save. Please try again."
+  },
+  "journal": {
+    "sections": "Blog and vlogs",
+    "blog": "Blog",
+    "vlogs": "Vlogs",
+    "latest": "Latest blogs",
+    "latestVlogs": "Latest vlogs",
+    "all": "All",
+    "newest": "Newest",
+    "categories": "Categories",
+    "archive": "Archive",
+    "index": "Index",
+    "prev": "Previous",
+    "next": "Next",
+    "pager": "Previous or next post",
+    "backToBlog": "All blogs",
+    "backToVlogs": "All vlogs",
+    "watch": "Watch",
+    "read": "Read",
+    "video": "Video",
+    "audio": "Audio",
+    "emptyCategory": "Nothing in this category.",
+    "emptyVlogs": "No vlogs yet.",
+    "morePosts": "More blogs",
+    "moreVlogs": "More vlogs",
+    "comingSoon": "Video coming soon.",
+    "videoUnsupported": "Your browser cannot play this video.",
+    "newBlog": "New blog",
+    "newVlog": "New vlog",
+    "catInzichten": "Insights",
+    "catVerhalen": "Stories",
+    "catPraktijk": "Practice",
+    "catHappyPeople": "Happy People"
+  },
+  "legal": {
+    "nav": "Legal",
+    "disclaimer": "Disclaimer",
+    "terms": "Terms and conditions",
+    "privacy": "Privacy policy",
+    "cookies": "Cookie policy",
+    "disclaimerLead": "Happy People disclaimer.",
+    "termsLead": "Happy People terms and conditions.",
+    "privacyLead": "Happy People privacy policy.",
+    "cookiesLead": "Happy People cookie policy.",
+    "draftNote": "Draft text — fields in [square brackets] will be filled in later."
   }
 }

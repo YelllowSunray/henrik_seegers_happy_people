@@ -12,15 +12,58 @@ import { CmsField, useAutosizeTextarea } from "@/components/cms/cms-field";
 import { useCmsOptional } from "@/components/cms/cms-provider";
 import { cmsAdminFetch } from "@/lib/cms-admin-fetch";
 import { t } from "@/lib/content";
+import {
+  BLOG_CATEGORY_IDS,
+  publishedDateLabel,
+} from "@/lib/journal";
 import type { BlogPost, Locale } from "@/lib/types";
+
+const CATEGORY_LABELS: Record<(typeof BLOG_CATEGORY_IDS)[number], string> = {
+  inzichten: "Inzichten",
+  verhalen: "Verhalen",
+  praktijk: "Praktijk",
+  "happy-people": "Happy People",
+};
+
+function CategorySelect({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <label className="mt-3 block text-xs font-medium text-ink-soft">
+      Categorie
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="mt-1 w-full rounded-sm border border-dashed border-accent/40 bg-transparent px-2 py-2 text-sm text-ink outline-none focus:border-accent"
+      >
+        <option value="">Geen categorie</option>
+        {BLOG_CATEGORY_IDS.map((id) => (
+          <option key={id} value={id}>
+            {CATEGORY_LABELS[id]}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
 
 type Draft = {
   title: string;
   excerpt: string;
   body: string;
+  category: string;
 };
 
-const emptyDraft = (): Draft => ({ title: "", excerpt: "", body: "" });
+const emptyDraft = (): Draft => ({
+  title: "",
+  excerpt: "",
+  body: "",
+  category: "",
+});
 
 const ADMIN_CHROME =
   "m-0 box-border block w-full min-w-0 max-w-full appearance-none border border-dashed border-accent/40 bg-transparent px-1.5 py-0.5 leading-[inherit] outline-none transition " +
@@ -107,7 +150,7 @@ function useDebouncedSave(
     return () => {
       if (timer.current) clearTimeout(timer.current);
     };
-  }, [enabled, postId, payload.title, payload.excerpt, payload.body]);
+  }, [enabled, postId, payload.title, payload.excerpt, payload.body, payload.category]);
 
   return status;
 }
@@ -124,13 +167,14 @@ function CmsBlogRow({
   const [title, setTitle] = useState(t(post.title, locale));
   const [excerpt, setExcerpt] = useState(t(post.excerpt, locale));
   const [body, setBody] = useState(t(post.body, locale));
+  const [category, setCategory] = useState(post.category ?? "");
   const [expandBody, setExpandBody] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const status = useDebouncedSave(
     post.id,
-    { title, excerpt, body },
+    { title, excerpt, body, category },
     true,
   );
 
@@ -164,7 +208,9 @@ function CmsBlogRow({
   return (
     <li className="rounded-xl border border-dashed border-accent/40 bg-accent/[0.03] p-4 sm:p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-xs text-ink-soft">{post.publishedAt || "Concept"}</p>
+        <p className="text-xs text-ink-soft">
+          {publishedDateLabel(post.publishedAt) || "Concept"}
+        </p>
         <div className="flex items-center gap-2">
           {status ? (
             <span className="text-[11px] text-ink-soft">{status}</span>
@@ -192,6 +238,7 @@ function CmsBlogRow({
         placeholder="Korte intro"
         className="mt-3 max-w-2xl reading-copy"
       />
+      <CategorySelect value={category} onChange={setCategory} />
       {expandBody ? (
         <AdminTextArea
           value={body}
@@ -229,6 +276,7 @@ function CmsNewPost({
   const [draft, setDraft] = useState<Draft>(emptyDraft);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [published, setPublished] = useState<BlogPost | null>(null);
 
   async function publish() {
     if (!draft.title.trim()) {
@@ -250,6 +298,7 @@ function CmsNewPost({
         throw new Error(data.error || "Publiceren mislukt");
       }
       onCreated(data.post);
+      setPublished(data.post);
       setDraft(emptyDraft());
       setOpen(false);
     } catch (err) {
@@ -259,69 +308,87 @@ function CmsNewPost({
     }
   }
 
-  if (!open) {
-    return (
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="mb-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-accent/55 bg-accent/5 px-4 py-3.5 text-sm font-semibold text-accent hover:bg-accent/10"
-      >
-        <span aria-hidden className="text-lg leading-none">
-          +
-        </span>
-        Nieuw blogbericht
-      </button>
-    );
-  }
-
   return (
-    <div className="mb-5 rounded-xl border border-dashed border-accent/50 bg-accent/[0.05] p-4 sm:p-5">
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-xs font-semibold tracking-wide text-accent uppercase">
-          Nieuw blogbericht
-        </p>
+    <div id="nieuwe-blog" className="scroll-mt-28">
+      {published ? (
+        <div className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
+          <p className="font-semibold">Gepubliceerd — het staat nu op de site.</p>
+          <Link
+            href={`/blog/${published.slug}`}
+            className="mt-1 inline-flex font-semibold underline-offset-2 hover:underline"
+          >
+            Bekijk dit bericht live →
+          </Link>
+        </div>
+      ) : null}
+      {!open ? (
         <button
           type="button"
           onClick={() => {
-            setOpen(false);
-            setDraft(emptyDraft());
-            setError(null);
+            setPublished(null);
+            setOpen(true);
           }}
-          className="text-xs font-medium text-ink-soft"
+          className="mb-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-accent/55 bg-accent/5 px-4 py-3.5 text-sm font-semibold text-accent hover:bg-accent/10"
         >
-          Annuleren
+          <span aria-hidden className="text-lg leading-none">
+            +
+          </span>
+          Nieuwe blog
         </button>
-      </div>
-      <AdminTextArea
-        value={draft.title}
-        onChange={(title) => setDraft((d) => ({ ...d, title }))}
-        multiline={false}
-        placeholder="Titel"
-        className="font-display mt-3 text-2xl leading-tight text-ink md:text-3xl"
-      />
-      <AdminTextArea
-        value={draft.excerpt}
-        onChange={(excerpt) => setDraft((d) => ({ ...d, excerpt }))}
-        placeholder="Korte intro"
-        className="mt-3 max-w-2xl reading-copy"
-      />
-      <AdminTextArea
-        value={draft.body}
-        onChange={(body) => setDraft((d) => ({ ...d, body }))}
-        placeholder="Volle tekst (lege regel = nieuwe alinea)"
-        className="mt-4 max-w-2xl reading-copy reading-copy-ink"
-      />
-      <div className="mt-5 flex flex-wrap items-center gap-3">
-        <button
-          type="button"
-          disabled={busy}
-          onClick={() => void publish()}
-          className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
-        >
-          {busy ? "Bezig…" : "Publiceren"}
-        </button>
-        {error ? <p className="text-sm text-red-700">{error}</p> : null}
-      </div>
+      ) : (
+        <div className="mb-5 rounded-xl border border-dashed border-accent/50 bg-accent/[0.05] p-4 sm:p-5">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs font-semibold tracking-wide text-accent uppercase">
+              Nieuwe blog
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                setDraft(emptyDraft());
+                setError(null);
+              }}
+              className="text-xs font-medium text-ink-soft"
+            >
+              Annuleren
+            </button>
+          </div>
+          <AdminTextArea
+            value={draft.title}
+            onChange={(title) => setDraft((d) => ({ ...d, title }))}
+            multiline={false}
+            placeholder="Titel"
+            className="font-display mt-3 text-2xl leading-tight text-ink md:text-3xl"
+          />
+          <AdminTextArea
+            value={draft.excerpt}
+            onChange={(excerpt) => setDraft((d) => ({ ...d, excerpt }))}
+            placeholder="Korte intro"
+            className="mt-3 max-w-2xl reading-copy"
+          />
+          <AdminTextArea
+            value={draft.body}
+            onChange={(body) => setDraft((d) => ({ ...d, body }))}
+            placeholder="Volle tekst (lege regel = nieuwe alinea)"
+            className="mt-4 max-w-2xl reading-copy reading-copy-ink"
+          />
+          <CategorySelect
+            value={draft.category}
+            onChange={(category) => setDraft((d) => ({ ...d, category }))}
+          />
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => void publish()}
+              className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
+            >
+              {busy ? "Bezig…" : "Publiceren"}
+            </button>
+            {error ? <p className="text-sm text-red-700">{error}</p> : null}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

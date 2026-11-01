@@ -1,17 +1,23 @@
+import { asDateString } from "@/lib/dates";
 import type { VideoItem } from "./types";
 
 function todayIso(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-/** True when publishedAt is today or earlier (empty date = not visible to members). */
+/** True when publishedAt is today or earlier (empty date = not visible). */
 export function isVideoPublished(
   video: Pick<VideoItem, "publishedAt">,
   onDate = todayIso(),
 ): boolean {
-  const publishedAt = video.publishedAt?.trim();
+  const publishedAt = asDateString(video.publishedAt);
   if (!publishedAt) return false;
   return publishedAt <= onDate;
+}
+
+/** Public vlog catalog: published (media can still be “coming soon”). */
+export function isPublicVlog(video: VideoItem, onDate = todayIso()): boolean {
+  return video.kind === "vlog" && isVideoPublished(video, onDate);
 }
 
 function hasPlayableMedia(video: VideoItem): boolean {

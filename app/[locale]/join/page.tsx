@@ -7,6 +7,7 @@ import { useAuth } from "@/components/auth-provider";
 import { Link, useRouter } from "@/i18n/navigation";
 import { signInHref } from "@/lib/auth-href";
 import { postSignUpPath } from "@/lib/profile";
+import { MIN_PASSWORD_LENGTH, authErrorKey } from "@/lib/auth-errors";
 
 function JoinForm() {
   const t = useTranslations("auth");
@@ -28,10 +29,14 @@ function JoinForm() {
     e.preventDefault();
     setBusy(true);
     setError(null);
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      setError(t("errorWeakPassword"));
+      return;
+    }
     try {
       await signUp(email, password);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Auth failed");
+      setError(t(authErrorKey(err)));
       setBusy(false);
     }
   }
@@ -65,7 +70,7 @@ function JoinForm() {
           <input
             type="password"
             required
-            minLength={6}
+            minLength={MIN_PASSWORD_LENGTH}
             autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

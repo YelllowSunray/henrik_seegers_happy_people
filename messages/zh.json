@@ -158,7 +158,10 @@
     "manageSubscription": "管理订阅",
     "paradisePrompt": "选择权在你 — 会是 YES 还是 NO？",
     "paradiseNote": "用这首歌，我希望能修补我见过的最美丽的女人那颗破碎的心🙏❤️",
-    "monthlyIntro": "每月 € 1.65"
+    "monthlyIntro": "每月 € 1.65",
+    "digitalConsent": "I want immediate access to the digital content and waive my 14-day right of withdrawal.",
+    "digitalConsentTerms": "Terms and conditions",
+    "digitalConsentRequired": "Tick the box to agree to immediate access."
   },
   "contact": {
     "title": "联系方式",
@@ -259,7 +262,18 @@
     "forgotPassword": "忘记密码？",
     "forgotNeedEmail": "首先在上面输入您的电子邮件。",
     "forgotSent": "检查您的电子邮件中是否有重置链接。",
-    "forgotFailed": "无法发送重置电子邮件。"
+    "forgotFailed": "无法发送重置电子邮件。",
+    "errorWeakPassword": "Your password is too short. Use at least 6 characters.",
+    "errorEmailInUse": "This email already has an account. Sign in or reset your password.",
+    "errorInvalidEmail": "That email does not look right. Check the spelling.",
+    "errorUserNotFound": "We do not know this email yet. Please join first.",
+    "errorWrongPassword": "That password is not correct. Try again or reset your password.",
+    "errorInvalidCredential": "Email or password is not correct. Check it, or reset your password.",
+    "errorTooMany": "Too many attempts. Wait a moment and try again.",
+    "errorNetwork": "No connection. Check your internet and try again.",
+    "errorDisabled": "This account is disabled. Email us if that is unexpected.",
+    "errorResetLink": "This reset link no longer works. Request a new one.",
+    "errorGeneric": "Sign-in failed. Please try again."
   },
   "footer": {
     "tagline": "Happy People的路径",
@@ -613,7 +627,8 @@
       "你好，我是 Happy People 的 Henk。你想聊些什么？",
       "欢迎。我是 Henk。告诉我——你在想什么？"
     ],
-    "convoIntroFallback": "你好，我是 Happy People 的 Henk。你想聊些什么？"
+    "convoIntroFallback": "你好，我是 Happy People 的 Henk。你想聊些什么？",
+    "aiNotice": "This is an AI chat in Henk’s style. Answers are generated automatically and not personally checked by him."
   },
   "vlogsPage": {
     "eyebrow": "Vlogs",
@@ -647,5 +662,50 @@
     "delete": "Delete",
     "by": "by",
     "failed": "Could not save. Please try again."
+  },
+  "journal": {
+    "sections": "Blog and vlogs",
+    "blog": "Blog",
+    "vlogs": "Vlogs",
+    "latest": "Latest blogs",
+    "latestVlogs": "Latest vlogs",
+    "all": "All",
+    "newest": "Newest",
+    "categories": "Categories",
+    "archive": "Archive",
+    "index": "Index",
+    "prev": "Previous",
+    "next": "Next",
+    "pager": "Previous or next post",
+    "backToBlog": "All blogs",
+    "backToVlogs": "All vlogs",
+    "watch": "Watch",
+    "read": "Read",
+    "video": "Video",
+    "audio": "Audio",
+    "emptyCategory": "Nothing in this category.",
+    "emptyVlogs": "No vlogs yet.",
+    "morePosts": "More blogs",
+    "moreVlogs": "More vlogs",
+    "comingSoon": "Video coming soon.",
+    "videoUnsupported": "Your browser cannot play this video.",
+    "newBlog": "New blog",
+    "newVlog": "New vlog",
+    "catInzichten": "Insights",
+    "catVerhalen": "Stories",
+    "catPraktijk": "Practice",
+    "catHappyPeople": "Happy People"
+  },
+  "legal": {
+    "nav": "Legal",
+    "disclaimer": "Disclaimer",
+    "terms": "Terms and conditions",
+    "privacy": "Privacy policy",
+    "cookies": "Cookie policy",
+    "disclaimerLead": "Happy People disclaimer.",
+    "termsLead": "Happy People terms and conditions.",
+    "privacyLead": "Happy People privacy policy.",
+    "cookiesLead": "Happy People cookie policy.",
+    "draftNote": "Draft text — fields in [square brackets] will be filled in later."
   }
 }

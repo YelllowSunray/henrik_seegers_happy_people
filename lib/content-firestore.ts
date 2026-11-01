@@ -21,7 +21,8 @@ import type {
 } from "@/lib/types";
 import type { BillingState } from "@/lib/billing";
 import { DEFAULT_BILLING_STATE, parseBillingDoc } from "@/lib/billing";
-import { isMemberVisibleVideo } from "@/lib/video-visibility";
+import { asDateString } from "@/lib/dates";
+import { isMemberVisibleVideo, isPublicVlog } from "@/lib/video-visibility";
 
 function asLocalized(value: unknown, fallback = ""): LocalizedString {
   if (value && typeof value === "object" && !Array.isArray(value)) {
@@ -46,10 +47,14 @@ function mapPost(id: string, data: Record<string, unknown>): BlogPost {
     title: asLocalized(data.title),
     excerpt: asLocalized(data.excerpt),
     body: asLocalized(data.body),
-    publishedAt: String(data.publishedAt ?? ""),
+    publishedAt: asDateString(data.publishedAt),
     membersOnly: Boolean(data.membersOnly),
     coverImage:
       typeof data.coverImage === "string" ? data.coverImage : undefined,
+    category:
+      typeof data.category === "string" && data.category.trim()
+        ? data.category.trim()
+        : undefined,
   };
 }
 
@@ -93,9 +98,13 @@ function mapVideo(id: string, data: Record<string, unknown>): VideoItem {
     videoUrl: typeof data.videoUrl === "string" ? data.videoUrl : undefined,
     audioUrl: typeof data.audioUrl === "string" ? data.audioUrl : undefined,
     thumbnail: typeof data.thumbnail === "string" ? data.thumbnail : undefined,
-    publishedAt: String(data.publishedAt ?? ""),
+    publishedAt: asDateString(data.publishedAt),
     durationLabel:
       typeof data.durationLabel === "string" ? data.durationLabel : undefined,
+    category:
+      typeof data.category === "string" && data.category.trim()
+        ? data.category.trim()
+        : undefined,
   };
 }
 
@@ -103,7 +112,7 @@ function mapQuote(id: string, data: Record<string, unknown>): QuoteItem {
   return {
     id,
     text: asLocalized(data.text),
-    publishedAt: String(data.publishedAt ?? ""),
+    publishedAt: asDateString(data.publishedAt),
   };
 }
 
@@ -194,20 +203,24 @@ export async function fetchVideosByKind(
 ): Promise<VideoItem[]> {
   const rows = await loadCollection("videos", mapVideo);
 
+  const visible = (v: VideoItem) =>
+    kind === "vlog" ? isPublicVlog(v) : v.kind === kind && isMemberVisibleVideo(v);
+
   if (options?.firestoreOnly) {
     if (!rows) return [];
-    return rows
-      .filter((v) => v.kind === kind && isMemberVisibleVideo(v))
-      .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+    return rows.filter(visible).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
   }
 
   if (rows === null) {
-    return seedVideosByKind(kind).filter((v) => isMemberVisibleVideo(v));
+    return seedVideosByKind(kind).filter(visible);
   }
 
-  return rows
-    .filter((v) => v.kind === kind && isMemberVisibleVideo(v))
-    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  return rows.filter(visible).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+}
+
+export async function fetchVlogById(id: string): Promise<VideoItem | undefined> {
+  const rows = await fetchVideosByKind("vlog");
+  return rows.find((video) => video.id === id);
 }
 
 export async function fetchQuotes(): Promise<QuoteItem[]> {

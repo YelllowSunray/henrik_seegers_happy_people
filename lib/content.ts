@@ -32,6 +32,7 @@ export const posts: BlogPost[] = [
     },
     publishedAt: "2026-08-01",
     membersOnly: false,
+    category: "inzichten",
   },
   {
     id: "2",
@@ -53,6 +54,7 @@ export const posts: BlogPost[] = [
     },
     publishedAt: "2026-07-28",
     membersOnly: false,
+    category: "praktijk",
   },
   {
     id: "3",
@@ -74,6 +76,7 @@ export const posts: BlogPost[] = [
     },
     publishedAt: "2026-07-20",
     membersOnly: false,
+    category: "happy-people",
   },
   {
     id: "4",
@@ -95,6 +98,7 @@ export const posts: BlogPost[] = [
     },
     publishedAt: "2026-07-12",
     membersOnly: false,
+    category: "inzichten",
   },
   {
     id: "5",
@@ -116,6 +120,7 @@ export const posts: BlogPost[] = [
     },
     publishedAt: "2026-07-05",
     membersOnly: false,
+    category: "verhalen",
   },
   {
     id: "6",
@@ -137,6 +142,7 @@ export const posts: BlogPost[] = [
     },
     publishedAt: "2026-08-05",
     membersOnly: true,
+    category: "praktijk",
   },
 ];
 

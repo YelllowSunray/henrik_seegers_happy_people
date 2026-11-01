@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import { CmsField } from "@/components/cms/cms-field";
 import { FACEBOOK_HREF } from "@/lib/contact";
 import { cmsText } from "@/lib/homepage-content";
@@ -6,6 +7,7 @@ import { fetchHomepageCmsForLocale } from "@/lib/homepage-content.server";
 
 export async function SiteFooter({ locale }: { locale: string }) {
   const t = await getTranslations("footer");
+  const legal = await getTranslations("legal");
   const year = new Date().getFullYear();
   const cms = await fetchHomepageCmsForLocale(locale);
   const tagline = cmsText(cms?.footer.tagline, t("tagline"));
@@ -13,6 +15,13 @@ export async function SiteFooter({ locale }: { locale: string }) {
     cms?.footer.facebook,
     "Facebook — Hendrik Seegers",
   );
+
+  const links = [
+    { href: "/disclaimer" as const, label: legal("disclaimer") },
+    { href: "/algemene-voorwaarden" as const, label: legal("terms") },
+    { href: "/privacy" as const, label: legal("privacy") },
+    { href: "/cookies" as const, label: legal("cookies") },
+  ];
 
   return (
     <footer className="border-t border-line bg-bg-deep pb-[max(0.5rem,env(safe-area-inset-bottom))]">
@@ -25,7 +34,18 @@ export async function SiteFooter({ locale }: { locale: string }) {
             className="mt-2 max-w-sm text-sm text-ink-soft"
           />
         </div>
-        <div className="flex flex-col gap-2 text-sm text-ink-soft">
+        <div className="flex flex-col gap-3 text-sm text-ink-soft">
+          <nav className="flex flex-wrap gap-x-4 gap-y-2" aria-label={legal("nav")}>
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="underline-offset-4 hover:text-accent hover:underline"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
           <a
             href={FACEBOOK_HREF}
             target="_blank"

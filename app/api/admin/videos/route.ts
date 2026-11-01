@@ -38,6 +38,7 @@ export async function POST(req: Request) {
     title?: string;
     description?: string;
     videoUrl?: string;
+    category?: string;
   };
   try {
     body = (await req.json()) as typeof body;
@@ -48,12 +49,13 @@ export async function POST(req: Request) {
   const title = String(body.title ?? "").trim();
   const description = String(body.description ?? "").trim();
   const videoUrl = toPlayableUrl(String(body.videoUrl ?? ""));
+  const category = String(body.category ?? "").trim();
   if (!title) {
     return NextResponse.json({ error: "Titel is verplicht." }, { status: 400 });
   }
   if (!videoUrl) {
     return NextResponse.json(
-      { error: "Plak een YouTube-link." },
+      { error: "Voeg een opname toe of plak een YouTube-link." },
       { status: 400 },
     );
   }
@@ -68,6 +70,7 @@ export async function POST(req: Request) {
       description: { nl: description },
       videoUrl,
       publishedAt,
+      ...(category ? { category } : {}),
       createdAt: FieldValue.serverTimestamp(),
       updatedAt: FieldValue.serverTimestamp(),
     });
@@ -81,6 +84,7 @@ export async function POST(req: Request) {
         description: { nl: description },
         videoUrl,
         publishedAt,
+        ...(category ? { category } : {}),
       },
     });
   } catch (err) {

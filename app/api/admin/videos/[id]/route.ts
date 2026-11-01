@@ -26,6 +26,7 @@ type PatchBody = {
   title?: string;
   description?: string;
   videoUrl?: string;
+  category?: string;
 };
 
 export async function PATCH(
@@ -64,12 +65,15 @@ export async function PATCH(
     const videoUrl = toPlayableUrl(body.videoUrl);
     if (!videoUrl) {
       return NextResponse.json(
-        { error: "Plak een YouTube-link." },
+        { error: "Voeg een opname toe of plak een YouTube-link." },
         { status: 400 },
       );
     }
     patch.videoUrl = videoUrl;
     patch.mediaType = "video";
+  }
+  if (typeof body.category === "string") {
+    patch.category = body.category.trim();
   }
 
   try {

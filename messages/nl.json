@@ -191,7 +191,10 @@
     "openClub": "Naar de club",
     "manageSubscription": "Abonnement beheren",
     "paradisePrompt": "De keuze is aan jou — wordt het YES of NO?",
-    "paradiseNote": "Met dit lied hoop ik het gebroken hart te kunnen lijmen van de mooiste vrouw die ik ooit heb gezien🙏❤️"
+    "paradiseNote": "Met dit lied hoop ik het gebroken hart te kunnen lijmen van de mooiste vrouw die ik ooit heb gezien🙏❤️",
+    "digitalConsent": "Ik wil meteen toegang tot de digitale inhoud en doe afstand van mijn wettelijke herroepingsrecht van 14 dagen.",
+    "digitalConsentTerms": "Algemene voorwaarden",
+    "digitalConsentRequired": "Vink het vakje aan om akkoord te gaan met directe toegang."
   },
   "contact": {
     "title": "Contact",
@@ -292,7 +295,18 @@
     "forgotPassword": "Wachtwoord vergeten?",
     "forgotNeedEmail": "Vul eerst je e-mailadres in.",
     "forgotSent": "Check je e-mail voor een resetlink.",
-    "forgotFailed": "Resetmail kon niet worden verstuurd."
+    "forgotFailed": "Resetmail kon niet worden verstuurd.",
+    "errorWeakPassword": "Je wachtwoord is te kort. Gebruik minimaal 6 tekens.",
+    "errorEmailInUse": "Dit e-mailadres heeft al een account. Log in of kies wachtwoord vergeten.",
+    "errorInvalidEmail": "Dit e-mailadres lijkt niet te kloppen. Check de spelling.",
+    "errorUserNotFound": "We kennen dit e-mailadres nog niet. Word eerst lid.",
+    "errorWrongPassword": "Dat wachtwoord klopt niet. Probeer opnieuw of kies wachtwoord vergeten.",
+    "errorInvalidCredential": "E-mail of wachtwoord klopt niet. Check het, of kies wachtwoord vergeten.",
+    "errorTooMany": "Te veel pogingen. Wacht even en probeer opnieuw.",
+    "errorNetwork": "Geen verbinding. Check je internet en probeer opnieuw.",
+    "errorDisabled": "Dit account is uitgeschakeld. Mail ons als dit niet klopt.",
+    "errorResetLink": "Deze resetlink werkt niet meer. Vraag een nieuwe aan.",
+    "errorGeneric": "Inloggen lukte niet. Probeer het opnieuw."
   },
   "footer": {
     "tagline": "De weg van de Happy People",
@@ -650,6 +664,52 @@
       "Hoi, ik ben Henk. Laten we in gesprek gaan — waar denk je aan?",
       "Welkom bij Happy People. Ik ben Henk. Wat wil je vandaag met me delen?"
     ],
-    "convoIntroFallback": "Hoi, ik ben Henk van Happy People. Waar wil je het over hebben?"
+    "convoIntroFallback": "Hoi, ik ben Henk van Happy People. Waar wil je het over hebben?",
+    "aiNotice": "Dit is een AI-chat in de stijl van Henk. Antwoorden zijn automatisch gegenereerd en niet persoonlijk door hem gecontroleerd."
+  },
+  "journal": {
+    "sections": "Blog en vlogs",
+    "blog": "Blog",
+    "vlogs": "Vlogs",
+    "latest": "Nieuwste blogs",
+    "latestVlogs": "Nieuwste vlogs",
+    "all": "Alles",
+    "newest": "Nieuwste",
+    "categories": "Categorieën",
+    "archive": "Archief",
+    "index": "Overzicht",
+    "prev": "Vorige",
+    "next": "Volgende",
+    "pager": "Naar vorig of volgend bericht",
+    "backToBlog": "Alle blogs",
+    "backToVlogs": "Alle vlogs",
+    "watch": "Bekijk",
+    "read": "Lees",
+    "video": "Video",
+    "audio": "Audio",
+    "emptyCategory": "Niets in deze categorie.",
+    "emptyVlogs": "Nog geen vlogs.",
+    "morePosts": "Meer blogs",
+    "moreVlogs": "Meer vlogs",
+    "comingSoon": "Video volgt binnenkort.",
+    "videoUnsupported": "Je browser kan deze video niet afspelen.",
+    "newBlog": "Nieuwe blog",
+    "newVlog": "Nieuwe vlog",
+    "catInzichten": "Inzichten",
+    "catVerhalen": "Verhalen",
+    "catPraktijk": "Praktijk",
+    "catHappyPeople": "Happy People"
+  },
+  "legal": {
+    "nav": "Juridisch",
+    "disclaimer": "Disclaimer",
+    "terms": "Algemene voorwaarden",
+    "privacy": "Privacyverklaring",
+    "cookies": "Cookiebeleid",
+    "disclaimerLead": "Disclaimer van Happy People.",
+    "termsLead": "Algemene voorwaarden van Happy People.",
+    "privacyLead": "Privacyverklaring van Happy People.",
+    "cookiesLead": "Cookiebeleid van Happy People.",
+    "draftNote": "Concepttekst — velden tussen [vierkante haken] vult Samir later in."
   }
 }
