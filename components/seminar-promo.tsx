@@ -1,87 +1,48 @@
 "use client";
 
-import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { CmsField } from "@/components/cms/cms-field";
 import { useCmsOptional, useCmsValue } from "@/components/cms/cms-provider";
 
-function usePromoOffset() {
-  useEffect(() => {
-    const mobile = window.matchMedia("(max-width: 1023px)");
-
-    function apply() {
-      document.documentElement.style.setProperty(
-        "--seminar-promo-h",
-        mobile.matches ? "2.75rem" : "2.375rem",
-      );
-    }
-
-    apply();
-    mobile.addEventListener("change", apply);
-    return () => {
-      mobile.removeEventListener("change", apply);
-      document.documentElement.style.setProperty("--seminar-promo-h", "0px");
-    };
-  }, []);
-}
-
 export function SeminarPromoBar({
   onHero,
   scrolled,
+  cmsMode,
 }: {
   onHero: boolean;
   scrolled: boolean;
+  cmsMode: boolean;
 }) {
   const t = useTranslations("site");
   const cms = useCmsOptional();
   const banner = useCmsValue("site.banner", t("underConstruction"));
 
-  usePromoOffset();
-
-  const heroAtTop = onHero && !scrolled;
-  const lightOnDark = onHero || scrolled;
-
-  const shellClass = heroAtTop
-    ? "border-y border-white/40 text-white"
-    : lightOnDark
-      ? "border-t border-white/10 text-white"
-      : "border-t border-line text-ink";
-
-  const fieldClass = lightOnDark
-    ? "bg-transparent text-center text-sm font-medium text-white"
-    : "bg-transparent text-center text-sm font-medium text-ink";
+  const dark = onHero || scrolled || cmsMode;
 
   return (
-    <div className={`bg-transparent ${shellClass}`}>
-      <p className="mx-auto flex max-w-7xl items-center justify-center px-5 py-2.5 text-center text-sm font-medium lg:hidden md:px-8">
+    <div
+      className={
+        dark
+          ? "border-t border-white/15 bg-black/80 text-white"
+          : "border-t border-line bg-bg-deep text-ink"
+      }
+    >
+      <div className="mx-auto max-w-7xl px-5 py-2.5 md:px-8">
         {cms?.enabled ? (
           <CmsField
             path="site.banner"
             value={banner}
             multiline={false}
-            inline
-            nowrap
-            className={fieldClass}
+            className={`w-full text-center text-sm font-medium leading-snug sm:text-base ${
+              dark ? "bg-transparent text-white" : "bg-transparent text-ink"
+            }`}
           />
         ) : (
-          <span className="drop-shadow-sm">{banner}</span>
+          <p className="text-center text-sm font-medium leading-snug sm:text-base">
+            {banner}
+          </p>
         )}
-      </p>
-
-      <p className="mx-auto hidden max-w-5xl items-center justify-center px-8 py-2 text-center text-sm font-medium lg:flex">
-        {cms?.enabled ? (
-          <CmsField
-            path="site.banner"
-            value={banner}
-            multiline={false}
-            inline
-            nowrap
-            className={fieldClass}
-          />
-        ) : (
-          <span className="drop-shadow-sm">{banner}</span>
-        )}
-      </p>
+      </div>
     </div>
   );
 }

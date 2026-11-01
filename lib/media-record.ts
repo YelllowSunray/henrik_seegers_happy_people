@@ -43,3 +43,11 @@ export function canUseMediaRecorder(): boolean {
 
 /** ~2.1 Mbps → ~16 MB/min. Storage rules cap uploads at 80 MB. */
 export const MAX_RECORD_MS = 4 * 60 * 1000;
+export const MAX_VLOG_BYTES = 80 * 1024 * 1024;
+
+export function extensionFromVideoBlob(blob: Blob): "mp4" | "webm" | "mov" {
+  const type = blob.type.toLowerCase();
+  if (type.includes("webm")) return "webm";
+  if (type.includes("quicktime") || type.includes("mov")) return "mov";
+  return "mp4";
+}

@@ -14,7 +14,8 @@ import { useRouter } from "@/i18n/navigation";
 
 export default function AdminPage() {
   const t = useTranslations("admin");
-  const { isAdmin, loading, unlockAdmin } = useAuth();
+  const { isAdmin, isRealAdmin, loading, unlockAdmin, setPreviewMode } =
+    useAuth();
   const router = useRouter();
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -26,10 +27,11 @@ export default function AdminPage() {
   );
 
   useEffect(() => {
-    if (!loading && isAdmin) {
+    if (!loading && (isAdmin || isRealAdmin)) {
+      setPreviewMode("off");
       router.replace("/");
     }
-  }, [loading, isAdmin, router]);
+  }, [loading, isAdmin, isRealAdmin, router, setPreviewMode]);
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -43,7 +45,7 @@ export default function AdminPage() {
     router.replace("/");
   }
 
-  if (loading || isAdmin) {
+  if (loading || isAdmin || isRealAdmin) {
     return (
       <>
         <SiteHeader variant="solid" />

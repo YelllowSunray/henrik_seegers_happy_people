@@ -5,12 +5,10 @@ import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { BlogBody } from "@/components/blog-body";
 import { CmsBlogPostEditor } from "@/components/cms/cms-blog-feed";
-import { JournalNav } from "@/components/journal-nav";
-import { JournalAside } from "@/components/journal-aside";
 import { PostPager } from "@/components/post-pager";
 import { buildPageMetadata } from "@/lib/seo";
 import { t } from "@/lib/content";
-import { fetchPostBySlug, fetchPublicPosts, fetchVideosByKind } from "@/lib/content-firestore";
+import { fetchPostBySlug, fetchPublicPosts } from "@/lib/content-firestore";
 import { neighbors } from "@/lib/journal";
 import type { Locale } from "@/lib/types";
 
@@ -46,10 +44,9 @@ export default async function BlogPostPage({
   const { locale: localeParam, slug } = await params;
   setRequestLocale(localeParam);
   const locale = localeParam as Locale;
-  const [post, posts, vlogs] = await Promise.all([
+  const [post, posts] = await Promise.all([
     fetchPostBySlug(slug),
     fetchPublicPosts(),
-    fetchVideosByKind("vlog"),
   ]);
 
   if (!post || post.membersOnly) {
@@ -62,37 +59,28 @@ export default async function BlogPostPage({
     <>
       <SiteHeader variant="solid" />
       <Section>
-        <JournalNav active="blog" />
-        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(16rem,0.8fr)]">
-          <div>
-            <CmsBlogPostEditor post={post} locale={locale}>
-              <p className="text-xs text-ink-soft">{post.publishedAt}</p>
-              <h1 className="font-display mt-3 max-w-3xl text-3xl leading-tight sm:text-4xl md:text-5xl">
-                {t(post.title, locale)}
-              </h1>
-              <div className="mt-8 sm:mt-10">
-                <BlogBody text={t(post.body, locale)} />
-              </div>
-            </CmsBlogPostEditor>
-            <PostPager
-              kind="blog"
-              prev={
-                prev
-                  ? { href: `/blog/${prev.slug}`, title: t(prev.title, locale) }
-                  : undefined
-              }
-              next={
-                next
-                  ? { href: `/blog/${next.slug}`, title: t(next.title, locale) }
-                  : undefined
-              }
-            />
-          </div>
-          <JournalAside
-            locale={locale}
-            posts={posts}
-            vlogs={vlogs}
-            currentId={post.id}
+        <div className="max-w-3xl">
+          <CmsBlogPostEditor post={post} locale={locale}>
+            <p className="text-sm text-ink-soft">{post.publishedAt}</p>
+            <h1 className="font-display mt-3 text-3xl leading-tight sm:text-4xl md:text-5xl">
+              {t(post.title, locale)}
+            </h1>
+            <div className="mt-8 sm:mt-10">
+              <BlogBody text={t(post.body, locale)} />
+            </div>
+          </CmsBlogPostEditor>
+          <PostPager
+            kind="blog"
+            prev={
+              prev
+                ? { href: `/blog/${prev.slug}`, title: t(prev.title, locale) }
+                : undefined
+            }
+            next={
+              next
+                ? { href: `/blog/${next.slug}`, title: t(next.title, locale) }
+                : undefined
+            }
           />
         </div>
       </Section>
