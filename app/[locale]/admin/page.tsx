@@ -1,95 +1,23 @@
 "use client";
 
-import {
-  FormEvent,
-  useEffect,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from "react";
-import { useTranslations } from "next-intl";
+import { useEffect } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { useAuth } from "@/components/auth-provider";
 import { useRouter } from "@/i18n/navigation";
 
 export default function AdminPage() {
-  const t = useTranslations("admin");
-  const { isAdmin, isRealAdmin, loading, unlockAdmin, setPreviewMode } =
-    useAuth();
+  const { enterAdmin } = useAuth();
   const router = useRouter();
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const hydrated = useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false,
-  );
 
   useEffect(() => {
-    if (!loading && (isAdmin || isRealAdmin)) {
-      setPreviewMode("off");
-      router.replace("/");
-    }
-  }, [loading, isAdmin, isRealAdmin, router, setPreviewMode]);
-
-  function onSubmit(e: FormEvent) {
-    e.preventDefault();
-    setError(null);
-    // Read the DOM value: browser autofill doesn't always fire onChange.
-    const value = inputRef.current?.value ?? password;
-    if (!unlockAdmin(value.trim())) {
-      setError(t("wrongPassword"));
-      return;
-    }
+    enterAdmin();
     router.replace("/");
-  }
-
-  if (loading || isAdmin || isRealAdmin) {
-    return (
-      <>
-        <SiteHeader variant="solid" />
-        <p className="p-16 text-center text-ink-soft">…</p>
-      </>
-    );
-  }
+  }, [enterAdmin, router]);
 
   return (
     <>
       <SiteHeader variant="solid" />
-      <div className="mx-auto max-w-md px-5 py-20">
-        <p className="text-center text-[11px] font-semibold tracking-[0.18em] text-accent uppercase">
-          CMS · NL
-        </p>
-        <h1 className="font-display mt-3 text-center text-3xl text-ink">
-          {t("title")}
-        </h1>
-        <p className="mt-3 text-center text-ink-soft">
-          Log in om de website te bewerken. Je gaat daarna naar de homepage.
-        </p>
-        <form onSubmit={onSubmit} className="mt-8 space-y-4">
-          <label className="block text-sm font-medium text-ink">
-            {t("password")}
-            <input
-              ref={inputRef}
-              type="password"
-              required
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1.5 w-full border border-line bg-white px-3 py-3 text-base outline-none focus:border-accent"
-            />
-          </label>
-          {error && <p className="text-sm text-red-700">{error}</p>}
-          <button
-            type="submit"
-            disabled={!hydrated}
-            className="w-full rounded-full bg-accent py-3.5 text-sm font-semibold text-white hover:bg-accent-soft disabled:opacity-60"
-          >
-            Start CMS
-          </button>
-        </form>
-      </div>
+      <p className="p-16 text-center text-ink-soft">Beheer openen…</p>
     </>
   );
 }

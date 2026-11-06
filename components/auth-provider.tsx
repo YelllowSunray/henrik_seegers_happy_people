@@ -55,6 +55,8 @@ type AuthContextValue = {
   resetPassword: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
+  /** Open the CMS without a password. Used by /admin. */
+  enterAdmin: () => void;
   unlockAdmin: (password: string) => boolean;
 };
 
@@ -145,8 +147,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     writeAdminPreview(mode);
   }, []);
 
-  const unlockAdmin = useCallback((password: string) => {
-    if (password !== ADMIN_PASSWORD) return false;
+  const enterAdmin = useCallback(() => {
     try {
       sessionStorage.setItem(ADMIN_SESSION_KEY, "1");
     } catch {
@@ -154,8 +155,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     setPasswordAdmin(true);
     writeAdminPreview("off");
-    return true;
   }, []);
+
+  const unlockAdmin = useCallback(
+    (password: string) => {
+      if (password !== ADMIN_PASSWORD) return false;
+      enterAdmin();
+      return true;
+    },
+    [enterAdmin],
+  );
 
   const isRealAdmin = Boolean(profile?.isAdmin) || passwordAdmin;
   const viewingAs = isRealAdmin ? previewMode : "off";
@@ -234,6 +243,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (user) await firebaseSignOut(getClientAuth());
       },
       refreshProfile,
+      enterAdmin,
       unlockAdmin,
     }),
     [
@@ -245,6 +255,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       viewingAs,
       setPreviewMode,
       refreshProfile,
+      enterAdmin,
       unlockAdmin,
     ],
   );
