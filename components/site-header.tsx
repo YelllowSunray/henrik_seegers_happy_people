@@ -16,11 +16,12 @@ const navKeys = [
   ["vlogs", "/vlogs"],
   ["blog", "/blog"],
   ["community", "/community"],
+  ["admin", "/admin"],
 ] as const;
 
 export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" }) {
   const t = useTranslations("nav");
-  const { user, isMember, isAdmin, previewMode, signOut, loading } = useAuth();
+  const { user, isMember, previewMode, signOut, loading } = useAuth();
   const cms = useCmsOptional();
   const cmsMode = Boolean(cms?.enabled);
   const onHero = variant === "hero";
@@ -143,15 +144,6 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                   {t("members")}
                 </Link>
               )}
-              {isAdmin && !cmsMode && (
-                <Link
-                  href="/admin"
-                  className="rounded-lg px-3 py-3.5 text-lg font-medium text-gold transition hover:bg-white/10"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {t("admin")}
-                </Link>
-              )}
               {cmsMode && (
                 <p className="rounded-lg px-3 py-3.5 text-lg font-medium text-gold">
                   CMS · NL
@@ -245,18 +237,6 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                 {t("members")}
               </Link>
             )}
-            {isAdmin && !cmsMode && (
-              <Link
-                href="/admin"
-                className={`hidden text-sm font-semibold transition lg:inline ${
-                  darkChrome
-                    ? "text-gold hover:text-white"
-                    : "text-accent hover:text-accent-soft"
-                }`}
-              >
-                {t("admin")}
-              </Link>
-            )}
             {cmsMode && (
               <span
                 className={`hidden text-xs font-semibold tracking-wide uppercase lg:inline ${
@@ -299,6 +279,16 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
               </Link>
             )}
 
+            <Link
+              href="/admin"
+              className={`inline-flex min-h-11 items-center rounded-full px-3.5 text-sm font-semibold lg:hidden ${
+                darkChrome
+                  ? "bg-white text-ink"
+                  : "bg-accent text-white"
+              }`}
+            >
+              {t("admin")}
+            </Link>
             <button
               type="button"
               className={`inline-flex h-10 w-10 items-center justify-center rounded-full border lg:hidden ${
