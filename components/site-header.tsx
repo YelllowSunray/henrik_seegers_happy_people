@@ -209,7 +209,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
               : "border-b border-line bg-bg/90 backdrop-blur"
         }`}
       >
-      <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-5 py-4 md:gap-4 md:px-8 lg:gap-6">
+      <div className="mx-auto flex w-full max-w-7xl items-center gap-3 pl-[max(1.25rem,env(safe-area-inset-left))] pr-[max(2rem,env(safe-area-inset-right))] py-4 md:gap-4 md:pl-8 md:pr-8 lg:gap-6">
         <HeaderBackButton dark={darkChrome} />
         <Link
           href="/"
