@@ -6,6 +6,7 @@ import { MembershipStory } from "@/components/membership-story";
 import { LightboxImage } from "@/components/lightbox-image";
 import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
 import { CmsField } from "@/components/cms/cms-field";
+import { ParadiseNoteField } from "@/components/paradise-note-field";
 import {
   cmsText,
 } from "@/lib/homepage-content";
@@ -75,7 +76,7 @@ export default async function MembershipPage({
                 artist="Natasha Bedingfield"
                 tone="page"
               />
-              <CmsField
+              <ParadiseNoteField
                 path="membership.paradiseNote"
                 value={paradiseNote}
                 className="reading-copy mt-4 italic"

@@ -337,7 +337,9 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
             </button>
           </div>
         </div>
-        <SeminarPromoBar onHero={onHero} scrolled={scrolled || menuOpen} />
+        {onHero && !cmsMode ? null : (
+          <SeminarPromoBar onHero={onHero} scrolled={scrolled || menuOpen} />
+        )}
       </header>
 
       {mobileMenu}
