@@ -53,17 +53,9 @@ export function useAutosizeTextarea(
       if (node === document.activeElement && (node as HTMLTextAreaElement).dataset.composing === "1") {
         return;
       }
-      // iOS Safari zooms inputs under 16px — floor small fields only.
+      // Keep the designed type size. Do not bump form controls above the public text.
       node.style.fontSize = "";
-      const coarse =
-        typeof window !== "undefined" &&
-        window.matchMedia("(pointer: coarse)").matches;
-      let cs = getComputedStyle(node);
-      const designed = parseFloat(cs.fontSize) || 16;
-      if (coarse && designed > 0 && designed < 16) {
-        node.style.fontSize = "16px";
-        cs = getComputedStyle(node);
-      }
+      const cs = getComputedStyle(node);
       const borderX =
         (parseFloat(cs.borderLeftWidth) || 0) +
         (parseFloat(cs.borderRightWidth) || 0);
@@ -112,7 +104,7 @@ export function useAutosizeTextarea(
 
 /** Shared chrome: live-site look, contained on mobile. */
 const CMS_TEXTAREA =
-  "m-0 box-border max-w-full appearance-none border border-dashed border-accent/40 bg-transparent px-1.5 py-0.5 leading-[inherit] text-inherit outline-none transition " +
+  "m-0 box-border max-w-full appearance-none border border-dashed border-accent/40 bg-transparent p-0 outline-none transition " +
   "hover:border-accent/70 hover:bg-accent/[0.04] focus:border-accent focus:bg-accent/[0.06] focus:ring-1 focus:ring-accent/25 " +
   "resize-none rounded-sm [overflow-wrap:anywhere]";
 

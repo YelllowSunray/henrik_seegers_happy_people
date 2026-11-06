@@ -11,8 +11,6 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { BlogEmptyState, BlogPostArticle } from "@/components/blog-card";
 import {
-  AdminCardActions,
-  AdminCardOpenLink,
   AdminDangerButton,
   AdminField,
   AdminGhostButton,
@@ -353,13 +351,10 @@ function CmsBlogRow({
           </p>
         ) : null}
       </div>
-      <AdminCardActions>
+      <div className="grid grid-cols-2 gap-2 border-t border-line px-3 py-3 sm:flex sm:flex-row sm:flex-wrap">
         <AdminPrimaryButton compact onClick={() => setEditing(true)}>
           Bewerken
         </AdminPrimaryButton>
-        <AdminCardOpenLink href={`/blog/${post.slug}`}>
-          Openen
-        </AdminCardOpenLink>
         <AdminDangerButton
           compact
           onClick={() => {
@@ -374,7 +369,7 @@ function CmsBlogRow({
         >
           Verwijderen
         </AdminDangerButton>
-      </AdminCardActions>
+      </div>
     </li>
   );
 }
