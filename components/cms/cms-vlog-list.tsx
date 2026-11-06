@@ -22,7 +22,7 @@ import {
 } from "@/components/cms/admin-ui";
 import { useCmsOptional } from "@/components/cms/cms-provider";
 import { useAuth } from "@/components/auth-provider";
-import { VlogCover, VlogEmptyState, VlogPostCard } from "@/components/vlog-card";
+import { VlogEmptyState, VlogPostCard } from "@/components/vlog-card";
 import {
   openVlogCamera,
   VlogMediaPick,
@@ -554,32 +554,23 @@ function CmsVlogRow({
 
   return (
     <li className="overflow-hidden rounded-3xl border border-line bg-white shadow-[0_8px_28px_rgba(18,26,24,0.05)]">
-      <div className="grid grid-cols-[6.5rem_1fr] sm:grid-cols-[11rem_1fr]">
-        <VlogCover
-          video={video}
-          alt=""
-          showPlay={false}
-          className="min-h-[6.5rem] sm:min-h-full"
-        />
-        <div className="flex min-w-0 flex-col justify-center px-3 py-3 sm:p-5">
-          <p className="text-sm text-ink-soft">
-            <time dateTime={video.publishedAt}>{date}</time>
-            {video.durationLabel ? (
-              <>
-                <span aria-hidden> · </span>
-                <span>{video.durationLabel}</span>
-              </>
-            ) : null}
-          </p>
-          <h3 className="font-display mt-1 line-clamp-2 text-lg leading-tight text-ink sm:text-2xl">
-            {title}
-          </h3>
-          {excerpt ? (
-            <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-ink-soft sm:text-base">
-              {excerpt}
-            </p>
+      <VlogPlayer url={video.videoUrl} title={title} poster={video.thumbnail} />
+      <div className="px-4 py-4 sm:px-5">
+        <p className="text-sm text-ink-soft">
+          <time dateTime={video.publishedAt}>{date}</time>
+          {video.durationLabel ? (
+            <>
+              <span aria-hidden> · </span>
+              <span>{video.durationLabel}</span>
+            </>
           ) : null}
-        </div>
+        </p>
+        <h3 className="font-display mt-1 text-2xl leading-tight text-ink">
+          {title}
+        </h3>
+        {excerpt ? (
+          <p className="mt-2 text-base leading-relaxed text-ink-soft">{excerpt}</p>
+        ) : null}
       </div>
       <AdminCardActions>
         <AdminPrimaryButton compact onClick={() => setEditing(true)}>
@@ -677,7 +668,7 @@ export function CmsVlogList({
         {videos.length === 0 ? (
           <VlogEmptyState title={page("emptyTitle")} hint={page("emptyHint")} />
         ) : (
-          <ul className="space-y-4">
+          <ul className="mx-auto flex max-w-3xl flex-col gap-8">
             {videos.map((video) => (
               <CmsVlogRow
                 key={video.id}
@@ -699,22 +690,13 @@ export function CmsVlogList({
     );
   }
 
-  const [featured, ...rest] = videos;
-
   return (
-    <>
-      {featured ? (
-        <VlogPostCard video={featured} locale={loc} featured />
-      ) : null}
-      {rest.length > 0 ? (
-        <ul className="mt-6 grid gap-5 sm:grid-cols-2 sm:gap-6">
-          {rest.map((video) => (
-            <li key={video.id} className="min-w-0">
-              <VlogPostCard video={video} locale={loc} />
-            </li>
-          ))}
-        </ul>
-      ) : null}
-    </>
+    <ul className="mx-auto flex max-w-3xl flex-col gap-8">
+      {videos.map((video) => (
+        <li key={video.id} className="min-w-0">
+          <VlogPostCard video={video} locale={loc} />
+        </li>
+      ))}
+    </ul>
   );
 }

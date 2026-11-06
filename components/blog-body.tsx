@@ -187,7 +187,7 @@ export function BlogBody({
 
   return (
     <div
-      className={`max-w-2xl space-y-6 reading-copy ${className}`}
+      className={`space-y-6 reading-copy ${className || "max-w-2xl"}`}
     >
       {paragraphs.flatMap((paragraph, i) => {
         const chunks = splitMarkdownImages(paragraph);

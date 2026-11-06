@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { BlogBody } from "@/components/blog-body";
 import { t } from "@/lib/content";
 import { formatPostDate, readingMinutes } from "@/lib/journal";
 import type { BlogPost, Locale } from "@/lib/types";
@@ -161,6 +162,45 @@ export function BlogPostCard({
           {body}
         </div>
       </Link>
+    </article>
+  );
+}
+
+/** Full post on the public blog page — no extra click to read it. */
+export function BlogPostArticle({
+  post,
+  locale,
+}: {
+  post: BlogPost;
+  locale: Locale;
+}) {
+  const tr = useTranslations("blog");
+  const title = t(post.title, locale) || "Zonder titel";
+  const excerpt = t(post.excerpt, locale);
+  const body = t(post.body, locale);
+  const minutes = readingMinutes(title, excerpt, body);
+  const date = formatPostDate(post.publishedAt, locale);
+
+  return (
+    <article className="overflow-hidden rounded-3xl border border-line bg-white shadow-[0_8px_28px_rgba(18,26,24,0.05)]">
+      <BlogCover post={post} alt="" variant="hero" />
+      <div className="px-5 py-6 sm:px-8 sm:py-8">
+        <p className="text-sm font-medium text-ink-soft">
+          <time dateTime={post.publishedAt}>{date}</time>
+          <span aria-hidden> · </span>
+          <span>{tr("minutes", { count: minutes })}</span>
+        </p>
+        <h2 className="font-display mt-2 text-3xl leading-tight text-ink sm:text-4xl">
+          {title}
+        </h2>
+        {body.trim() ? (
+          <div className="mt-6">
+            <BlogBody text={body} className="max-w-none" />
+          </div>
+        ) : excerpt ? (
+          <p className="mt-4 text-lg leading-relaxed text-ink-soft">{excerpt}</p>
+        ) : null}
+      </div>
     </article>
   );
 }

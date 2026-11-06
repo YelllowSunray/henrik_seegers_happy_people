@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { VlogPlayer } from "@/components/vlog-player";
 import { youtubeThumbnailFromUrl } from "@/components/youtube-embed";
 import { t } from "@/lib/content";
 import { formatPostDate } from "@/lib/journal";
@@ -98,80 +99,52 @@ export function VlogCover({
 export function VlogPostCard({
   video,
   locale,
-  featured = false,
 }: {
   video: VideoItem;
   locale: Locale;
   featured?: boolean;
 }) {
-  const tr = useTranslations("vlogsPage");
   const journal = useTranslations("journal");
   const title = t(video.title, locale) || "Zonder titel";
   const excerpt = t(video.description, locale);
   const date = formatPostDate(video.publishedAt, locale);
+  const audio = video.mediaType === "audio" || Boolean(video.audioUrl?.trim());
 
   return (
-    <article
-      className={`group overflow-hidden rounded-3xl border border-line bg-white shadow-[0_8px_28px_rgba(18,26,24,0.05)] transition hover:border-accent/25 hover:shadow-[0_12px_36px_rgba(18,26,24,0.08)] ${
-        featured ? "" : "h-full"
-      }`}
-    >
-      <Link
-        href={`/vlogs/${video.id}`}
-        className={`block ${featured ? "lg:grid lg:min-h-[22rem] lg:grid-cols-2" : ""}`}
-      >
-        <VlogCover
-          video={video}
-          alt=""
-          variant={featured ? "featured" : "card"}
-        />
-        <div
-          className={`flex flex-col justify-center ${
-            featured ? "p-4 sm:p-8 lg:p-10" : "p-5 sm:p-6"
-          }`}
-        >
-          {featured ? (
-            <p className="mb-2 text-xs font-semibold tracking-[0.16em] text-accent uppercase">
-              {tr("featured")}
-            </p>
-          ) : null}
-          <p className="text-sm text-ink-soft">
-            <time dateTime={video.publishedAt}>{date}</time>
-            {video.durationLabel ? (
-              <>
-                <span aria-hidden> · </span>
-                <span>{video.durationLabel}</span>
-              </>
-            ) : null}
-          </p>
-          <h2
-            className={`font-display mt-2 text-ink group-hover:text-accent ${
-              featured
-                ? "text-[1.65rem] leading-tight sm:text-3xl md:text-4xl"
-                : "text-xl leading-tight sm:text-2xl"
-            }`}
+    <article className="overflow-hidden rounded-3xl border border-line bg-white shadow-[0_8px_28px_rgba(18,26,24,0.05)]">
+      {audio && video.audioUrl ? (
+        <div className="bg-ink px-4 py-5">
+          <audio
+            controls
+            preload="metadata"
+            src={video.audioUrl}
+            className="w-full"
           >
-            {title}
-          </h2>
-          {excerpt ? (
-            <p
-              className={`mt-3 text-ink-soft ${
-              featured
-                ? "line-clamp-2 text-base leading-relaxed sm:line-clamp-3 sm:text-lg"
-                : "line-clamp-3 text-sm leading-relaxed sm:text-base"
-              }`}
-            >
-              {excerpt}
-            </p>
-          ) : null}
-          <span className="mt-5 inline-flex min-h-11 items-center text-sm font-semibold text-accent">
-            {journal("watch")}
-            <span aria-hidden className="ml-1.5">
-              →
-            </span>
-          </span>
+            {journal("videoUnsupported")}
+          </audio>
         </div>
-      </Link>
+      ) : (
+        <VlogPlayer url={video.videoUrl} title={title} poster={video.thumbnail} />
+      )}
+      <div className="px-4 py-4 sm:px-6 sm:py-5">
+        <p className="text-sm text-ink-soft">
+          <time dateTime={video.publishedAt}>{date}</time>
+          {video.durationLabel ? (
+            <>
+              <span aria-hidden> · </span>
+              <span>{video.durationLabel}</span>
+            </>
+          ) : null}
+        </p>
+        <h2 className="font-display mt-1 text-2xl leading-tight text-ink sm:text-3xl">
+          <Link href={`/vlogs/${video.id}`} className="hover:text-accent">
+            {title}
+          </Link>
+        </h2>
+        {excerpt ? (
+          <p className="mt-2 text-base leading-relaxed text-ink-soft">{excerpt}</p>
+        ) : null}
+      </div>
     </article>
   );
 }

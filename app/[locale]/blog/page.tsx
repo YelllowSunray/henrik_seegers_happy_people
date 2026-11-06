@@ -52,7 +52,7 @@ export default async function BlogPage({
     <>
       <SiteHeader variant="solid" />
       <Section compact>
-        <div className="max-w-2xl">
+        <div className="max-w-3xl">
           <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase">
             {eyebrow}
           </p>

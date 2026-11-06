@@ -9,7 +9,7 @@ import {
 } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { BlogEmptyState, BlogPostCard } from "@/components/blog-card";
+import { BlogEmptyState, BlogPostArticle } from "@/components/blog-card";
 import {
   AdminCardActions,
   AdminCardOpenLink,
@@ -382,7 +382,6 @@ function CmsBlogRow({
 export function CmsBlogFeed({
   posts: initialPosts,
   locale,
-  readLabel,
   emptyLabel,
   ctaLabel,
   limit,
@@ -433,36 +432,15 @@ export function CmsBlogFeed({
       );
     }
 
-    const [featured, ...rest] = visible;
-    const useFeatured = !limit && Boolean(featured);
-
     return (
       <>
-        {useFeatured && featured ? (
-          <BlogPostCard
-            post={featured}
-            locale={locale}
-            readLabel={readLabel}
-            featured
-          />
-        ) : null}
-        {(useFeatured ? rest : visible).length > 0 ? (
-          <ul
-            className={`grid gap-5 sm:grid-cols-2 sm:gap-6 ${
-              useFeatured ? "mt-6" : ""
-            }`}
-          >
-            {(useFeatured ? rest : visible).map((post) => (
-              <li key={post.id} className="min-w-0">
-                <BlogPostCard
-                  post={post}
-                  locale={locale}
-                  readLabel={readLabel}
-                />
-              </li>
-            ))}
-          </ul>
-        ) : null}
+        <ul className="flex max-w-3xl flex-col gap-10">
+          {visible.map((post) => (
+            <li key={post.id} className="min-w-0">
+              <BlogPostArticle post={post} locale={locale} />
+            </li>
+          ))}
+        </ul>
         {showCta && ctaLabel ? (
           <div className="mt-10 border-t border-line pt-8">
             <Link

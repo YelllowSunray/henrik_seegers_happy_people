@@ -90,14 +90,13 @@ export function VlogPlayer({
 
   if (isDirectMediaUrl(src) || !src.includes("youtube.")) {
     return (
-      <div className="aspect-video bg-ink">
+      <div className="bg-ink">
         <video
           controls
           playsInline
           preload="metadata"
-          poster={poster}
           src={src}
-          className="h-full w-full"
+          className="mx-auto block max-h-[70dvh] w-full bg-black object-contain"
         >
           {tr("videoUnsupported")}
         </video>
