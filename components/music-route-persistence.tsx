@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname } from "@/i18n/navigation";
+import { locales } from "@/i18n/locales";
 import {
   kickAutoplayForCurrentView,
   markAudioForResumeOnReturn,
@@ -9,7 +10,43 @@ import {
   resumeMusicAfterNavigation,
   resumeMusicIfNeeded,
   resumeMusicOnPageVisible,
+  setAutomaticMusicEnabled,
 } from "@/components/synced-lyric-player";
+
+const NAV_PATHS = [
+  "/video-bell",
+  "/seminars",
+  "/vlogs",
+  "/blog",
+  "/community",
+] as const;
+
+function stripLocale(pathname: string): string {
+  const parts = pathname.split("/");
+  const maybeLocale = parts[1];
+  if (maybeLocale && (locales as readonly string[]).includes(maybeLocale)) {
+    const rest = `/${parts.slice(2).join("/")}`.replace(/\/$/, "");
+    return rest || "/";
+  }
+  return pathname;
+}
+
+/** Pages opened from the main nav. Automatic music stays off here. */
+function isNavContentPath(pathname: string): boolean {
+  const path = stripLocale(pathname);
+  return NAV_PATHS.some((nav) => path === nav || path.startsWith(`${nav}/`));
+}
+
+function syncMusicToPath(pathname: string) {
+  if (isNavContentPath(pathname)) {
+    setAutomaticMusicEnabled(false);
+    return;
+  }
+  setAutomaticMusicEnabled(true);
+  reconcileMusicResumeState();
+  resumeMusicIfNeeded();
+  kickAutoplayForCurrentView();
+}
 
 function isInternalLink(anchor: HTMLAnchorElement): boolean {
   if (anchor.target === "_blank" || anchor.hasAttribute("download")) return false;
@@ -40,15 +77,9 @@ function shouldMarkResumeForLink(anchor: HTMLAnchorElement): boolean {
   return isInternalLink(anchor) || isLeavingSiteLink(anchor);
 }
 
-/** Keep shared music playing across in-app navigation (mobile + desktop). */
+/** Homepage music keeps playing across the site, except on main nav pages. */
 export function MusicRoutePersistence() {
   const pathname = usePathname();
-
-  useEffect(() => {
-    reconcileMusicResumeState();
-    resumeMusicIfNeeded();
-    kickAutoplayForCurrentView();
-  }, []);
 
   useEffect(() => {
     const onVisibility = () => {
@@ -73,6 +104,17 @@ export function MusicRoutePersistence() {
       if (!(target instanceof Element)) return;
       const anchor = target.closest("a[href]");
       if (!(anchor instanceof HTMLAnchorElement)) return;
+      const href = anchor.getAttribute("href");
+      if (href) {
+        try {
+          if (isNavContentPath(new URL(href, window.location.href).pathname)) {
+            setAutomaticMusicEnabled(false);
+            return;
+          }
+        } catch {
+          /* ignore bad hrefs */
+        }
+      }
       if (!shouldMarkResumeForLink(anchor)) return;
       markAudioForResumeOnReturn();
     };
@@ -88,6 +130,11 @@ export function MusicRoutePersistence() {
     });
 
     const onPopState = () => {
+      if (isNavContentPath(window.location.pathname)) {
+        setAutomaticMusicEnabled(false);
+        return;
+      }
+      setAutomaticMusicEnabled(true);
       markAudioForResumeOnReturn();
       resumeMusicAfterNavigation();
     };
@@ -102,9 +149,7 @@ export function MusicRoutePersistence() {
   }, []);
 
   useEffect(() => {
-    reconcileMusicResumeState();
-    resumeMusicIfNeeded();
-    kickAutoplayForCurrentView();
+    syncMusicToPath(pathname);
   }, [pathname]);
 
   return null;

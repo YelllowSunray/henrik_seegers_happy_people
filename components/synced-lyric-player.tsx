@@ -46,6 +46,11 @@ let handoffRunId = 0;
 let playGeneration = 0;
 /** True after user leaves while music was playing — keep going until they pause. */
 let routePersistPlaying = false;
+/**
+ * Nav pages (blog, vlogs, seminars, community, Zoom) stay quiet.
+ * Homepage autoplay and route-resume must not start a track there.
+ */
+let suppressAutomaticMusic = false;
 /** Set when page/app backgrounds while music should resume on return. */
 let resumeAfterBackground = false;
 const RESUME_STORAGE_KEY = "hssc-audio-resume";
@@ -81,6 +86,14 @@ function getSharedAudio(): HTMLAudioElement {
       }
     });
     sharedAudio.addEventListener("play", () => {
+      if (suppressAutomaticMusic && !userPinnedPlayback) {
+        try {
+          sharedAudio?.pause();
+        } catch {
+          /* ignore */
+        }
+        return;
+      }
       mediaUnlocked = true;
       routePersistPlaying = true;
       writeResumeSnapshot();
@@ -88,6 +101,7 @@ function getSharedAudio(): HTMLAudioElement {
     });
     sharedAudio.addEventListener("pause", () => {
       if (
+        !suppressAutomaticMusic &&
         routePersistPlaying &&
         scrollHandoffEnabled &&
         sharedAudio?.src &&
@@ -555,6 +569,7 @@ function readLastHandoff(): LastHandoff | null {
 
 /** Start or resume in the same touch/click turn — required on iOS Safari. */
 function tryPlayFromGesturePreferResume(): void {
+  if (suppressAutomaticMusic) return;
   void playForCurrentScrollPosition(true);
 }
 
@@ -566,6 +581,7 @@ async function playForCurrentScrollPosition(
   fromUserGesture = false,
 ): Promise<boolean> {
   if (typeof window === "undefined") return false;
+  if (suppressAutomaticMusic && !fromUserGesture) return false;
   if (anyPlaying() || holdHandoffUntilScroll) return false;
 
   const snap = readResumeSnapshot();
@@ -637,7 +653,7 @@ function scheduleReturnAutoplayBurst() {
 
 /** Re-try autoplay for whatever widget is visible (route change / return from app). */
 export function kickAutoplayForCurrentView() {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || suppressAutomaticMusic) return;
   ensureScrollListening();
   if (anyPlaying()) return;
   void playForCurrentScrollPosition(false);
@@ -662,6 +678,7 @@ function scheduleInitialAutoplayBurst() {
 }
 
 async function runHandoff() {
+  if (suppressAutomaticMusic) return;
   if (!scrollHandoffEnabled || holdHandoffUntilScroll) return;
 
   // No lyric widgets on this page (e.g. blog post) — keep whatever is playing.
@@ -938,6 +955,7 @@ function ensureResumeGestureListening() {
 }
 
 function onPageVisibleAgain() {
+  if (suppressAutomaticMusic) return;
   ensureResumeGestureListening();
   ensureGestureListening();
   snapshotForResume();
@@ -1005,7 +1023,7 @@ export function resumeMusicOnPageVisible() {
 
 /** Resume / autoplay for current scroll position after backgrounding. */
 export function resumeMusicAfterNavigation() {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || suppressAutomaticMusic) return;
   ensureReturnResumeListening();
   void playForCurrentScrollPosition(false);
   for (const ms of [50, 150, 350, 700, 1200, 2000, 3500, 5000]) {
@@ -1028,9 +1046,39 @@ export function reconcileMusicResumeState() {
   }
 }
 
+/** Stop automatic music on nav pages, or allow it again on the homepage. */
+export function setAutomaticMusicEnabled(enabled: boolean) {
+  if (typeof window === "undefined") return;
+  if (!enabled) {
+    suppressAutomaticMusic = true;
+    playGeneration += 1;
+    cancelPendingHandoff();
+    clearInitialAutoplayTimers();
+    routePersistPlaying = false;
+    resumeAfterBackground = false;
+    userPinnedPlayback = false;
+    holdHandoffUntilScroll = false;
+    scrollHandoffEnabled = false;
+    clearResumeSnapshot();
+    const audio = sharedAudio;
+    if (audio && !audio.paused) {
+      try {
+        audio.pause();
+      } catch {
+        /* ignore */
+      }
+    }
+    notifyPlayState(false);
+    return;
+  }
+  if (!suppressAutomaticMusic) return;
+  suppressAutomaticMusic = false;
+  scrollHandoffEnabled = true;
+}
+
 /** Resume or start music for the current view when returning to the site. */
 export function resumeMusicIfNeeded() {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || suppressAutomaticMusic) return;
   if (anyPlaying()) return;
   if (shouldAttemptResume()) {
     resumeMusicAfterNavigation();
@@ -1116,6 +1164,11 @@ export function resumeMusicAfterChat() {
 
   scrollHandoffEnabled = handoffBeforeChatOverlay;
 
+  if (suppressAutomaticMusic) {
+    playingBeforeChatOverlay = false;
+    return;
+  }
+
   if (playingBeforeChatOverlay) {
     playingBeforeChatOverlay = false;
     routePersistPlaying = true;
@@ -1196,6 +1249,7 @@ export function SyncedLyricPlayer({
       setTime(audio.currentTime);
       routePersistPlaying = true;
     } else if (
+      !suppressAutomaticMusic &&
       shouldAttemptResume() &&
       sameSrc(audio.src || "", audioSrc) &&
       audio.paused &&
@@ -1225,7 +1279,7 @@ export function SyncedLyricPlayer({
         // Keep audio playing across routes; just clear the widget id.
         activePlayerId = null;
       }
-      // Do NOT pause shared audio on unmount — blog posts should keep hearing it.
+      // Do not pause here. Nav pages stop the track in MusicRoutePersistence.
     };
   }, [audioSrc]);
 
