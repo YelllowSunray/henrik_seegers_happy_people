@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
-import { JoinButton } from "@/components/join-button";
 import { MembershipStory } from "@/components/membership-story";
 import { DonateSection } from "@/components/donate-section";
 import { SpeedGallery } from "@/components/speed-gallery";
@@ -13,7 +12,6 @@ import { SeminarStory } from "@/components/seminar-story";
 import { SpiritsPlayer } from "@/components/spirits-player";
 import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
 import { CmsField, CmsParagraphs } from "@/components/cms/cms-field";
-import { CmsHeroCtas } from "@/components/cms/cms-hero-ctas";
 import { CmsOrExpandable } from "@/components/cms/cms-or-static";
 import { fetchEvents } from "@/lib/content-firestore";
 import {
@@ -40,11 +38,7 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
   const nextEvent = events[0];
 
   const hero = {
-    brand: cmsText(cms?.hero.brand, tNav("brand")),
-    headline: cmsText(cms?.hero.headline, tNav("headline")),
     support: cmsText(cms?.hero.support, tNav("support")),
-    ctaJoin: cmsText(cms?.hero.ctaJoin, tNav("ctaJoin")),
-    ctaSeminar: cmsText(cms?.hero.ctaSeminar, tNav("ctaSeminar")),
   };
   const message = {
     eyebrow: cmsText(cms?.message.eyebrow, tMsg("eyebrow")),
@@ -97,25 +91,11 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
         <div className="relative mx-auto flex min-h-[100svh] w-full flex-col justify-end gap-4 px-5 pb-8 pt-[calc(var(--site-header-h,6.5rem)+0.75rem)] sm:gap-8 sm:pb-16 md:px-8 md:pb-24 lg:flex-row lg:items-end lg:justify-between lg:gap-12 lg:px-10 xl:px-14">
           <div className="min-w-0 max-w-6xl lg:max-w-xl xl:max-w-2xl">
             <CmsField
-              path="hero.brand"
-              value={hero.brand}
-              as="p"
-              multiline={false}
-              className="reveal font-display text-4xl leading-[1.05] text-white drop-shadow sm:text-5xl md:text-7xl lg:text-8xl"
-            />
-            <CmsField
-              path="hero.headline"
-              value={hero.headline}
-              as="h1"
-              className="reveal reveal-delay-1 mt-1 max-w-xl text-balance text-lg leading-snug text-white sm:mt-4 sm:text-xl md:text-2xl lg:text-[1.65rem]"
-            />
-            <CmsField
               path="hero.support"
               value={hero.support}
               as="p"
-              className="reveal reveal-delay-2 mt-1 max-w-md text-base leading-snug text-white/90 sm:mt-3 sm:text-lg"
+              className="reveal max-w-md text-base leading-snug text-white/90 sm:text-lg"
             />
-            <CmsHeroCtas ctaJoin={hero.ctaJoin} ctaSeminar={hero.ctaSeminar} />
           </div>
 
           <div className="w-full shrink-0 lg:ml-auto lg:w-auto lg:max-w-[41rem]">
