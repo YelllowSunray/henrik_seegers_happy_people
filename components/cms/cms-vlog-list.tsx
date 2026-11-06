@@ -23,7 +23,11 @@ import {
 import { useCmsOptional } from "@/components/cms/cms-provider";
 import { useAuth } from "@/components/auth-provider";
 import { VlogCover, VlogEmptyState, VlogPostCard } from "@/components/vlog-card";
-import { VlogMediaPick, type VlogMediaSource } from "@/components/vlog-media-pick";
+import {
+  openVlogCamera,
+  VlogMediaPick,
+  type VlogMediaSource,
+} from "@/components/vlog-media-pick";
 import { VlogPlayer } from "@/components/vlog-player";
 import { youtubeThumbSrc } from "@/components/youtube-embed";
 import {
@@ -41,6 +45,9 @@ import type { Locale, VideoItem } from "@/lib/types";
 function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
+  const [opening, setOpening] = useState(false);
+  const [camera, setCamera] = useState<MediaStream | null>(null);
+  const [cameraKey, setCameraKey] = useState(0);
   const [blob, setBlob] = useState<Blob | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [youtube, setYoutube] = useState<{ url: string; id: string } | null>(
@@ -66,8 +73,14 @@ function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
 
   useEffect(() => () => revokePreview(), []);
 
+  function stopCamera(stream: MediaStream | null) {
+    stream?.getTracks().forEach((track) => track.stop());
+  }
+
   function reset(close = true) {
     revokePreview();
+    stopCamera(camera);
+    setCamera(null);
     setBlob(null);
     setPreviewUrl(null);
     setYoutube(null);
@@ -76,6 +89,39 @@ function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
     setError(null);
     setProgress(0);
     if (close) setOpen(false);
+  }
+
+  async function openRecorder() {
+    if (opening) return;
+    setPublished(null);
+    setError(null);
+    setOpening(true);
+    try {
+      const stream = await openVlogCamera();
+      setCamera(stream);
+      setCameraKey((key) => key + 1);
+      setOpen(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Camera starten lukte niet.");
+    } finally {
+      setOpening(false);
+    }
+  }
+
+  async function retake() {
+    setError(null);
+    try {
+      const stream = await openVlogCamera();
+      stopCamera(camera);
+      revokePreview();
+      setBlob(null);
+      setPreviewUrl(null);
+      setYoutube(null);
+      setCamera(stream);
+      setCameraKey((key) => key + 1);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Camera starten lukte niet.");
+    }
   }
 
   function onPicked(source: VlogMediaSource) {
@@ -104,7 +150,7 @@ function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
 
   async function publish() {
     if (!hasMedia) {
-      setError("Kies, neem of plak eerst een video.");
+      setError("Neem eerst een video op.");
       return;
     }
     if (!title.trim()) {
@@ -163,86 +209,71 @@ function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
         </AdminSuccess>
       ) : null}
       {!open ? (
-        <AdminNewButton
-          onClick={() => {
-            setPublished(null);
-            setOpen(true);
-          }}
-        >
-          Nieuwe vlog
-        </AdminNewButton>
+        <>
+          <AdminNewButton onClick={() => void openRecorder()}>
+            {opening ? "Camera starten…" : "Nieuwe vlog"}
+          </AdminNewButton>
+          {error ? <p className="mt-3 text-base text-red-700">{error}</p> : null}
+        </>
       ) : (
         <div className="rounded-2xl border border-line bg-bg-deep/40 p-5 sm:p-6">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="text-sm font-semibold tracking-[0.14em] text-accent uppercase">
-                Nieuwe vlog
-              </p>
-              <p className="mt-1 text-base text-ink-soft">
-                Eerst een video of YouTube-link, daarna titel en tekst, en dan
-                Publiceren.
-              </p>
-            </div>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm font-semibold tracking-[0.14em] text-accent uppercase">
+              Nieuwe vlog
+            </p>
             <AdminGhostButton onClick={close}>Annuleren</AdminGhostButton>
           </div>
 
           <div className="mt-6 space-y-8">
             <div>
-              <p className="text-base font-semibold text-ink">1. Kies je video</p>
-              <p className="mt-1 text-sm text-ink-soft">
-                Drie keuzes: een bestand, nu opnemen, of een YouTube-link.
-              </p>
-              <div className="mt-3">
-                {youtube ? (
-                  <div className="space-y-3">
-                    <div className="overflow-hidden rounded-2xl">
-                      <VlogPlayer
-                        url={youtube.url}
-                        title={title.trim() || "YouTube"}
-                        poster={youtubeThumbSrc(youtube.id)}
-                        eager
-                      />
-                    </div>
-                    <AdminGhostButton onClick={() => reset(false)}>
-                      Andere video
-                    </AdminGhostButton>
+              {youtube ? (
+                <div className="space-y-3">
+                  <div className="overflow-hidden rounded-2xl">
+                    <VlogPlayer
+                      url={youtube.url}
+                      title={title.trim() || "YouTube"}
+                      poster={youtubeThumbSrc(youtube.id)}
+                      eager
+                    />
                   </div>
-                ) : blob && previewUrl ? (
-                  <div className="space-y-3">
-                    <div className="overflow-hidden rounded-2xl bg-ink">
-                      <video
-                        src={previewUrl}
-                        controls
-                        playsInline
-                        className="aspect-[9/16] w-full bg-black object-contain sm:aspect-video"
-                      />
-                    </div>
-                    <AdminGhostButton onClick={() => reset(false)}>
-                      Andere video
-                    </AdminGhostButton>
+                  <AdminGhostButton onClick={() => void retake()}>
+                    Opnieuw opnemen
+                  </AdminGhostButton>
+                </div>
+              ) : blob && previewUrl ? (
+                <div className="space-y-3">
+                  <div className="overflow-hidden rounded-2xl bg-ink">
+                    <video
+                      src={previewUrl}
+                      controls
+                      playsInline
+                      className="mx-auto aspect-[9/16] max-h-[calc(100dvh-18rem)] w-full bg-black object-contain"
+                    />
                   </div>
-                ) : (
-                  <VlogMediaPick onReady={onPicked} />
-                )}
-              </div>
+                  <AdminGhostButton onClick={() => void retake()}>
+                    Opnieuw opnemen
+                  </AdminGhostButton>
+                </div>
+              ) : (
+                <VlogMediaPick
+                  key={cameraKey}
+                  initialStream={camera}
+                  onReady={onPicked}
+                  onCancel={close}
+                />
+              )}
             </div>
 
             {hasMedia ? (
               <>
-                <AdminField
-                  label="2. Titel"
-                  hint="De kop die bezoekers zien."
-                >
+                <AdminField label="Titel">
                   <AdminInput
                     value={title}
                     onChange={setTitle}
                     placeholder="Bijvoorbeeld: Een moment van rust"
                   />
                 </AdminField>
-                <AdminField
-                  label="3. Korte tekst"
-                  hint="Wat wil je bij de video zeggen? Mag leeg blijven."
-                >
+                <AdminField label="Korte tekst">
                   <AdminTextarea
                     value={description}
                     onChange={setDescription}
@@ -250,16 +281,6 @@ function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
                     minRows={3}
                   />
                 </AdminField>
-                <AdminPreview label="Zo ziet het eruit">
-                  <h2 className="font-display text-2xl leading-tight text-ink">
-                    {title.trim() || "Titel"}
-                  </h2>
-                  {description.trim() ? (
-                    <p className="mt-2 text-base leading-relaxed text-ink-soft">
-                      {description}
-                    </p>
-                  ) : null}
-                </AdminPreview>
                 {error ? <p className="text-base text-red-700">{error}</p> : null}
                 {busy ? (
                   <p className="text-base font-medium text-ink">
@@ -300,6 +321,7 @@ function VlogEditForm({
     null,
   );
   const [replacing, setReplacing] = useState(false);
+  const [replaceStream, setReplaceStream] = useState<MediaStream | null>(null);
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -447,12 +469,32 @@ function VlogEditForm({
 
       {replacing ? (
         <VlogMediaPick
+          initialStream={replaceStream}
           onReady={onPicked}
-          onCancel={() => setReplacing(false)}
+          onCancel={() => {
+            replaceStream?.getTracks().forEach((track) => track.stop());
+            setReplaceStream(null);
+            setReplacing(false);
+          }}
         />
       ) : (
-        <AdminGhostButton onClick={() => setReplacing(true)}>
-          Andere video
+        <AdminGhostButton
+          onClick={() => {
+            void (async () => {
+              try {
+                const stream = await openVlogCamera();
+                setReplaceStream(stream);
+                setReplacing(true);
+                setError(null);
+              } catch (err) {
+                setError(
+                  err instanceof Error ? err.message : "Camera starten lukte niet.",
+                );
+              }
+            })();
+          }}
+        >
+          Opnieuw opnemen
         </AdminGhostButton>
       )}
 

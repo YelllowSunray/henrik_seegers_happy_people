@@ -9,8 +9,7 @@ import {
 } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { BlogBody } from "@/components/blog-body";
-import { BlogCover, BlogEmptyState, BlogPostCard } from "@/components/blog-card";
+import { BlogEmptyState, BlogPostCard } from "@/components/blog-card";
 import {
   AdminCardActions,
   AdminCardOpenLink,
@@ -19,7 +18,6 @@ import {
   AdminGhostButton,
   AdminInput,
   AdminNewButton,
-  AdminPreview,
   AdminPrimaryButton,
   AdminSaveStatus,
   AdminSuccess,
@@ -28,7 +26,6 @@ import {
   confirmLeave,
   useLeaveGuard,
 } from "@/components/cms/admin-ui";
-import { BlogCoverField } from "@/components/cms/blog-image-pick";
 import { useCmsOptional } from "@/components/cms/cms-provider";
 import { FACEBOOK_HREF } from "@/lib/contact";
 import {
@@ -55,6 +52,11 @@ const emptyDraft = (): Draft => ({
   body: "",
   coverImage: "",
 });
+
+function leadFromBody(body: string) {
+  const first = body.replace(/\r\n/g, "\n").split(/\n\s*\n/)[0] ?? "";
+  return first.replace(/\s+/g, " ").trim().slice(0, 180);
+}
 
 function useDebouncedSave(
   postId: string | null,
@@ -114,82 +116,27 @@ function BlogFormFields({
   onChange: (next: Draft) => void;
 }) {
   return (
-    <div className="space-y-6">
-      <AdminField
-        label="1. Titel"
-        hint="De kop die bezoekers als eerste zien."
-      >
+    <div className="space-y-5">
+      <AdminField label="Titel">
         <AdminInput
           value={draft.title}
-          onChange={(title) => onChange({ ...draft, title })}
-          placeholder="Bijvoorbeeld: Je bent niet verloren"
+          onChange={(title) =>
+            onChange({ ...draft, title, excerpt: leadFromBody(draft.body) })
+          }
+          placeholder="Titel"
         />
       </AdminField>
-      <AdminField
-        label="2. Korte intro"
-        hint="Eén of twee zinnen onder de titel."
-      >
-        <AdminTextarea
-          value={draft.excerpt}
-          onChange={(excerpt) => onChange({ ...draft, excerpt })}
-          placeholder="Waar gaat dit bericht over?"
-          minRows={3}
-        />
-      </AdminField>
-      <AdminField
-        label="3. Omslagfoto"
-        hint="Deze foto komt op de kaart en bovenaan het bericht."
-      >
-        <BlogCoverField
-          value={draft.coverImage}
-          onChange={(coverImage) => onChange({ ...draft, coverImage })}
-        />
-      </AdminField>
-      <AdminField
-        label="4. Het verhaal"
-        hint="Lege regel = nieuwe alinea."
-      >
+      <AdminField label="Tekst">
         <AdminTextarea
           value={draft.body}
-          onChange={(body) => onChange({ ...draft, body })}
-          placeholder="Schrijf hier je blog."
+          onChange={(body) =>
+            onChange({ ...draft, body, excerpt: leadFromBody(body) })
+          }
+          placeholder="Schrijf je blog."
           minRows={8}
         />
       </AdminField>
     </div>
-  );
-}
-
-function BlogPreview({ draft }: { draft: Draft }) {
-  return (
-    <AdminPreview label="Zo ziet het eruit">
-      {draft.coverImage ? (
-        <div className="mb-5 overflow-hidden rounded-2xl border border-line">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={draft.coverImage}
-            alt=""
-            className="aspect-[16/10] w-full object-cover"
-          />
-        </div>
-      ) : null}
-      <p className="text-sm text-ink-soft">Vandaag</p>
-      <h2 className="font-display mt-2 text-2xl leading-tight text-ink sm:text-3xl">
-        {draft.title.trim() || "Titel"}
-      </h2>
-      {draft.excerpt.trim() ? (
-        <p className="mt-3 text-base leading-relaxed text-ink-soft">
-          {draft.excerpt}
-        </p>
-      ) : null}
-      {draft.body.trim() ? (
-        <div className="mt-5">
-          <BlogBody text={draft.body} />
-        </div>
-      ) : (
-        <p className="mt-5 text-sm text-ink-soft">Nog geen tekst.</p>
-      )}
-    </AdminPreview>
   );
 }
 
@@ -266,20 +213,14 @@ function NewBlog({ onCreated }: { onCreated: (post: BlogPost) => void }) {
         </AdminNewButton>
       ) : (
         <div className="rounded-2xl border border-line bg-bg-deep/40 p-5 sm:p-6">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="text-sm font-semibold tracking-[0.14em] text-accent uppercase">
-                Nieuwe blog
-              </p>
-              <p className="mt-1 text-base text-ink-soft">
-                Titel, intro, eventueel een foto, dan het verhaal — en Publiceren.
-              </p>
-            </div>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm font-semibold tracking-[0.14em] text-accent uppercase">
+              Nieuwe blog
+            </p>
             <AdminGhostButton onClick={close}>Annuleren</AdminGhostButton>
           </div>
-          <div className="mt-6 space-y-8">
+          <div className="mt-6 space-y-6">
             <BlogFormFields draft={draft} onChange={setDraft} />
-            <BlogPreview draft={draft} />
             {error ? <p className="text-base text-red-700">{error}</p> : null}
             <AdminPrimaryButton busy={busy} onClick={() => void publish()}>
               {busy ? "Bezig…" : "Publiceren"}
@@ -357,11 +298,7 @@ function BlogEditForm({
           </AdminDangerButton>
         </div>
       </div>
-      <p className="text-sm text-ink-soft">
-        Wijzigingen worden automatisch opgeslagen.
-      </p>
       <BlogFormFields draft={draft} onChange={updateDraft} />
-      <BlogPreview draft={draft} />
       {error ? <p className="text-base text-red-700">{error}</p> : null}
     </div>
   );
@@ -401,27 +338,20 @@ function CmsBlogRow({
 
   return (
     <li className="overflow-hidden rounded-3xl border border-line bg-white shadow-[0_8px_28px_rgba(18,26,24,0.05)]">
-      <div className="grid grid-cols-[6.5rem_1fr] sm:grid-cols-[11rem_1fr]">
-        <BlogCover
-          post={post}
-          alt=""
-          className="min-h-[6.5rem] sm:min-h-full"
-        />
-        <div className="flex min-w-0 flex-col justify-center px-3 py-3 sm:p-5">
-          <p className="text-sm text-ink-soft">
-            <time dateTime={post.publishedAt}>{date}</time>
-            <span aria-hidden> · </span>
-            <span>{tr("minutes", { count: minutes })}</span>
+      <div className="min-w-0 px-4 py-4 sm:px-5 sm:py-5">
+        <p className="text-sm text-ink-soft">
+          <time dateTime={post.publishedAt}>{date}</time>
+          <span aria-hidden> · </span>
+          <span>{tr("minutes", { count: minutes })}</span>
+        </p>
+        <h3 className="font-display mt-2 text-xl leading-snug text-ink sm:text-2xl">
+          {title}
+        </h3>
+        {excerpt ? (
+          <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-ink-soft sm:text-base">
+            {excerpt}
           </p>
-          <h3 className="font-display mt-1 line-clamp-2 text-lg leading-tight text-ink sm:text-2xl">
-            {title}
-          </h3>
-          {excerpt ? (
-            <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-ink-soft sm:text-base">
-              {excerpt}
-            </p>
-          ) : null}
-        </div>
+        ) : null}
       </div>
       <AdminCardActions>
         <AdminPrimaryButton compact onClick={() => setEditing(true)}>

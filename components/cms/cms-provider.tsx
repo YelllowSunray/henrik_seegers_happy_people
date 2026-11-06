@@ -337,30 +337,6 @@ export function useCmsOptional() {
   return useContext(CmsContext);
 }
 
-function PreviewButtons() {
-  const { setPreviewMode } = useAuth();
-  const btn =
-    "inline-flex min-h-10 flex-1 items-center justify-center rounded-full bg-white/12 px-3 text-xs font-semibold text-white transition hover:bg-white/20 sm:text-sm";
-  return (
-    <div className="grid grid-cols-2 gap-1.5">
-      <button
-        type="button"
-        className={btn}
-        onClick={() => setPreviewMode("visitor")}
-      >
-        Bekijk als bezoeker
-      </button>
-      <button
-        type="button"
-        className={btn}
-        onClick={() => setPreviewMode("member")}
-      >
-        Bekijk als lid
-      </button>
-    </div>
-  );
-}
-
 function useDockHeight() {
   const dockRef = useRef<HTMLDivElement>(null);
 
@@ -449,9 +425,6 @@ function CmsBottomBar() {
                 Uitloggen
               </button>
             </div>
-            <div className="mt-1.5">
-              <PreviewButtons />
-            </div>
           </div>
         </div>
       </div>
@@ -483,22 +456,13 @@ function AdminPreviewBar() {
           <p className="px-2 pb-2 text-xs text-white/65">
             Alleen kijken — je account verandert niet.
           </p>
-          <div className="grid grid-cols-2 gap-1.5">
-            <button
-              type="button"
-              onClick={() => setPreviewMode(asMember ? "visitor" : "member")}
-              className="inline-flex min-h-11 items-center justify-center rounded-full bg-white/12 px-3 text-sm font-semibold text-white hover:bg-white/20"
-            >
-              {asMember ? "Bekijk als bezoeker" : "Bekijk als lid"}
-            </button>
-            <button
-              type="button"
-              onClick={() => setPreviewMode("off")}
-              className="inline-flex min-h-11 items-center justify-center rounded-full bg-white px-3 text-sm font-semibold text-ink hover:bg-white/90"
-            >
-              Terug naar beheer
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => setPreviewMode("off")}
+            className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-white px-3 text-sm font-semibold text-ink hover:bg-white/90"
+          >
+            Terug naar beheer
+          </button>
         </div>
       </div>
     </div>

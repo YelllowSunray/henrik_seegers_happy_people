@@ -132,6 +132,15 @@ export type HomepageContent = {
     tagline: string;
     facebook: string;
   };
+  zoom: {
+    eyebrow: string;
+    title: string;
+    lead: string;
+    body: string;
+    join: string;
+    url: string;
+    missing: string;
+  };
 };
 
 function asString(value: unknown, fallback = ""): string {
@@ -275,6 +284,15 @@ export function getDefaultHomepageContent(): HomepageContent {
       tagline: nl.footer.tagline,
       facebook: "Facebook — Hendrik Seegers",
     },
+    zoom: {
+      eyebrow: nl.videoBell.eyebrow,
+      title: nl.videoBell.title,
+      lead: nl.videoBell.lead,
+      body: nl.videoBell.body,
+      join: nl.videoBell.join,
+      url: "",
+      missing: nl.videoBell.missing,
+    },
   };
 }
 
@@ -295,6 +313,7 @@ export function parseHomepageContent(
   const blog = (data.blog ?? {}) as Record<string, unknown>;
   const donate = (data.donate ?? {}) as Record<string, unknown>;
   const footer = (data.footer ?? {}) as Record<string, unknown>;
+  const zoom = (data.zoom ?? {}) as Record<string, unknown>;
 
   return {
     site: {
@@ -473,6 +492,15 @@ export function parseHomepageContent(
     footer: {
       tagline: asString(footer.tagline, defaults.footer.tagline),
       facebook: asString(footer.facebook, defaults.footer.facebook),
+    },
+    zoom: {
+      eyebrow: asString(zoom.eyebrow, defaults.zoom.eyebrow),
+      title: asString(zoom.title, defaults.zoom.title),
+      lead: asString(zoom.lead, defaults.zoom.lead),
+      body: asString(zoom.body, defaults.zoom.body),
+      join: asString(zoom.join, defaults.zoom.join),
+      url: asString(zoom.url, defaults.zoom.url),
+      missing: asString(zoom.missing, defaults.zoom.missing),
     },
   };
 }

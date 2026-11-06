@@ -3,6 +3,10 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
 import { SubscriberGate } from "@/components/subscriber-gate";
+import { CmsField } from "@/components/cms/cms-field";
+import { ZoomMeetingJoin } from "@/components/zoom-meeting-join";
+import { cmsText } from "@/lib/homepage-content";
+import { fetchHomepageCmsForLocale } from "@/lib/homepage-content.server";
 import { buildPageMetadata } from "@/lib/seo";
 import type { Locale } from "@/lib/types";
 
@@ -15,11 +19,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "videoBell" });
+  const cms = await fetchHomepageCmsForLocale(locale);
   return buildPageMetadata({
     locale: locale as Locale,
     pathname: "/video-bell",
-    title: t("title"),
-    description: t("lead"),
+    title: cmsText(cms?.zoom.title, t("title")),
+    description: cmsText(cms?.zoom.lead, t("lead")),
   });
 }
 
@@ -31,42 +36,49 @@ export default async function VideoBellPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("videoBell");
-  const zoomUrl = process.env.NEXT_PUBLIC_COMMUNITY_ZOOM_URL?.trim() ?? "";
+  const cms = await fetchHomepageCmsForLocale(locale);
+  const envUrl = process.env.NEXT_PUBLIC_COMMUNITY_ZOOM_URL?.trim() ?? "";
+
+  const eyebrow = cmsText(cms?.zoom.eyebrow, t("eyebrow"));
+  const title = cmsText(cms?.zoom.title, t("title"));
+  const lead = cmsText(cms?.zoom.lead, t("lead"));
+  const body = cmsText(cms?.zoom.body, t("body"));
+  const join = cmsText(cms?.zoom.join, t("join"));
+  const missing = cmsText(cms?.zoom.missing, t("missing"));
+  const url = cmsText(cms?.zoom.url, envUrl);
 
   return (
     <>
       <SiteHeader variant="solid" />
       <SubscriberGate>
-      <Section>
-        <p className="text-sm font-semibold tracking-[0.18em] text-accent uppercase">
-          {t("eyebrow")}
-        </p>
-        <h1 className="font-display mt-3 text-3xl leading-tight text-ink md:text-5xl">
-          {t("title")}
-        </h1>
-        <p className="mt-5 max-w-2xl reading-copy">
-          {t("lead")}
-        </p>
-        <p className="mt-4 max-w-2xl reading-copy reading-copy-ink">
-          {t("body")}
-        </p>
-        <div className="mt-10">
-          {zoomUrl ? (
-            <a
-              href={zoomUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-white hover:bg-accent-soft"
-            >
-              {t("join")}
-            </a>
-          ) : (
-            <p className="max-w-xl rounded-xl border border-line bg-white/60 px-4 py-3 text-sm text-ink-soft">
-              {t("missing")}
-            </p>
-          )}
-        </div>
-      </Section>
+        <Section>
+          <CmsField
+            path="zoom.eyebrow"
+            value={eyebrow}
+            multiline={false}
+            className="text-sm font-semibold tracking-[0.18em] text-accent uppercase"
+          />
+          <CmsField
+            path="zoom.title"
+            value={title}
+            as="h1"
+            multiline={false}
+            className="font-display mt-3 text-3xl leading-tight text-ink md:text-5xl"
+          />
+          <CmsField
+            path="zoom.lead"
+            value={lead}
+            className="mt-5 max-w-2xl reading-copy"
+          />
+          <CmsField
+            path="zoom.body"
+            value={body}
+            className="mt-4 max-w-2xl reading-copy reading-copy-ink"
+          />
+          <div className="mt-10">
+            <ZoomMeetingJoin url={url} joinLabel={join} missingLabel={missing} />
+          </div>
+        </Section>
       </SubscriberGate>
     </>
   );
