@@ -14,6 +14,7 @@ export function MicrochipPlayer({
       title="Micro Chip"
       artist="Tarrus Riley"
       tone="hero"
+      showLyrics={false}
       className="max-w-[41rem]"
       handoffAnchorId={handoffAnchorId}
     />

@@ -1134,6 +1134,7 @@ export function SyncedLyricPlayer({
   artist,
   tone = "hero",
   compact = false,
+  showLyrics = true,
   className = "",
   handoffAnchorId: _handoffAnchorId,
 }: {
@@ -1143,6 +1144,8 @@ export function SyncedLyricPlayer({
   artist?: string;
   tone?: Tone;
   compact?: boolean;
+  /** When false, hide the synced lyric column (track still plays). */
+  showLyrics?: boolean;
   className?: string;
   /** @deprecated Handoff is based on widget position, not section titles. */
   handoffAnchorId?: string;
@@ -1157,6 +1160,7 @@ export function SyncedLyricPlayer({
   const [time, setTime] = useState(0);
 
   useEffect(() => {
+    if (!showLyrics) return;
     let cancelled = false;
     fetch(lrcSrc)
       .then((r) => r.text())
@@ -1167,7 +1171,7 @@ export function SyncedLyricPlayer({
     return () => {
       cancelled = true;
     };
-  }, [lrcSrc]);
+  }, [lrcSrc, showLyrics]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -1227,7 +1231,7 @@ export function SyncedLyricPlayer({
       }
       // Do NOT pause shared audio on unmount — blog posts should keep hearing it.
     };
-  }, [audioSrc]);
+  }, [audioSrc, tone]);
 
   const active = activeLyricIndex(lines, time);
   const visibleLines =
@@ -1293,10 +1297,16 @@ export function SyncedLyricPlayer({
   return (
     <div ref={rootRef} data-lyric-player className={`w-full ${className}`}>
       <div
-        className={`flex min-h-0 flex-col items-stretch gap-3 px-3.5 py-3 transition-[border-color] duration-300 sm:flex-row sm:gap-3 ${
+        className={`flex min-h-0 flex-col items-stretch gap-3 px-3.5 py-3 transition-[border-color] duration-300 sm:gap-3 ${
+          showLyrics ? "sm:flex-row" : ""
+        } ${
           compact
-            ? "sm:min-h-[6.75rem] sm:px-3 sm:py-3"
-            : "sm:min-h-[7.5rem] sm:gap-4 sm:px-[1.1rem] sm:py-4"
+            ? showLyrics
+              ? "sm:min-h-[6.75rem] sm:px-3 sm:py-3"
+              : "sm:min-h-0 sm:px-3 sm:py-3"
+            : showLyrics
+              ? "sm:min-h-[7.5rem] sm:gap-4 sm:px-[1.1rem] sm:py-4"
+              : "sm:min-h-0 sm:gap-4 sm:px-[1.1rem] sm:py-4"
         } ${
           isHero
             ? `border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.28)] ${
@@ -1405,58 +1415,60 @@ export function SyncedLyricPlayer({
           </span>
         </button>
 
-        <div
-          className={`min-w-0 flex-1 pt-3 sm:border-t-0 sm:pt-0 ${
-            compact ? "sm:pl-3" : "sm:pl-4"
-          } ${
-            isHero
-              ? "border-t border-white/25 sm:border-l"
-              : "border-t border-line sm:border-l"
-          }`}
-        >
-          <div className="flex h-full min-h-0 flex-col justify-center gap-1 sm:min-h-[5.2rem] sm:gap-1.5">
-            {visibleLines.length === 0 ? (
-              <p
-                className={`text-[13px] ${
-                  isHero ? "text-white/70 drop-shadow" : "text-ink-soft"
-                }`}
-              >
-                Tap play for synced lyrics
-              </p>
-            ) : (
-              visibleLines.map((line, i) => (
+        {showLyrics ? (
+          <div
+            className={`min-w-0 flex-1 pt-3 sm:border-t-0 sm:pt-0 ${
+              compact ? "sm:pl-3" : "sm:pl-4"
+            } ${
+              isHero
+                ? "border-t border-white/25 sm:border-l"
+                : "border-t border-line sm:border-l"
+            }`}
+          >
+            <div className="flex h-full min-h-0 flex-col justify-center gap-1 sm:min-h-[5.2rem] sm:gap-1.5">
+              {visibleLines.length === 0 ? (
                 <p
-                  key={`${line.t}-${active}-${i}`}
-                  className={`leading-snug transition duration-300 ${
-                    isHero
-                      ? i >= 2
-                        ? "hidden sm:block"
-                        : ""
-                      : i >= 3
-                        ? "hidden sm:block"
-                        : ""
-                  } ${
-                    isHero
-                      ? `drop-shadow-[0_1px_2px_rgba(0,0,0,0.65)] ${
-                          i === 0
-                            ? "font-display text-sm text-white sm:text-base"
-                            : i === 1
-                              ? "text-[13px] text-white/80 sm:text-sm"
-                              : "text-[13px] text-white/60 sm:text-sm"
-                        }`
-                      : i === 0
-                        ? "font-display text-sm text-ink sm:text-base"
-                        : i === 1
-                          ? "text-[13px] text-ink-soft sm:text-sm"
-                          : "text-[13px] text-ink-soft/70 sm:text-sm"
+                  className={`text-[13px] ${
+                    isHero ? "text-white/70 drop-shadow" : "text-ink-soft"
                   }`}
                 >
-                  {line.text}
+                  Tap play for synced lyrics
                 </p>
-              ))
-            )}
+              ) : (
+                visibleLines.map((line, i) => (
+                  <p
+                    key={`${line.t}-${active}-${i}`}
+                    className={`leading-snug transition duration-300 ${
+                      isHero
+                        ? i >= 2
+                          ? "hidden sm:block"
+                          : ""
+                        : i >= 3
+                          ? "hidden sm:block"
+                          : ""
+                    } ${
+                      isHero
+                        ? `drop-shadow-[0_1px_2px_rgba(0,0,0,0.65)] ${
+                            i === 0
+                              ? "font-display text-sm text-white sm:text-base"
+                              : i === 1
+                                ? "text-[13px] text-white/80 sm:text-sm"
+                                : "text-[13px] text-white/60 sm:text-sm"
+                          }`
+                        : i === 0
+                          ? "font-display text-sm text-ink sm:text-base"
+                          : i === 1
+                            ? "text-[13px] text-ink-soft sm:text-sm"
+                            : "text-[13px] text-ink-soft/70 sm:text-sm"
+                    }`}
+                  >
+                    {line.text}
+                  </p>
+                ))
+              )}
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </div>
   );
