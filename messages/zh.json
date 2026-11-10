@@ -482,109 +482,109 @@
   },
   "meeting": {
     "eyebrow": "相遇",
-    "title": "那场相遇，造就了今天的我",
+    "title": "这次相遇让我重新知道了我一直知道的事。“我又变回了我自己”",
     "imageAlt": "相遇",
     "bridge": "",
     "blocks": [
       {
-        "song": "Hallelujah — Alexandra Burke",
-        "youtube": "https://www.youtube.com/watch?v=aplWTXEcY70",
-        "text": "从格罗宁根出发，我来到了 GGZ Centraal Almere，带着头部受伤和满脑子的疑问。给我的药物只让不安越来越大。但在内心深处，仍有一个小小的意识：我的故事还没有结束。"
-      },
-      {
         "song": "Crazy — Gnarls Barkley",
         "youtube": "https://www.youtube.com/watch?v=-N4jf6rtyuw",
-        "text": "我的头脑像一场风暴。思想、声音和话语比平常更响亮地涌入。但有时会有一小段寂静。在其中，我慢慢开始区分什么是属于我的，什么是混乱带来的。"
+        "text": "我从格罗宁根来到阿尔梅勒，头部受了伤，脑子里全是疑问。我的世界颠倒了，念头和情绪搅在一起飞奔。可在心底，仍有什么在低声说，我的故事还没有结束。"
       },
       {
         "song": "The Real Slim Shady — Eminem",
         "youtube": "https://www.youtube.com/watch?v=eJO5HU_7_1w",
-        "text": "周围出现了我应该成为什么样的画面，而我仍在寻找答案。别人越试图定义我，我越强烈地需要找回自己的声音。我不再想让外界的预期和评判决定我的身份。"
+        "text": "周围出现了关于我应该成为谁的画面，而我还在寻找真正的自己。我想找回自己的声音，不再背着别人的期待。我想重新能够做我自己。"
       },
       {
         "song": "I'm a Creep — Daniel Mustard",
         "youtube": "https://www.youtube.com/watch?v=vtLiL3uReoI",
-        "text": "但我并没有立刻认出自己。有时我觉得自己像自己生活中的客人。在那份疏离之下，我逐渐意识到我并不等于最黑暗的想法或最艰难的时刻。这给了继续前行的空间。"
-      },
-      {
-        "song": "I Love Me — Meghan Trainor",
-        "youtube": "https://www.youtube.com/watch?v=xzoNK3JDBhw",
-        "text": "我学会再次温和地看待自己。我不必否认错误，也不必完全被它们压垮。自我接纳并不意味着必须觉得自己完美，而是不再拒绝自己。"
+        "text": "有时我觉得自己是自己生活里的陌生人，仿佛把自己弄丢了。但在那种疏离之下，仍有一部分我还在。我比自己的恐惧和混乱更多。"
       },
       {
         "song": "Angel Eyes — Wet Wet Wet",
         "youtube": "https://www.youtube.com/watch?v=Wgid1me8POs",
-        "text": "当我对自己不那么苛刻时，小小的记忆和感受回来了。一种气味、一段旋律或一束光，都可能突然唤起熟悉的东西。仿佛有一扇门被推开了一条缝。康复并不意味着要成为新的人，而是再次与自己相遇。"
+        "text": "有时是一个眼神、一段记忆，或只是想到某个人，就会唤醒我心里的什么。温暖来到心里，微笑来到嘴边，仿佛世界暂时变得更柔和。那是我再次感到，把心里一个特别的位置给一个人，是多么美的时刻。"
       },
       {
         "song": "Every Little Thing She Does Is Magic — The Police",
         "youtube": "https://www.youtube.com/watch?v=aENX1Sf3fgQ",
-        "text": "慢慢地，生活又有了动静。我又想喝咖啡，更久地望向窗外，对谈话产生好奇。后来我又开始制定计划。火花不必重新创造，它只需要氧气。"
+        "text": "有时一件小事——一个微笑、一个念头，或对某个特别时刻的记忆——就能改变我的一整天。世界有了更多颜色，音乐听起来更美，连最小的事物也显得特别。仿佛另一个人的存在，又给生活带来了一点魔法。"
+      },
+      {
+        "song": "I Love Me — Meghan Trainor",
+        "youtube": "https://www.youtube.com/watch?v=xzoNK3JDBhw",
+        "text": "我学会温柔地看自己，连同所有缺点。慢慢地我发现，我不必谴责自己。我可以做我自己，连同属于我的一切。自我接纳感觉像是回到家。"
       },
       {
         "song": "Are You With Me — Lost Frequencies",
         "youtube": "https://www.youtube.com/watch?v=dumrK4YCkf4",
-        "text": "我明白没有人能替我走下一步。别人可以站在我身边，但方向必须我自己选择。这令人紧张，但也让我重新获得了掌控感。"
+        "text": "我又渴望冒险、人群，以及那个等着我的世界。没有人能替我走这段路；我重新把舵握回自己手里。"
       },
       {
         "song": "Would I Lie to You? — Charles & Eddie",
         "youtube": "https://www.youtube.com/watch?v=G_UXvcr22rM",
-        "text": "我学会再次审视自己的思想。那是事实、恐惧，还是旧的信念？并不是脑中浮现的一切都需要是真的。通过提问，混乱逐渐失去力量。"
+        "text": "我重新审视自己的想法。并非每一个念头都是事实，也并非每一种恐惧都值得我信任。"
       },
       {
         "song": "It Must Be Love — Madness",
         "youtube": "https://www.youtube.com/watch?v=vmezIIrFQmY",
-        "text": "情感回来了。有时是悲伤，有时是眼泪，有时是喜悦。不是每一种感受都需要立刻解释。能够再次真正感受，已经是康复的迹象。"
+        "text": "我的情感回来了，有时是眼泪，有时是微笑。我的心又打开了，那种感觉很好。"
       },
       {
         "song": "You Take My Breath Away — Berlin",
         "youtube": "https://www.youtube.com/watch?v=Bx51eegLTY8",
-        "text": "有时我在窗玻璃里看到自己，会停留更久。我看到疲惫和艰难时期的痕迹，但眼中也有熟悉的东西。我再次遇见自己，看到的不仅是失去的，也有留下的。"
+        "text": "有时我看见镜中的自己，又认出了我。脆弱、鲜活，回到了自己身边。"
       },
       {
         "song": "All of Me — John Legend",
         "youtube": "https://www.youtube.com/watch?v=450p7goxZqg",
-        "text": "我学会让不同的面向并存：力量与脆弱、错误与成长、困惑与洞察。我不必总是坚强。它们共同构成我的故事。"
+        "text": "我学会拥抱自己的每一面：力量与脆弱，怀疑与信任，渴望与梦想。这一切合在一起，才是我。"
       },
       {
         "song": "If You Don’t Know Me by Now — Simply Red",
         "youtube": "https://www.youtube.com/watch?v=zTcu7MCtuTs",
-        "text": "被他人理解并不等同于理解自己。他们的认可可能很宝贵，但不能取代我自己的探索。自我认知比外界确认更重要。"
+        "text": "被别人理解，和理解自己，是两回事。他们的认可可以很美，却代替不了我自己的寻找。最重要的相遇，是与我自己的相遇。"
       },
       {
         "song": "Caravan of Love — The Housemartins",
         "youtube": "https://www.youtube.com/watch?v=ehfiQd7lcPY",
-        "text": "过去仍是我历史的一部分，但不必决定未来。我带走有价值的，放下不再服务于我的。回顾不是倒退，而是更有意识地向前。"
+        "text": "我的过去仍然属于我，但不必决定我的未来。我放下了阻碍我的东西，向前看向可能的事。"
       },
       {
         "song": "Don’t Stop Me Now — Queen",
         "youtube": "https://www.youtube.com/watch?v=aJez0ljzSQw",
-        "text": "当能量回来时，野心也重新苏醒。我做更多事，产生新想法，再次制定计划。引擎重新运转，但现在我更清楚想去哪里。"
+        "text": "我的能量回来了，念头在脑子里飞，计划长出了翅膀，我又感到力量在流动。"
       },
       {
         "song": "Pocketful of Sunshine — Natasha Bedingfield",
         "youtube": "https://www.youtube.com/watch?v=gte3BoXKwP0",
-        "text": "再次有了轻盈、梦想和可能性的空间。未来不再像只是要熬过去的东西，而是我可以自己塑造的东西。在不确定之外，希望也可以存在。"
+        "text": "未来像长夜之后的晴朗早晨一样打开了。有空间去梦想、去笑，去开始新的冒险。"
       },
       {
         "song": "To Love a Woman — Lionel Richie & Enrique Iglesias",
         "youtube": "https://www.youtube.com/watch?v=36Dp1L8Fgh4",
-        "text": "我发现心中仍有多少爱：对人、对生活、对前方的一切。敏感不必是弱点。正因为能够再次感受，我才能再次连接。"
+        "text": "我发现，尽管经历了一切，我心里仍有多少爱活着。我的心并没有关上，它只是需要时间再一次绽开。"
       },
       {
         "song": "I Want To Know What Love Is — Mariah Carey",
         "youtube": "https://www.youtube.com/watch?v=gCadlN8fexk",
-        "text": "问题从别人怎么看我，转向我自己对自己有什么感受。在艰难的日子里，自我接纳有时只意味着不再拒绝自己。我一步步学会给自己肯定。"
+        "text": "我渴望的不只是被理解，还有真正的连结，去爱，也被打动。爱感觉像是生命中最美的事物之一。"
       },
       {
         "song": "Something Beautiful About You — Joel Donnelly",
         "youtube": "https://www.youtube.com/watch?v=xN_vuOKypEs",
-        "text": "我想理解发生了什么，以及我失去了什么。但我学到不是每个问题都需要立刻有答案。有时只有在为不明留出空间并仍继续前行时，洞察才会出现。"
+        "text": "我仍在寻找发生在我身上的事的答案，但并非每个问题都要立刻得到回答。有时惊奇就够了，还有对重新绽放之物的感激。"
       },
       {
         "song": "Paradise by the Dashboard Light — Meat Loaf & Ellen Foley",
         "youtube": "https://www.youtube.com/watch?v=C11MzbEcHlw",
-        "text": "事后看来，这段时期不是终点，而是转折点。危机、混乱与恢复一起成为一面镜子，让我重新学会看自己。并非一切都有答案，但我又有了方向。当我决定再次掌握自己的生活时，内心的力量升起来了。"
+        "text": "回头看，我不把这段时间当作结束，而当作转折。穿过风暴与康复，我重新学会看、感受、爱和享受。我作为我自己回来了，心是敞开的，对生活有了重新燃起的爱。"
+      },
+      {
+        "song": "Hallelujah — Alexandra Burke",
+        "youtube": "https://www.youtube.com/watch?v=aplWTXEcY70",
+        "text": "然后我又知道了心底一直知道的事。我并没有消失，只是暂时找不到回到自己的路。哈利路亚，我又回到了家，我又是我自己了。"
       }
     ]
   },

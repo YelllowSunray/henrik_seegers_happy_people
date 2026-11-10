@@ -481,110 +481,110 @@
     "startChat": "Avvia nuova chat"
   },
   "meeting": {
-    "eyebrow": "L’incontro",
-    "title": "L’incontro che ha portato a chi sono ora",
-    "imageAlt": "L’incontro",
+    "eyebrow": "L'incontro",
+    "title": "L'incontro ha fatto sì che sapessi di nuovo ciò che ho sempre saputo. \"Sono tornato a essere me stesso\"",
+    "imageAlt": "L'incontro",
     "bridge": "",
     "blocks": [
       {
-        "song": "Hallelujah — Alexandra Burke",
-        "youtube": "https://www.youtube.com/watch?v=aplWTXEcY70",
-        "text": "Da Groningen sono finito alla GGZ Centraal Almere, con un trauma cranico e la testa piena di domande. I farmaci che mi davano aumentavano solo l’agitazione. Eppure, in profondità, restava una piccola consapevolezza: la mia storia non era finita."
-      },
-      {
         "song": "Crazy — Gnarls Barkley",
         "youtube": "https://www.youtube.com/watch?v=-N4jf6rtyuw",
-        "text": "La mia testa sembrava una tempesta. Pensieri, suoni e voci arrivavano più forti del normale. Eppure a volte c’erano brevi momenti di silenzio. Lì iniziai lentamente a distinguere ciò che era mio da ciò che veniva dal caos."
+        "text": "Da Groninga sono finito ad Almere, con un trauma cranico e la testa piena di domande. Il mio mondo era sottosopra, pensieri e sentimenti correvano l'uno sull'altro. Eppure, nel profondo, qualcosa continuava a sussurrare che la mia storia non era finita."
       },
       {
         "song": "The Real Slim Shady — Eminem",
         "youtube": "https://www.youtube.com/watch?v=eJO5HU_7_1w",
-        "text": "Intorno a me nascevano immagini di chi avrei dovuto essere, mentre io cercavo ancora risposte. Più gli altri cercavano di definirmi, più forte diveniva il bisogno di ritrovare la mia voce. Non volevo più che la mia identità fosse decisa da aspettative e giudizi esterni."
+        "text": "Intorno a me nascevano immagini di chi avrei dovuto essere, mentre cercavo chi ero davvero. Volevo ritrovare la mia voce, senza il peso delle aspettative altrui. Volevo poter essere di nuovo me stesso."
       },
       {
         "song": "I'm a Creep — Daniel Mustard",
         "youtube": "https://www.youtube.com/watch?v=vtLiL3uReoI",
-        "text": "Eppure non mi riconobbi subito. A volte mi sentivo un ospite nella mia vita. Sotto quell’estraneamento crebbe la consapevolezza che non ero uguale ai miei pensieri più oscuri o ai momenti più difficili. Questo aprì spazio per andare avanti."
-      },
-      {
-        "song": "I Love Me — Meghan Trainor",
-        "youtube": "https://www.youtube.com/watch?v=xzoNK3JDBhw",
-        "text": "Imparai a guardarmi di nuovo con gentilezza. Non dovevo negare i miei errori, ma non dovevo nemmeno crollare sotto di essi. L’autoaccettazione non significava trovarmi perfetto, ma smettere di rifiutarmi."
+        "text": "A volte mi sentivo un estraneo nella mia stessa vita, come se mi fossi perso. Ma sotto quello straniamento restava qualcosa di me. Ero più delle mie paure e della mia confusione."
       },
       {
         "song": "Angel Eyes — Wet Wet Wet",
         "youtube": "https://www.youtube.com/watch?v=Wgid1me8POs",
-        "text": "Giudicandomi con meno durezza, tornarono piccoli ricordi e sentimenti. Un profumo, una melodia o una luce potevano evocare qualcosa di familiare. Sembrava che una porta si aprisse di un varco. Guarire non significava diventare qualcuno di nuovo, ma ritrovarmi."
+        "text": "A volte c'era uno sguardo, un ricordo, o semplicemente il pensiero di qualcuno che risvegliava qualcosa in me. Arrivava calore nel cuore e un sorriso sulla bocca, come se il mondo per un attimo diventasse più morbido. Erano momenti in cui sentivo di nuovo quanto è bello dare a qualcuno un posto speciale nel cuore."
       },
       {
         "song": "Every Little Thing She Does Is Magic — The Police",
         "youtube": "https://www.youtube.com/watch?v=aENX1Sf3fgQ",
-        "text": "Lentamente tornò movimento nella mia vita. Avevo di nuovo voglia di caffè, guardavo più a lungo fuori dalla finestra e diventavo curioso delle conversazioni. Più tardi feci di nuovo progetti. La scintilla non doveva essere ricreata; aveva solo bisogno di ossigeno."
+        "text": "A volte una cosa piccola — un sorriso, un pensiero o il ricordo di un momento speciale — poteva cambiare tutta la mia giornata. Il mondo prendeva più colore, la musica suonava più bella e anche le cose più piccole sembravano speciali. Era come se la presenza di un'altra persona avesse ridato un po' di magia alla vita."
+      },
+      {
+        "song": "I Love Me — Meghan Trainor",
+        "youtube": "https://www.youtube.com/watch?v=xzoNK3JDBhw",
+        "text": "Ho imparato a guardarmi con mitezza, difetti compresi. Piano piano ho scoperto che non dovevo condannarmi. Potevo essere chi ero, con tutto ciò che mi apparteneva. Accettarmi sembrava tornare a casa."
       },
       {
         "song": "Are You With Me — Lost Frequencies",
         "youtube": "https://www.youtube.com/watch?v=dumrK4YCkf4",
-        "text": "Capì che nessun altro poteva fare il mio prossimo passo al posto mio. Altri potevano stare accanto a me, ma la direzione dovevo sceglierla io. Era emozionante, ma mi restituì anche il controllo."
+        "text": "Ho sentito di nuovo il desiderio di avventura, di persone e del mondo che mi aspettava. Nessuno poteva fare il mio viaggio al posto mio; ho ripreso io il timone."
       },
       {
         "song": "Would I Lie to You? — Charles & Eddie",
         "youtube": "https://www.youtube.com/watch?v=G_UXvcr22rM",
-        "text": "Imparai a esaminare di nuovo i miei pensieri. Era un fatto, una paura o una vecchia convinzione? Non tutto ciò che sorgeva nella mia mente doveva essere vero. Facendo domande, il caos perdeva potere."
+        "text": "Ho ricominciato a esaminare i miei pensieri. Non ogni pensiero era un fatto, e non ogni paura meritava la mia fiducia."
       },
       {
         "song": "It Must Be Love — Madness",
         "youtube": "https://www.youtube.com/watch?v=vmezIIrFQmY",
-        "text": "Tornò l’emozione. A volte come dolore, a volte come lacrime e a volte come gioia. Ogni sentimento non doveva essere spiegato subito. Poter sentire di nuovo era già un segno di guarigione."
+        "text": "Le mie emozioni sono tornate, a volte come lacrime, a volte come un sorriso. Il mio cuore si è riaperto, e faceva bene."
       },
       {
         "song": "You Take My Breath Away — Berlin",
         "youtube": "https://www.youtube.com/watch?v=Bx51eegLTY8",
-        "text": "A volte mi vedevo riflesso in una finestra e restavo a guardare. Vedevo stanchezza e segni di un periodo difficile, ma anche qualcosa di familiare negli occhi. Mi incontrai di nuovo e vidi non solo ciò che era perduto, ma anche ciò che era rimasto."
+        "text": "A volte vedevo il mio riflesso e mi riconoscevo di nuovo. Vulnerabile, vivo, e di nuovo con me stesso."
       },
       {
         "song": "All of Me — John Legend",
         "youtube": "https://www.youtube.com/watch?v=450p7goxZqg",
-        "text": "Imparai a far convivere le mie diverse parti: forza e vulnerabilità, errori e crescita, confusione e insight. Non dovevo essere sempre forte. Insieme formavano la mia storia."
+        "text": "Ho imparato ad abbracciare tutti i miei lati: forza e vulnerabilità, dubbio e fiducia, desideri e sogni. Tutto insieme faceva di me chi ero."
       },
       {
         "song": "If You Don’t Know Me by Now — Simply Red",
         "youtube": "https://www.youtube.com/watch?v=zTcu7MCtuTs",
-        "text": "Essere compresi dagli altri non era come comprendere se stessi. Il loro riconoscimento poteva essere prezioso, ma non sostituiva la mia ricerca. La conoscenza di sé divenne più importante della conferma esterna."
+        "text": "Essere capiti dagli altri era diverso dal capire se stessi. Il loro riconoscimento poteva essere bello, ma non sostituiva la mia ricerca. L'incontro più importante era quello con me stesso."
       },
       {
         "song": "Caravan of Love — The Housemartins",
         "youtube": "https://www.youtube.com/watch?v=ehfiQd7lcPY",
-        "text": "Il mio passato restava parte della mia storia, ma non doveva determinare il futuro. Portai con me ciò che aveva valore e lasciai ciò che non serviva più. Guardare indietro non era cadere indietro, ma andare avanti con più consapevolezza."
+        "text": "Il mio passato continuava a far parte di me, ma non doveva decidere il mio futuro. Ho lasciato andare ciò che mi tratteneva e ho guardato avanti, verso ciò che era possibile."
       },
       {
         "song": "Don’t Stop Me Now — Queen",
         "youtube": "https://www.youtube.com/watch?v=aJez0ljzSQw",
-        "text": "Quando tornò l’energia, anche l’ambizione tornò in vita. Facevo di più, avevo nuove idee e rifeci piani. Il motore girava di nuovo, ma ora sapevo meglio dove volevo andare."
+        "text": "La mia energia è tornata, le idee volavano nella testa, i piani mettevano le ali e sentivo di nuovo la forza scorrere."
       },
       {
         "song": "Pocketful of Sunshine — Natasha Bedingfield",
         "youtube": "https://www.youtube.com/watch?v=gte3BoXKwP0",
-        "text": "Tornò spazio per leggerezza, sogni e possibilità. Il futuro non sembrava più qualcosa da attraversare, ma qualcosa che potevo plasmare. Accanto all’incertezza poteva esistere anche la speranza."
+        "text": "Il futuro si apriva come un mattino di sole dopo una lunga notte. C'era spazio per sognare, ridere e iniziare nuove avventure."
       },
       {
         "song": "To Love a Woman — Lionel Richie & Enrique Iglesias",
         "youtube": "https://www.youtube.com/watch?v=36Dp1L8Fgh4",
-        "text": "Scoprii quanto amore c’era ancora in me: per le persone, per la vita e per ciò che mi aspettava. La sensibilità non doveva essere debolezza. Proprio perché potevo sentire di nuovo, potevo riconnettermi."
+        "text": "Ho scoperto quanto amore viveva ancora in me, nonostante tutto. Il mio cuore non era chiuso; aveva solo bisogno di tempo per rifiorire."
       },
       {
         "song": "I Want To Know What Love Is — Mariah Carey",
         "youtube": "https://www.youtube.com/watch?v=gCadlN8fexk",
-        "text": "La domanda passò da cosa pensavano gli altri a cosa potevo sentire io di me stesso. Nei giorni difficili, accettarsi a volte significava solo non rifiutarsi di nuovo. Passo dopo passo imparai a darmi affermazione."
+        "text": "Non desideravo solo essere capito, ma anche un legame vero, amare ed essere toccato. L'amore sembrava una delle cose più belle della vita."
       },
       {
         "song": "Something Beautiful About You — Joel Donnelly",
         "youtube": "https://www.youtube.com/watch?v=xN_vuOKypEs",
-        "text": "Volevo capire cosa mi era successo e cosa avevo perso. Ma imparai che non ogni domanda ha bisogno di risposta immediata. A volte l’insight nasce quando lasci spazio all’incerto e vai avanti lo stesso."
+        "text": "Continuavo a cercare risposte a ciò che mi era successo, ma non ogni domanda doveva avere subito una risposta. A volte bastava lo stupore, e la gratitudine per ciò che tornava a fiorire."
       },
       {
         "song": "Paradise by the Dashboard Light — Meat Loaf & Ellen Foley",
         "youtube": "https://www.youtube.com/watch?v=C11MzbEcHlw",
-        "text": "Col senno di poi non vedo questo periodo come una fine, ma come una svolta. Crisi, confusione e guarigione insieme divennero uno specchio in cui imparai a guardarmi. Non ho risposta a tutto, ma ho di nuovo direzione. La mia forza interiore emerse perché decisi di riprendere in mano la mia vita."
+        "text": "Col senno di poi non vedo questo periodo come la fine, ma come una svolta. Attraverso la tempesta e la guarigione ho imparato di nuovo a guardare, sentire, amare e godere. Sono tornato come me stesso, con il cuore aperto e un amore rinnovato per la vita."
+      },
+      {
+        "song": "Hallelujah — Alexandra Burke",
+        "youtube": "https://www.youtube.com/watch?v=aplWTXEcY70",
+        "text": "E allora ho saputo di nuovo ciò che avevo sempre saputo nel profondo. Non ero scomparso, avevo solo perso per un po' la strada verso me stesso. Hallelujah, ero tornato a casa, ero di nuovo me stesso."
       }
     ]
   },
