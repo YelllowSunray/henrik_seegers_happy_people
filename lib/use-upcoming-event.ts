@@ -12,6 +12,10 @@ function mapEventDoc(id: string, data: Record<string, unknown>): SeminarEvent {
     title: (data.title as LocalizedString) ?? { nl: "" },
     description: (data.description as LocalizedString) ?? { nl: "" },
     date: String(data.date ?? ""),
+    dateLabel:
+      typeof data.dateLabel === "string" && data.dateLabel.trim()
+        ? data.dateLabel.trim()
+        : undefined,
     dateUncertain: Boolean(data.dateUncertain),
     time: String(data.time ?? ""),
     location: String(data.location ?? ""),

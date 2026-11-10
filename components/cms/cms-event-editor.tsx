@@ -24,6 +24,7 @@ type Draft = {
   title: string;
   description: string;
   date: string;
+  dateLabel: string;
   time: string;
   location: string;
   address: string;
@@ -34,6 +35,7 @@ const empty: Draft = {
   title: "",
   description: "",
   date: new Date().toISOString().slice(0, 10),
+  dateLabel: "",
   time: "14:00–17:00",
   location: "Van der Valk Hotel Amersfoort",
   address: "Ruimtevaart 22-24, 3824 MX Amersfoort",
@@ -147,6 +149,7 @@ export function CmsNextEventCard({
           title: String((data.title as { nl?: string })?.nl ?? ""),
           description: String((data.description as { nl?: string })?.nl ?? ""),
           date: String(data.date ?? empty.date),
+          dateLabel: String(data.dateLabel ?? ""),
           time: String(data.time ?? empty.time),
           location: String(data.location ?? empty.location),
           address: String(data.address ?? empty.address),
@@ -211,11 +214,13 @@ export function CmsNextEventCard({
 
   if (!cms?.enabled) return <>{children}</>;
 
-  const datePreview = draft.dateUncertain
-    ? laterThisYearLabel
-    : draft.date
-      ? formatEventDate(draft.date, "nl")
-      : "";
+  const dateShown =
+    draft.dateLabel.trim() ||
+    (draft.dateUncertain
+      ? laterThisYearLabel
+      : draft.date
+        ? formatEventDate(draft.date, "nl")
+        : "");
 
   return (
     <div className="border-y border-ink/15 bg-bg-deep px-6 py-10 sm:px-8 md:py-12">
@@ -239,37 +244,18 @@ export function CmsNextEventCard({
       />
 
       <div className="mt-6 space-y-2">
-        {draft.dateUncertain ? (
-          <p className="font-display text-2xl leading-snug text-ink md:text-3xl">
-            {datePreview}
-          </p>
-        ) : (
-          <InlineField
-            type="date"
-            value={draft.date}
-            onChange={(date) => updateDraft({ date })}
-            className="font-display text-2xl leading-snug text-ink md:text-3xl"
-          />
-        )}
-        {!draft.dateUncertain ? (
-          <p className="text-sm text-ink-soft">{datePreview}</p>
-        ) : null}
+        <InlineField
+          value={dateShown}
+          onChange={(dateLabel) => updateDraft({ dateLabel })}
+          placeholder="bijv. voorjaar 2027"
+          className="font-display text-2xl leading-snug text-ink md:text-3xl"
+        />
         <InlineField
           value={draft.time}
           onChange={(time) => updateDraft({ time })}
           placeholder="Tijd, bijv. 14:00–17:00"
           className="mt-1 reading-copy"
         />
-        <label className="mt-2 flex items-center gap-2 text-sm text-ink">
-          <input
-            type="checkbox"
-            checked={draft.dateUncertain}
-            onChange={(e) =>
-              updateDraft({ dateUncertain: e.target.checked })
-            }
-          />
-          Datum nog onzeker (“{laterThisYearLabel}”)
-        </label>
       </div>
 
       <div className="mt-8 border-l-2 border-gold pl-5">

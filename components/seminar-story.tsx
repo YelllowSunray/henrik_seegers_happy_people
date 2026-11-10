@@ -58,7 +58,10 @@ export async function SeminarStory({
   const eventDate = event
     ? getEventDateLabel(event, locale, tr("dateLaterThisYear"))
     : "";
-  const eventTime = event && !event.dateUncertain ? (event.time ?? "") : "";
+  const eventTime =
+    event && (event.dateLabel?.trim() || !event.dateUncertain)
+      ? (event.time ?? "")
+      : "";
   const addressLines = event?.address
     ? event.address.split(/,\s*/)
     : [];

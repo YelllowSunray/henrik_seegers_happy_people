@@ -70,9 +70,15 @@ export function getSeminarContent(
   };
 }
 
+function isIsoDate(value: string): boolean {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value);
+}
+
 export function formatEventDate(isoDate: string, locale: string): string {
+  if (!isIsoDate(isoDate)) return isoDate;
   const [y, m, d] = isoDate.split("-").map(Number);
   const date = new Date(y, m - 1, d);
+  if (Number.isNaN(date.getTime())) return isoDate;
   return new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "long",
@@ -85,6 +91,8 @@ export function getEventDateLabel(
   locale: Locale,
   laterThisYearLabel: string,
 ): string {
+  const custom = event.dateLabel?.trim();
+  if (custom) return custom;
   if (event.dateUncertain) return laterThisYearLabel;
   return formatEventDate(event.date, locale);
 }

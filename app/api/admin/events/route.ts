@@ -19,6 +19,7 @@ type Body = {
   title?: string;
   description?: string;
   date?: string;
+  dateLabel?: string;
   time?: string;
   location?: string;
   address?: string;
@@ -53,6 +54,7 @@ export async function PUT(req: Request) {
     title: { nl: title },
     description: { nl: String(body.description ?? "").trim() },
     date: String(body.date ?? new Date().toISOString().slice(0, 10)),
+    dateLabel: String(body.dateLabel ?? "").trim(),
     time: String(body.time ?? ""),
     location: String(body.location ?? ""),
     address: String(body.address ?? ""),

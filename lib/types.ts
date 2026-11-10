@@ -24,7 +24,9 @@ export type SeminarEvent = {
   title: LocalizedString;
   description: LocalizedString;
   date: string;
-  /** When true, the public site shows a “later this year” label instead of the date. */
+  /** Free-text date visitors see, such as “voorjaar 2027”. */
+  dateLabel?: string;
+  /** When true, and there is no custom label, the site shows “later this year”. */
   dateUncertain?: boolean;
   time: string;
   location: string;

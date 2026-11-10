@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
-import { SubscriberGate } from "@/components/subscriber-gate";
 import { CmsField } from "@/components/cms/cms-field";
 import { ZoomMeetingJoin } from "@/components/zoom-meeting-join";
 import { cmsText } from "@/lib/homepage-content";
@@ -50,7 +49,6 @@ export default async function VideoBellPage({
   return (
     <>
       <SiteHeader variant="solid" />
-      <SubscriberGate>
         <Section>
           <CmsField
             path="zoom.eyebrow"
@@ -79,7 +77,6 @@ export default async function VideoBellPage({
             <ZoomMeetingJoin url={url} joinLabel={join} missingLabel={missing} />
           </div>
         </Section>
-      </SubscriberGate>
     </>
   );
 }

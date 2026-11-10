@@ -12,6 +12,7 @@ import {
   fetchVideosByKind,
 } from "@/lib/content-firestore";
 import { t } from "@/lib/content";
+import { getEventDateLabel } from "@/lib/seminar-content";
 import type { Locale } from "@/lib/types";
 
 export default async function MembersHomePage({
@@ -144,9 +145,11 @@ export default async function MembersHomePage({
               {t(upcomingEvent.description, locale)}
             </p>
             <p className="mt-4 text-sm font-medium text-ink">
-              {upcomingEvent.dateUncertain
-                ? trSeminars("dateLaterThisYear")
-                : upcomingEvent.date}
+              {getEventDateLabel(
+                upcomingEvent,
+                locale,
+                trSeminars("dateLaterThisYear"),
+              )}
               {upcomingEvent.time ? ` · ${upcomingEvent.time}` : ""}
               {upcomingEvent.location ? ` · ${upcomingEvent.location}` : ""}
             </p>

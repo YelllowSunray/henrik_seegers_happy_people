@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { Section } from "@/components/section";
-import { SubscriberGate } from "@/components/subscriber-gate";
 import { CommunityForum } from "@/components/community-forum";
 import { buildPageMetadata } from "@/lib/seo";
 import type { Locale } from "@/lib/types";
@@ -35,11 +34,9 @@ export default async function CommunityPage({
   return (
     <>
       <SiteHeader variant="solid" />
-      <SubscriberGate>
-        <Section>
-          <CommunityForum />
-        </Section>
-      </SubscriberGate>
+      <Section>
+        <CommunityForum />
+      </Section>
     </>
   );
 }
