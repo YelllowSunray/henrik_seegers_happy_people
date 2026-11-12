@@ -198,7 +198,7 @@ export async function LegalDocument({
 }) {
   setRequestLocale(locale);
   const t = await getTranslations("legal");
-  const markdown = readLegalMarkdown(slug);
+  const markdown = readLegalMarkdown(slug, locale);
   return (
     <>
       <SiteHeader variant="solid" />

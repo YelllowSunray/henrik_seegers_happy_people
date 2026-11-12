@@ -1,219 +1,32 @@
 {
-  "subtitle": "MOLTO PIÙ CHE ASCOLTARE",
+  "subtitle": "Tu partecipi",
   "ticketSalesOpen": false,
   "storyBlocks": [
     {
       "type": "paragraph",
-      "text": "Un seminario Happy People non è un pomeriggio in cui ti siedi e cerchi di restare sveglio per tre ore. Partecipi."
+      "text": "Un seminario Happy People non è un pomeriggio in cui ti appoggi allo schienale e cerchi di restare sveglio per tre ore. Tu partecipi."
     },
     {
       "type": "paragraph",
-      "text": "Parliamo tra noi, ridiamo, ascoltiamo, facciamo domande — e a volte incontriamo argomenti su cui forse non ti sei mai fermato davvero."
+      "text": "Parliamo tra noi, ridiamo, ascoltiamo, facciamo domande e a volte incontriamo argomenti su cui forse non ti sei mai davvero fermato."
     },
     {
       "type": "paragraph",
-      "text": "Psicologia, spiritualità, archeologia, storia, convinzioni umane e storie personali si uniscono. Non per dirti in cosa credere, ma per esplorare insieme."
+      "text": "Psicologia, spiritualità, storia, archeologia, convinzioni umane e storie personali si incontrano, non per dirti che cosa devi credere, ma per esplorare insieme che cosa sappiamo, che cosa crediamo di sapere e che cosa possiamo imparare gli uni dagli altri quando guardiamo per un momento attraverso gli occhi di un altro."
     },
     {
       "type": "paragraph",
-      "text": "Perché credo che diventi interessante nel momento in cui osi dire:"
-    },
-    {
-      "type": "paragraph",
-      "text": "«Forse non lo so.»"
-    },
-    {
-      "type": "paragraph",
-      "text": "Lì inizia per me la curiosità."
-    },
-    {
-      "type": "paragraph",
-      "text": "Perché le persone pensano come pensano? Da dove vengono le nostre convinzioni? Quanto di ciò che diamo per scontato abbiamo davvero esaminato noi stessi?"
-    },
-    {
-      "type": "paragraph",
-      "text": "E quando guardiamo oltre la nostra vita quotidiana, emergono all’improvviso domande del tutto diverse."
-    },
-    {
-      "type": "paragraph",
-      "text": "Come sono state create le Linee di Nazca? Come costruirono le piramidi di Giza migliaia di anni fa? Cosa sappiamo davvero delle civiltà scomparse? E cosa potremmo ancora imparare dalle sette meraviglie del mondo antico?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Guardiamo anche antiche tradizioni come il giainismo, con idee su karma, non violenza e la consapevolezza che la realtà forse ha più facce di quelle che possiamo vedere dalla nostra prospettiva."
-    },
-    {
-      "type": "paragraph",
-      "text": "E forse lungo il cammino arriviamo a una domanda un tempo posta da Erich von Däniken:"
-    },
-    {
-      "type": "paragraph",
-      "text": "«Gli dei erano astronauti?»"
-    },
-    {
-      "type": "paragraph",
-      "text": "Non per convincertene, ma per farti fermare alla domanda:"
-    },
-    {
-      "type": "paragraph",
-      "text": "Come facciamo davvero a sapere ciò che crediamo di sapere?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Questo, per me, è il cuore."
-    },
-    {
-      "type": "paragraph",
-      "text": "Durante un seminario Happy People non devi credere in nulla. Non devi nemmeno rifiutare nulla."
-    },
-    {
-      "type": "paragraph",
-      "text": "Puoi essere cattolico, musulmano, buddista, ebreo, cristiano, agnostico, ateo — o semplicemente qualcuno che dice: non lo so, ma voglio esplorare."
-    },
-    {
-      "type": "paragraph",
-      "text": "Tutto può essere messo sul tavolo."
-    },
-    {
-      "type": "paragraph",
-      "text": "Forse scopriamo che, nonostante tutte le nostre differenze, abbiamo molto più in comune di quanto pensiamo."
-    },
-    {
-      "type": "paragraph",
-      "text": "Che dietro diverse religioni e visioni del mondo si nascondono sempre le stesse domande umane."
-    },
-    {
-      "type": "paragraph",
-      "text": "Chi siamo? Perché siamo qui? Come vogliamo vivere? E cosa ci collega davvero l’uno all’altro?"
-    },
-    {
-      "type": "paragraph",
-      "text": "E forse l’idea giainista che non si vede mai tutta la storia da una sola prospettiva è una bella chiave per guardare a tutto questo."
-    },
-    {
-      "type": "paragraph",
-      "text": "Non scegliere tra tutto o niente, ma osare ascoltare ciò che un’altra prospettiva può insegnarti."
-    },
-    {
-      "type": "paragraph",
-      "text": "Uno più uno non deve sempre fare due."
-    },
-    {
-      "type": "paragraph",
-      "text": "A volte emerge qualcosa di nuovo quando metti due prospettive una accanto all’altra."
-    },
-    {
-      "type": "paragraph",
-      "text": "Forse è un pezzo del missing link che tutti cerchiamo: non un’altra convinzione che deve sostituire l’altra, ma la capacità di capirci davvero."
-    },
-    {
-      "type": "paragraph",
-      "text": "E forse questo si adatta meglio a Happy People."
-    },
-    {
-      "type": "paragraph",
-      "text": "Molto più che ascoltare."
+      "text": "Forse scopri una prospettiva nuova, o riconosci qualcosa della tua vita nel racconto di qualcun altro. Oppure hai semplicemente un bel pomeriggio ad Amersfoort."
     }
   ],
   "eventBlocks": [
     {
       "type": "paragraph",
-      "text": "IDENTITÀ · CONNESSIONE · MANIFESTAZIONE"
+      "text": "La data seguirà, e anche il prezzo del biglietto."
     },
     {
       "type": "paragraph",
-      "text": "Chi sei quando lasci andare per un momento le aspettative degli altri?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Quali schemi plasmano a volte le tue scelte senza che te ne accorga?"
-    },
-    {
-      "type": "paragraph",
-      "text": "E cosa succede quando pensieri, parole e azioni tornano nella stessa direzione?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Non riceverai risposte già pronte."
-    },
-    {
-      "type": "paragraph",
-      "text": "Riceverai qualcos’altro: lo spazio per guardare da solo."
-    },
-    {
-      "type": "paragraph",
-      "text": "Fare domande. Condividere esperienze. Ascoltare. E scoprire nuove possibilità."
-    },
-    {
-      "type": "paragraph",
-      "text": "Non devi sapere esattamente cosa stai cercando. Non ti serve un piano. Vieni semplicemente come sei."
-    },
-    {
-      "type": "paragraph",
-      "text": "Forse riconoscerai uno schema in cui sei bloccato da tempo. Forse nascerà un’intuizione che non ti aspettavi. O forse tornerai a casa semplicemente con una buona conversazione e la testa piena di pensieri nuovi."
-    },
-    {
-      "type": "paragraph",
-      "text": "Anche quello conta."
-    },
-    {
-      "type": "heading",
-      "text": "COSA PUOI ASPETTARTI?"
-    },
-    {
-      "type": "list",
-      "items": [
-        "storie personali che creano riconoscimento",
-        "intuizioni pratiche su identità, relazioni e convinzioni",
-        "spazio per domande e conversazione",
-        "musica, umorismo e vera connessione",
-        "snack e bevande",
-        "occasione di conoscere altri partecipanti"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Non vieni solo per ascoltare. Vieni per partecipare, riflettere con noi e mettere qualcosa in movimento."
-    },
-    {
-      "type": "paragraph",
-      "text": "Il numero di posti è volutamente limitato. Non per sembrare esclusivo. Ma perché l’attenzione personale funziona meglio quando non sei seduto in una sala con mille persone insieme."
-    },
-    {
-      "type": "heading",
-      "text": "BIGLIETTO"
-    },
-    {
-      "type": "paragraph",
-      "text": "Prezzo in arrivo."
-    },
-    {
-      "type": "paragraph",
-      "text": "La prenotazione online sarà presto disponibile."
-    },
-    {
-      "type": "paragraph",
-      "text": "Vuoi essere il primo a sapere quando inizia la vendita? Tieni d’occhio Happy People."
-    },
-    {
-      "type": "heading",
-      "text": "IL VIAGGIO DI RITORNO A UNO"
-    },
-    {
-      "type": "paragraph",
-      "text": "Forse alla fine non si tratta di diventare qualcun altro."
-    },
-    {
-      "type": "paragraph",
-      "text": "Forse si tratta di riscoprire chi eri già."
-    },
-    {
-      "type": "paragraph",
-      "text": "Concediti lo spazio per guardare tutto questo con calma."
-    },
-    {
-      "type": "paragraph",
-      "text": "Forse il tuo viaggio inizia qui."
+      "text": "Vieni come sei, con il tuo percorso, con le tue domande, o proprio senza risposte."
     }
   ]
 }

@@ -1,219 +1,32 @@
 {
-  "subtitle": "MEHR ALS NUR ZUHÖREN",
+  "subtitle": "Du machst mit",
   "ticketSalesOpen": false,
   "storyBlocks": [
     {
       "type": "paragraph",
-      "text": "Ein Happy People-Seminar ist kein Nachmittag, an dem du dich zurücklehnst und drei Stunden lang versuchst, wach zu bleiben. Du machst mit."
+      "text": "Ein Happy-People-Seminar ist kein Nachmittag, an dem du dich zurücklehnst und drei Stunden versuchst wach zu bleiben. Du machst mit."
     },
     {
       "type": "paragraph",
-      "text": "Wir sprechen miteinander, wir lachen, wir hören zu, wir stellen Fragen — und manchmal stoßen wir auf Themen, bei denen du vielleicht noch nie wirklich innegehalten hast."
+      "text": "Wir kommen miteinander ins Gespräch, wir lachen, wir hören zu, wir stellen Fragen, und manchmal stoßen wir auf Themen, bei denen du vielleicht noch nie wirklich innegehalten hast."
     },
     {
       "type": "paragraph",
-      "text": "Psychologie, Spiritualität, Archäologie, Geschichte, menschliche Überzeugungen und persönliche Geschichten kommen zusammen. Nicht um dir zu sagen, was du glauben sollst, sondern um gemeinsam zu erforschen."
+      "text": "Psychologie, Spiritualität, Geschichte, Archäologie, menschliche Überzeugungen und persönliche Geschichten kommen zusammen, nicht um dir zu sagen, was du glauben sollst, sondern um gemeinsam zu untersuchen, was wir wissen, was wir zu wissen glauben und was wir voneinander lernen können, wenn wir einen Moment durch die Augen eines anderen schauen."
     },
     {
       "type": "paragraph",
-      "text": "Denn ich glaube, es wird interessant in dem Moment, in dem du den Mut hast zu sagen:"
-    },
-    {
-      "type": "paragraph",
-      "text": "„Vielleicht weiß ich es nicht.“"
-    },
-    {
-      "type": "paragraph",
-      "text": "Dort beginnt für mich Neugier."
-    },
-    {
-      "type": "paragraph",
-      "text": "Warum denken Menschen so, wie sie denken? Woher kommen unsere Überzeugungen? Wie viel von dem, was wir für wahr halten, haben wir wirklich selbst untersucht?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Und wenn wir über unseren Alltag hinausblicken, tauchen plötzlich ganz andere Fragen auf."
-    },
-    {
-      "type": "paragraph",
-      "text": "Wie entstanden die Nazca-Linien? Wie bauten Menschen vor Tausenden von Jahren die Pyramiden von Gizeh? Was wissen wir wirklich über verschwundene Zivilisationen? Und was könnten wir noch von den sieben Weltwundern der Antike lernen?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Wir schauen auch auf alte Traditionen wie den Jainismus, mit Ideen über Karma, Gewaltlosigkeit und die Erkenntnis, dass die Wirklichkeit vielleicht mehr Seiten hat, als wir aus unserer eigenen Perspektive sehen können."
-    },
-    {
-      "type": "paragraph",
-      "text": "Und vielleicht stoßen wir unterwegs auf eine Frage, die einst von Erich von Däniken gestellt wurde:"
-    },
-    {
-      "type": "paragraph",
-      "text": "„Waren die Götter Astronauten?“"
-    },
-    {
-      "type": "paragraph",
-      "text": "Nicht um dich davon zu überzeugen, sondern um dich bei der Frage innehalten zu lassen:"
-    },
-    {
-      "type": "paragraph",
-      "text": "Wie wissen wir eigentlich, was wir zu wissen glauben?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Das ist für mich der Kern."
-    },
-    {
-      "type": "paragraph",
-      "text": "Bei einem Happy People-Seminar musst du an nichts glauben. Du musst auch nichts ablehnen."
-    },
-    {
-      "type": "paragraph",
-      "text": "Du darfst Katholik, Muslim, Buddhist, Jude, Christ, Agnostiker, Atheist sein — oder einfach jemand, der sagt: Ich weiß es nicht, aber ich möchte es erforschen."
-    },
-    {
-      "type": "paragraph",
-      "text": "Alles darf auf den Tisch."
-    },
-    {
-      "type": "paragraph",
-      "text": "Vielleicht entdecken wir gerade, dass wir trotz all unserer Unterschiede viel mehr gemeinsam haben, als wir denken."
-    },
-    {
-      "type": "paragraph",
-      "text": "Dass hinter verschiedenen Religionen und Weltanschauungen immer wieder dieselben menschlichen Fragen stehen."
-    },
-    {
-      "type": "paragraph",
-      "text": "Wer sind wir? Warum sind wir hier? Wie wollen wir leben? Und was verbindet uns eigentlich miteinander?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Und vielleicht ist gerade die jainistische Idee, dass man die ganze Geschichte nie aus einer Perspektive sieht, ein schöner Schlüssel, um das zu betrachten."
-    },
-    {
-      "type": "paragraph",
-      "text": "Nicht zwischen Alles oder Nichts wählen, sondern wagen zuzuhören, was eine andere Perspektive dir lehren kann."
-    },
-    {
-      "type": "paragraph",
-      "text": "Eins plus Eins muss nicht immer zwei sein."
-    },
-    {
-      "type": "paragraph",
-      "text": "Manchmal entsteht etwas Neues, wenn man zwei Perspektiven nebeneinanderlegt."
-    },
-    {
-      "type": "paragraph",
-      "text": "Vielleicht ist das ein Stück des missing link, nach dem wir alle suchen: nicht noch eine Überzeugung, die die andere ersetzen muss, sondern die Fähigkeit, einander wirklich zu verstehen."
-    },
-    {
-      "type": "paragraph",
-      "text": "Und das passt vielleicht am besten zu Happy People."
-    },
-    {
-      "type": "paragraph",
-      "text": "Mehr als nur zuhören."
+      "text": "Vielleicht entdeckst du eine neue Sicht, oder du erkennst etwas aus deinem eigenen Leben in der Geschichte eines anderen. Oder du hast einfach einen schönen Nachmittag in Amersfoort."
     }
   ],
   "eventBlocks": [
     {
       "type": "paragraph",
-      "text": "IDENTITÄT · VERBINDUNG · MANIFESTATION"
+      "text": "Das Datum folgt, der Ticketpreis auch."
     },
     {
       "type": "paragraph",
-      "text": "Wer bist du, wenn du die Erwartungen anderer für einen Moment loslässt?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Welche Muster bestimmen manchmal unbemerkt deine Entscheidungen?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Und was passiert, wenn Gedanken, Worte und Handeln wieder in dieselbe Richtung gehen?"
-    },
-    {
-      "type": "paragraph",
-      "text": "Du bekommst keine fertigen Antworten."
-    },
-    {
-      "type": "paragraph",
-      "text": "Du bekommst etwas anderes: den Raum, selbst hinzuschauen."
-    },
-    {
-      "type": "paragraph",
-      "text": "Fragen zu stellen. Erfahrungen zu teilen. Zuzuhören. Und neue Möglichkeiten zu entdecken."
-    },
-    {
-      "type": "paragraph",
-      "text": "Du musst nicht genau wissen, wonach du suchst. Du brauchst keinen Plan. Komm einfach, wie du bist."
-    },
-    {
-      "type": "paragraph",
-      "text": "Vielleicht erkennst du ein Muster, in dem du schon länger feststeckst. Vielleicht entsteht eine Einsicht, die du nicht erwartet hast. Oder vielleicht gehst du einfach mit einem guten Gespräch und einem Kopf voller neuer Gedanken nach Hause."
-    },
-    {
-      "type": "paragraph",
-      "text": "Auch das zählt."
-    },
-    {
-      "type": "heading",
-      "text": "WAS KANNST DU ERWARTEN?"
-    },
-    {
-      "type": "list",
-      "items": [
-        "persönliche Geschichten, die Wiedererkennung wecken",
-        "praktische Einsichten zu Identität, Beziehungen und Überzeugungen",
-        "Raum für Fragen und Gespräche",
-        "Musik, Humor und echte Verbindung",
-        "Snacks und Getränke",
-        "Gelegenheit, andere Teilnehmer kennenzulernen"
-      ]
-    },
-    {
-      "type": "paragraph",
-      "text": "Du kommst nicht nur zum Zuhören. Du kommst, um mitzumachen, mitzudenken und etwas in Bewegung zu setzen."
-    },
-    {
-      "type": "paragraph",
-      "text": "Die Anzahl der Plätze ist bewusst begrenzt. Nicht, um interessant zu wirken. Sondern weil persönliche Aufmerksamkeit einfach besser funktioniert, wenn du nicht mit tausend Menschen gleichzeitig in einem Saal sitzt."
-    },
-    {
-      "type": "heading",
-      "text": "TICKET"
-    },
-    {
-      "type": "paragraph",
-      "text": "Ticketpreis folgt."
-    },
-    {
-      "type": "paragraph",
-      "text": "Online-Reservierung ist bald möglich."
-    },
-    {
-      "type": "paragraph",
-      "text": "Möchtest du als Erster erfahren, wann der Verkauf startet? Halte Happy People im Blick."
-    },
-    {
-      "type": "heading",
-      "text": "DIE REISE ZURÜCK ZU EINS"
-    },
-    {
-      "type": "paragraph",
-      "text": "Vielleicht geht es am Ende gar nicht darum, jemand anderes zu werden."
-    },
-    {
-      "type": "paragraph",
-      "text": "Vielleicht geht es darum, wieder zu entdecken, wer du eigentlich schon warst."
-    },
-    {
-      "type": "paragraph",
-      "text": "Gönn dir den Raum, in Ruhe danach zu schauen."
-    },
-    {
-      "type": "paragraph",
-      "text": "Vielleicht beginnt deine Reise hier."
+      "text": "Komm, wie du bist, mit deinem eigenen Hintergrund, mit deinen eigenen Fragen oder gerade ohne Antworten."
     }
   ]
 }

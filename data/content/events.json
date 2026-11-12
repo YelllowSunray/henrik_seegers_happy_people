@@ -1,0 +1,30 @@
+[
+  {
+    "id": "ev1",
+    "title": {
+      "de": "Die Reise zurück zum Einssein",
+      "ko": "하나로 돌아가는 여정",
+      "en": "The journey back to one",
+      "it": "Il viaggio di ritorno all'uno",
+      "fr": "Le voyage de retour vers l'un",
+      "es": "El viaje de regreso a la unidad",
+      "nl": "De reis terug naar één"
+    },
+    "description": {
+      "de": "Ein persönlicher und inspirierender Nachmittag über Identität, Verbindung und Manifestation.",
+      "ko": "정체성, 연결, 현현에 관한 개인적이고 영감을 주는 오후.",
+      "en": "A personal and inspiring afternoon about identity, connection and manifestation.",
+      "it": "Un pomeriggio personale e ispirante su identità, connessione e manifestazione.",
+      "fr": "Un après-midi personnel et inspirant sur l'identité, la connexion et la manifestation.",
+      "es": "Una tarde personal e inspiradora sobre identidad, conexión y manifestación.",
+      "nl": "Een persoonlijke en inspirerende middag over identiteit, verbinding en manifestatie."
+    },
+    "date": "2026-09-19",
+    "dateLabel": "voor jaar 2027",
+    "dateUncertain": true,
+    "time": "14:00–17:00",
+    "location": "Van der Valk Hotel Amersfoort",
+    "address": "Ruimtevaart 22–24, 3824 MX Amersfoort",
+    "priceLabel": "€1.500"
+  }
+]

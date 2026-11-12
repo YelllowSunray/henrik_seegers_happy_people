@@ -1,0 +1,29 @@
+[
+  {
+    "id": "q1",
+    "text": {
+      "nl": "Ik zet mijn angsten op stil, mijn glimlach op standje maximaal en sluit me aan bij de shiny happy people.",
+      "en": "I put my fears on silent, my smile on maximum, and join the shiny happy people.",
+      "de": "Ich stelle meine Ängste auf stumm, mein Lächeln auf Maximum und schließe mich den shiny happy people an."
+    },
+    "publishedAt": "2026-08-07"
+  },
+  {
+    "id": "q2",
+    "text": {
+      "nl": "Doe wat je zegt. Zeg wat je doet. Of in omgekeerde volgorde — dat mag ook.",
+      "en": "Do what you say. Say what you do. Or the other way around — that works too.",
+      "de": "Tu was du sagst. Sag was du tust. Oder umgekehrt — das geht auch."
+    },
+    "publishedAt": "2026-08-03"
+  },
+  {
+    "id": "q4",
+    "text": {
+      "nl": "Together we reunite as 1.",
+      "en": "Together we reunite as 1.",
+      "de": "Together we reunite as 1."
+    },
+    "publishedAt": "2026-07-18"
+  }
+]

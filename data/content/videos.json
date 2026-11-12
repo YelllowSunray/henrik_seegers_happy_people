@@ -1,0 +1,18 @@
+[
+  {
+    "id": "v-sample-1",
+    "title": {
+      "nl": "Voorbeeld: affirmatie openen",
+      "en": "Sample: opening affirmation",
+      "de": "Beispiel: Affirmation öffnen"
+    },
+    "description": {
+      "nl": "Korte publieke clip uit een Almere-seminar.",
+      "en": "Short public clip from an Almere seminar.",
+      "de": "Kurzer öffentlicher Clip aus einem Seminar in Almere."
+    },
+    "kind": "sample",
+    "publishedAt": "2026-07-01",
+    "durationLabel": "3 min"
+  }
+]

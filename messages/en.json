@@ -75,9 +75,9 @@
     "readMore": "Read more"
   },
   "seminars": {
-    "eyebrow": "Seminars",
-    "title": "Live seminars",
-    "teaser": "More than just listening — an afternoon where you take part, stay curious and may look at your own life differently.",
+    "eyebrow": "Seminar",
+    "title": "The journey back to one",
+    "teaser": "A Happy People seminar is not an afternoon where you lean back and try to stay awake for three hours. You take part.",
     "cta": "See seminars",
     "next": "Next seminar",
     "location": "Van der Valk Hotel Amersfoort",
@@ -288,12 +288,12 @@
   "donate": {
     "eyebrow": "Support",
     "title": "A gift with a smile",
-    "lead": "Membership keeps the club running. A one-time gift helps Henk keep sharing seminars, vlogs and messages — no obligation.",
-    "body": "No subscription, no pressure. Choose an amount that feels right. Every gift counts.",
+    "lead": "If you want to support Happy People, you can do that with a one-time gift: 5 euros, 10 euros, 25 euros, 50 euros, or something else — no subscription and no obligation.",
+    "body": "You pay only if you stand behind the idea. The heart of Happy People is that we bring people together out of curiosity and connection, not out of what everyone is supposed to think. Each part has its own purpose. You choose what fits you. And whatever you choose, it is about making room to understand each other better.",
     "chooseAmount": "Choose an amount",
     "selected": "Selected",
     "secureNote": "One-time · secure via Stripe · card or local methods",
-    "asideQuote": "Raised in warmth: speak what you feel. My word is my deed.",
+    "asideQuote": "The heart of Happy People is that we bring people together out of curiosity and connection, not out of what everyone is supposed to think.",
     "asideCredit": "Happy People",
     "imageAlt": "Happy People moment",
     "cta": "Donate",
