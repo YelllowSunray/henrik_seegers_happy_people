@@ -9,6 +9,7 @@ import { LightboxImage } from "@/components/lightbox-image";
 import { MeetingStory } from "@/components/meeting-story";
 import { MicrochipPlayer } from "@/components/microchip-player";
 import { SeminarStory } from "@/components/seminar-story";
+import { HeroVideo } from "@/components/hero-video";
 import { SpiritsPlayer } from "@/components/spirits-player";
 import { SyncedLyricPlayer } from "@/components/synced-lyric-player";
 import { CmsField, CmsParagraphs } from "@/components/cms/cms-field";
@@ -73,17 +74,7 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
       <SiteHeader variant="hero" />
 
       <section className="relative min-h-[100svh] overflow-hidden">
-        <video
-          id="hero-video"
-          className="absolute inset-0 h-full w-full object-cover object-[center_28%] sm:object-center"
-          src="/videos/Siminar_Video.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          aria-hidden
-        />
+        <HeroVideo />
         <div
           className="absolute inset-0"
           style={{ background: "var(--hero-overlay)" }}
@@ -182,7 +173,7 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
             />
             <div className="mt-10 w-full max-w-[41rem]">
               <SyncedLyricPlayer
-                audioSrc="/audio/hooponopono.mp3"
+                audioSrc="/audio/hooponopono-v1.mp3"
                 lrcSrc="/audio/hooponopono.lrc"
                 title="Ho'oponopono"
                 tone="page"
@@ -192,7 +183,7 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
           </div>
           <div className="lg:sticky lg:top-28">
             <LightboxImage
-              src="/images/adhd-pic.jpg"
+              src="/images/adhd-pic.webp"
               alt={about.title}
               className="aspect-[3/4] min-h-[16rem] w-full"
             />
@@ -233,7 +224,7 @@ export async function HomePageClassic({ locale }: { locale: Locale }) {
                 className="reading-copy reading-copy-ink mb-4"
               />
               <SyncedLyricPlayer
-                audioSrc="/audio/pocketful-of-sunshine.mp3"
+                audioSrc="/audio/pocketful-of-sunshine-v1.mp3"
                 lrcSrc="/audio/pocketful-of-sunshine.lrc"
                 title="Pocketful of Sunshine"
                 artist="Natasha Bedingfield"

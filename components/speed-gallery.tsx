@@ -4,14 +4,14 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const IMAGES = [
-  "/images/IMG_1471.jpg",
-  "/images/IMG_1474.jpg",
-  "/images/IMG_1476.jpg",
-  "/images/IMG_1478.jpg",
-  "/images/IMG_1480.jpg",
-  "/images/IMG_1481.jpg",
-  "/images/IMG_1482.jpg",
-  "/images/IMG_1486.jpg",
+  "/images/IMG_1471.webp",
+  "/images/IMG_1474.webp",
+  "/images/IMG_1476.webp",
+  "/images/IMG_1478.webp",
+  "/images/IMG_1480.webp",
+  "/images/IMG_1481.webp",
+  "/images/IMG_1482.webp",
+  "/images/IMG_1486.webp",
 ] as const;
 
 /** Time each image stays on screen. */
@@ -36,7 +36,6 @@ export function SpeedGallery() {
           alt=""
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
-          priority={i === 0}
           className={`object-cover object-center transition-opacity duration-500 ${
             i === index ? "opacity-100" : "opacity-0"
           }`}

@@ -9,7 +9,7 @@ import { t } from "@/lib/content";
 import { formatPostDate } from "@/lib/journal";
 import type { Locale, VideoItem } from "@/lib/types";
 
-const FALLBACK_COVER = "/images/seminar.png";
+const FALLBACK_COVER = "/images/seminar.webp";
 
 export function vlogThumbSrc(video: VideoItem): string {
   const poster = video.thumbnail?.trim();
@@ -116,7 +116,7 @@ export function VlogPostCard({
         <div className="bg-ink px-4 py-5">
           <audio
             controls
-            preload="metadata"
+            preload="none"
             src={video.audioUrl}
             className="w-full"
           >

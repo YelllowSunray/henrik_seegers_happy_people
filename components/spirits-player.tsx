@@ -9,7 +9,7 @@ export function SpiritsPlayer({
 }) {
   return (
     <SyncedLyricPlayer
-      audioSrc="/audio/spirits.mp3"
+      audioSrc="/audio/spirits-v1.mp3"
       lrcSrc="/audio/spirits.lrc"
       title="Spirits In The Material World"
       artist="The Police"

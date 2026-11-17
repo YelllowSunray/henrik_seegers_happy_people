@@ -24,7 +24,7 @@ export default async function MembersLayout({
       <div className="relative overflow-hidden border-b border-line">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url(/images/seminar.png)" }}
+          style={{ backgroundImage: "url(/images/seminar.webp)" }}
           aria-hidden
         />
         <div

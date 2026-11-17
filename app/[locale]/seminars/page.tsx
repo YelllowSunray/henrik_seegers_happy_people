@@ -59,7 +59,7 @@ export default async function SeminarsPage({
 
         <figure className="mt-14 max-w-md">
           <LightboxImage
-            src="/images/blog.png"
+            src="/images/blog.webp"
             alt={tr("imageAlt")}
             className="aspect-square min-h-[16rem] w-full"
           />

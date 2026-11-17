@@ -247,6 +247,7 @@ function NewVlog({ onCreated }: { onCreated: (video: VideoItem) => void }) {
                       src={previewUrl}
                       controls
                       playsInline
+                      preload="none"
                       className="mx-auto aspect-[9/16] max-h-[calc(100dvh-18rem)] w-full bg-black object-contain"
                     />
                   </div>
@@ -448,6 +449,7 @@ function VlogEditForm({
             src={previewUrl}
             controls
             playsInline
+            preload="none"
             className="aspect-video w-full rounded-xl bg-black object-contain"
           />
         ) : youtube ? (

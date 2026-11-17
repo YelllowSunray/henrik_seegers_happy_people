@@ -168,7 +168,7 @@ export function DonateSection({
 
       <aside className="relative overflow-hidden">
         <LightboxImage
-          src="/images/IMG_1478.jpg"
+          src="/images/IMG_1478.webp"
           alt={t("imageAlt")}
           className="aspect-[4/5] min-h-[18rem] w-full sm:min-h-[22rem]"
         />

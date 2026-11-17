@@ -8,7 +8,7 @@ import { t } from "@/lib/content";
 import { formatPostDate, readingMinutes } from "@/lib/journal";
 import type { BlogPost, Locale } from "@/lib/types";
 
-const FALLBACK_COVER = "/images/blog.png";
+const FALLBACK_COVER = "/images/blog.webp";
 
 function coverSrc(post: BlogPost): string {
   const src = post.coverImage?.trim();

@@ -440,23 +440,7 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
 
 export function NavigationMemory({ children }: { children: React.ReactNode }) {
   return (
-    <Suspense
-      fallback={
-        <NavMemoryContext.Provider
-          value={{
-            goBack: () => {
-              if (typeof window !== "undefined" && window.history.length > 1) {
-                sessionStorage.setItem(RESTORE_FLAG, "1");
-                window.history.back();
-              }
-            },
-            rememberHere: () => {},
-          }}
-        >
-          {children}
-        </NavMemoryContext.Provider>
-      }
-    >
+    <Suspense fallback={null}>
       <NavigationMemoryInner>{children}</NavigationMemoryInner>
     </Suspense>
   );

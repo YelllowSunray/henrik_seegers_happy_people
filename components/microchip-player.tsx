@@ -9,7 +9,7 @@ export function MicrochipPlayer({
 }) {
   return (
     <SyncedLyricPlayer
-      audioSrc="/audio/microchip.mp3"
+      audioSrc="/audio/microchip-v1.mp3"
       lrcSrc="/audio/microchip.lrc"
       title="Micro Chip"
       artist="Tarrus Riley"

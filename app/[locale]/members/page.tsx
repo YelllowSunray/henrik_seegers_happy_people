@@ -92,7 +92,7 @@ export default async function MembersHomePage({
           >
             <div
               className="absolute inset-0 bg-cover bg-center transition duration-700 group-hover:scale-105"
-              style={{ backgroundImage: "url(/images/IMG_1480.jpg)" }}
+              style={{ backgroundImage: "url(/images/IMG_1480.webp)" }}
               aria-hidden
             />
             <div
@@ -199,7 +199,7 @@ export default async function MembersHomePage({
             >
               <div
                 className="absolute inset-0 bg-cover bg-center transition duration-700 group-hover:scale-105"
-                style={{ backgroundImage: "url(/images/IMG_1478.jpg)" }}
+                style={{ backgroundImage: "url(/images/IMG_1478.webp)" }}
                 aria-hidden
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/45 to-ink/15" />

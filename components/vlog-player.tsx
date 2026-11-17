@@ -94,7 +94,7 @@ export function VlogPlayer({
         <video
           controls
           playsInline
-          preload="metadata"
+          preload="none"
           src={src}
           className="mx-auto block max-h-[70dvh] w-full bg-black object-contain"
         >

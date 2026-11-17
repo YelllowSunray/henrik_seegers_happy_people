@@ -93,7 +93,7 @@ export default async function AboutPage({
           </div>
           <div className="lg:sticky lg:top-28">
             <LightboxImage
-              src="/images/adhd-pic.jpg"
+              src="/images/adhd-pic.webp"
               alt={title}
               className="aspect-[3/4] min-h-[16rem] w-full"
             />

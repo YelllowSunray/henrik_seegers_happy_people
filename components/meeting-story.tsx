@@ -49,7 +49,7 @@ export async function MeetingStory({
         {blocks.length > 0 ? (
           <div className="mt-8 w-full max-w-[41rem]">
             <SyncedLyricPlayer
-              audioSrc="/audio/sweet-little-woman.mp3"
+              audioSrc="/audio/sweet-little-woman-v1.mp3"
               lrcSrc="/audio/sweet-little-woman.lrc"
               title="Sweet Little Woman"
               artist="Joe Cocker"

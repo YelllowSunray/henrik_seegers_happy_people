@@ -39,7 +39,6 @@ export function MeetingGallery({
           alt={i === index ? alt : ""}
           fill
           sizes="(max-width: 1024px) 100vw, 30vw"
-          priority={i === 0}
           className={`object-cover object-center transition-opacity duration-500 ${
             i === index ? "opacity-100" : "opacity-0"
           }`}

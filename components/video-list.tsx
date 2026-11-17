@@ -92,7 +92,7 @@ export function VideoList({
                   {v.audioUrl ? (
                     <audio
                       controls
-                      preload="metadata"
+                      preload="none"
                       src={v.audioUrl}
                       className="mt-6 w-full"
                     >

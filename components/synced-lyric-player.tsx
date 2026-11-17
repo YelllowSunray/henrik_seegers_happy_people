@@ -60,7 +60,6 @@ const RESUME_MAX_AGE_MS = 30 * 60 * 1000;
 let initialAutoplayBurst = false;
 let initialAutoplayTimers: number[] = [];
 let scrollEndBurstTimers: number[] = [];
-const preloadedSrc = new Set<string>();
 let timeListeners = new Set<(t: number) => void>();
 let playListeners = new Set<(playing: boolean) => void>();
 let lastResumeSnapshotAt = 0;
@@ -71,7 +70,7 @@ let lastUserPlayAt = 0;
 function getSharedAudio(): HTMLAudioElement {
   if (!sharedAudio) {
     sharedAudio = new Audio();
-    sharedAudio.preload = "auto";
+    sharedAudio.preload = "none";
     sharedAudio.setAttribute("playsinline", "true");
     sharedAudio.setAttribute("webkit-playsinline", "true");
     sharedAudio.addEventListener("timeupdate", () => {
@@ -305,19 +304,8 @@ function pickFocusWidget(): PlayerEntry | null {
   return bestRatio >= threshold ? best : null;
 }
 
-function preloadAudio(src: string) {
-  if (typeof window === "undefined") return;
-  const abs = absoluteSrc(src);
-  if (preloadedSrc.has(abs)) return;
-  preloadedSrc.add(abs);
-  const probe = new Audio();
-  probe.preload = "auto";
-  probe.src = abs;
-  try {
-    probe.load();
-  } catch {
-    /* ignore */
-  }
+function preloadAudio(_src: string) {
+  /* Leave the file on the server until the visitor presses play. */
 }
 
 function clearScrollEndBurstTimers() {
@@ -428,6 +416,9 @@ async function playSrc(
   ) {
     return false;
   }
+
+  // Automatic handoff must not fetch a file before the visitor has pressed play.
+  if (!opts?.fromUser && !mediaUnlocked) return false;
 
   if (!sameSrc(audio.src || "", abs)) {
     audio.src = abs;
@@ -588,6 +579,7 @@ async function playForCurrentScrollPosition(
   const resumeIntent = shouldAttemptResume();
 
   if (resumeIntent && snap) {
+    if (!fromUserGesture && !mediaUnlocked) return false;
     const match = findPlayerForSrc(snap.src);
     const src = match?.src ?? pathnameFromAudioSrc(snap.src);
     const playerId = match?.id ?? activePlayerId ?? `resume-${Date.now()}`;
@@ -903,6 +895,7 @@ function notifyPlayState(playing: boolean) {
 }
 
 async function tryResumeAfterReturn(fromUserGesture = false): Promise<boolean> {
+  if (!fromUserGesture && !mediaUnlocked) return false;
   if (!shouldAttemptResume()) return false;
 
   const audio = getSharedAudio();

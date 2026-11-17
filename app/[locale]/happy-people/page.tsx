@@ -69,7 +69,7 @@ export default async function MembershipPage({
                 className="reading-copy reading-copy-ink mb-4"
               />
               <SyncedLyricPlayer
-                audioSrc="/audio/pocketful-of-sunshine.mp3"
+                audioSrc="/audio/pocketful-of-sunshine-v1.mp3"
                 lrcSrc="/audio/pocketful-of-sunshine.lrc"
                 title="Pocketful of Sunshine"
                 artist="Natasha Bedingfield"

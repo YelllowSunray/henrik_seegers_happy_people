@@ -218,7 +218,7 @@ export async function SeminarStory({
         {showSoStrongPlayer && event ? (
           <div className="mt-8 w-full max-w-[32rem]">
             <SyncedLyricPlayer
-              audioSrc="/audio/so-strong.mp3"
+              audioSrc="/audio/so-strong-v1.mp3"
               lrcSrc="/audio/so-strong.lrc"
               title="So Strong"
               artist="Labi Siffre"

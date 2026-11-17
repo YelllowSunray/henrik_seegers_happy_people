@@ -27,7 +27,7 @@ function getSharedAudio(): HTMLAudioElement {
     sharedAudio.setAttribute("webkit-playsinline", "true");
     (sharedAudio as HTMLAudioElement & { playsInline?: boolean }).playsInline =
       true;
-    sharedAudio.preload = "auto";
+    sharedAudio.preload = "none";
   }
   return sharedAudio;
 }

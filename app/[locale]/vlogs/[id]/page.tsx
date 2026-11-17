@@ -72,7 +72,7 @@ export default async function VlogPage({
               {audio && vlog.audioUrl ? (
                 <audio
                   controls
-                  preload="metadata"
+                  preload="none"
                   src={vlog.audioUrl}
                   className="w-full"
                 />
