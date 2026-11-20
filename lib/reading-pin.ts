@@ -150,15 +150,40 @@ function readPin(): ReadingPin | null {
   }
 }
 
-function fieldFor(id: string): HTMLTextAreaElement | HTMLElement | null {
-  const path = id.split("#")[0] ?? id;
+function fieldFor(
+  pin: ReadingPin,
+): { el: HTMLTextAreaElement | HTMLElement; offset: number } | null {
+  const path = pin.id.split("#")[0] ?? pin.id;
+  const needle = pin.snippet.trim();
   const area = document.querySelector<HTMLTextAreaElement>(
     `textarea[data-cms-pin="${quoteAttr(path)}"]`,
   );
-  if (area) return area;
-  return document.querySelector<HTMLElement>(
-    `[data-cms-pin="${quoteAttr(id)}"]`,
+  if (area) {
+    return {
+      el: area,
+      offset: absoluteOffset(pin.id, pin.offset ?? 0, area.value, pin.snippet ?? ""),
+    };
+  }
+
+  const exact = document.querySelector<HTMLElement>(
+    `[data-cms-pin="${quoteAttr(pin.id)}"]`,
   );
+  if (exact) {
+    const text = exact.textContent ?? "";
+    const at = needle ? text.indexOf(needle) : -1;
+    return { el: exact, offset: at >= 0 ? at : Math.min(pin.offset ?? 0, text.length) };
+  }
+
+  if (!needle) return null;
+  const parts = document.querySelectorAll<HTMLElement>(
+    `[data-cms-pin^="${quoteAttr(path)}#"]`,
+  );
+  for (const el of parts) {
+    const text = el.textContent ?? "";
+    const at = text.indexOf(needle);
+    if (at >= 0) return { el, offset: at };
+  }
+  return null;
 }
 
 function absoluteOffset(id: string, offset: number, value: string, snippet: string) {
@@ -226,13 +251,14 @@ function lineScreenY(
 export function restoreReadingPin() {
   const pin = readPin();
   if (!pin) return false;
-  const field = fieldFor(pin.id);
+  const field = fieldFor(pin);
   if (!field) return false;
   const value =
-    field instanceof HTMLTextAreaElement ? field.value : (field.textContent ?? "");
-  if (field instanceof HTMLTextAreaElement && !value) return false;
-  const abs = absoluteOffset(pin.id, pin.offset ?? 0, value, pin.snippet ?? "");
-  const y = lineScreenY(field, abs);
+    field.el instanceof HTMLTextAreaElement
+      ? field.el.value
+      : (field.el.textContent ?? "");
+  if (field.el instanceof HTMLTextAreaElement && !value) return false;
+  const y = lineScreenY(field.el, field.offset);
   if (y == null) return false;
   const desired = headerBottom() + pin.belowHeader;
   const delta = y - desired;

@@ -20,7 +20,9 @@ import { syncMembershipPrices } from "@/lib/cms-price-sync";
 import { queueScrollRestore } from "@/components/navigation-memory";
 import {
   clearReadingPin,
+  commitReadingPin,
   hasReadingPin,
+  peekReadingPin,
   restoreReadingPin,
 } from "@/lib/reading-pin";
 import {
@@ -149,15 +151,15 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
     router.replace(pathname || "/", { locale: "nl", scroll: false });
   }, [enabled, locale, pathname, router]);
 
-  // After edit controls mount, put the same text back on the same screen line.
+  // After edit controls mount or unmount, put the same text back on the same screen line.
   useLayoutEffect(() => {
-    if (!enabled || !hasReadingPin()) return;
+    if (!hasReadingPin()) return;
     if (pathname === "/admin" || pathname.startsWith("/admin/")) return;
     restoreReadingPin();
   }, [enabled, pathname]);
 
   useEffect(() => {
-    if (!enabled || !hasReadingPin()) return;
+    if (!hasReadingPin()) return;
     if (pathname === "/admin" || pathname.startsWith("/admin/")) return;
     let stopped = false;
     const apply = () => {
@@ -365,11 +367,14 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
   );
 
   const exitCms = useCallback(() => {
+    if (!hasReadingPin()) commitReadingPin(peekReadingPin());
     void (async () => {
       await signOut();
-      router.replace("/");
+      if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+        router.replace("/", { locale: "nl", scroll: false });
+      }
     })();
-  }, [router, signOut]);
+  }, [pathname, router, signOut]);
 
   const value = useMemo<CmsContextValue>(
     () => ({
@@ -486,6 +491,7 @@ function CmsBottomBar() {
               </span>
               <button
                 type="button"
+                onPointerDown={() => commitReadingPin(peekReadingPin())}
                 onClick={exitCms}
                 className="inline-flex h-10 shrink-0 items-center justify-center rounded-full bg-white px-4 text-sm font-semibold text-ink transition hover:bg-white/90 active:bg-white/80"
               >
