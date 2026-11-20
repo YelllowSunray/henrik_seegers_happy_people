@@ -1,5 +1,7 @@
 const PIN_KEY = "hp.readingPin";
 
+let pinGeneration = 0;
+
 export type ReadingPin = {
   id: string;
   /** Character offset inside the pinned text block. */
@@ -35,28 +37,66 @@ function caretRange(x: number, y: number): Range | null {
   return range;
 }
 
+function isField(
+  el: Element | null,
+): el is HTMLTextAreaElement | HTMLInputElement {
+  return el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement;
+}
+
+function covered(el: Element | null) {
+  return !!el?.closest("header, [role='toolbar']");
+}
+
+/** Character in a CMS field whose line sits at this screen Y. */
+function offsetAtClientY(
+  field: HTMLTextAreaElement | HTMLInputElement,
+  clientY: number,
+): number {
+  const value = field.value;
+  if (!value) return 0;
+  let best = 0;
+  let lo = 0;
+  let hi = value.length - 1;
+  while (lo <= hi) {
+    const mid = (lo + hi) >>> 1;
+    const y = lineScreenY(field, mid);
+    if (y != null && y <= clientY + 2) {
+      best = mid;
+      lo = mid + 1;
+    } else {
+      hi = mid - 1;
+    }
+  }
+  return best;
+}
+
 function pinFromPoint(x: number, y: number): ReadingPin | null {
+  const hit = document.elementFromPoint(x, y);
+  if (covered(hit)) return null;
+
   const range = caretRange(x, y);
   let pinEl: HTMLElement | null = null;
   let offset = 0;
   let lineTop = y;
 
-  if (range) {
+  if (range && !covered(range.startContainer.parentElement)) {
     const node = range.startContainer;
     const base =
       node.nodeType === Node.ELEMENT_NODE
         ? (node as HTMLElement)
         : node.parentElement;
     const found = base?.closest("[data-cms-pin]");
-    if (found instanceof HTMLElement) {
+    if (found instanceof HTMLElement && !covered(found)) {
       pinEl = found;
-      const pre = document.createRange();
-      try {
-        pre.selectNodeContents(pinEl);
-        pre.setEnd(range.startContainer, range.startOffset);
-        offset = pre.toString().length;
-      } catch {
-        offset = 0;
+      if (!isField(found)) {
+        const pre = document.createRange();
+        try {
+          pre.selectNodeContents(pinEl);
+          pre.setEnd(range.startContainer, range.startOffset);
+          offset = pre.toString().length;
+        } catch {
+          offset = 0;
+        }
       }
       const rect = range.getClientRects()[0] ?? range.getBoundingClientRect();
       if (rect && (rect.height > 0 || rect.top !== 0)) lineTop = rect.top;
@@ -65,12 +105,12 @@ function pinFromPoint(x: number, y: number): ReadingPin | null {
 
   if (!pinEl) {
     for (const el of document.elementsFromPoint(x, y)) {
-      if (el.closest("header")) continue;
+      if (covered(el)) continue;
       const found = el.closest("[data-cms-pin]");
       if (found instanceof HTMLElement) {
         pinEl = found;
         offset = 0;
-        lineTop = found.getBoundingClientRect().top;
+        lineTop = y;
         break;
       }
     }
@@ -79,14 +119,29 @@ function pinFromPoint(x: number, y: number): ReadingPin | null {
   if (!pinEl) return null;
   const id = pinEl.getAttribute("data-cms-pin");
   if (!id) return null;
-  const text = pinEl.innerText.replace(/\s+/g, " ").trim();
+
+  const field = isField(pinEl) ? pinEl : pinEl.querySelector("textarea, input");
+  if (isField(field)) {
+    offset = offsetAtClientY(field, y);
+    const line = field.value.slice(offset).replace(/^\s+/, "").split("\n")[0] ?? "";
+    const snippet = line.slice(0, 48).trim();
+    if (!snippet) return null;
+    const lineTop = lineScreenY(field, offset) ?? y;
+    return {
+      id,
+      offset,
+      snippet,
+      belowHeader: lineTop - headerBottom(),
+    };
+  }
+
   const raw = pinEl.textContent ?? "";
   const snippet = raw.slice(offset, offset + 48);
-  if (!snippet.trim() && !text) return null;
+  if (!snippet.trim()) return null;
   return {
     id,
     offset,
-    snippet: snippet || text.slice(0, 48),
+    snippet,
     belowHeader: lineTop - headerBottom(),
   };
 }
@@ -97,8 +152,12 @@ export function peekReadingPin(): ReadingPin | null {
   const view = window.visualViewport;
   const viewHeight = view?.height ?? window.innerHeight;
   const viewTop = view?.offsetTop ?? 0;
-  const band = Math.max(48, viewHeight - top);
-  const ys = [0.34, 0.5, 0.22, 0.66].map((part) => viewTop + top + band * part);
+  const dockTop =
+    document.querySelector("[role='toolbar']")?.getBoundingClientRect().top ??
+    viewTop + viewHeight;
+  const bottom = Math.min(viewTop + viewHeight, dockTop);
+  const band = Math.max(48, bottom - top);
+  const ys = [0.38, 0.55, 0.22].map((part) => viewTop + top + band * part);
   const xs = [32, 56, Math.min(window.innerWidth * 0.42, 220)];
   for (const y of ys) {
     if (y < top + 4 || y > viewTop + viewHeight - 8) continue;
@@ -111,13 +170,19 @@ export function peekReadingPin(): ReadingPin | null {
 }
 
 export function commitReadingPin(pin: ReadingPin | null) {
-  if (!pin) return;
+  if (!pin) return 0;
+  pinGeneration += 1;
   try {
     sessionStorage.setItem(PIN_KEY, JSON.stringify(pin));
   } catch {
     /* private mode */
   }
   document.documentElement.classList.add("cms-pinning");
+  return pinGeneration;
+}
+
+export function readingPinGeneration() {
+  return pinGeneration;
 }
 
 export function hasReadingPin() {

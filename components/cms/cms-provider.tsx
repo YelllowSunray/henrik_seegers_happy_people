@@ -23,6 +23,7 @@ import {
   commitReadingPin,
   hasReadingPin,
   peekReadingPin,
+  readingPinGeneration,
   restoreReadingPin,
 } from "@/lib/reading-pin";
 import {
@@ -162,8 +163,9 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
     if (!hasReadingPin()) return;
     if (pathname === "/admin" || pathname.startsWith("/admin/")) return;
     let stopped = false;
+    const generation = readingPinGeneration();
     const apply = () => {
-      if (!stopped) restoreReadingPin();
+      if (!stopped && readingPinGeneration() === generation) restoreReadingPin();
     };
     apply();
     const raf = requestAnimationFrame(apply);
@@ -173,6 +175,7 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
     let quiet = 0;
     const stop = () => {
       if (stopped) return;
+      if (readingPinGeneration() !== generation) return;
       stopped = true;
       clearReadingPin();
     };
@@ -491,7 +494,11 @@ function CmsBottomBar() {
               </span>
               <button
                 type="button"
-                onPointerDown={() => commitReadingPin(peekReadingPin())}
+                onPointerDown={() => {
+                  const pin = peekReadingPin();
+                  if (pin) commitReadingPin(pin);
+                  else clearReadingPin();
+                }}
                 onClick={exitCms}
                 className="inline-flex h-10 shrink-0 items-center justify-center rounded-full bg-white px-4 text-sm font-semibold text-ink transition hover:bg-white/90 active:bg-white/80"
               >
