@@ -5,6 +5,10 @@ import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useAuth } from "@/components/auth-provider";
+import {
+  HOME_SECTION_BY_PATH,
+  rememberAdminReturn,
+} from "@/components/navigation-memory";
 import { useCmsOptional } from "@/components/cms/cms-provider";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { HeaderBackButton } from "@/components/smart-back-button";
@@ -21,7 +25,7 @@ const navKeys = [
 
 export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" }) {
   const t = useTranslations("nav");
-  const { user, isMember, previewMode, signOut, loading } = useAuth();
+  const { user, isMember, previewMode, signOut, loading, enterAdmin } = useAuth();
   const cms = useCmsOptional();
   const cmsMode = Boolean(cms?.enabled);
   const onHero = variant === "hero";
@@ -93,6 +97,22 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
     ? "text-white/90 hover:text-white"
     : "text-ink-soft hover:text-ink";
 
+  function onAdminClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    setMenuOpen(false);
+    if (pathname === "/") {
+      event.preventDefault();
+      enterAdmin();
+      return;
+    }
+    const sectionId = HOME_SECTION_BY_PATH[pathname];
+    if (sectionId) {
+      rememberAdminReturn({
+        scrollY: window.scrollY,
+        sectionId,
+      });
+    }
+  }
+
   const mobileMenu =
     menuOpen && mounted
       ? createPortal(
@@ -125,16 +145,16 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
             </div>
 
             <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-6">
-              {navKeys.map(([key, href]) => (
-                <Link
-                  key={key}
-                  href={href}
-                  className="rounded-lg px-3 py-3.5 text-lg font-medium text-white/90 transition hover:bg-white/10 hover:text-white"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {t(key)}
-                </Link>
-              ))}
+            {navKeys.map(([key, href]) => (
+              <Link
+                key={key}
+                href={href}
+                className="rounded-lg px-3 py-3.5 text-lg font-medium text-white/90 transition hover:bg-white/10 hover:text-white"
+                onClick={key === "admin" ? onAdminClick : () => setMenuOpen(false)}
+              >
+                {t(key)}
+              </Link>
+            ))}
               {isMember && (
                 <Link
                   href="/members"
@@ -222,6 +242,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                 key={key}
                 href={href}
                 className={`inline-flex min-h-11 items-center transition ${linkTone}`}
+                onClick={key === "admin" ? onAdminClick : undefined}
               >
                 {t(key)}
               </Link>
@@ -281,6 +302,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
 
             <Link
               href="/admin"
+              onClick={onAdminClick}
               className={`inline-flex min-h-11 items-center rounded-full px-3.5 text-sm font-semibold lg:hidden ${
                 darkChrome
                   ? "bg-white text-ink"

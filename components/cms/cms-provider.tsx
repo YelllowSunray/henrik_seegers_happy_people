@@ -16,6 +16,7 @@ import { useAuth } from "@/components/auth-provider";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { getClientDb, isFirebaseConfigured } from "@/lib/firebase/client";
 import { syncMembershipPrices } from "@/lib/cms-price-sync";
+import { queueScrollRestore } from "@/components/navigation-memory";
 import {
   getDefaultHomepageContent,
   HOMEPAGE_DOC_PATH,
@@ -130,10 +131,16 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
   const enabled = isAdmin && !loading;
 
   // Force Dutch while editing — never stay on /en, /de, etc.
+  // /admin does its own redirect and already queued the scroll restore.
   useEffect(() => {
     if (!enabled) return;
     if (locale === "nl") return;
-    router.replace(pathname || "/", { locale: "nl" });
+    if (pathname === "/admin" || pathname.startsWith("/admin/")) return;
+    const path = `${pathname || "/"}${window.location.search}`;
+    if (window.scrollY > 0) {
+      queueScrollRestore({ path, scrollY: window.scrollY });
+    }
+    router.replace(pathname || "/", { locale: "nl", scroll: false });
   }, [enabled, locale, pathname, router]);
 
   // Warn when CMS is open in another browser tab.

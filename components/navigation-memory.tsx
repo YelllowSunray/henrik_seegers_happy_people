@@ -17,6 +17,7 @@ const SCROLL_KEY = "hp.scrollByKey";
 const STACK_KEY = "hp.navStack";
 const RESTORE_FLAG = "hp.restoreScroll";
 const PENDING_RESTORE = "hp.pendingRestore";
+const ADMIN_RETURN = "hp.adminReturn";
 
 type StackEntry = { path: string; scrollY: number; sectionId?: string };
 
@@ -444,6 +445,42 @@ export function NavigationMemory({ children }: { children: React.ReactNode }) {
       <NavigationMemoryInner>{children}</NavigationMemoryInner>
     </Suspense>
   );
+}
+
+/** Ask the next page view to open at this scroll position. */
+export function queueScrollRestore(entry: StackEntry) {
+  try {
+    sessionStorage.setItem(PENDING_RESTORE, JSON.stringify(entry));
+    sessionStorage.setItem(RESTORE_FLAG, "1");
+  } catch {
+    /* private mode */
+  }
+}
+
+/** Scroll position to reapply after the Admin route returns to the homepage. */
+export function rememberAdminReturn(entry: {
+  scrollY: number;
+  sectionId?: string;
+}) {
+  try {
+    sessionStorage.setItem(
+      ADMIN_RETURN,
+      JSON.stringify({ path: "/", ...entry }),
+    );
+  } catch {
+    /* private mode */
+  }
+}
+
+export function takeAdminReturn(): StackEntry | null {
+  try {
+    const raw = sessionStorage.getItem(ADMIN_RETURN);
+    sessionStorage.removeItem(ADMIN_RETURN);
+    if (!raw) return null;
+    return JSON.parse(raw) as StackEntry;
+  } catch {
+    return null;
+  }
 }
 
 export function useNavigationMemory() {
