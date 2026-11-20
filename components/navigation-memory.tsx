@@ -315,6 +315,7 @@ function NavigationMemoryInner({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (restoringRef.current) return undefined;
+    if (document.documentElement.classList.contains("cms-pinning")) return undefined;
 
     cleanupRestoreRef.current?.();
     cleanupRestoreRef.current = null;

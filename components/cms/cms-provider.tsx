@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useEffectEvent,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -17,6 +18,11 @@ import { usePathname, useRouter } from "@/i18n/navigation";
 import { getClientDb, isFirebaseConfigured } from "@/lib/firebase/client";
 import { syncMembershipPrices } from "@/lib/cms-price-sync";
 import { queueScrollRestore } from "@/components/navigation-memory";
+import {
+  clearReadingPin,
+  hasReadingPin,
+  restoreReadingPin,
+} from "@/lib/reading-pin";
 import {
   getDefaultHomepageContent,
   HOMEPAGE_DOC_PATH,
@@ -137,11 +143,65 @@ export function CmsProvider({ children }: { children: React.ReactNode }) {
     if (locale === "nl") return;
     if (pathname === "/admin" || pathname.startsWith("/admin/")) return;
     const path = `${pathname || "/"}${window.location.search}`;
-    if (window.scrollY > 0) {
+    if (!hasReadingPin() && window.scrollY > 0) {
       queueScrollRestore({ path, scrollY: window.scrollY });
     }
     router.replace(pathname || "/", { locale: "nl", scroll: false });
   }, [enabled, locale, pathname, router]);
+
+  // After edit controls mount, put the same text back on the same screen line.
+  useLayoutEffect(() => {
+    if (!enabled || !hasReadingPin()) return;
+    if (pathname === "/admin" || pathname.startsWith("/admin/")) return;
+    restoreReadingPin();
+  }, [enabled, pathname]);
+
+  useEffect(() => {
+    if (!enabled || !hasReadingPin()) return;
+    if (pathname === "/admin" || pathname.startsWith("/admin/")) return;
+    let stopped = false;
+    const apply = () => {
+      if (!stopped) restoreReadingPin();
+    };
+    apply();
+    const raf = requestAnimationFrame(apply);
+    const timers = [40, 120, 280, 600, 1000, 1600].map((ms) =>
+      window.setTimeout(apply, ms),
+    );
+    let quiet = 0;
+    const stop = () => {
+      if (stopped) return;
+      stopped = true;
+      clearReadingPin();
+    };
+    const bump = () => {
+      if (stopped) return;
+      apply();
+      window.clearTimeout(quiet);
+      quiet = window.setTimeout(stop, 700);
+    };
+    const ro = new ResizeObserver(bump);
+    ro.observe(document.documentElement);
+    const view = window.visualViewport;
+    view?.addEventListener("resize", bump);
+    view?.addEventListener("scroll", bump);
+    window.addEventListener("touchmove", stop, { passive: true });
+    window.addEventListener("wheel", stop, { passive: true });
+    quiet = window.setTimeout(stop, 700);
+    const end = window.setTimeout(stop, 2600);
+    return () => {
+      stopped = true;
+      cancelAnimationFrame(raf);
+      timers.forEach((id) => window.clearTimeout(id));
+      window.clearTimeout(quiet);
+      window.clearTimeout(end);
+      ro.disconnect();
+      view?.removeEventListener("resize", bump);
+      view?.removeEventListener("scroll", bump);
+      window.removeEventListener("touchmove", stop);
+      window.removeEventListener("wheel", stop);
+    };
+  }, [enabled, pathname]);
 
   // Warn when CMS is open in another browser tab.
   useEffect(() => {

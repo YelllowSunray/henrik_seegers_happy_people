@@ -6,9 +6,10 @@ import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useAuth } from "@/components/auth-provider";
 import {
-  HOME_SECTION_BY_PATH,
-  rememberAdminReturn,
-} from "@/components/navigation-memory";
+  commitReadingPin,
+  peekReadingPin,
+  type ReadingPin,
+} from "@/lib/reading-pin";
 import { useCmsOptional } from "@/components/cms/cms-provider";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { HeaderBackButton } from "@/components/smart-back-button";
@@ -34,6 +35,8 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
+  const heldPin = useRef<ReadingPin | null>(null);
+  const openingAdmin = useRef(false);
   const showJoin = !isMember && !cmsMode;
 
   // Same chrome for visitors and admin. Desktop: translucent at the top of
@@ -81,15 +84,25 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
 
   useEffect(() => {
     if (!menuOpen) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const scrollY = window.scrollY;
+    const body = document.body;
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.width = "100%";
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") setMenuOpen(false);
     }
     document.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = prev;
-      document.removeEventListener("keydown", onKey);
+      body.style.position = "";
+      body.style.top = "";
+      body.style.left = "";
+      body.style.right = "";
+      body.style.width = "";
+      window.scrollTo({ top: scrollY, left: 0, behavior: "auto" });
+      openingAdmin.current = false;
     };
   }, [menuOpen]);
 
@@ -97,19 +110,23 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
     ? "text-white/90 hover:text-white"
     : "text-ink-soft hover:text-ink";
 
+  function onMenuPointerDown() {
+    if (!menuOpen) heldPin.current = peekReadingPin();
+  }
+
+  function onAdminPointerDown() {
+    if (menuOpen) return;
+    heldPin.current = peekReadingPin();
+  }
+
   function onAdminClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    if (menuOpen) openingAdmin.current = true;
+    commitReadingPin(heldPin.current ?? peekReadingPin());
     setMenuOpen(false);
     if (pathname === "/") {
       event.preventDefault();
+      event.currentTarget.blur();
       enterAdmin();
-      return;
-    }
-    const sectionId = HOME_SECTION_BY_PATH[pathname];
-    if (sectionId) {
-      rememberAdminReturn({
-        scrollY: window.scrollY,
-        sectionId,
-      });
     }
   }
 
@@ -150,6 +167,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                 key={key}
                 href={href}
                 className="rounded-lg px-3 py-3.5 text-lg font-medium text-white/90 transition hover:bg-white/10 hover:text-white"
+                onPointerDown={key === "admin" ? onAdminPointerDown : undefined}
                 onClick={key === "admin" ? onAdminClick : () => setMenuOpen(false)}
               >
                 {t(key)}
@@ -242,6 +260,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
                 key={key}
                 href={href}
                 className={`inline-flex min-h-11 items-center transition ${linkTone}`}
+                onPointerDown={key === "admin" ? onAdminPointerDown : undefined}
                 onClick={key === "admin" ? onAdminClick : undefined}
               >
                 {t(key)}
@@ -302,6 +321,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
 
             <Link
               href="/admin"
+              onPointerDown={onAdminPointerDown}
               onClick={onAdminClick}
               className={`inline-flex min-h-11 items-center rounded-full px-3.5 text-sm font-semibold lg:hidden ${
                 darkChrome
@@ -321,6 +341,7 @@ export function SiteHeader({ variant = "hero" }: { variant?: "hero" | "solid" })
               aria-expanded={menuOpen}
               aria-controls="mobile-nav"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
+              onPointerDown={onMenuPointerDown}
               onClick={() => setMenuOpen((v) => !v)}
             >
               {menuOpen ? (

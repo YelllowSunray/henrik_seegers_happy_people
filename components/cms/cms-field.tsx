@@ -152,7 +152,7 @@ export function CmsField({
     if (cmsOnly) return null;
     if (hideWhenEmpty && !text.trim()) return null;
     return (
-      <Tag id={id} className={className}>
+      <Tag id={id} data-cms-pin={path} className={className}>
         {text}
       </Tag>
     );
@@ -174,6 +174,7 @@ export function CmsField({
       <textarea
         ref={ref}
         id={id}
+        data-cms-pin={path}
         value={draft}
         rows={1}
         placeholder={placeholder}
@@ -248,7 +249,7 @@ export function CmsParagraphs({
       return (
         <ul className={className}>
           {live.map((item, i) => (
-            <li key={i} className={itemClassName}>
+            <li key={i} data-cms-pin={`${path}#${i}`} className={itemClassName}>
               {item}
             </li>
           ))}
@@ -258,7 +259,7 @@ export function CmsParagraphs({
     return (
       <div className={className}>
         {live.map((paragraph, i) => (
-          <p key={i} className={itemClassName}>
+          <p key={i} data-cms-pin={`${path}#${i}`} className={itemClassName}>
             {paragraph}
           </p>
         ))}
@@ -270,6 +271,7 @@ export function CmsParagraphs({
     <div className={`min-w-0 max-w-full ${className ?? ""}`}>
       <textarea
         ref={ref}
+        data-cms-pin={path}
         value={draft}
         rows={1}
         onCompositionStart={(e) => {

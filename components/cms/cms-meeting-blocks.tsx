@@ -199,7 +199,10 @@ export function CmsMeetingBlocks({
       <div className="mt-10 space-y-12">
         {live.map((block, i) => (
           <article key={`meeting-block-${i}`} className="space-y-4">
-            <h3 className="font-display text-xl md:text-2xl">
+            <h3
+              data-cms-pin={`meeting.blocks.${i}.song`}
+              className="font-display text-xl md:text-2xl"
+            >
               <MeetingYoutubeLink href={block.youtube} song={block.song} />
             </h3>
             <CmsField
